@@ -1,1 +1,0 @@
-const client = require("./src/structs/EricaClient")
