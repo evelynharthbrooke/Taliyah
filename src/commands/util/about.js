@@ -43,19 +43,27 @@ class AboutCommand extends Command {
             .set({
                 Authorization: `Basic ${base64(`${config.github_username}:${config.github_password}`)}`
             });
+        
+        function getNodeVersion() {
+            if (process.version.includes('nightly')) {
+                return process.version.substr(0, 7).concat(' ' + '(nightly)')
+            } else {
+                return process.version.substr(0, 7)
+            }
+        }
 
         const info = new MessageEmbed()
         .setColor(0x00AE86)
         .setAuthor(`About ${this.client.user.username}`, this.client.user.displayAvatarURL({ format: 'png', size: 512 }))
-        .setDescription(`Information about ${this.client.user.username}, such as the latest commit, its uptime, etc.`)
+        .setDescription(`Information about ${this.client.user.username}, such as the latest commit, its uptime, etc. You ` +
+                        `can visit her source code on GitHub [here](https://github.com/KamranMackey/Erica).`)
         .addField("❯ Latest Commit", `[\`${commits[0].sha.substr(0, 7)}\`](${commits[0].html_url})`, true)
         .addField('❯ Uptime', humanize(this.client.uptime, { largest: 1, round: true }), true)
         .addField('❯ Servers', `${this.client.guilds.size} server${this.client.guilds.size > 1 ? 's' : ''}`, true)
         .addField('❯ Users', `${this.client.guilds.map(g => g.memberCount).reduce((f, l) => f + l)} user${this.client.guilds.map(g => g.memberCount).reduce((f, l) => f + l) > 1 ? 's' : ''}`, true)
         .addField('❯ Channels', `${this.client.channels.size} channel${this.client.channels.size > 1 ? 's' : ''}`, true)
         .addField('❯ Version', version, true)
-        .addField('❯ Source Code', `[GitHub](https://github.com/KamranMackey/Erica)`, true)
-        .addField('❯ Node Version', process.version.substr(0, 7), true)
+        .addField('❯ Node Version', getNodeVersion(), true)
         .addField('❯ V8 Version', process.versions.v8.substr(0, 10), true)
         .addField('❯ Memory Usage', `${Math.round(process.memoryUsage().heapUsed / 1024 / 1024)} MB`, true)
         
