@@ -48,7 +48,9 @@ class AboutCommand extends Command {
         
         function getNodeVersion() {
             if (process.version.includes('nightly')) {
-                return process.version.substr(0, 7).concat(' ' + '(nightly)')
+                return process.version.substr(0, 7).concat(' ' + '(nightly)'); // for nightly builds
+            } else if (process.version.includes('canary')) {
+                return process.version.substr(0, 7).concat(' ' + '(canary)'); // for canary builds
             } else {
                 return process.version.substr(0, 7)
             }

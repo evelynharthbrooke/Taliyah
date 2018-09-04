@@ -80,7 +80,7 @@ class EricaClient extends AkairoClient {
     }
 
     async start() {
-        if (process.version.includes('nightly')) {
+        if (process.version.includes('nightly') || process.version.includes('canary')) {
             this.logger.log('warn', 'You are running Erica on an experimental version of Node. You may experience issues!')
         }
         this.logger.log('info', `Starting up Erica v${version} and logging into the Discord API.`)
