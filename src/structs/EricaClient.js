@@ -1,6 +1,8 @@
 /**
  * EricaClient.js -- The Erica client.
  * 
+ * Copyright (c) 2018-present Kamran Mackey.
+ * 
  * Erica is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -78,6 +80,9 @@ class EricaClient extends AkairoClient {
     }
 
     async start() {
+        if (process.version.includes('nightly')) {
+            this.logger.log('warn', 'You are running Erica on an experimental version of Node. You may experience issues!')
+        }
         this.logger.log('info', `Starting up Erica v${version} and logging into the Discord API.`)
         return this.login(this.config.token);
     }

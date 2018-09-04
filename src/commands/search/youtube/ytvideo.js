@@ -1,6 +1,8 @@
 /**
  * ytvideo.js -- Retrieves information on a specified YouTube video.
  * 
+ * Copyright (c) 2018-present Kamran Mackey.
+ * 
  * Erica is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -33,8 +35,8 @@ const apiKey = config.youtube_key;
 class YouTubeVideoCommand extends Command {
     constructor() {
         super('ytvideo', {
-            aliases: ['ytvideo', 'yvideo', 'youtubevideo'],
-            category: 'search',
+            aliases: ['ytvideo', 'yvideo'],
+            category: 'Search',
             description: {
                 content: 'Retrieves information on a specified YouTube video.',
                 usage: '<video>'

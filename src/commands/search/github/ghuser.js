@@ -1,6 +1,8 @@
 /**
  * ghuser.js -- Retrieves information on a specified GitHub user.
  * 
+ * Copyright (c) 2018-present Kamran Mackey.
+ * 
  * Erica is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -26,7 +28,7 @@ class GitHubUserCommand extends Command {
     constructor() {
         super('ghuser', {
             aliases: ['guser', 'ghuser', 'githubuser'],
-            category: 'search',
+            category: 'Search',
             description: { 
                 content: 'Retrieve information on a GitHub user.',
                 usage: '<user>'

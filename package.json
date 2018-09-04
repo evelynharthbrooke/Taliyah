@@ -4,7 +4,7 @@
   "description": "A bot for Discord focused on functionality and full integration with Discord's API.",
   "main": "src/index.js",
   "scripts": {
-    "start": "node ./erica.js"
+    "start": "node --harmony ./erica.js"
   },
   "repository": {
     "type": "git",
@@ -27,7 +27,6 @@
   "homepage": "https://github.com/KamranMackey/Erica#readme",
   "dependencies": {
     "@discordjs/uws": "^10.149.0",
-    "common-tags": "^1.8.0",
     "discord-akairo": "github:1Computer1/discord-akairo",
     "discord.js": "github:discordjs/discord.js",
     "erlpack": "github:discordapp/erlpack",

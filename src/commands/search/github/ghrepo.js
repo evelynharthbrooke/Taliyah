@@ -1,6 +1,8 @@
 /**
  * ghrepo.js -- Retrieves information on a specified GitHub repository.
  * 
+ * Copyright (c) 2018-present Kamran Mackey.
+ * 
  * Erica is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -26,7 +28,7 @@ class GitHubRepoCommand extends Command {
     constructor() {
         super('ghrepo', {
             aliases: ['grepo', 'ghrepo', 'githubrepo'],
-            category: 'search',
+            category: 'Search',
             description: {
                 content: 'Searches for a repository on GitHub.',
                 usage: '<repository>'

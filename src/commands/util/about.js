@@ -2,6 +2,8 @@
  * about.js -- The about command; sends the user useful information
  * about the Erica bot for Discord.
  * 
+ * Copyright (c) 2018-present Kamran Mackey.
+ * 
  * Erica is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -27,7 +29,7 @@ class AboutCommand extends Command {
     constructor() {
         super('about', {
             aliases: ['info', 'about'],
-            category: 'util',
+            category: 'Utilities',
             description: { content: 'Retrieves various information and statistics about Erica.'},
         })
     }
@@ -54,7 +56,8 @@ class AboutCommand extends Command {
 
         const info = new MessageEmbed()
         .setColor(0x00AE86)
-        .setAuthor(`About ${this.client.user.username}`, this.client.user.displayAvatarURL({ format: 'png', size: 512 }))
+        .setTitle(`About ${this.client.user.username}`)
+        .setThumbnail(this.client.user.displayAvatarURL({ format: 'png', size: 1024 }))
         .setDescription(`Information about ${this.client.user.username}, such as the latest commit, its uptime, etc. You ` +
                         `can visit her source code on GitHub [here](https://github.com/KamranMackey/Erica).`)
         .addField("❯ Latest Commit", `[\`${commits[0].sha.substr(0, 7)}\`](${commits[0].html_url})`, true)

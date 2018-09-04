@@ -1,6 +1,8 @@
 /**
  * ytchannel.js -- Retrieves information on a YouTube channel.
  * 
+ * Copyright (c) 2018-present Kamran Mackey.
+ * 
  * Erica is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -25,8 +27,8 @@ const config = require('../../../../config.json');
 class YouTubeChannelCommand extends Command {
     constructor() {
         super('ytchannel', {
-            aliases: ['ychannel', 'ytchannel'],
-            category: 'search',
+            aliases: ['ytchannel', 'ychannel'],
+            category: 'Search',
             description: {
                 content: 'Retrieves information on a specified YouTube channel.',
                 usage: '<channel>'

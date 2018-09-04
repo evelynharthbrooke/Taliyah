@@ -2,6 +2,8 @@
  * ping.js -- The ping command; pings the Discord API gateway
  * and checks message latency.
  * 
+ * Copyright (c) 2018-present Kamran Mackey.
+ * 
  * Erica is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -22,8 +24,9 @@ class PingCommand extends Command {
     constructor() {
         super('ping', {
             aliases: ['ping'],
-            category: 'util',
-            description: { content: 'Pings Erica.'}
+            category: 'Utilities',
+            description: { content: 'Checks Erica\'s response to the Discord API ' + 
+                                    'and checks the message latency.'}
         });
     }
 
