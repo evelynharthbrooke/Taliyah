@@ -52,7 +52,7 @@ class AboutCommand extends Command {
             } else if (process.version.includes('canary')) {
                 return process.version.substr(0, 7).concat(' ' + '(canary)'); // for canary builds
             } else {
-                return process.version.substr(0, 7)
+                return process.version.substr(0, 7).concat(' ' + '(stable)'); // for stable builds
             }
         }
 
@@ -69,7 +69,7 @@ class AboutCommand extends Command {
         .addField('❯ Channels', `${this.client.channels.size} channel${this.client.channels.size > 1 ? 's' : ''}`, true)
         .addField('❯ Version', version, true)
         .addField('❯ Node Version', getNodeVersion(), true)
-        .addField('❯ V8 Version', process.versions.v8.substr(0, 10), true)
+        .addField('❯ V8 Version', process.versions.v8.substr(0, 15), true)
         .addField('❯ Memory Usage', `${Math.round(process.memoryUsage().heapUsed / 1024 / 1024)} MB`, true)
         
 

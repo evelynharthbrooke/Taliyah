@@ -29,7 +29,6 @@
     "@discordjs/uws": "^10.149.0",
     "discord-akairo": "github:1Computer1/discord-akairo",
     "discord.js": "github:discordjs/discord.js",
-    "erlpack": "github:discordapp/erlpack",
     "humanize-duration": "^3.15.1",
     "i18n-iso-countries": "^3.7.5",
     "moment": "^2.22.2",
