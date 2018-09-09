@@ -31,6 +31,7 @@
     "discord.js": "github:discordjs/discord.js",
     "humanize-duration": "^3.15.1",
     "i18n-iso-countries": "^3.7.6",
+    "lodash": "^4.17.10",
     "moment": "^2.22.2",
     "moment-duration-format": "^2.2.2",
     "node-superfetch": "^0.1.4",

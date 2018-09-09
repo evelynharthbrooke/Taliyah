@@ -19,7 +19,11 @@ class PurgeCommand extends Command {
                 {
                     id: 'msgCount',
                     match: 'content',
-                    type: 'number'
+                    type: 'number',
+                    prompt: {
+                        'start': 'Enter the number of messages you\'d like to purge.',
+                        'retry': 'You did not enter a number. Please enter a number and try again.'
+                    }
                 }
             ]
         })
@@ -32,7 +36,8 @@ class PurgeCommand extends Command {
                 .then(message => {
                     message.delete({ timeout: 15000 }); // delete purged message after 30 seconds.
             });
-            await this.client.logger.log('info', `Purged ${pluralize('message', msgCount, true)} in ${message.channel.name}.`)
+            await this.client.logger.log('info', `Purged ${pluralize('message', msgCount, true)} in ` + 
+                                                 `#${message.channel.name} in ${message.guild}.`)
             return null;
         } catch (err) {
             this.client.logger.log('info', `Unable to delete messages! ${err}`)
