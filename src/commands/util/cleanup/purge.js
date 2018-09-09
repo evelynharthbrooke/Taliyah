@@ -22,7 +22,7 @@ class PurgeCommand extends Command {
                     type: 'number',
                     prompt: {
                         'start': 'Enter the number of messages you\'d like to purge.',
-                        'retry': 'You did not enter a number. Please enter a number and try again.',
+                        'retry': 'You did not enter a number. Please enter a number and try again.'
                     }
                 }
             ]
