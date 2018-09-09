@@ -60,7 +60,7 @@ class WikipediaCommand extends Command {
                     .setThumbnail(article.thumbnail ? article.thumbnail.source : null)
                     .setURL(article.fullurl)
                     .setFooter(`Page content for ${article.title} is licensed under the CC-BY-SA 3.0 License.`)
-                    .setDescription(shorten(article.extract.replace(/.+\n\n/, '').replace(/\n/g, '\n\n ')));
+                    .setDescription(shorten(article.extract.replace(/\n/g, '\n\n')));
                 
                 return message.util.send(embed)
             }
