@@ -26,12 +26,23 @@ class IdCommand extends Command {
             category: 'Info',
             description: {
                 content: 'Retrieves your Discord user ID.'
-            }
+            },
+            args: [
+                {
+                    id: 'user',
+                    match: 'content',
+                    type: 'user',
+                }
+            ]
         });
     };
 
-    async exec(message) {
-        message.util.send(`Hi ${message.author}, your Discord ID is \`${message.author.id}\`.`);
+    async exec(message, { user }) {
+        if (!user) {
+            message.util.send(`Hi ${message.author}, your Discord ID is \`${message.author.id}\`.`);
+        } else {
+            message.channel.send(`${user.username}'s user ID is ${user.id}.`)
+        }
     };
 };
 
