@@ -66,7 +66,7 @@ Installing Node.js on Linux is pretty easy, just use your respective package man
 Node.js. For instance, on Arch Linux, you can run the following command and you'll be done!:
 
 ```bash
-sudo pacman -Syu nodejs npm # This should install the latest available version of Node.js, as well as npm.
+sudo pacman -S nodejs npm # This should install the latest available version of Node.js, as well as npm.
 ```
 
 On distributions such as Ubuntu, Debian, Linux Mint, and other `apt`-based distributions, you can run the following commands to
