@@ -20,7 +20,7 @@
  */
 const { Command } = require('discord-akairo');
 const pluralize = require('pluralize');
-const strings = require('../../../strings.json');
+const strings = require('../../strings.json');
 
 class PurgeCommand extends Command {
     constructor() {
