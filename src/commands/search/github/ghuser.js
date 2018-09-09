@@ -27,7 +27,7 @@ const config = require('../../../../config.json');
 class GitHubUserCommand extends Command {
     constructor() {
         super('ghuser', {
-            aliases: ['guser', 'ghuser', 'githubuser'],
+            aliases: ['ghuser', 'guser', 'githubuser'],
             category: 'Search',
             description: { 
                 content: 'Retrieve information on a GitHub user.',

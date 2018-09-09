@@ -26,7 +26,7 @@ class HelpCommand extends Command {
             clientPermissions: ['EMBED_LINKS'],
             description: {
                 content: 'Retrieves all commands & allows you to get info on individual commands.',
-                usage: 'leave blank or enter cmd name'
+                usage: '<blank> or <command>'
             },
             args: [
                 {
@@ -62,7 +62,9 @@ class HelpCommand extends Command {
             .setTitle(`Information on command ${command.aliases[0]}.`)
             .setDescription(command.description.content || '\u200b')
             .addField('❯ Category', command.category, true)
-            .addField('❯ Usage', `\`${command.aliases[0]} ${command.description.usage ? command.description.usage : ''}\``, true)
+            .addField('❯ Usage', `\`${config.prefix}${command.aliases[0]} ${command.description.usage 
+                ? command.description.usage 
+                : ''}\``, true)
 
         if (command.aliases.length > 1) embed.addField('❯ Command Aliases', `\`${command.aliases.join('` `')}\``, true);
         

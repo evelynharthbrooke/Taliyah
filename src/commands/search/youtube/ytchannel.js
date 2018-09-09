@@ -31,7 +31,7 @@ class YouTubeChannelCommand extends Command {
             category: 'Search',
             description: {
                 content: 'Retrieves information on a specified YouTube channel.',
-                usage: '<channel>'
+                usage: 'Enter the name of the YouTube channel.'
             },
             args: [
                 {

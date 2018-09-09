@@ -27,7 +27,7 @@ const config = require("../../../../config.json");
 class GitHubRepoCommand extends Command {
     constructor() {
         super('ghrepo', {
-            aliases: ['grepo', 'ghrepo', 'githubrepo'],
+            aliases: ['ghrepo', 'grepo', 'githubrepo'],
             category: 'Search',
             description: {
                 content: 'Searches for a repository on GitHub.',
