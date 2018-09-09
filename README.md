@@ -31,7 +31,7 @@ respective issue trackers and I'll take a look.
 #### macOS
 
 First, let's get Homebrew installed if it isn't already, so we can easily install the Node Version Manager (nvm), a really nice utility
-to manage and install multiple Node.js versions! **Note**: You may need Xcode and Xcode's commandline tools for certain Homebrew features
+to manage and install multiple Node.js versions! **Note**: You may need Xcode and Xcode's command-line tools for certain Homebrew features
 but I am not 100% sure on this. However, Xcode's comandline tools do include Apple's version of git (v2.13.6 at the time of writing, and
 I'm not sure if git is already included in macOS without the dev tools but meh), so I recommend installing them anyways.
 
