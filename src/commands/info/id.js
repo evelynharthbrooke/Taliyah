@@ -41,7 +41,7 @@ class IdCommand extends Command {
         if (!user) {
             message.util.send(`Hi ${message.author}, your Discord ID is \`${message.author.id}\`.`);
         } else {
-            message.channel.send(`${user.username}'s user ID is ${user.id}.`)
+            message.channel.send(`${user.username}'s user ID is \`${user.id}\`.`)
         }
     };
 };
