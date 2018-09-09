@@ -23,7 +23,7 @@ class IdCommand extends Command {
     constructor() {
         super('id', {
             aliases: ['id'],
-            category: 'Info',
+            category: 'Information',
             description: {
                 content: 'Retrieves yours, the bot\'s, or a user\'s Discord user ID.',
                 usage: '<blank> or <user>'
