@@ -34,7 +34,7 @@ class EricaClient extends AkairoClient {
         this.logger = createLogger({
             format: format.combine(
                 format.colorize(),
-                format.timestamp({ format: 'YYYY/MM/DD HH:mm:ss' }),
+                format.timestamp({ format: 'MMM DD YYYY HH:mm:ss' }),
 				format.printf(info => `[${info.timestamp}] ${info.level}: ${info.message}`)
             ),
             transports: [new transports.Console()]
@@ -51,6 +51,10 @@ class EricaClient extends AkairoClient {
             handleEdits: true
         });
 
+        // TODO: Implement an inhibitor handler (maybe?) as it
+        // may be useful to implement a blacklist in case any bad
+        // actors abuse the bot. Meh, I'll look into it.
+
         // Initialize the listener handler.
         this.logger.log('info', 'Initializing the listener handler.');
         this.listenerHandler = new ListenerHandler(this, {
@@ -60,7 +64,7 @@ class EricaClient extends AkairoClient {
         this.config = config;
 
         // Run the setup function to setup the command handler, the
-        // listener handler, and to load all commands and listeners.
+        // listener handler, as well as load all commands and listeners.
         this.setup();
     };
 
@@ -73,6 +77,7 @@ class EricaClient extends AkairoClient {
             commandHandler: this.commandHandler,
             listenerHandler: this.listenerHandler
         })
+
         // Load all commands and listeners.
         this.logger.log('info', 'Loading handlers.')
         this.commandHandler.loadAll();
@@ -80,10 +85,10 @@ class EricaClient extends AkairoClient {
     }
 
     async start() {
+        this.logger.log('info', `Starting up Erica v${version} and logging into the Discord API.`)
         if (process.version.includes('nightly') || process.version.includes('canary')) {
             this.logger.log('warn', 'You are running Erica on an experimental version of Node. You may experience issues!')
         }
-        this.logger.log('info', `Starting up Erica v${version} and logging into the Discord API.`)
         return this.login(this.config.token);
     }
 };

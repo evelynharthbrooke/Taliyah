@@ -1,5 +1,6 @@
 const { Command } = require('discord-akairo');
 const pluralize = require('pluralize');
+const strings = require('../../../strings.json');
 
 class PurgeCommand extends Command {
     constructor() {
@@ -11,9 +12,8 @@ class PurgeCommand extends Command {
             cooldown: 15000,
             ratelimit: 3,
             description: {
-                content: 'Purges a desired amount of messages from the current Discord guild. ' +
-                         'Recommended max number of messages to delete is 99.',
-                usage: '<number of messages>'
+                content: strings.purge_description,
+                usage: strings.purge_usage
             },
             args: [
                 {
@@ -22,7 +22,7 @@ class PurgeCommand extends Command {
                     type: 'number',
                     prompt: {
                         'start': 'Enter the number of messages you\'d like to purge.',
-                        'retry': 'You did not enter a number. Please enter a number and try again.'
+                        'retry': 'You did not enter a number. Please enter a number and try again.',
                     }
                 }
             ]
@@ -31,17 +31,22 @@ class PurgeCommand extends Command {
 
     async exec(message, { msgCount }) {
         try {
-            await message.channel.bulkDelete(msgCount, true)
-            await message.channel.send(`Successfully purged ${pluralize('message', msgCount, true)}.`)
-                .then(message => {
-                    message.delete({ timeout: 15000 }); // delete purged message after 30 seconds.
-            });
-            await this.client.logger.log('info', `Purged ${pluralize('message', msgCount, true)} in ` + 
-                                                 `#${message.channel.name} in ${message.guild}.`)
-            return null;
+            if (msgCount > 99) {
+                message.channel.send('You cannot delete more than 99 messages. Try again with a smaller number.')
+            } else {
+                await message.channel.bulkDelete(msgCount + 1, true)
+                await message.channel.send(`Purging, please wait...`)
+                    .then(message => {
+                        message.edit(`Successfully purged ${pluralize('message', msgCount, true)}.`)
+                        message.delete({ timeout: 15000 }); // delete purged message after 30 seconds.
+                    });
+                await this.client.logger.log('info', `Purged ${pluralize('message', msgCount, true)} in ` + 
+                                                     `#${message.channel.name} in ${message.guild}.`)
+                return null;
+            }
         } catch (err) {
-            this.client.logger.log('info', `Unable to delete messages! ${err}`)
-            message.channel.send(`Sorry, I was unable to delete any messages! ${err}`)
+            this.client.logger.log('info', `Unable to delete messages!\n\n${err}`)
+            message.channel.send(`Sorry, I was unable to delete any messages!\n\n\`\`\`${err}\`\`\``)
         }
     }
 }
