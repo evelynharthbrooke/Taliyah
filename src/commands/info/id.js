@@ -31,7 +31,7 @@ class IdCommand extends Command {
                 {
                     id: 'user',
                     match: 'content',
-                    type: 'user',
+                    type: 'user'
                 }
             ]
         });
