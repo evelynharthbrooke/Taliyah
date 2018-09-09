@@ -34,7 +34,7 @@ class EricaClient extends AkairoClient {
         this.logger = createLogger({
             format: format.combine(
                 format.colorize(),
-                format.timestamp({ format: 'MMM DD YYYY HH:mm:ss' }),
+                format.timestamp({ format: 'MMM D YYYY HH:mm:ss' }),
 				format.printf(info => `[${info.timestamp}] ${info.level}: ${info.message}`)
             ),
             transports: [new transports.Console()]
