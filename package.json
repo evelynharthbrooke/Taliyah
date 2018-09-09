@@ -30,11 +30,12 @@
     "discord-akairo": "github:1Computer1/discord-akairo",
     "discord.js": "github:discordjs/discord.js",
     "humanize-duration": "^3.15.1",
-    "i18n-iso-countries": "^3.7.5",
+    "i18n-iso-countries": "^3.7.6",
     "moment": "^2.22.2",
     "moment-duration-format": "^2.2.2",
     "node-superfetch": "^0.1.4",
     "numeral": "^2.0.6",
-    "winston": "^3.0.0"
+    "pluralize": "^7.0.0",
+    "winston": "^3.1.0"
   }
 }
