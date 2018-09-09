@@ -40,6 +40,8 @@ class IdCommand extends Command {
     async exec(message, { user }) {
         if (!user) {
             message.util.send(`Hi ${message.author}, your Discord ID is \`${message.author.id}\`.`);
+        } else if (user.id === this.client.user.id) {
+            message.channel.send(`Hi ${message.author.username}, my user ID is \`${this.client.user.id}\`.`);
         } else {
             message.channel.send(`${user.username}'s user ID is \`${user.id}\`.`)
         }
