@@ -25,7 +25,8 @@ class IdCommand extends Command {
             aliases: ['id'],
             category: 'Info',
             description: {
-                content: 'Retrieves your Discord user ID.'
+                content: 'Retrieves yours, the bot\'s, or a user\'s Discord user ID.',
+                usage: '<blank> or <user>'
             },
             args: [
                 {
