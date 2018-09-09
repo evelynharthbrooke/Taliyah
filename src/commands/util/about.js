@@ -28,7 +28,7 @@ const { version } = require('../../../package.json');
 class AboutCommand extends Command {
     constructor() {
         super('about', {
-            aliases: ['info', 'about'],
+            aliases: ['about', 'info'],
             category: 'Utilities',
             description: { content: 'Retrieves various information and statistics about Erica.'},
         })

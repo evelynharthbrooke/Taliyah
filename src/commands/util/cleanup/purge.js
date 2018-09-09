@@ -35,9 +35,8 @@ class PurgeCommand extends Command {
             await this.client.logger.log('info', `Purged ${pluralize('message', msgCount, true)} in ${message.channel.name}.`)
             return null;
         } catch (err) {
-            console.log(err);
-            this.client.logger.log('info', 'User could not delete messages older than two weeks.')
-            message.channel.send('Sorry, I cannot delete messages older than two weeks!')
+            this.client.logger.log('info', `Unable to delete messages! ${err}`)
+            message.channel.send(`Sorry, I was unable to delete any messages! ${err}`)
         }
     }
 }
