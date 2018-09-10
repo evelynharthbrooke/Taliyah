@@ -32,6 +32,24 @@ class Util {
     }
 
     /**
+     * Trim Array method
+     * 
+     * Limits an array to a certain amount of entries. Once that limit has been
+     * reached, this function will trim the array.
+     * 
+     * @param array The name of the array to trim.
+     * @param maxLen The max amount of entries in an array before the trim happens.
+     */
+    static trimArray(array, maxLen = 10) {
+      if (array.length > maxLen) {
+        const len = array.length - maxLen;
+        array = array.slice(0, maxLen);
+        array.push(`${len} more...`);
+      }
+      return array;
+    }
+
+    /**
      * Shorten method
      * 
      * Shortens text to be of a certain length.
