@@ -1,5 +1,5 @@
 /**
- * ready.js -- The listener for the disconnect event, checks
+ * disconnect.js -- The listener for the disconnect event, checks
  * if the bot has disconnected, and if it has, log the event.
  * 
  * Copyright (c) 2018-present Kamran Mackey.
