@@ -22,6 +22,7 @@ const { MessageEmbed } = require('discord.js');
 const moment = require('moment');
 const numeral = require('numeral');
 const request = require('node-superfetch');
+const pluralize = require('pluralize')
 const config = require('../../../../config.json');
 
 class YouTubeChannelCommand extends Command {
@@ -81,9 +82,9 @@ class YouTubeChannelCommand extends Command {
             .setTitle(`Channel information for ${data.snippet.title}`)
             .setDescription(data.snippet.description)
             .setThumbnail(data.snippet.thumbnails.medium ? data.snippet.thumbnails.medium.url : null)
-            .addField(`❯ Total Subscribers`, `${subsCount} subscriber${subsCount.length > 1 ? 's' : ''}`, true)
-            .addField(`❯ Total Videos`, `${videoCount} video${videoCount.length > 1 ? 's' : ''}`, true)
-            .addField(`❯ Total Views`, `${viewCount} view${viewCount.length > 1 ? 's' : ''}`, true)
+            .addField(`❯ Total Subscribers`, pluralize('subscriber', subsCount, true), true)
+            .addField(`❯ Total Videos`, pluralize('video', videoCount, true), true)
+            .addField(`❯ Total Views`, pluralize('view', viewCount, true), true)
             .addField(`❯ Creation Date`, `${publishedDate}`, true)
 
         function getCountryName() {
