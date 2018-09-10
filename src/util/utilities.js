@@ -38,12 +38,12 @@ class Util {
      * reached, this function will trim the array.
      * 
      * @param array The name of the array to trim.
-     * @param maxLen The max amount of entries in an array before the trim happens.
+     * @param size The max amount of array contents allowed before the trim happens. Default is 10.
      */
-    static trimArray(array, maxLen = 10) {
-      if (array.length > maxLen) {
-        const len = array.length - maxLen;
-        array = array.slice(0, maxLen);
+    static trimArray(array, size = 10) {
+      if (array.length > size) {
+        const len = array.length - size;
+        array = array.slice(0, size);
         array.push(`${len} more...`);
       }
       return array;
