@@ -37,8 +37,8 @@ class Util {
      * Limits an array to a certain amount of entries. Once that limit has been
      * reached, this function will trim the array.
      * 
-     * @param array The name of the array to trim.
-     * @param size The max amount of array contents allowed before the trim happens. Default is 10.
+     * @param array Name of the array to trim.
+     * @param size Max amount of entries in an array allowed before trimming. Default is 10.
      */
     static trimArray(array, size = 10) {
       if (array.length > size) {
