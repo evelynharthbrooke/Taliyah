@@ -29,8 +29,8 @@ class ChangelogCommand extends Command {
 			.setColor(0x7289DA)
 			.setURL(`${commitsUrl}/master`)
 			.setDescription(commits.map(commit => {
-				const hash = `[\`${commit.sha.slice(0, 7)}\`](${commit.html_url})`;
-				return `${hash} ${shorten(commit.commit.message.split('\n')[0], 50)} - ${commit.author.login}`;
+				const sha = `[\`${commit.sha.slice(0, 7)}\`](${commit.html_url})`;
+				return `${sha} ${shorten(commit.commit.message.split('\n')[0], 50)} - ${commit.author.login}`;
 			}).join('\n'));
 		return message.channel.send(embed);
     }
