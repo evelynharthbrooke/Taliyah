@@ -56,7 +56,7 @@ class UserCommand extends Command {
             .addField('❯ Tag', user.tag, true)
             .addField('❯ ID', user.id, true)
             .addField('❯ Creation Date', discordCreationDate, true)
-            .addField('❯ Is Bot?', user.bot ? 'Yes' : 'No', true);
+            .addField('❯ Account Type', user.bot ? 'Bot' : 'Human', true);
 
         if (message.channel.type === 'text') {
             try {

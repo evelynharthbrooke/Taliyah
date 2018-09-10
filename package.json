@@ -1,6 +1,6 @@
 {
   "name": "erica",
-  "version": "0.2.2",
+  "version": "0.3.0",
   "description": "A bot for Discord focused on functionality and full integration with Discord's API.",
   "main": "src/index.js",
   "scripts": {
