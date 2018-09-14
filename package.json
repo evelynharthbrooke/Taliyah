@@ -31,7 +31,7 @@
     "discord.js": "github:discordjs/discord.js",
     "discord.js-lavalink": "github:mrjacz/discord.js-lavalink",
     "humanize-duration": "^3.15.2",
-    "i18n-iso-countries": "^3.7.7",
+    "i18n-iso-countries": "^3.7.8",
     "lodash": "^4.17.11",
     "moment": "^2.22.2",
     "moment-duration-format": "^2.2.2",
