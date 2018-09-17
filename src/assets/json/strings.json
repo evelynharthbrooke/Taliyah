@@ -1,0 +1,4 @@
+{
+    "purge_description": "Purges the desired amount of messages from a channel in the current Discord guild.\n\nThe max number of messages you can delete is 99.",
+    "purge_usage": "<number of messages>"
+}
