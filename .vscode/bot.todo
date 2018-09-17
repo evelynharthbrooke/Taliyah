@@ -3,7 +3,7 @@ Base:
 
 Commands: 
   ☐ Implement moderation commands such as ban/kick/mute/etc.
-  ☐ Implement anime command (for users who like to retrieve anime information)
+  ☐ Implement anime command using the AniList API.
 
 Listeners:
   ☐ Implement a reconnect listener.
