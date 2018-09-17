@@ -74,12 +74,12 @@ class UserCommand extends Command {
                     userEmbed.setTitle(`Information on user ${user.tag}.`);
                 }
 
-                userEmbed.setColor(member.displayHexColor)
+                userEmbed.setColor(member.displayHexColor);
                 userEmbed.setDescription(member.presence.activity
                     ? `${activityChoices[member.presence.activity.type]} **${member.presence.activity.name}**.`
-                    : '')
-                userEmbed.addField('❯ Server Join Date', serverJoinDate, true)
-                userEmbed.addField('❯ Nickname', member.nickname || 'No nickname set.', true)
+                    : '');
+                userEmbed.addField('❯ Server Join Date', serverJoinDate, true);
+                userEmbed.addField('❯ Nickname', member.nickname || 'No nickname set.', true);
                 userEmbed.addField(`❯ Roles (${roles.length})`, roles.length ? trimArray(roles, 10).join(', ')
                     : 'No roles found.');
             } catch (err) {
