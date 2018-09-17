@@ -100,7 +100,7 @@ git clone https://gitlab.com/KamranMackey/Erica
 Alright, now let's `cd` into the download directory where we downloaded Erica to.
 
 ```bash
-cd Erica # note: the cd command works pretty much globally across all three major operating systems.
+cd Erica
 ```
 
 Now we can install Erica's dependencies. On Windows, you will need to install the `windows-build-tools` package using npm, as Windows

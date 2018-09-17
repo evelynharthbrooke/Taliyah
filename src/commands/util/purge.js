@@ -32,7 +32,7 @@ class PurgeCommand extends Command {
             cooldown: 15000,
             ratelimit: 3,
             description: {
-                content: strings.purge_description,
+                content: strings.purge_description + strings.purge_max,
                 usage: strings.purge_usage
             },
             args: [

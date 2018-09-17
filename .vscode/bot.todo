@@ -1,0 +1,9 @@
+Commands: 
+  ☐ Implement moderation commands such as ban/kick/mute/etc.
+  ☐ Implement anime command (for users who like to retrieve anime information)
+
+Inhibitors:
+  ☐ Implement a blacklist? (this is a maybe)
+
+Activity Rotation:
+  ☐ Figure out a way to implement activity rotation for the bot presence.
