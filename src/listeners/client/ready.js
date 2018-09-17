@@ -33,7 +33,6 @@ class ReadyListener extends Listener {
 
     async exec() {
         this.client.logger.info(`Erica v${version} has successfully logged into Discord and is ready to handle command requests.`);
-        // TODO: Maybe have this rotate between different activities? 🤔
         this.client.user.setActivity(`Erica v${version} | ${config.prefix}help`);
     }
 }

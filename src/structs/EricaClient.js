@@ -51,10 +51,6 @@ class EricaClient extends AkairoClient {
             handleEdits: true
         });
 
-        // TODO: Implement an inhibitor handler (maybe?) as it
-        // may be useful to implement a blacklist in case any bad
-        // actors abuse the bot. Meh, I'll look into it.
-
         // Initialize the listener handler.
         this.logger.log('info', 'Initializing the listener handler.');
         this.listenerHandler = new ListenerHandler(this, {

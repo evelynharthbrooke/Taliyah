@@ -1,9 +1,15 @@
+Base:
+  ☐ Improve error handling throughout Erica to reduce the crash rate.
+
 Commands: 
   ☐ Implement moderation commands such as ban/kick/mute/etc.
   ☐ Implement anime command (for users who like to retrieve anime information)
 
+Listeners:
+  ☐ Implement a reconnect listener.
+
 Inhibitors:
-  ☐ Implement a blacklist? (this is a maybe)
+  ☐ Implement a blacklist?
 
 Activity Rotation:
   ☐ Figure out a way to implement activity rotation for the bot presence.
