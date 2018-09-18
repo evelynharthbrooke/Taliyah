@@ -19,8 +19,8 @@
  * along with Erica. If not, see <https://www.gnu.org/licenses/>.
  */
 const { Listener } = require('discord-akairo');
-const config = require('../../../config.json');
 const { version } = require('../../../package.json');
+const activities = require('../../assets/json/activities.json');
 
 class ReadyListener extends Listener {
     constructor() {
@@ -32,8 +32,20 @@ class ReadyListener extends Listener {
     }
 
     async exec() {
-        this.client.logger.info(`Erica v${version} has successfully logged into Discord and is ready to handle command requests.`);
-        this.client.user.setActivity(`Erica v${version} | ${config.prefix}help`);
+        this.client.logger.log('info', `Erica v${version} has successfully logged into Discord and is ready to handle command requests.`);
+
+        // set the base activity that way so an activity has been set before
+        // our activity rotation executes.
+        const baseActivity = activities[Math.floor(Math.random() * activities.length)];
+        this.client.logger.log('info', 'Setting the base activity.')
+        this.client.user.setActivity(baseActivity.text, { type: baseActivity.type })
+
+        this.client.setInterval(() => {
+            this.client.logger.log('info', `Rotating between activities.`)
+            const activity = activities[Math.floor(Math.random() * activities.length)];
+            this.client.user.setActivity(activity.text, { type: activity.type })
+            this.client.logger.log('info', `Changed the activity! New activity is "${activity.type} ${activity.text}".`)
+        }, 120000)
     }
 }
 

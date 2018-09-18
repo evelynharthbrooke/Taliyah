@@ -22,6 +22,7 @@ const { MessageEmbed } = require('discord.js');
 const humanize = require('humanize-duration')
 const { base64 } = require('../../util/utilities');
 const request = require('node-superfetch')
+const pluralize = require('pluralize');
 const config = require("../../../config.json")
 const { version } = require('../../../package.json');
 
@@ -56,6 +57,9 @@ class AboutCommand extends Command {
             }
         }
 
+        // Reduce 
+        const channelCount = this.client.channels.filter(channel => channel.type != "category").size
+
         const info = new MessageEmbed()
         .setColor(0x00AE86)
         .setTitle(`About ${this.client.user.username}`)
@@ -65,8 +69,8 @@ class AboutCommand extends Command {
         .addField("❯ Latest Commit", `[\`${commits[0].sha.substr(0, 7)}\`](${commits[0].html_url})`, true)
         .addField('❯ Uptime', humanize(this.client.uptime, { largest: 1, round: true }), true)
         .addField('❯ Servers', `${this.client.guilds.size} server${this.client.guilds.size > 1 ? 's' : ''}`, true)
-        .addField('❯ Users', `${this.client.guilds.map(g => g.memberCount).reduce((f, l) => f + l)} user${this.client.guilds.map(g => g.memberCount).reduce((f, l) => f + l) > 1 ? 's' : ''}`, true)
-        .addField('❯ Channels', `${this.client.channels.size} channel${this.client.channels.size > 1 ? 's' : ''}`, true)
+        .addField('❯ Users', pluralize('user', this.client.guilds.map(g => g.memberCount).reduce((f, l) => f + l), true), true)
+        .addField('❯ Channels', pluralize('channel', channelCount, true), true)
         .addField('❯ Version', version, true)
         .addField('❯ Node Version', getNodeVersion(), true)
         .addField('❯ V8 Version', process.versions.v8.substr(0, 15), true)

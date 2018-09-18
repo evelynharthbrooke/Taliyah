@@ -12,4 +12,4 @@ Inhibitors:
   ☐ Implement a blacklist?
 
 Activity Rotation:
-  ☐ Figure out a way to implement activity rotation for the bot presence.
+  ✔ Figure out a way to implement activity rotation for the bot presence. @done(18-09-17 18:58)
