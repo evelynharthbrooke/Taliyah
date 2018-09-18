@@ -32,19 +32,23 @@ class ReadyListener extends Listener {
     }
 
     async exec() {
-        this.client.logger.log('info', `Erica v${version} has successfully logged into Discord and is ready to handle command requests.`);
+        this.client.logger.log('info', `Erica v${version} has successfully logged into the Discord API as ${this.client.user.tag}.`);
 
         // set the base activity that way so an activity has been set before
         // our activity rotation executes.
         const baseActivity = activities[Math.floor(Math.random() * activities.length)];
         this.client.logger.log('info', 'Setting the base activity.')
-        this.client.user.setActivity(baseActivity.text, { type: baseActivity.type })
+        this.client.user.setActivity(baseActivity.name, { type: baseActivity.type })
 
         this.client.setInterval(() => {
-            this.client.logger.log('info', `Rotating between activities.`)
+            this.client.logger.log('info', `Attempting to rotate between activities.`)
             const activity = activities[Math.floor(Math.random() * activities.length)];
-            this.client.user.setActivity(activity.text, { type: activity.type })
-            this.client.logger.log('info', `Changed the activity! New activity is "${activity.type} ${activity.text}".`)
+            if (activity.name === this.client.user.presence.activity.name) {
+                this.client.logger.log('info', 'Activity is identical, leaving activity the same for now.');
+            } else {
+                this.client.user.setActivity(activity.name, { type: activity.type })
+                this.client.logger.log('info', `Successfully changed the activity! New activity is "${activity.type} ${activity.name}".`);
+            }
         }, 120000)
     }
 }
