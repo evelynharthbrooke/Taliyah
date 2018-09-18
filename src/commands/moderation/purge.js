@@ -26,7 +26,7 @@ class PurgeCommand extends Command {
     constructor() {
         super('purge', {
             aliases: ['purge', 'prune', 'clear'],
-            category: 'Utilities',
+            category: 'Moderation',
             clientPermissions: ['READ_MESSAGE_HISTORY', 'MANAGE_MESSAGES'],
             userPermissions: ['MANAGE_MESSAGES'],
             cooldown: 15000,

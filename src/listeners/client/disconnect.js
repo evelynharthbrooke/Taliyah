@@ -28,7 +28,7 @@ class DisconnectListener extends Listener {
         });
     }
     
-    async exec(event) {
+    exec(event) {
         this.client.logger.log('warn', `Sorry, looks like I disconnected! :( (${event.code})`)
     }
 }

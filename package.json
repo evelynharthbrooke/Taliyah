@@ -4,7 +4,8 @@
   "description": "A bot for Discord focused on functionality and full integration with Discord's API.",
   "main": "src/index.js",
   "scripts": {
-    "start": "node --harmony ./erica.js"
+    "start": "pm2 start ./erica.js --node-args='--harmony'",
+    "logs": "pm2 logs erica"
   },
   "repository": {
     "type": "git",
@@ -42,5 +43,8 @@
     "numeral": "^2.0.6",
     "pluralize": "^7.0.0",
     "winston": "^3.1.0"
+  },
+  "devDependencies": {
+    "pm2": "^3.1.2"
   }
 }
