@@ -82,7 +82,6 @@ class AboutCommand extends Command {
         } else {
             info.setFooter('Not running in PM2 mode.', this.client.user.displayAvatarURL())
         }
-        
 
         return message.util.send(info);
     }
