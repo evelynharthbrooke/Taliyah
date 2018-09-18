@@ -57,7 +57,8 @@ class AboutCommand extends Command {
             }
         }
 
-        // Reduce 
+        // Filter the channel count to remove channel categories as they aren't channels,
+        // they're just entities that you can't do anything with other than put stuff in.
         const channelCount = this.client.channels.filter(channel => channel.type != "category").size
 
         const info = new MessageEmbed()
