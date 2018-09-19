@@ -83,15 +83,17 @@ class EricaClient extends AkairoClient {
     async start() {
         this.logger.log('info', `Starting up Erica v${version} and logging into the Discord API.`)
 
-        if (process.env.pm_id) {
-            this.logger.log('info', 'I am running in PM2 mode. I will remain running in the background')
-            this.logger.log('info', 'and will restart/reload if a crash occurs.')
-        } else {
-            this.logger.log('warn', 'I am not running under PM2 :( I will not gracefully restart if a crash occurs!')
-        }
-        
         if (process.version.includes('nightly') || process.version.includes('canary')) {
-            this.logger.log('warn', 'You are running Erica on an experimental version of Node. You may experience issues!')
+            this.logger.log('warn', 'You are running Erica on an experimental version of Node. You may experience stability issues.\n\n')
+            this.logger.log('warn', 'Based on stability reasons, it is strongly recommended that you run me under a stable version of Node.')
+        }
+
+        if (process.env.pm_id) {
+            this.logger.log('info', 'You are running me with PM2. I will remain running in the background' +
+                                    'and will restart/reload if I crash and/or disconnect.')
+        } else {
+            this.logger.log('warn', 'You are not running me with PM2. This is not recommended! Please consider switching to PM2.')
+            this.logger.log('warn', 'It will allow me to gracefully restart/reload if I happen to crash and/or if I somehow disconnect.')
         }
         
         return this.login(this.config.token);

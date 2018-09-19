@@ -53,6 +53,8 @@ class AboutCommand extends Command {
                 return process.version.substr(0, 7).concat(' ' + '(nightly)'); // for nightly builds
             } else if (process.version.includes('canary')) {
                 return process.version.substr(0, 7).concat(' ' + '(canary)'); // for canary builds
+            } else if (process.version.includes('rc')) {
+                return process.version.substr(0, 7).concat(' ' + '(rc)'); // for rc builds
             } else {
                 return process.version.substr(0, 7).concat(' ' + '(stable)'); // for stable builds
             }
@@ -77,12 +79,6 @@ class AboutCommand extends Command {
         .addField('❯ Node Version', getNodeVersion(), true)
         .addField('❯ V8 Version', process.versions.v8.substr(0, 15), true)
         .addField('❯ Memory Usage', `${Math.round(process.memoryUsage().heapUsed / 1024 / 1024)} MB`, true)
-
-        if (process.env.pm_id) {
-            info.setFooter('Running in PM2 mode.', this.client.user.displayAvatarURL())
-        } else {
-            info.setFooter('Not running in PM2 mode.', this.client.user.displayAvatarURL())
-        }
 
         return message.util.send(info);
     }

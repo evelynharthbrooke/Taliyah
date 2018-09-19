@@ -1,7 +1,7 @@
 /**
  * purge.js -- The purge command.
  * 
- * This command purges up to 100 messages from a channel in a Discord guild.
+ * This command purges up to 99 messages from a channel in a Discord guild.
  * 
  * Copyright (c) 2018-present Kamran Mackey.
  * 

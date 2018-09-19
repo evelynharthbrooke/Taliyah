@@ -2,7 +2,7 @@ Base:
   ☐ Improve error handling throughout Erica to reduce the crash rate.
 
 Commands: 
-  ☐ Implement moderation commands such as ban/kick/mute/etc.
+  ☐ Implement more moderation commands such as ban and kick.
   ☐ Implement anime command using the AniList API.
 
 Listeners:
