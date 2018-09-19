@@ -84,7 +84,7 @@ class EricaClient extends AkairoClient {
         this.logger.log('info', `Starting up Erica v${version} and logging into the Discord API.`);
 
         if (process.version.includes('nightly') || process.version.includes('canary')) {
-            this.logger.log('warn', 'You are running Erica on an experimental version of Node. You may experience stability issues.\n\n');
+            this.logger.log('warn', 'You are running Erica on an experimental version of Node. You may experience stability issues.');
             this.logger.log('warn', 'It\'s strongly recommended that you run a stable version of Node.');
         }
 
@@ -93,7 +93,7 @@ class EricaClient extends AkairoClient {
             this.logger.log('info', 'I will restart/reload if I crash and/or disconnect.');
         } else {
             this.logger.log('warn', 'You are not running me with PM2. This is not recommended! Please consider switching to PM2.');
-            this.logger.log('warn', 'It will allow me to gracefully restart/reload if I happen to crash and/or if I somehow disconnect.');
+            this.logger.log('warn', 'It will allow me to gracefully restart/reload if I happen to crash and/or disconnect.');
         }
         
         return this.login(this.config.token);
