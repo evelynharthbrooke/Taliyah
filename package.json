@@ -44,7 +44,7 @@
     "pluralize": "^7.0.0",
     "winston": "^3.1.0"
   },
-  "devDependencies": {
+  "optionalDependencies": {
     "pm2": "^3.1.2"
   }
 }
