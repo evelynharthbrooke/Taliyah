@@ -36,7 +36,6 @@ class AboutCommand extends Command {
     }
 
     async exec(message) {
-
         // Set up a request to the GitHub API. This allows us to properly retrieve
         // total commits, as well as the latest commit. This uses GitHub authentication
         // to lower the risk of being rate-limited. The authentication details are sent

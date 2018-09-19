@@ -12,8 +12,8 @@ when any new commands get added.
 
 ## Information:
 * **changelog:** Displays the most recent commits pushed to Erica's codebase.
-* **id:** Displays a user's Discord ID.
-* **user:** Retrieves detailed information on a user in a Discord guild.
+* **id:** Retrieves a user's Discord ID.
+* **user:** Retrieves detailed information on a chosen user.*
 
 ## Search:
 * **ghrepo:** Sends detailed information on a chosen GitHub repository.
