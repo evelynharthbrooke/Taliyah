@@ -13,7 +13,7 @@ when any new commands get added.
 ## Information:
 * **changelog:** Displays the most recent commits pushed to Erica's codebase.
 * **id:** Retrieves a user's Discord ID.
-* **user:** Retrieves detailed information on a chosen user.*
+* **user:** Retrieves detailed information on a chosen user.<sub><sup>1</sup></sub>
 
 ## Search:
 * **ghrepo:** Sends detailed information on a chosen GitHub repository.
@@ -21,3 +21,5 @@ when any new commands get added.
 * **ytchannel:** Sends detailed information on a chosen YouTube channel.
 * **ytvideo:** Sends detailed information on a chosen YouTube video.
 * **wikipedia:** Sends information on a chosen Wikipedia article.
+
+<sub>1. This command is recommended to only be used in Discord guilds and not direct messages.</sub>
