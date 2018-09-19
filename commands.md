@@ -2,7 +2,7 @@
 This is the command list for Erica. New commands are being added all the time, so keep an eye on this list
 when any new commands get added.
 
-## Utility:
+## Utilities:
 * **help:** Displays the current command list or displays useful information on a chosen command. 
 * **about:** Retrieves and displays detailed information about Erica.
 * **ping:** Pings the Discord API gateway and displays message latency.
