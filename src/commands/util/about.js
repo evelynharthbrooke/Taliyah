@@ -37,10 +37,12 @@ class AboutCommand extends Command {
 
     async exec(message) {
 
-        // set up a request to the GitHub API so that we can properly retrieve
-        // total commits, and the latest commit. Uses GitHub authentication to
-        // lower the risk of being rate-limited, but send the authentication
-        // details using base64 encoding for more security.
+        // Set up a request to the GitHub API. This allows us to properly retrieve
+        // total commits, as well as the latest commit. This uses GitHub authentication
+        // to lower the risk of being rate-limited. The authentication details are sent
+        // using base64 encoding instead of plain text for improved security so that way
+        // the details aren't able to be intercepted, even though HTTPS does a good job
+        // of preventing that anyways.
         const { body: commits } = await request
             .get('https://api.github.com/repos/KamranMackey/Erica/commits')
             .set({
@@ -57,8 +59,8 @@ class AboutCommand extends Command {
             }
         }
 
-        // Filter the channel count to remove channel categories as they aren't channels,
-        // they're just entities that you can't do anything with other than put stuff in.
+        // Filter the channel count to remove channel categories, as they aren't
+        // neccessary while retrieving the number of channels.
         const channelCount = this.client.channels.filter(channel => channel.type != "category").size
 
         const info = new MessageEmbed()
