@@ -138,5 +138,17 @@ We've finally reached the final step! To run the bot, run the following command.
 npm start
 ```
 
-This will start the bot. You will see a bunch of messages letting you know the bot is loading. Also: It is also possible to run Erica
-under PM2, so you are entirely free to use that if you wish.
+This will start up Erica. You will see a bunch of messages letting you know that she is initializing. By default, this will run Erica via
+PM2. Running Erica via PM2 improves reliability and will automatically restart her when a crash occurs. Because of this, you have to install
+it. You can do this by running the following command:
+
+```bash
+npm install -g pm2 # this installs PM2 globally so you can run it via your terminal of choice.
+```
+
+However, if for some reason you would like to run Erica via the standard node interpreter, you can do that too. Note however that you will lose
+the graceful reload/restart functionality that is offered via PM2.
+
+```bash
+node --harmony ./erica.js # This will run Erica and sends the harmony command-line flag to Node.
+```
