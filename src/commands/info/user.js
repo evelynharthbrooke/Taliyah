@@ -58,10 +58,6 @@ class UserCommand extends Command {
             .addField('❯ Creation Date', discordCreationDate, true)
             .addField('❯ Account Type', user.bot ? 'Bot' : 'Human', true);
 
-        if (!message.guild) {
-            userEmbed.setFooter("Cannot retrieve server-only user info, displaying basic user info instead.");
-        }
-
         if (message.channel.type === 'text') {
             const member = await message.guild.members.fetch(user.id);
             const serverJoinDate = moment.utc(member.joinedAt).format('lll');
@@ -86,6 +82,10 @@ class UserCommand extends Command {
             userEmbed.addField('❯ Hoist Role', member.roles.hoist ? member.roles.hoist.name : 'None', true)
             userEmbed.addField(`❯ Roles (${roles.length})`, roles.length ? trimArray(roles, 1).join(', ')
                 : 'No roles found.', true);
+        }
+
+        if (!message.guild) {
+            userEmbed.setFooter("Cannot retrieve server-only user info, displaying basic user info instead.");
         }
         
         return message.channel.send(userEmbed);
