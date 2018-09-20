@@ -58,36 +58,37 @@ class UserCommand extends Command {
             .addField('❯ Creation Date', discordCreationDate, true)
             .addField('❯ Account Type', user.bot ? 'Bot' : 'Human', true);
 
-        if (message.channel.type === 'text') {
-            try {
-                const member = await message.guild.members.fetch(user.id);
-                const serverJoinDate = moment.utc(member.joinedAt).format('lll');
-                const roles = member.roles.filter(r => r.id !== message.guild.defaultRole.id)
-                    .sort((x, y) => x.position - y.position)
-                    .map(r => r.name);
-
-                if (user.id === message.author.id) {
-                    userEmbed.setTitle('Information on yourself.');
-                } else if (user.id === this.client.user.id) {
-                    userEmbed.setTitle('Information on me!');
-                } else {
-                    userEmbed.setTitle(`Information on user ${user.tag}.`);
-                }
-
-                userEmbed.setColor(member.displayHexColor);
-                userEmbed.setDescription(member.presence.activity
-                    ? `${activityChoices[member.presence.activity.type]} **${member.presence.activity.name}**.`
-                    : '');
-                userEmbed.addField('❯ Server Join Date', serverJoinDate, true);
-                userEmbed.addField('❯ Nickname', member.nickname || 'No nickname set.', true);
-                userEmbed.addField(`❯ Roles (${roles.length})`, roles.length ? trimArray(roles, 10).join(', ')
-                    : 'No roles found.');
-            } catch (err) {
-                userEmbed.setFooter('Failed to resolve member, showing basic user information instead.');
-            }
+        if (!message.guild) {
+            userEmbed.setFooter("Cannot retrieve server-only user info, displaying basic user info instead.");
         }
-        return message.channel.send(userEmbed);
 
+        if (message.channel.type === 'text') {
+            const member = await message.guild.members.fetch(user.id);
+            const serverJoinDate = moment.utc(member.joinedAt).format('lll');
+            const roles = member.roles.filter(r => r.id !== message.guild.defaultRole.id)
+                .sort((x, y) => x.position - y.position)
+                .map(r => r.name);
+
+            if (user.id === message.author.id) {
+                userEmbed.setTitle('Information on yourself.');
+            } else if (user.id === this.client.user.id) {
+                userEmbed.setTitle('Information on me!');
+            } else {
+                userEmbed.setTitle(`Information on user ${user.tag}.`);
+            }
+
+            userEmbed.setColor(member.displayHexColor);
+            userEmbed.setDescription(member.presence.activity
+                ? `${activityChoices[member.presence.activity.type]} **${member.presence.activity.name}**.`
+                : '');
+            userEmbed.addField('❯ Server Join Date', serverJoinDate, true);
+            userEmbed.addField('❯ Nickname', member.nickname || 'No nickname set.', true);
+            userEmbed.addField('❯ Hoist Role', member.roles.hoist ? member.roles.hoist.name : 'None', true)
+            userEmbed.addField(`❯ Roles (${roles.length})`, roles.length ? trimArray(roles, 1).join(', ')
+                : 'No roles found.', true);
+        }
+        
+        return message.channel.send(userEmbed);
     }
 }
 

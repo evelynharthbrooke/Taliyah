@@ -44,7 +44,7 @@ class Util {
       if (array.length > size) {
         const len = array.length - size;
         array = array.slice(0, size);
-        array.push(`${len} more...`);
+        array.push(`and ${len} more...`);
       }
       return array;
     }

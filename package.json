@@ -1,11 +1,12 @@
 {
   "name": "erica",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "A bot for Discord focused on functionality and full integration with Discord's API.",
   "main": "src/index.js",
   "scripts": {
-    "start": "pm2 start ./erica.js --node-args='--harmony'",
-    "logs": "pm2 logs erica"
+    "start": "pm2 start -f ./erica.js --node-args='--harmony'",
+    "logs": "pm2 logs erica",
+    "kill": "pm2 kill"
   },
   "repository": {
     "type": "git",
