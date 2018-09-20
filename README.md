@@ -83,8 +83,8 @@ sudo apt-get install -y nodejs
 sudo apt-get install -y build-essential # required if you want to install native Node.js modules via npm!
 ```
 
-For other distributions, such as Gentoo, openSUSE, and others, you can visit the "Installing node.js via package
-manager" page on the Node.js website, which you can visit [here](https://nodejs.org/en/download/package-manager/).
+For other distributions, such as Gentoo, openSUSE, and others, you can visit the respective page on the Node.js
+website, which you can visit [here](https://nodejs.org/en/download/package-manager/).
 
 ### Installing
 
