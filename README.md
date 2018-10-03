@@ -86,7 +86,7 @@ sudo apt-get install -y build-essential # required if you want to install native
 For other distributions, such as Gentoo, openSUSE, and others, you can visit the respective page on the Node.js
 website, which you can visit [here](https://nodejs.org/en/download/package-manager/).
 
-### Installing
+### Installing the bot
 
 Now, we can actually download Erica and set her up. This step 100% requires Git, as that is how we will 
 be downloading her.
@@ -119,7 +119,7 @@ npm install
 Just be patient while this process completes. It may take a while to complete, depending on your Internet 
 speed as well as the speed of your system's SSD and/or hardrive.
 
-### Configuring
+### Configuring the bot
 
 Now we can set up Erica. You will need to go to the developers site for Discord, and create a new application.
 You can do this by going [here](https://discordapp.com/developers/applications/), logging in, and selecting
@@ -139,7 +139,7 @@ encounter an error when trying to run the respective commands, so that's why I s
 
 Now, we are pretty much done. Now, onto the final step, which is actually running Erica.
 
-### Running
+### Running the bot
 
 We've finally reached the final step! To run the bot, run the following command.
 
