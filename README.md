@@ -166,8 +166,8 @@ node --harmony ./erica.js # This will run Erica and sends the harmony command-li
 
 ### Licensing and Other Information
 Erica is licensed under the terms of the GNU General Public License, version 3.0, or any later versions that
-may release in the near or far future. The basic license terms are below, and the full terms can be found in 
-the `LICENSE` file in the root directory.
+may release in the near or far future. The license snippet is below, and the full terms can be found in the 
+`LICENSE` file in the root directory.
 
 Certain portions of Erica were inspired by and based on the code for Xiao, a bot developed by a fellow Discord
 bot creator ([dragonfire535](https://github.com/dragonfire535)), and you can take a look at Xiao's source code 
