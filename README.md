@@ -169,8 +169,8 @@ Erica is licensed under the terms of the GNU General Public License, version 3.0
 that may release in the near or far future. The basic license terms are below, and the full terms can be 
 found in the `LICENSE` file in the root directory.
 
-Some commands were inspired by and based on the code for [dragonfire535](https://github.com/dragonfire535)'s 
-bot Xiao, and you can find the source code to it by clicking [here](https://github.com/dragonfire535/xiao).
+Certain portions of Erica were based on [dragonfire535](https://github.com/dragonfire535)'s bot Xiao, and
+you can find the source code to it by clicking [here](https://github.com/dragonfire535/xiao).
 
     Copyright © 2018-present Kamran Mackey
 
