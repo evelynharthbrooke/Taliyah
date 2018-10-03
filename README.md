@@ -164,12 +164,13 @@ PM2.
 node --harmony ./erica.js # This will run Erica and sends the harmony command-line flag to Node.
 ```
 
-### Licensing
-Erica is licensed under the terms of the GNU General Public License, version 3.0, or any later versions that
-may release in the near or far future. The basic license terms are below, and the full terms can be found in
-the `LICENSE` file in the root directory.
+### Licensing and Other Information
+Erica is licensed under the terms of the GNU General Public License, version 3.0, or any later versions 
+that may release in the near or far future. The basic license terms are below, and the full terms can be 
+found in the `LICENSE` file in the root directory.
 
-![GPL V3](https://www.gnu.org/graphics/gplv3-127x51.png)
+Some commands were inspired by and based on the code for [dragonfire535](https://github.com/dragonfire535)'s 
+bot Xiao, and you can find the source code to it by clicking [here](https://github.com/dragonfire535/xiao).
 
     Copyright © 2018-present Kamran Mackey
 
