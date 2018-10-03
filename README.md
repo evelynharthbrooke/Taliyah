@@ -163,3 +163,25 @@ PM2.
 ```bash
 node --harmony ./erica.js # This will run Erica and sends the harmony command-line flag to Node.
 ```
+
+### Licensing
+Erica is licensed under the terms of the GNU General Public License, version 3.0, or any later versions that
+may release in the near or far future. The basic license terms are below, and the full terms can be found in
+the `LICENSE` file in the root directory.
+
+![GPL V3](https://www.gnu.org/graphics/gplv3-127x51.png)
+
+    Copyright © 2018-present Kamran Mackey
+
+    Erica is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Erica is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Erica. If not, see <http://www.gnu.org/licenses/>.
