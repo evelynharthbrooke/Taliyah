@@ -75,7 +75,7 @@ nvm install node # this installs the latest Node.js version
 Above, I described how to install Node.js with the Node Version Manager, but in this section I will describe
 how to install Node.js without it, in case you only want one Node.js installation and don't plan on installing
 multiple versions of Node. This section is going to be decently small as you only need to accomplish one step,
-which is to install Node through homebrew.
+which is to install Node through Homebrew.
 
 ```bash
 brew install node # simple, right?
