@@ -73,10 +73,10 @@ nvm install node # this installs the latest Node.js version
 
 ##### Without the Node Version Manager
 This option allows you to install Node.js without the Node Version Manager. If you would like to proceed with this route,
-you only have to accomplish one step, which is to install Node.js using Homebrew. This will install icu4c as well as Node.
-You can also install Node.js with OpenSSL 1.1 support, but its optional, since macOS already comes with its own SSL binary,
-LibreSSL, found in BSD distributions such as OpenBSD and FreeBSD. Anyways, babbling aside, you can install Node with the
-below command.
+you only have to accomplish one step, which is to install Node.js using Homebrew. This will install `icu4c` which allows
+full Unicode support, as well as Node.js itself. You can also install Node.js with OpenSSL 1.1 support, but its optional, 
+since macOS already comes with its own SSL binary, LibreSSL, found in BSD operating systems such as OpenBSD and FreeBSD. 
+Anyways, babbling aside, you can install Node with the below command.
 
 ```bash
 brew install node # simple, right?
