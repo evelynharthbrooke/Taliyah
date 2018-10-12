@@ -51,19 +51,34 @@ packages.
 brew update
 ```
 
-Then, let's install the Node Version Manager.
+##### With the Node Version Manager
+This option allows you to install Node.js with the Node Version Manager, which is strongly recommended because `nvm`
+allows you to e.g. manage multiple Node.js versions, which is ridiculously useful for testing purposes. But, you can
+also install node without `nvm` and I'll describe how to do that in the next section.
 
 ```bash
 brew install nvm && mkdir ~/.nvm
-# add the below part to your current shell profile!
+# add the below part to your current shell profile.
+# this step is crucial if you actually want to use
+# nvm.
 export NVM_DIR="$HOME/.nvm"
 . "#{opt_prefix}/nvm.sh"
 ```
 
-Finally, we can install the latest version of Node.js!
+Finally, we can install the latest version of Node.js.
 
 ```bash
 nvm install node # this installs the latest Node.js version
+```
+
+##### Without the Node Version Manager
+Above, I described how to install Node.js with the Node Version Manager, but in this section I will describe
+how to install Node.js without it, in case you only want one Node.js installation and don't plan on installing
+multiple versions of Node. This section is going to be decently small as you only need to accomplish one step,
+which is to install Node through homebrew.
+
+```bash
+brew install node # simple, right?
 ```
 
 #### Linux
