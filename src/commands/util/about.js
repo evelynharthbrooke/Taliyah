@@ -54,9 +54,9 @@ class AboutCommand extends Command {
             } else if (process.version.includes('canary')) {
                 return process.version.substr(0, 7).concat(' ' + '(canary)'); // for canary builds
             } else if (process.version.includes('rc')) {
-                return process.version.substr(0, 7).concat(' ' + '(rc)'); // for rc builds
+                return process.version.substr(0, 8).concat(' ' + '(rc)'); // for rc builds
             } else {
-                return process.version.substr(0, 7).concat(' ' + '(stable)'); // for stable builds
+                return process.version.substr(0, 8).concat(' ' + '(stable)'); // for stable builds
             }
         }
 
