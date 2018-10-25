@@ -31,7 +31,7 @@
   },
   "homepage": "https://github.com/KamranMackey/Erica#readme",
   "dependencies": {
-    "@discordjs/uws": "^11.149.0",
+    "@discordjs/uws": "^11.149.1",
     "discord-akairo": "github:1Computer1/discord-akairo",
     "discord.js": "github:discordjs/discord.js",
     "discord.js-lavalink": "github:mrjacz/discord.js-lavalink",
