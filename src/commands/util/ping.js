@@ -54,7 +54,7 @@ class PingCommand extends Command {
             .setColor(0x8b0000)
             .setDescription("Pong! :ping_pong:")
             .addField('Message Latency', `\`${latency}ms\``, true)
-            .addField('Heartbeat', `\`${Math.round(this.client.ping)}ms\``, true)
+            .addField('Heartbeat', `\`${Math.round(this.client.ws.ping)}ms\``, true)
             .setFooter(bot_health)
         
         return m.edit(PingEmbed);
