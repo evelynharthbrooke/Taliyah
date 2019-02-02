@@ -16,6 +16,10 @@
         "type": "PLAYING"
     },
     {
+        "name": "anime",
+        "type": "WATCHING"
+    },
+    {
         "name": "with AI",
         "type": "PLAYING"
     }
