@@ -84,7 +84,11 @@ class LastFMRecentCommand extends Command {
         const lfm_registered = moment.unix(lfm_ui.user.registered.unixtime).format('lll');
 
         if (mode == "basic") {
-            return message.channel.send(`${lfm_user} is listening to ${lfm_song} on ${lfm_album} by ${lfm_artist}.`)
+            if (lfm_rt.recenttracks.track[0]["@attr".nowplaying == "true"]) {
+                return message.channel.send(`${lfm_user} is listening to ${lfm_song} on ${lfm_album} by ${lfm_artist}.`)
+            } else {
+                return message.channel.send(`${lfm_user} last listened to ${lfm_song} on ${lfm_album} by ${lfm_artist}.`)
+            }
         } else if (mode == "embed") {
             const lfm_embed = new MessageEmbed()
 
