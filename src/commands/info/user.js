@@ -53,7 +53,6 @@ class UserCommand extends Command {
 
         const userEmbed = new MessageEmbed()
             .setThumbnail(user.displayAvatarURL())
-            .addField('❯ Tag', user.tag, true)
             .addField('❯ ID', user.id, true)
             .addField('❯ Creation Date', discordCreationDate, true)
             .addField('❯ Account Type', user.bot ? 'Bot' : 'Human', true);
@@ -66,7 +65,7 @@ class UserCommand extends Command {
                 .map(r => r.name);
 
             if (user.id === message.author.id) {
-                userEmbed.setTitle('Information on yourself.');
+                userEmbed.setTitle(`Information on you, ${user.tag}.`);
             } else if (user.id === this.client.user.id) {
                 userEmbed.setTitle('Information on me!');
             } else {
