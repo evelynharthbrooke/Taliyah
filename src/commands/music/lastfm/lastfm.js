@@ -110,7 +110,7 @@ class LastFMRecentCommand extends Command {
             }
 
             if (lfm_rt.recenttracks.track[0]["@attr"].nowplaying == "true") {
-                lfm_embed.setDescription(`Currently listening to ${lfm_song} on ${lfm_album} by ${lfm_artist}`)
+                lfm_embed.setDescription(`${lfm_user} is currently listening to ${lfm_song} on ${lfm_album} by ${lfm_artist}`)
             } else {
                 lfm_embed.setDescription(`${lfm_user} last listened to ${lfm_song} on ${lfm_album} by ${lfm_artist}`)
             }
