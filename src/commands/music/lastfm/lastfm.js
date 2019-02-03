@@ -60,16 +60,18 @@ class LastFMRecentCommand extends Command {
         // Endpoint for the last.fm API.
         const lastfm_base = 'https://ws.audioscrobbler.com/2.0/?method='
         // API methods
-        const rt_method = 'user.getRecentTracks'
-        const ui_method = 'user.getInfo'
-        // Recent Tracks query.
-        const song_query = `&user=${user}&api_key=${config.lastfm_key}&limit=5&format=json`
-        const song_rq_url = `${lastfm_base}${rt_method}${song_query}`
+        const rt_method = 'user.getRecentTracks' // Get Recent Tracks
+        const ui_method = 'user.getInfo'         // Get User Information
+        const lt_method = 'user.getLovedTracks'  // Get Loved Tracks
+        const query = `&user=${user}&api_key=${config.lastfm_key}&limit=5&format=json`
+        const song_rq_url = `${lastfm_base}${rt_method}${query}`
         const { body: lfm_rt } = await request.get(song_rq_url)
         // User Information query.
-        const user_query = `&user=${user}&api_key=${config.lastfm_key}&format=json`
-        const user_rq_url = `${lastfm_base}${ui_method}${user_query}`
+        const user_rq_url = `${lastfm_base}${ui_method}${query}`
         const { body: lfm_ui } = await request.get(user_rq_url)
+        // Get Loved Tracks query
+        const loved_rq_url = `${lastfm_base}${lt_method}${query}`
+        const { body: lfm_lt } = await request.get(loved_rq_url)
         // Scrobble information
         const lfm_total = numeral(lfm_rt.recenttracks["@attr"].total).format('0.0a')
         const track = lfm_rt.recenttracks.track[0]
@@ -80,8 +82,10 @@ class LastFMRecentCommand extends Command {
         // User Information
         const lfm_user_url = lfm_ui.user.url
         const lfm_country = lfm_ui.user.country
+        const lfm_loved = lfm_lt.lovedtracks["@attr"].total
         const lfm_sub = lfm_ui.user.subscriber
-        const lfm_registered = moment.unix(lfm_ui.user.registered.unixtime).format('lll');
+        const lfm_registered = moment.unix(lfm_ui.user.registered.unixtime).format('ll');
+        const lfm_time_registered = moment(lfm_registered).toNow(true)
 
         if (mode == "basic") {
             if (!track.hasOwnProperty("@attr")) {
@@ -111,16 +115,17 @@ class LastFMRecentCommand extends Command {
 
             if (track.hasOwnProperty("@attr")) {
                 lfm_embed.setDescription(`${lfm_user} is currently listening to ${lfm_song} on ${lfm_album} by ${lfm_artist}.` +
-                                         "\n\n" + `[View ${track.name} on last.fm →](${track.url})`)
+                                         "\n\n" + `[View track ${track.name} on last.fm →](${track.url})`)
             } else {
                 lfm_embed.setDescription(`${lfm_user} last listened to ${lfm_song} on ${lfm_album} by ${lfm_artist}` +
-                                         "\n\n" + `[View ${track.name} on last.fm →](${track.url})`)
+                                         "\n\n" + `[View track ${track.name} on last.fm →](${track.url})`)
             }
 
             lfm_embed.addField("❯ Total Scrobbles", lfm_total, true)
+            lfm_embed.addField("❯ Loved Tracks", lfm_loved, true)
             lfm_embed.addField("❯ Country", lfm_country, true)
             lfm_embed.addField("❯ Subscriber?", getSubStatus(), true)
-            lfm_embed.addField("❯ Registered On", lfm_registered, true)
+            lfm_embed.addField("❯ Registered On", `${lfm_registered} (${lfm_time_registered})`)
 
             return message.channel.send(lfm_embed);
         }
