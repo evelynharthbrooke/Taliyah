@@ -10,10 +10,14 @@ when any new commands get added.
 ## Moderation:
 * **purge:** Deletes up to a total of 99 messages from the current Discord channel.
 
+## Music:
+* **lastfm:** Retrieves information on the specified Last.fm user.
+
 ## Information:
 * **changelog:** Displays the most recent commits pushed to Erica's codebase.
-* **id:** Retrieves a user's Discord ID.
+* **id:** Retrieves a user's Discord ID. Leave blank to fetch your own Disccord ID.
 * **user:** Retrieves detailed information on a chosen user.<sub><sup>1</sup></sub>
+* **server:** Retrieves detailed information in the current Discord guild.<sub><sup>2</sup></sub>
 
 ## Search:
 * **ghrepo:** Sends detailed information on a chosen GitHub repository.
@@ -23,3 +27,4 @@ when any new commands get added.
 * **wikipedia:** Sends information on a chosen Wikipedia article.
 
 <sub>1. This command is recommended to only be used in Discord guilds and not direct messages.</sub>
+<sub>2. This command can ONLY be used in Discord guilds and cannot be used inside private conversations.</sub>
