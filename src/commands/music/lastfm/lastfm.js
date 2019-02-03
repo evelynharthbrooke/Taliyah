@@ -26,7 +26,6 @@ const numeral = require("numeral");
 const config = require("../../../../config.json");
 
 class LastFMRecentCommand extends Command {
-
     constructor() {
         super('lastfm', {
             aliases: ["lfm", "fm", "lastfm"],
@@ -73,10 +72,11 @@ class LastFMRecentCommand extends Command {
         const { body: lfm_ui } = await request.get(user_rq_url)
         // Scrobble information
         const lfm_total = numeral(lfm_rt.recenttracks["@attr"].total).format('0.0a')
+        const track = lfm_rt.recenttracks.track[0]
         const lfm_user = lfm_rt.recenttracks["@attr"].user
-        const lfm_song = lfm_rt.recenttracks.track[0].name
-        const lfm_album = lfm_rt.recenttracks.track[0].album["#text"]
-        const lfm_artist = lfm_rt.recenttracks.track[0].artist["#text"]
+        const lfm_song = track.name
+        const lfm_album = track.album["#text"]
+        const lfm_artist = track.artist["#text"]
         // User Information
         const lfm_user_url = lfm_ui.user.url
         const lfm_country = lfm_ui.user.country
@@ -84,10 +84,10 @@ class LastFMRecentCommand extends Command {
         const lfm_registered = moment.unix(lfm_ui.user.registered.unixtime).format('lll');
 
         if (mode == "basic") {
-            if (lfm_rt.recenttracks.track[0]["@attr"].nowplaying == "true") {
-                return message.channel.send(`${lfm_user} is listening to ${lfm_song} on ${lfm_album} by ${lfm_artist}.`)
-            } else {
+            if (!track.hasOwnProperty("@attr")) {
                 return message.channel.send(`${lfm_user} last listened to ${lfm_song} on ${lfm_album} by ${lfm_artist}.`)
+            } else {
+                return message.channel.send(`${lfm_user} is listening to ${lfm_song} on ${lfm_album} by ${lfm_artist}.`)
             }
         } else if (mode == "embed") {
             const lfm_embed = new MessageEmbed()
@@ -95,7 +95,7 @@ class LastFMRecentCommand extends Command {
             lfm_embed.setTitle(`Last.fm information for user ${lfm_user}`)
             lfm_embed.setURL(lfm_user_url)
 
-            if (lfm_rt.recenttracks.track[0]["image"][3]["#text"] == "") {
+            if (track["image"][3]["#text"] == "") {
                 this.client.logger.log("No immage attached to track, omitting from embed.")
             } else {
                 lfm_embed.setThumbnail(lfm_rt.recenttracks.track[0]["image"][3]["#text"])
@@ -109,10 +109,12 @@ class LastFMRecentCommand extends Command {
                 }
             }
 
-            if (lfm_rt.recenttracks.track[0]["@attr"].nowplaying == "true") {
-                lfm_embed.setDescription(`${lfm_user} is currently listening to ${lfm_song} on ${lfm_album} by ${lfm_artist}`)
+            if (track.hasOwnProperty("@attr")) {
+                lfm_embed.setDescription(`${lfm_user} is currently listening to ${lfm_song} on ${lfm_album} by ${lfm_artist}.` +
+                                         "\n\n" + `[View ${track.name} on last.fm →](${track.url})`)
             } else {
-                lfm_embed.setDescription(`${lfm_user} last listened to ${lfm_song} on ${lfm_album} by ${lfm_artist}`)
+                lfm_embed.setDescription(`${lfm_user} last listened to ${lfm_song} on ${lfm_album} by ${lfm_artist}` +
+                                         "\n\n" + `[View ${track.name} on last.fm →](${track.url})`)
             }
 
             lfm_embed.addField("❯ Total Scrobbles", lfm_total, true)
