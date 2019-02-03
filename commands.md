@@ -26,6 +26,5 @@ when any new commands get added.
 * **ytvideo:** Sends detailed information on a chosen YouTube video.
 * **wikipedia:** Sends information on a chosen Wikipedia article.
 
-<sub>1. This command is recommended to only be used in Discord guilds and not direct messages.</sub>
-
+<sub>1. This command is recommended to only be used in Discord guilds and not direct messages.</sub><br>
 <sub>2. This command can ONLY be used in Discord guilds and cannot be used inside private conversations.</sub>
