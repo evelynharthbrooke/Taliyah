@@ -1,4 +1,4 @@
-# Erica Command List (12 total commands)
+# Erica Command List (14 total commands)
 This is the command list for Erica. New commands are being added all the time, so keep an eye on this list
 when any new commands get added.
 
