@@ -39,13 +39,15 @@ class ChangelogCommand extends Command {
         const commitsUrl = github_base + `/repos/${config.erica_repo_username}/${config.erica_repo_name}/commits`
         const login = `Basic ${base64(`${config.github_username}:${config.github_password}`)}`
 
+        const githubCommitsURL = `https://github.com/${config.erica_repo_username}/${config.erica_repo_name}/commits/master`
+
         let {body : botCommits } = await request.get(commitsUrl).set({ Authorization: login });
 
         const commits = botCommits.slice(0, 10);
 		const embed = new MessageEmbed()
 			.setTitle(`[${config.erica_repo_name}:master] Most recent commits`)
 			.setColor(0x7289DA)
-			.setURL(`${commitsUrl}/master`)
+			.setURL(githubCommitsURL)
 			.setDescription(commits.map(commit => {
 				const sha = `[\`${commit.sha.slice(0, 7)}\`](${commit.html_url})`;
 				return `${sha} ${shorten(commit.commit.message.split('\n')[0], 50)} - ${commit.author.login}`;
