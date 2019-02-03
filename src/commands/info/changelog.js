@@ -45,7 +45,7 @@ class ChangelogCommand extends Command {
 
         const commits = botCommits.slice(0, 10);
 		const embed = new MessageEmbed()
-			.setTitle(`[${config.erica_repo_name}:master] Most recent commits`)
+			.setTitle(`Most recent commits on ${config.erica_repo_name}'s master branch`)
 			.setColor(0x7289DA)
 			.setURL(githubCommitsURL)
 			.setDescription(commits.map(commit => {
