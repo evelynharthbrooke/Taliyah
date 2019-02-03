@@ -50,7 +50,7 @@ class ChangelogCommand extends Command {
 			.setURL(githubCommitsURL)
 			.setDescription(commits.map(commit => {
 				const sha = `[\`${commit.sha.slice(0, 7)}\`](${commit.html_url})`;
-				return `${sha} ${shorten(commit.commit.message.split('\n')[0], 50)} - ${commit.author.login}`;
+				return `${sha} ${shorten(commit.commit.message.split('\n')[0], 50)} (${commit.author.login})`;
 			}).join('\n'));
 		return message.channel.send(embed);
     }
