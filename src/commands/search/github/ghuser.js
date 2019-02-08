@@ -29,7 +29,7 @@ class GitHubUserCommand extends Command {
         super('ghuser', {
             aliases: ['ghuser', 'guser', 'githubuser'],
             category: 'Search',
-            description: { 
+            description: {
                 content: 'Retrieve information on a GitHub user.',
                 usage: '<user>'
             },
@@ -51,7 +51,7 @@ class GitHubUserCommand extends Command {
         // use the basic authentication type as we don't need OAuth.
         const auth = `Basic ${base64(`${config.github_username}:${config.github_password}`)}`
 
-        let {body : user} = await request.get(`${github_base}/users/${name}`).set({ Authorization: auth });
+        let { body: user } = await request.get(`${github_base}/users/${name}`).set({ Authorization: auth });
 
         function getBio() {
             if (user.bio != null) {

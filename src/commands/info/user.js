@@ -86,7 +86,7 @@ class UserCommand extends Command {
         if (!message.guild) {
             userEmbed.setFooter("Cannot retrieve server-only user info, displaying basic user info instead.");
         }
-        
+
         return message.channel.send(userEmbed);
     }
 }

@@ -55,7 +55,7 @@ class PurgeCommand extends Command {
                 message.channel.send('You cannot delete more than 99 messages. Try again with a smaller number.')
             } else {
                 await message.channel.bulkDelete(msgCount + 1, true)
-                await message.channel.send(`Purging, please wait...`)
+                await message.channel.send(`Purging ${pluralize('message', msgCount, true)}, please wait...`)
                     .then(message => {
                         message.edit(`Successfully purged ${pluralize('message', msgCount, true)}.`)
                         message.delete({ timeout: 15000 }); // delete purged message after 30 seconds.

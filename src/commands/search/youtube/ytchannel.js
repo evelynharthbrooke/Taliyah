@@ -57,7 +57,7 @@ class YouTubeChannelCommand extends Command {
             part: 'snippet',
             q: channelName,
             maxResults: 1,
-            type: 'channel', 
+            type: 'channel',
             key: login
         })
 
@@ -88,15 +88,15 @@ class YouTubeChannelCommand extends Command {
             .addField(`❯ Creation Date`, `${publishedDate}`, true)
 
         function getCountryName() {
-            return countries.getName(data.snippet.country, 'en').substr(0,13);
+            return countries.getName(data.snippet.country, 'en').substr(0, 13);
         }
-        
+
         if (data.snippet.country != null) {
-            channelEmbed.addField(`❯ Country of Origin`,`:flag_${data.snippet.country.toLowerCase()}: ${getCountryName()}`, true)
+            channelEmbed.addField(`❯ Country of Origin`, `:flag_${data.snippet.country.toLowerCase()}: ${getCountryName()}`, true)
         } else {
             this.client.logger.log('info', `Could not detect the channel's country, omitting the country field from the embed.`)
         }
-        
+
         return message.util.send(channelEmbed);
     }
 }

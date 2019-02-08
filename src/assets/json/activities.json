@@ -22,5 +22,13 @@
     {
         "name": "with AI",
         "type": "PLAYING"
+    }, 
+    {
+        "name": "Fortnite",
+        "type": "PLAYING"
+    },
+    {
+        "name": "music",
+        "type": "LISTENING"
     }
 ]

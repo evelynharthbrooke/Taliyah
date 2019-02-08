@@ -1,7 +1,7 @@
 /**
- * kick.js -- The kick command.
+ * report.js -- The Report Model.
  * 
- * Kicks a user from the current Discord guild.
+ * Model for reports. Stores information in MongoDB.
  * 
  * Copyright (c) 2018-present Kamran Mackey.
  * 
@@ -19,7 +19,18 @@
  * along with Erica. If not, see <https://www.gnu.org/licenses/>.
  */
 
-class KickCommand {
-}
+const mongoose = require('mongoose');
 
-module.exports = KickCommand;
+const reportSchema = mongoose.Schema({
+    _id: mongoose.Schema.Types.ObjectId,
+    username: String,
+    userID: String,
+    reason: String,
+    guild: String,
+    channel: String,
+    rUser: String,
+    rUserID: String,
+    time: String,
+});
+
+module.exports = mongoose.model("Report", reportSchema);

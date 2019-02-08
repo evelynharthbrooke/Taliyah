@@ -57,27 +57,27 @@ class GitHubRepoCommand extends Command {
         const github_base = 'https://api.github.com'
         const repoUrl = github_base + `/repos/${owner}/${repository}`
         const login = `Basic ${base64(`${config.github_username}:${config.github_password}`)}`
-        
-        let {body : repo } = await request.get(repoUrl).set({ Authorization: login });
+
+        let { body: repo } = await request.get(repoUrl).set({ Authorization: login });
 
         const creationDate = moment.utc(repo.created_at).format('lll');
         const updatedDate = moment.utc(repo.updated_at).format('lll');
 
         let RepoEmbed = new MessageEmbed()
-                .setColor(0xFFFFFF)
-                .setURL(repo.html_url)
-                .setThumbnail(repo.owner.avatar_url)
-                .setTitle(`GitHub Repository Information for ${repo.full_name}`)
-                .setDescription(repo.description ? shorten(repo.description) : `No description.`)
-                .addField('❯ Owner', repo.owner.login, true)
-                .addField('❯ Stars', repo.stargazers_count, true)
-                .addField('❯ Forks', repo.forks, true)
-                .addField('❯ Open Issues', repo.open_issues, true)
-                .addField('❯ Language', repo.language || '???', true)
-                .addField('❯ License', repo.license ? shorten(repo.license.spdx_id) : '???', true)
-                .addField('❯ Created On', creationDate, true)
-                .addField('❯ Last Updated', updatedDate, true)
-           
+            .setColor(0xFFFFFF)
+            .setURL(repo.html_url)
+            .setThumbnail(repo.owner.avatar_url)
+            .setTitle(`GitHub Repository Information for ${repo.full_name}`)
+            .setDescription(repo.description ? shorten(repo.description) : `No description.`)
+            .addField('❯ Owner', repo.owner.login, true)
+            .addField('❯ Stars', repo.stargazers_count, true)
+            .addField('❯ Forks', repo.forks, true)
+            .addField('❯ Open Issues', repo.open_issues, true)
+            .addField('❯ Language', repo.language || '???', true)
+            .addField('❯ License', repo.license ? shorten(repo.license.spdx_id) : '???', true)
+            .addField('❯ Created On', creationDate, true)
+            .addField('❯ Last Updated', updatedDate, true)
+
         message.util.send(RepoEmbed)
     }
 }

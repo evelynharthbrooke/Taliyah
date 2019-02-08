@@ -1,7 +1,7 @@
 /**
- * kick.js -- The kick command.
+ * lastfm.js -- The Last.fm Model.
  * 
- * Kicks a user from the current Discord guild.
+ * The schema model for last.fm.
  * 
  * Copyright (c) 2018-present Kamran Mackey.
  * 
@@ -19,7 +19,10 @@
  * along with Erica. If not, see <https://www.gnu.org/licenses/>.
  */
 
-class KickCommand {
-}
+const mongoose = require("mongoose");
 
-module.exports = KickCommand;
+const lfmSchema = mongoose.Schema({
+    dUsername: String,
+    dUserID: String,
+    lfmUsername: String,
+})

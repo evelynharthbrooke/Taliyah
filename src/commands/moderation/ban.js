@@ -19,8 +19,7 @@
  * along with Erica. If not, see <https://www.gnu.org/licenses/>.
  */
 
- class BanCommand {
+class BanCommand {
+}
 
- }
-
- module.exports = BanCommand;
+module.exports = BanCommand;

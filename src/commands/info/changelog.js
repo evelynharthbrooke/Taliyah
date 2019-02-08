@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Erica. If not, see <https://www.gnu.org/licenses/>.
  */
+
 const { Command } = require('discord-akairo');
 const { MessageEmbed } = require('discord.js');
 const { shorten, base64 } = require('../../util/utilities');
@@ -41,18 +42,18 @@ class ChangelogCommand extends Command {
 
         const githubCommitsURL = `https://github.com/${config.erica_repo_username}/${config.erica_repo_name}/commits/master`
 
-        let {body : botCommits } = await request.get(commitsUrl).set({ Authorization: login });
+        let { body: botCommits } = await request.get(commitsUrl).set({ Authorization: login });
 
         const commits = botCommits.slice(0, 10);
-		const embed = new MessageEmbed()
-			.setTitle(`Most recent commits on ${config.erica_repo_name}'s master branch`)
-			.setColor(0x7289DA)
-			.setURL(githubCommitsURL)
-			.setDescription(commits.map(commit => {
-				const sha = `[\`${commit.sha.slice(0, 7)}\`](${commit.html_url})`;
-				return `${sha} ${shorten(commit.commit.message.split('\n')[0], 50)} (${commit.author.login})`;
-			}).join('\n'));
-		return message.channel.send(embed);
+        const embed = new MessageEmbed()
+            .setTitle(`Most recent commits on ${config.erica_repo_name}'s master branch`)
+            .setColor(0x7289DA)
+            .setURL(githubCommitsURL)
+            .setDescription(commits.map(commit => {
+                const sha = `[\`${commit.sha.slice(0, 7)}\`](${commit.html_url})`;
+                return `${sha} ${shorten(commit.commit.message.split('\n')[0], 50)} (${commit.author.login})`;
+            }).join('\n'));
+        return message.channel.send(embed);
     }
 }
 
