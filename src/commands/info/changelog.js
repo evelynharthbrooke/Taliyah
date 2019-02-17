@@ -1,20 +1,20 @@
 /**
- * changelog.js -- Fetches the most recent commits to Erica.
+ * changelog.js -- Fetches the most recent commits to bot.
  * 
  * Copyright (c) 2018-present Kamran Mackey.
  * 
- * Erica is free software: you can redistribute it and/or modify
+ * bot is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  * 
- * Erica is distributed in the hope that it will be useful,
+ * bot is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  * 
  * You should have received a copy of the GNU General Public License
- * along with Erica. If not, see <https://www.gnu.org/licenses/>.
+ * along with bot. If not, see <https://www.gnu.org/licenses/>.
  */
 
 const { Command } = require('discord-akairo');
@@ -37,16 +37,16 @@ class ChangelogCommand extends Command {
 
     async exec(message) {
         const github_base = 'https://api.github.com'
-        const commitsUrl = github_base + `/repos/${config.erica_repo_username}/${config.erica_repo_name}/commits`
+        const commitsUrl = github_base + `/repos/${config.bot_repo_username}/${config.bot_repo_name}/commits`
         const login = `Basic ${base64(`${config.github_username}:${config.github_password}`)}`
 
-        const githubCommitsURL = `https://github.com/${config.erica_repo_username}/${config.erica_repo_name}/commits/master`
+        const githubCommitsURL = `https://github.com/${config.bot_repo_username}/${config.bot_repo_name}/commits/master`
 
         let { body: botCommits } = await request.get(commitsUrl).set({ Authorization: login });
 
         const commits = botCommits.slice(0, 10);
         const embed = new MessageEmbed()
-            .setTitle(`Most recent commits on ${config.erica_repo_name}'s master branch`)
+            .setTitle(`Most recent commits on ${config.bot_repo_name}'s master branch`)
             .setColor(0x7289DA)
             .setURL(githubCommitsURL)
             .setDescription(commits.map(commit => {
