@@ -47,7 +47,7 @@ class ChangelogCommand extends Command {
         const commits = botCommits.slice(0, 10);
         const embed = new MessageEmbed()
             .setTitle(`Most recent commits on ${config.bot_repo_name}'s master branch`)
-            .setColor(0x7289DA)
+            .setColor(0x315665)
             .setURL(githubCommitsURL)
             .setDescription(commits.map(commit => {
                 const sha = `[\`${commit.sha.slice(0, 7)}\`](${commit.html_url})`;

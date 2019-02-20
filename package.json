@@ -45,6 +45,8 @@
     "node-superfetch": "^0.1.9",
     "numeral": "^2.0.6",
     "pluralize": "^7.0.0",
+    "pokedex-promise-v2": "github:PokeAPI/pokedex-promise-v2#master",
+    "spotify-web-api-node": "^4.0.0",
     "winston": "^3.2.1",
     "zlib-sync": "^0.1.4"
   }

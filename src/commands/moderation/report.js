@@ -39,7 +39,6 @@ class ReportCommand extends Command {
                 {
                     id: 'member',
                     type: "member",
-
                     prompt: {
                         start: "Please enter the member you'd like to report.",
                         retry: "You did not enter a user to report."
@@ -68,6 +67,7 @@ class ReportCommand extends Command {
             reason: reason,
             guild: message.guild.name,
             channel: message.channel.name,
+            channelID: message.channel.id,
             rUser: message.author.username,
             rUserID: message.author.id,
             time: message.createdAt
@@ -81,7 +81,7 @@ class ReportCommand extends Command {
         reportEmbed.addField("Reporter ID", report.rUserID, true)
         reportEmbed.addField("Guild", report.guild, true)
         reportEmbed.addField("Channel", report.channel, true)
-        reportEmbed.setFooter(`Report sent at ${report.time}.`)
+        reportEmbed.setFooter(`Report sent at ${report.time}. Channel ID: ${report.channelID}`)
 
         report.save()
             .then(message.channel.send(reportEmbed))

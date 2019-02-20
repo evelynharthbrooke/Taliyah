@@ -39,7 +39,7 @@ class NMGameCommand extends Command {
                     id: "game",
                     match: "content",
                     prompt: {
-                        start: "What's the game you would like to search for?"
+                        start: "What's the game you would like to search for on Nexus Mods?"
                     }
                 }
             ]

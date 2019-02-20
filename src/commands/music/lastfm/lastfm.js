@@ -78,7 +78,7 @@ class LastFMRecentCommand extends Command {
         const lfm_artists = lfm_la.artists["@attr"].total
         const lfm_sub = lfm_ui.user.subscriber
         const lfm_registered = moment.unix(lfm_ui.user.registered.unixtime).format('ll');
-        const lfm_time_registered = moment(lfm_registered).toNow(true)
+        const lfm_time_registered = moment.unix(lfm_ui.user.registered.unixtime).toNow(true)
 
         if (user == null) {
             message.channel.send("Looks like you haven't entered a last.fm username!");
