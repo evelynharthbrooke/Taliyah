@@ -49,7 +49,7 @@ class ReadyListener extends Listener {
                 this.client.user.setActivity(activity.name, { type: activity.type })
                 this.client.logger.log('info', `Successfully changed the activity! New activity is "${activity.type} ${activity.name}".`);
             }
-        }, 120000)
+        }, 200000)
     }
 }
 

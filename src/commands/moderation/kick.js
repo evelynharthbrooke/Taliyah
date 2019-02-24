@@ -19,7 +19,50 @@
  * along with Erica. If not, see <https://www.gnu.org/licenses/>.
  */
 
-class KickCommand {
-}
+const { Command } = require('discord-akairo');
+
+class KickCommand extends Command {
+    constructor() {
+        super('kick', {
+            aliases: ['kick'],
+            category: 'Moderation',
+            description: {
+                content: "Kicks a user from the current Discord server.",
+                usage: '<member>'
+            },
+            args: [
+                {
+                    id: 'member',
+                    type: 'member'
+                },
+                {
+                    id: 'reason',
+                    match: 'rest',
+                    type: 'string'
+                }
+            ]
+        })
+    }
+
+    async exec(message, { member, reason }) {
+        member = message.mentions.members.first();
+        if (!member) {
+            return message.channel.send("You didn't mention a member to kick!");
+        } else if (!reason) {
+            return message.channel.send("You didn't give a reason as to why you want to kick this user!");
+        } else {
+            await member.kick(reason).then(() => {
+                message.channel.send(
+                    `Successfully kicked **${member.user.tag}!\n\n` +
+                    `__**Reason**__: ${reason}`
+                )
+            }).catch(err => {
+                message.channel.send(`I was unable to kick ${member.user.tag}!`);
+                // Log the error
+                console.error(err);
+            });
+        };
+    };
+};
 
 module.exports = KickCommand;

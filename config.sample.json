@@ -4,6 +4,9 @@
     "token": "",
 
     "lastfm_key": "",
+
+    "sp_clientid": "",
+    "sp_clientsecret": "",
     
     "github_username": "",
     "github_password": "",

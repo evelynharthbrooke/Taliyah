@@ -26,7 +26,10 @@
         super('pokemon', {
             aliases: ["pokemon", "plookup", "pmon", "poke"],
             category: 'Search',
-            description: { content: 'Retrieves information on the specified Pokémon.' },
+            description: { 
+                content: 'Retrieves information on the specified Pokémon.',
+                usage: "<pokemon>"
+            },
             args: [
                 {
                     id: "pdex_entry",

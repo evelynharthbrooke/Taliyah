@@ -19,7 +19,28 @@
  * along with Erica. If not, see <https://www.gnu.org/licenses/>.
  */
 
-class BanCommand {
+ const { Command } = require('discord-akairo');
+
+class BanCommand extends Command {
+    constructor() {
+        super('ban', {
+            aliases: ['ban', 'banish'],
+            category: "Moderation",
+            description: {
+                content: "Bans a user from the current Discord server.",
+                usage: "<user>"
+            },
+            args: [
+                {
+                    id: 'member',
+                    type: 'member'
+                }
+            ]
+        })
+    }
+    async exec(message, { member }) {
+        message.channel.send("Not yet implemented");
+    }
 }
 
 module.exports = BanCommand;
