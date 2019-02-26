@@ -79,7 +79,7 @@ class SpotifyNewReleasesCommand extends Command {
                 }).join('');
 
                 function getMarketName() {
-                    return countries.getName(market, 'en').substr(0, 13);
+                    return countries.getName(market, 'en');
                 }
 
                 newReleasesEmbed.setTitle(`New Releases on Spotify for ${getMarketName()}`)

@@ -84,6 +84,10 @@ class SpotifyAlbumCommand extends Command {
                         copyright = res.body.copyrights[0].text;
                     }
 
+                    if (albumName.includes("EP")) {
+                        albumName = albumName.replace(/-|\s\wP/g, ""); // I don't know how this works, but it does.
+                    }
+
                     let title;
                     let tracksTitle;
                     if (total_tracks === 1) {
@@ -116,8 +120,8 @@ class SpotifyAlbumCommand extends Command {
                     message.channel.send(albumEmbed);
                 }).catch(error => {
                     console.log(error);
-                    return message.channel.send(`Whoops! Looks like something happened while trying to` +
-                        `fetch album details for ${album}. Please try again later!`)
+                    return message.channel.send(`Whoops! Looks like something happened while trying to ` +
+                        `fetch album details for \`${album}\`. Please try again later!`)
                 })
             }).catch(error => {
                 console.log(error);
