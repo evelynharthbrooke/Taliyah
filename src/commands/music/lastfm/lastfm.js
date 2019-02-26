@@ -45,8 +45,16 @@ class LastFMRecentCommand extends Command {
     }
 
     async exec(message, { user }) {
+        
+        if (user == null) {
+            message.channel.send("Looks like you haven't entered a last.fm username!");
+            return;
+        }
+
         // Endpoint for the last.fm API.
         const lastfm_base = 'https://ws.audioscrobbler.com/2.0/?method='
+        // Initialize the Discord embed.
+        const lfm_embed = new MessageEmbed()
         // API methods
         const recentTracksMethod = 'user.getRecentTracks'
         const userInfoMethod = 'user.getInfo'
@@ -76,19 +84,12 @@ class LastFMRecentCommand extends Command {
         const lfm_country = lfm_ui.user.country
         const lfm_loved = lfm_lt.lovedtracks["@attr"].total
         const lfm_artists = lfm_la.artists["@attr"].total
-        const lfm_sub = lfm_ui.user.subscriber
         const lfm_registered = moment.unix(lfm_ui.user.registered.unixtime).format('ll');
         const lfm_time_registered = moment.unix(lfm_ui.user.registered.unixtime).toNow(true)
 
-        if (user == null) {
-            message.channel.send("Looks like you haven't entered a last.fm username!");
-            return;
-        }
-
-        const lfm_embed = new MessageEmbed()
-
-        lfm_embed.setTitle(`Last.fm information for user ${lfm_user}`)
-        lfm_embed.setURL(lfm_user_url)
+        lfm_embed.setTitle(`Last.fm information for user ${lfm_user}`);
+        lfm_embed.setColor(0xd51007)
+        lfm_embed.setURL(lfm_user_url);
 
         if (track["image"][3]["#text"] == "") {
             this.client.logger.log('info', 'No immage attached to Last.fm track, omitting from embed.')
@@ -96,28 +97,22 @@ class LastFMRecentCommand extends Command {
             lfm_embed.setThumbnail(lfm_rt.recenttracks.track[0]["image"][3]["#text"])
         }
 
-        function getSubStatus() {
-            if (lfm_sub == 0) {
-                return "No"
-            } else {
-                return "Yes"
-            }
-        }
+        const statistics =
+            `**Total Scrobbles**: ${lfm_total}\n` +
+            `**Loved Tracks**: ${lfm_loved}\n` +
+            `**Total Artists**: ${lfm_artists}\n` +
+            `**Country**: ${lfm_country}\n` +
+            `**Registration Date**: ${lfm_registered} (${lfm_time_registered})`
 
         if (track.hasOwnProperty("@attr")) {
-            lfm_embed.setDescription(`${lfm_user} is currently listening to ${lfm_song} on ${lfm_album} by ${lfm_artist}.` +
-                "\n\n" + `[View track ${track.name} on Last.fm →](${track.url})`)
+            lfm_embed.setDescription(
+                `${lfm_user} is currently listening to ${lfm_song} by ${lfm_artist} on ${lfm_album}.` +
+                `\n\n` + `[View track ${track.name} on Last.fm →](${track.url})\n\n` + statistics)
         } else {
-            lfm_embed.setDescription(`${lfm_user} last listened to ${lfm_song} on ${lfm_album} by ${lfm_artist}.` +
-                "\n\n" + `[View track ${track.name} on Last.fm →](${track.url})`)
+            lfm_embed.setDescription(
+                `${lfm_user} last listened to ${lfm_song} by ${lfm_artist} on ${lfm_album}.\n\n` +
+                `[View track ${track.name} on Last.fm →](${track.url})\n\n` + statistics)
         }
-
-        lfm_embed.addField("❯ Total Scrobbles", lfm_total, true)
-        lfm_embed.addField("❯ Loved Tracks", lfm_loved, true)
-        lfm_embed.addField("❯ Total Artists", lfm_artists, true)
-        lfm_embed.addField("❯ Country", lfm_country, true)
-        lfm_embed.addField("❯ Subscriber?", getSubStatus(), true)
-        lfm_embed.addField("❯ Registered On", `${lfm_registered} (${lfm_time_registered})`, true)
 
         return message.channel.send(lfm_embed);
     }

@@ -53,17 +53,11 @@ class SpotifyAlbumCommand extends Command {
         spotify.clientCredentialsGrant().then(data => {
             spotify.setAccessToken(data.body['access_token']);
 
-            spotify.searchAlbums(album, { limit: 1, offset: 0 }, (err, res) => {
-                let albumEmbed = new MessageEmbed();
-
-                if (typeof res.body.albums.items[0] === `undefined`) {
-                    return message.channel.send(`No results found for query \`${album}\`. ` +
-                        `Please try a different search query.`)
-                }
-
+            spotify.searchAlbums(album, { limit: 1, offset: 0 }).then(res => {
                 const id = res.body.albums.items[0].id;
 
                 spotify.getAlbum(id).then(res => {
+                    let albumEmbed = new MessageEmbed();
                     let albumName = res.body.name;
                     let cover = res.body.images[1].url;
                     let artists = res.body.artists.map(artist => {
@@ -93,16 +87,16 @@ class SpotifyAlbumCommand extends Command {
                     let title;
                     let tracksTitle;
                     if (total_tracks === 1) {
-                        title = `Information for single ${albumName}`;
+                        title = `Information on single ${albumName}`;
                         tracksTitle = "Single";
                     } else if (res.body.album_type === "compilation") {
-                        title = `Information for compilation ${albumName}`;
+                        title = `Information on compilation ${albumName}`;
                         tracksTitle = "Compilation";
                     } else if (total_tracks <= 6) {
-                        title = `Information for EP ${albumName}`;
+                        title = `Information on EP ${albumName}`;
                         tracksTitle = "EP"
                     } else {
-                        title = `Information for album ${albumName}`;
+                        title = `Information on album ${albumName}`;
                         tracksTitle = "Album";
                     }
 
@@ -120,7 +114,15 @@ class SpotifyAlbumCommand extends Command {
                     albumEmbed.setFooter(`${copyright} | Information provided by the Spotify Web API.`);
 
                     message.channel.send(albumEmbed);
+                }).catch(error => {
+                    console.log(error);
+                    return message.channel.send(`Whoops! Looks like something happened while trying to` +
+                        `fetch album details for ${album}. Please try again later!`)
                 })
+            }).catch(error => {
+                console.log(error);
+                return message.channel.send(`No results found for query \`${album}\`. ` +
+                    `Please try a different search term.`);
             })
         })
     }
