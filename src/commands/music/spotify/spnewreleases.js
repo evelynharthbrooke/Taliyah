@@ -87,7 +87,8 @@ class SpotifyNewReleasesCommand extends Command {
                 newReleasesEmbed.setFooter(`Powered by the Spotify Web API.`)
 
                 if (newReleasesEmbed.length >= 2048) {
-                    return message.channel.send("Sorry, the total length of the message exceeds 2048 chars. Try a smaller limit.");
+                    return message.channel.send("Sorry, the total length of the message exceeds 2048 chars. " +
+                        "Try a smaller limit.");
                 } else {
                     return message.channel.send(newReleasesEmbed);
                 }

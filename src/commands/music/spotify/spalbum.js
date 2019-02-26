@@ -57,7 +57,8 @@ class SpotifyAlbumCommand extends Command {
                 let albumEmbed = new MessageEmbed();
 
                 if (typeof res.body.albums.items[0] === `undefined`) {
-                    return message.channel.send(`No results found for query \`${album}\`. Please try a different search query.`)
+                    return message.channel.send(`No results found for query \`${album}\`. ` +
+                        `Please try a different search query.`)
                 }
 
                 const id = res.body.albums.items[0].id;
@@ -74,7 +75,8 @@ class SpotifyAlbumCommand extends Command {
                         let name = track.name;
                         let trackNumber = track.track_number;
                         let trackURL = track.external_urls.spotify;
-                        let length = moment.duration(track.duration_ms, "milliseconds").format('h[h] mm[m] s[s]');
+                        let length = moment.duration(track.duration_ms,
+                            "milliseconds").format('h[h] mm[m] s[s]');
                         let explicit = track.explicit ? "(Explicit)" : "";
 
                         return `**${trackNumber}.** [${name}](${trackURL}) - ${length} ${explicit}`;
@@ -116,7 +118,7 @@ class SpotifyAlbumCommand extends Command {
                         `${trackListing}`
                     );
                     albumEmbed.setFooter(`${copyright} | Information provided by the Spotify Web API.`);
-                    
+
                     message.channel.send(albumEmbed);
                 })
             })

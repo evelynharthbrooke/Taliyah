@@ -69,7 +69,8 @@ class SpotifyTrackCommand extends Command {
                         let album = res.body.tracks.items[0].album.name;
                         let explicit = res.body.tracks.items[0].explicit ? "Yes" : "No";
 
-                        let length = moment.duration(res.body.tracks.items[0].duration_ms, "milliseconds").format('h[h] mm[m] s[s]');
+                        let length = moment.duration(res.body.tracks.items[0].duration_ms, 
+                            "milliseconds").format('h[h] mm[m] s[s]');
                         let cover = res.body.tracks.items[0].album.images[1].url;
                         let playback_url = res.body.tracks.items[0].external_urls.spotify;
 
