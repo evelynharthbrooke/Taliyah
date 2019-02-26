@@ -85,7 +85,7 @@ class SpotifyAlbumCommand extends Command {
                     }
 
                     if (albumName.includes("EP")) {
-                        albumName = albumName.replace(/-|\s\wP/g, ""); // I don't know how this works, but it does.
+                        albumName = albumName.replace(/-|\sEP/g, ""); // I don't know how this works, but it does.
                     }
 
                     let title;
