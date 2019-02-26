@@ -106,8 +106,8 @@ class LastFMRecentCommand extends Command {
 
         if (track.hasOwnProperty("@attr")) {
             lfm_embed.setDescription(
-                `${lfm_user} is currently listening to ${lfm_song} by ${lfm_artist} on ${lfm_album}.` +
-                `\n\n` + `[View track ${track.name} on Last.fm →](${track.url})\n\n` + statistics)
+                `${lfm_user} is currently listening to ${lfm_song} by ${lfm_artist} on ${lfm_album}.\n\n` +
+                `[View track ${track.name} on Last.fm →](${track.url})\n\n` + statistics)
         } else {
             lfm_embed.setDescription(
                 `${lfm_user} last listened to ${lfm_song} by ${lfm_artist} on ${lfm_album}.\n\n` +
