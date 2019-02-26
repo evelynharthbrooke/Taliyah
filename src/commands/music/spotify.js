@@ -21,7 +21,6 @@
 const { Command } = require('discord-akairo');
 const { stripIndents } = require('common-tags');
 
-
 class SpotifyCommand extends Command {
     constructor() {
         super('spotify', {
