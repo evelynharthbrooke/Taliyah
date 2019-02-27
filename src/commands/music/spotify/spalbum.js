@@ -84,10 +84,6 @@ class SpotifyAlbumCommand extends Command {
                         copyright = res.body.copyrights[0].text;
                     }
 
-                    if (albumName.includes("EP")) {
-                        albumName = albumName.replace(/-|\sEP/g, ""); // I don't know how this works, but it does.
-                    }
-
                     let title;
                     let tracksTitle;
                     if (total_tracks === 1) {
