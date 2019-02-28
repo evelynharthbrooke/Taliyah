@@ -27,12 +27,14 @@ class SpotifyCommand extends Command {
             aliases: ['spotify', 'sp', 'splookup', 'spot'],
             description: {
                 content: stripIndents`
-                    Allows you to search Spotify's musical database.
+                    Allows users to search for Spotify content such as
+                    albums, tracks, shows, etc.
 
                     __**Methods and Usage**__:
                     **newreleases**: \`<market>\`
                     **track**: \`<name of track>\`
                     **playlist**: \`<playlist ID>\`
+                    **show**: \`<show name>\`
                     **album**: \`<album name>\`
                 `,
                 usage: '<method> <argument>',
@@ -41,7 +43,7 @@ class SpotifyCommand extends Command {
             args: [
                 {
                     id: 'method',
-                    type: ['track', 'playlist', 'album', 'newreleases']
+                    type: ['track', 'playlist', 'show', 'album', 'newreleases']
                 },
                 {
                     id: 'args',
@@ -53,11 +55,13 @@ class SpotifyCommand extends Command {
     }
 
     exec(message, { method, args }) {
-        if (!method) return message.channel.send("You didn't choose a method!");
+
+        if (!method) return message.channel.send(`You didn't choose a method!`);
 
         let subcommand = {
             track: this.handler.modules.get('spotify-track'),
             playlist: this.handler.modules.get('spotify-playlist'),
+            show: this.handler.modules.get('spotify-show'),
             album: this.handler.modules.get('spotify-album'),
             newreleases: this.handler.modules.get('spotify-newreleases')
         }[method]

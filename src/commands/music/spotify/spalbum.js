@@ -113,7 +113,13 @@ class SpotifyAlbumCommand extends Command {
                     );
                     albumEmbed.setFooter(`${copyright} | Information provided by the Spotify Web API.`);
 
-                    message.channel.send(albumEmbed);
+                    if (albumEmbed.length >= 2048) {
+                        return message.channel.send(
+                            "Sorry! Looks like this album is too big to display. " + 
+                            "Please try a different album.")
+                    } else {
+                        message.channel.send(albumEmbed);
+                    }
                 }).catch(error => {
                     console.log(error);
                     return message.channel.send(`Whoops! Looks like something happened while trying to ` +
