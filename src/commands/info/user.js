@@ -49,6 +49,10 @@ class UserCommand extends Command {
     }
 
     async exec(message, { user }) {
+        if (!user) {
+            user = message.author;
+        }
+
         const discordCreationDate = moment.utc(user.createdAt).format('lll');
 
         const userEmbed = new MessageEmbed()

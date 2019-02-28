@@ -77,25 +77,26 @@ class YouTubeChannelCommand extends Command {
         const subsCount = numeral(data.statistics.subscriberCount).format('0a').toLocaleUpperCase();
         const viewCount = numeral(data.statistics.viewCount).format('0a').toLocaleUpperCase();
 
+        function getCountry() {
+            if (data.snippet.country != null) {
+                return countries.getName(data.snippet.country, 'en').substr(0, 13);
+            } else {
+                return "No country available."
+            }
+        }
+
         const channelEmbed = new MessageEmbed()
-            .setColor(0xDD2825)
-            .setTitle(`Channel information for ${data.snippet.title}`)
-            .setDescription(data.snippet.description)
-            .setThumbnail(data.snippet.thumbnails.medium ? data.snippet.thumbnails.medium.url : null)
-            .addField(`❯ Total Subscribers`, pluralize('subscriber', subsCount, true), true)
-            .addField(`❯ Total Videos`, pluralize('video', videoCount, true), true)
-            .addField(`❯ Total Views`, pluralize('view', viewCount, true), true)
-            .addField(`❯ Creation Date`, `${publishedDate}`, true)
-
-        function getCountryName() {
-            return countries.getName(data.snippet.country, 'en').substr(0, 13);
-        }
-
-        if (data.snippet.country != null) {
-            channelEmbed.addField(`❯ Country of Origin`, `:flag_${data.snippet.country.toLowerCase()}: ${getCountryName()}`, true)
-        } else {
-            this.client.logger.log('info', `Could not detect the channel's country, omitting the country field from the embed.`)
-        }
+        channelEmbed.setColor(0xDD2825)
+        channelEmbed.setTitle(`Channel information for ${data.snippet.title}`)
+        channelEmbed.setDescription(
+            `${data.snippet.description}\n\n` +
+            `**Country**: ${getCountry()}\n` +
+            `**Total Subscribers**: ${pluralize('subscriber', subsCount, true)}\n` +
+            `**Total Videos**: ${pluralize('video', videoCount, true)}\n` +
+            `**Total Views**: ${pluralize('view', viewCount, true)}\n` +
+            `**Creation Date**: ${publishedDate}`
+        )
+        channelEmbed.setThumbnail(data.snippet.thumbnails.medium ? data.snippet.thumbnails.medium.url : null)
 
         return message.util.send(channelEmbed);
     }

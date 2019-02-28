@@ -91,6 +91,7 @@ class SpotifyPlaylistCommand extends Command {
 
                 spPlaylistEmbed.setTitle(`Information on playlist ${name}`);
                 spPlaylistEmbed.setThumbnail(image);
+                spPlaylistEmbed.setColor(0x1DB954);
                 spPlaylistEmbed.setDescription(`${desc}\n\n` + 
                                                `**Owner**: [${owner}](${ownerURL})\n` +
                                                `**Tracks**: ${tracks}\n` +

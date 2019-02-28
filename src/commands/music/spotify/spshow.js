@@ -61,21 +61,23 @@ class SpotifyPodcastCommand extends Command {
                     const podcastEmbed = new MessageEmbed();
 
                     let episodes = res.body.episodes.items.slice(0, 5).map(episode => {
-                        console.log(episode);
-                        return `${episode.name} - ${episode.release_date}`
-                    }).join('\n')
+                        return `${episode.name} • ${moment(episode.release_date).format("ll")}`
+                    }).join('\n');
 
                     let explicit = res.body.explicit ? "Yes" : "No";
 
-                    podcastEmbed.setTitle(`Podcast Information for ${res.body.name}`);
+                    podcastEmbed.setTitle(`Show Information for ${res.body.name}`);
                     podcastEmbed.setThumbnail(res.body.images[0].url);
+                    podcastEmbed.setColor(0x1DB954);
                     podcastEmbed.setDescription(
                         `${res.body.description}\n\n` +
                         `**Publisher**: ${res.body.publisher}\n` +
-                        `**Explicit Podcast?** ${explicit}\n\n` +
+                        `**Explicit Podcast?** ${explicit}\n` +
+                        `**Episodes Available**: ${res.body.episodes.total}\n\n` +
                         `**Most Recent Episodes**:\n` +
                         `${episodes}`
-                    )
+                    );
+                    podcastEmbed.setFooter("Powered by the Spotify Web API.")
 
                     message.channel.send(podcastEmbed);
                 }).catch(error => {
