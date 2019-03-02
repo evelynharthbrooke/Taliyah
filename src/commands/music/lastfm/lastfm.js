@@ -25,7 +25,6 @@ const moment = require("moment");
 const numeral = require("numeral");
 const config = require("../../../../config.json");
 
-
 class LastFMRecentCommand extends Command {
     constructor() {
         super('lastfm', {
