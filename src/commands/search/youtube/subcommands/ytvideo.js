@@ -22,8 +22,8 @@ const moment = require("moment");
 require("moment-duration-format");
 const numeral = require("numeral");
 const request = require('node-superfetch');
-const { shorten } = require("../../../util/utilities");
-const config = require('../../../../config.json');
+const { shorten } = require("../../../../util/utilities");
+const config = require('../../../../../config.json');
 
 // YouTube API-related stuff
 const ytApiBase = "https://www.googleapis.com/youtube/v3/";
@@ -34,8 +34,7 @@ const apiKey = config.youtube_key;
 
 class YouTubeVideoCommand extends Command {
     constructor() {
-        super('ytvideo', {
-            aliases: ['ytvideo', 'yvideo'],
+        super('youtube-video', {
             category: 'Search',
             description: {
                 content: 'Retrieves information on a specified YouTube video.',

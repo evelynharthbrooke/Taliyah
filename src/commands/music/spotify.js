@@ -71,3 +71,4 @@ class SpotifyCommand extends Command {
 }
 
 module.exports = SpotifyCommand;
+

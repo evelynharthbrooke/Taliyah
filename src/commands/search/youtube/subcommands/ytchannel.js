@@ -23,12 +23,11 @@ const moment = require('moment');
 const numeral = require('numeral');
 const request = require('node-superfetch');
 const pluralize = require('pluralize')
-const config = require('../../../../config.json');
+const config = require('../../../../../config.json');
 
 class YouTubeChannelCommand extends Command {
     constructor() {
-        super('ytchannel', {
-            aliases: ['ytchannel', 'ychannel'],
+        super('youtube-channel', {
             category: 'Search',
             description: {
                 content: 'Retrieves information on a specified YouTube channel.',

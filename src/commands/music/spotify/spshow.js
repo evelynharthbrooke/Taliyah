@@ -51,6 +51,8 @@ class SpotifyPodcastCommand extends Command {
     }
 
     async exec(message, { show }) {
+        if (!show) return message.channel.send("You didn't enter a show name. Please try again.")
+
         spotify.clientCredentialsGrant().then(data => {
             spotify.setAccessToken(data.body['access_token']);
 

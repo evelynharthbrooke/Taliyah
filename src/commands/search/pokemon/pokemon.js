@@ -52,8 +52,8 @@
             const pokeEmbed = new MessageEmbed();
             const name_lc = res[0].name
             const name = name_lc.replace(/^\w/, c => c.toUpperCase());
-            const height = "__**Height**__: " + res[0].height / 10 + "m";
-            const weight = "__**Weight**__: " + res[0].weight / 10 + "kg";
+            const height = "**Height**: " + res[0].height / 10 + "m";
+            const weight = "**Weight**: " + res[0].weight / 10 + "kg";
             const poke_url = `https://www.pokemon.com/us/pokemon/${name}`;
 
             let flavortext = "placeholder flavor text";
@@ -63,7 +63,7 @@
             } else {
                 flavortext = res[1].flavor_text_entries[2].flavor_text;
             }
-
+z
             let pokeid = JSON.stringify(res[1].id);
             
             if (pokeid.length === 2) {
@@ -79,10 +79,10 @@
             let type = "placeholder type";
 
             if (typeof res[0].types[1] != 'undefined') {
-                type = `__**Types**__: ${res[0].types[1].type.name.replace(/^\w/, c => c.toUpperCase())} ` +
+                type = `**Types**: ${res[0].types[1].type.name.replace(/^\w/, c => c.toUpperCase())} ` +
                         `and ${res[0].types[0].type.name.replace(/^\w/, c => c.toUpperCase())}`;
             } else {
-                type = `__**Type**__: ${res[0].types[0].type.name.replace(/^\w/, c => c.toUpperCase())}`;
+                type = `**Type**: ${res[0].types[0].type.name.replace(/^\w/, c => c.toUpperCase())}`;
             };
 
             pokeEmbed.setTitle(`Pokédex Information on ${name}`)
