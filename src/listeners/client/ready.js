@@ -37,7 +37,7 @@ class ReadyListener extends Listener {
         // set the base activity that way so an activity has been set before
         // our activity rotation executes.
         const baseActivity = activities[Math.floor(Math.random() * activities.length)];
-        this.client.logger.log('info', 'Setting the base activity.')
+        this.client.logger.log('info', `Setting base activity. Base activity is "${baseActivity.type} ${baseActivity.name}".`)
         this.client.user.setActivity(baseActivity.name, { type: baseActivity.type })
 
         this.client.setInterval(() => {
@@ -47,6 +47,7 @@ class ReadyListener extends Listener {
                 this.client.logger.log('info', 'Activity is identical, leaving activity the same for now.');
             } else {
                 this.client.user.setActivity(activity.name, { type: activity.type })
+
                 this.client.logger.log('info', `Successfully changed the activity! New activity is "${activity.type} ${activity.name}".`);
             }
         }, 200000)
