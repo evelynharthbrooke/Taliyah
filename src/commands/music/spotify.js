@@ -64,7 +64,7 @@ class SpotifyCommand extends Command {
             show: this.handler.modules.get('spotify-show'),
             album: this.handler.modules.get('spotify-album'),
             newreleases: this.handler.modules.get('spotify-newreleases')
-        }[method]
+        }[method];
 
         return this.handler.handleDirectCommand(message, args, subcommand, true);
     }

@@ -91,16 +91,16 @@ class SpotifyTrackCommand extends Command {
 
                         message.channel.send(spotifyEmbed);
                     } catch {
-                        message.channel.send("Sorry, I either couldn't find that, or something else happened. Perhaps try again?")
-                    }
+                        message.channel.send("Sorry, I either couldn't find that, or something else happened. Perhaps try again?");
+                    };
                 }
-            })
+            });
         }, err => {
             console.log('Something went wrong when retrieving an access token', err);
         }).catch(() => {
             return message.channel.send("Sorry, an error occurred and I cannot continue with your request. Try again later.")
         });
-    }
-}
+    };
+};
 
 module.exports = SpotifyTrackCommand;

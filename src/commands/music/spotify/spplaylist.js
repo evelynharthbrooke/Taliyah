@@ -56,7 +56,7 @@ class SpotifyPlaylistCommand extends Command {
             
             if (!playlist) {
                 return message.channel.send("Please enter a playlist ID.")
-            }
+            };
             
             // Get playlist metadata.
             spotify.getPlaylist(playlist).then(res => {
@@ -101,9 +101,9 @@ class SpotifyPlaylistCommand extends Command {
                                                `${trackList}`);
                 spPlaylistEmbed.setFooter('Information provided by the Spotify Web API.');
                 message.channel.send(spPlaylistEmbed);
-            })
-        })
-    }
-}
+            });
+        });
+    };
+};
 
 module.exports = SpotifyPlaylistCommand;

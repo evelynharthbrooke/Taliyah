@@ -51,7 +51,7 @@ class SpotifyPodcastCommand extends Command {
     }
 
     async exec(message, { show }) {
-        if (!show) return message.channel.send("You didn't enter a show name. Please try again.")
+        if (!show) return message.channel.send("You didn't enter a show name. Please try again.");
 
         spotify.clientCredentialsGrant().then(data => {
             spotify.setAccessToken(data.body['access_token']);
@@ -79,21 +79,21 @@ class SpotifyPodcastCommand extends Command {
                         `**Most Recent Episodes**:\n` +
                         `${episodes}`
                     );
-                    podcastEmbed.setFooter("Powered by the Spotify Web API.")
+                    podcastEmbed.setFooter("Powered by the Spotify Web API.");
 
                     message.channel.send(podcastEmbed);
                 }).catch(error => {
                     console.log(error);
                     return message.channel.send(`Whoops! Looks like something happened while trying to ` +
                         `fetch show details for \`${show}\`. Please try again later!`)
-                })
+                });
             }).catch(error => {
                 console.log(error);
                 return message.channel.send(`No results found for show \`${show}\`. ` +
                     `Please try a different search term.`);
-            })
-        })
-    }
-}
+            });
+        });
+    };
+};
 
 module.exports = SpotifyPodcastCommand;

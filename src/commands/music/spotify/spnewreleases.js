@@ -62,6 +62,7 @@ class SpotifyNewReleasesCommand extends Command {
             limit = 20;
             console.log("No limit entered, defaulting to 20.");
         }
+        
         spotify.clientCredentialsGrant().then(data => {
             spotify.setAccessToken(data.body['access_token']);
             spotify.getNewReleases({ country: market, limit: limit }).then(res => {
@@ -84,7 +85,7 @@ class SpotifyNewReleasesCommand extends Command {
 
                 newReleasesEmbed.setTitle(`New Releases on Spotify for ${getMarketName()}`)
                 newReleasesEmbed.setDescription(items);
-                newReleasesEmbed.setFooter(`Powered by the Spotify Web API.`)
+                newReleasesEmbed.setFooter(`Powered by the Spotify Web API.`);
 
                 if (newReleasesEmbed.length >= 2048) {
                     return message.channel.send("Sorry, the total length of the message exceeds 2048 chars. " +

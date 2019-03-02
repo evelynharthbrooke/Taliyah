@@ -56,7 +56,7 @@ class YouTubeCommand extends Command {
         let subcommand = {
             channel: this.handler.modules.get('youtube-channel'),
             video: this.handler.modules.get('youtube-video')
-        }[method]
+        }[method];
 
         return this.handler.handleDirectCommand(message, args, subcommand, true);
     }

@@ -51,7 +51,7 @@ class SpotifyAlbumCommand extends Command {
 
     async exec(message, { album }) {
 
-        if (!album) return message.channel.send("You didn't enter an album name. Please try again.")
+        if (!album) return message.channel.send("You didn't enter an album name. Please try again.");
 
         spotify.clientCredentialsGrant().then(data => {
             spotify.setAccessToken(data.body['access_token']);
