@@ -1,7 +1,7 @@
 /**
  * youtube.js -- Main file for handling YouTube retrieval commands.
  * 
- * Copyright (c) 2018-present Kamran Mackey.
+ * Copyright (c) 2019-present Kamran Mackey.
  * 
  * Erica is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
