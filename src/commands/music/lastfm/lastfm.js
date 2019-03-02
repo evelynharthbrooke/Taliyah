@@ -103,15 +103,17 @@ class LastFMRecentCommand extends Command {
             `**Country**: ${lfm_country}\n` +
             `**Registration Date**: ${lfm_registered} (${lfm_time_registered})`;
 
+        let listeningStatus;
+
         if (track.hasOwnProperty("@attr")) {
-            lfm_embed.setDescription(
-                `${lfm_user} is currently listening to ${lfm_song} by ${lfm_artist} on ${lfm_album}.\n\n` +
-                `[View track ${track.name} on Last.fm →](${track.url})\n\n` + statistics)
+            listeningStatus = "is currently listening to"
         } else {
-            lfm_embed.setDescription(
-                `${lfm_user} last listened to ${lfm_song} by ${lfm_artist} on ${lfm_album}.\n\n` +
+            listeningStatus = "last listened to"
+        }
+
+        lfm_embed.setDescription(
+                `${lfm_user} ${listeningStatus} ${lfm_song} by ${lfm_artist} on ${lfm_album}.\n\n` +
                 `[View track ${track.name} on Last.fm →](${track.url})\n\n` + statistics)
-        };
 
         return message.channel.send(lfm_embed);
     }
