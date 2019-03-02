@@ -28,7 +28,7 @@ const config = require("../../../../config.json");
 class LastFMRecentCommand extends Command {
     constructor() {
         super('lastfm', {
-            aliases: ["lfm", "fm", "lastfm"],
+            aliases: ["lastfm", "lfm", "fm"],
             category: "Music",
             description: {
                 content: "Retrieves a users' Last.FM state.",
