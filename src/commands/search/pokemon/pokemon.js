@@ -63,7 +63,7 @@
             } else {
                 flavortext = res[1].flavor_text_entries[2].flavor_text;
             }
-z
+            
             let pokeid = JSON.stringify(res[1].id);
             
             if (pokeid.length === 2) {
