@@ -106,10 +106,10 @@ class LastFMRecentCommand extends Command {
         let listeningStatus;
 
         if (track.hasOwnProperty("@attr")) {
-            listeningStatus = "is currently listening to"
+            listeningStatus = "is currently listening to";
         } else {
-            listeningStatus = "last listened to"
-        }
+            listeningStatus = "last listened to";
+        };
 
         lfm_embed.setDescription(
                 `${lfm_user} ${listeningStatus} ${lfm_song} by ${lfm_artist} on ${lfm_album}.\n\n` +
