@@ -19,15 +19,14 @@
 const { Command } = require('discord-akairo');
 const { MessageEmbed } = require('discord.js');
 const request = require('node-superfetch');
-const { base64 } = require('../../../util/utilities');
+const { base64 } = require('../../../../util/utilities');
 const moment = require('moment');
 const numeral = require('numeral');
-const config = require('../../../../config.json');
+const config = require('../../../../../config.json');
 
 class GitHubUserCommand extends Command {
     constructor() {
-        super('ghuser', {
-            aliases: ['ghuser', 'guser', 'githubuser'],
+        super('github-user', {
             category: 'Search',
             description: {
                 content: 'Retrieve information on a GitHub user.',

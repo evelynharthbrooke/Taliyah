@@ -20,14 +20,12 @@ const { Command } = require('discord-akairo');
 const { MessageEmbed } = require('discord.js');
 const request = require('node-superfetch');
 const moment = require('moment');
-// Project level imports
-const { shorten, base64 } = require("../../../util/utilities");
-const config = require("../../../../config.json");
+const { shorten, base64 } = require("../../../../util/utilities");
+const config = require('../../../../../config.json');
 
 class GitHubRepoCommand extends Command {
     constructor() {
-        super('ghrepo', {
-            aliases: ['ghrepo', 'grepo', 'githubrepo'],
+        super('github-repo', {
             category: 'Search',
             description: {
                 content: 'Searches for a repository on GitHub.',

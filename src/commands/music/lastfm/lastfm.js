@@ -44,7 +44,7 @@ class LastFMRecentCommand extends Command {
     }
 
     async exec(message, { user }) {
-        
+
         if (user == null) {
             message.channel.send("Looks like you haven't entered a last.fm username!");
             return;
@@ -112,8 +112,8 @@ class LastFMRecentCommand extends Command {
         };
 
         lfm_embed.setDescription(
-                `${lfm_user} ${listeningStatus} ${lfm_song} by ${lfm_artist} on ${lfm_album}.\n\n` +
-                `[View track ${track.name} on Last.fm →](${track.url})\n\n` + statistics)
+            `${lfm_user} ${listeningStatus} ${lfm_song} by ${lfm_artist} on ${lfm_album}.\n\n` +
+            `[View track ${track.name} on Last.fm →](${track.url})\n\n` + statistics)
 
         return message.channel.send(lfm_embed);
     }
