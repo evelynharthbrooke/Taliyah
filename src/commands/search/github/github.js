@@ -63,4 +63,3 @@ class GitHubCommand extends Command {
 }
 
 module.exports = GitHubCommand;
-
