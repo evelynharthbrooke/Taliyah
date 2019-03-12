@@ -42,7 +42,7 @@
     "lodash": "^4.17.11",
     "moment": "^2.24.0",
     "moment-duration-format": "^2.2.2",
-    "mongoose": "^5.4.16",
+    "mongoose": "^5.4.19",
     "node-superfetch": "^0.1.9",
     "numeral": "^2.0.6",
     "pluralize": "^7.0.0",
