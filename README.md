@@ -10,7 +10,7 @@ other stuff. You can check out said library by visitng the link [here](https://g
 
 Ellie focuses on having a strong command toolbelt, while also being intuitive to use. One example is that Ellie uses
 the prompting featureof the Akairo library, which intuitively asks users to enter their query in certain commands,
-in case they send said command without applying  any arguments. At some point, I also plan on making Ellie support
+in case they send said command without applying any arguments. At some point, I also plan on making Ellie support
 music so people can use it as a music bot as well, if they so desire.
 
 ## Installation
@@ -37,7 +37,7 @@ really nice utility to manage and install multiple Node.js versions!
 
 **Note**: You may need Xcode and Xcode's tools for certain Homebrew features but I am not 100% sure on this. However, 
 Xcode's comandline tools include Apple's version of git (currently at version 2.17.1). I'm not sure if git is already 
-included in macOS without the dev  tools, but installing the tools are pretty useful for other development purposes, 
+included in macOS without the dev tools, but installing the tools are pretty useful for other development purposes, 
 so go ahead and install them.
 
 ```bash
@@ -148,7 +148,7 @@ OAuth2, and clicking "Add Bot". This will add a bot user to your application.
 
 Now, for the fun part! Let's grab the bot's token. You can do this by clicking the "Click to reveal token"
 button underneath the Username field on the bot page. Copy the token given to you. Now, in the bot's root
-directory, rename `config.sample.json` to `config.json`, and open the file. Paste the token into the token
+directory, rename `config.sample.toml` to `config.toml`, and open the file. Paste the token into the token
 field. While you have the file open, you may want to take this opportunity to enter your Discord user ID
 in the "owner" field so you can use any owner-only commands that have been added, as well as any API keys
 and usernames and passwords you'd like. I should note though that there is currently no error catching
@@ -159,37 +159,23 @@ Now, we are pretty much done. Now, onto the final step, which is actually runnin
 
 ### Running the Bot
 
-We've finally reached the final step! To run the bot, run the following command.
+You have reached the final step of the install instructions. You're almost there. You just have to build
+the bot and then start her up.
 
 ```bash
-npm start
+npm run build && npm start
 ```
 
-This will start up Ellie. You will see a bunch of messages letting you know that she is initializing. By
-default,  this will run Ellie via PM2. Running Ellie via PM2 improves reliability and will automatically
-restart her when a  crash occurs. Due to this, you will need to install it. You can do this by running
-the following command:
+Congratulations! You have (hopefully) successfully installed and set up Ellie, and you can now add the bot to
+any guild you'd like! (if you have the permission to of course!)
 
-```bash
-npm install -g pm2 # this installs PM2 globally so you can run it via your terminal of choice.
-```
-
-However, if for some reason you would like to run Ellie via the standard node interpreter, you can do
-that too. Note however that you will lose the graceful reload/restart functionality that is offered via
-PM2.
-
-```bash
-node --harmony ./Ellie.js # This will run Ellie and sends the harmony command-line flag to Node.
-```
+**NOTE**: Ellie does not use PM2. When I personally start usiing PM2 for running Ellie, I will re-add instructions
+on how to run Ellie using it.
 
 ### Licensing and Other Information
 Ellie is licensed under the terms of the GNU General Public License, version 3.0, or any later versions that
 may release in the near or far future. The license snippet is below, and the full terms can be found by looking 
 at the `LICENSE` file, located in the root directory.
-
-Certain portions of Ellie were inspired by and based on the code for Xiao, a bot developed by a fellow Discord
-bot creator ([dragonfire535](https://github.com/dragonfire535)), and you can take a look at Xiao's source code 
-by going to its GitHub repository, which you can access by clicking [here](https://github.com/dragonfire535/Xiao).
 
     Copyright © 2018-present Kamran Mackey
 
