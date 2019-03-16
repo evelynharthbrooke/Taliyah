@@ -99,7 +99,6 @@ export default class EllieClient extends AkairoClient {
       this.commandHandler.loadAll();
       this.listenerHandler.loadAll();
       const modules = this.commandHandler.modules.size + this.listenerHandler.modules.size;
-
       this.logger.info(`Successfully loaded ${modules} modules.`);
     } catch (err) {
       this.logger.error(err);
