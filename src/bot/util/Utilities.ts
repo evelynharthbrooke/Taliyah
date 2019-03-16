@@ -40,8 +40,7 @@ export class Util {
    * The format utility function.
    *
    * Similar to Python's implementation, allowing users to format
-   * their strings with %s. Separate from JavaScript/TypeScript's
-   * nativve format functionality.
+   * their strings with %s.
    *
    * @param string The piped string.
    * @param args The arguments to send.
