@@ -27,14 +27,6 @@ type Configuration = {
   owner?: string;
   prefix?: string;
   token?: string;
-  database?: {
-    type?: string,
-    host?: string,
-    port?: number,
-    username?: string,
-    password?: string,
-    name?: string,
-  };
   lastfm?: string;
   spotify?: {
     clientID?: string,
@@ -54,11 +46,6 @@ export default class Config {
   readonly owner: string;
   /** The Discord API token to use, used for connecting to the Discord API. */
   readonly token: string;
-  /** The database to use for TypeORM. */
-  readonly database: {
-    type: string, host: string, port: number,
-    username: string, password: string, name: string,
-  };
   /** The LastFM API key to use. */
   readonly lastfm: string;
   /** The Spotify client ID and client secret to use. */
@@ -77,18 +64,9 @@ export default class Config {
   public constructor(string?: string) {
     const config = string ? (toml.parse(string) as Configuration) : {};
     const spotify = config.spotify || {};
-    const database = config.database || {};
     this.owner = config.owner || '';
     this.prefix = config.prefix || '!';
     this.token = config.token || '';
-    this.database = {
-      type: database.type || '',
-      host: database.host || '',
-      port: database.port || 3306, // This is not needed if users use SQLite.
-      username: database.username || '',
-      password: database.password || '',
-      name: database.name || '',
-    };
     this.lastfm = config.lastfm || '';
     this.spotify = {
       clientID: spotify.clientID || '',

@@ -19,13 +19,7 @@
 
 import * as path from 'path';
 
-import {
-  AkairoClient,
-  AkairoOptions,
-  Command,
-  CommandHandler,
-  ListenerHandler,
-} from 'discord-akairo';
+import { AkairoClient, AkairoOptions, CommandHandler, ListenerHandler } from 'discord-akairo';
 
 import { ClientOptions } from 'discord.js';
 import Config from './Config';
