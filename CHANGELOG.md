@@ -8,6 +8,7 @@ projects like Visual Studio Code), as well as adding various new commands and ne
 speed. However, some commands were migrated from the JavaScript version, like `!pokemon`, just with 
 a few changes to support TypeScript's syntax.
 - Added this Changelog, for keeping track of the stuff I change.
+- Added `!ban`. Bans a user from the current Discord guild.
 - Added `!steamstatus`. Retrieves the current Steam server status.
 - Added a listener that checks for message deletion, and logs it to a channel. Working on making this 
 support per-guild channels instead of hardcoding the channel name, but that most likely will not be 
