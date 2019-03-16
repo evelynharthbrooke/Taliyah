@@ -46,21 +46,47 @@ export default class NPMCommand extends Command {
 
   public async exec(message: Message, { query }: { query: string }) {
     const NPM_QUERY = query.toLowerCase();
+    const NPM_REGISTRY_URL = `https://registry.npmjs.com/${NPM_QUERY}`;
+    const NPM_LOGO = 'https://raw.githubusercontent.com/npm/logos/master/npm%20square/n-large.png';
+    const NPM_WEBSITE = 'https://www.npmjs.com';
 
     if (!NPM_QUERY) {
       return message.channel.send('You did not enter a name of an npm package.');
     }
 
     if (NPM_QUERY.startsWith('@types')) {
-      return message.channel.send('Unfortunately, I cannot display information for TypeScript typings. ' +
-        'Please try a different package.');
+      try {
+        const NPM_TYPINGS_REQUEST = await request.get(NPM_REGISTRY_URL);
+        const NPM_TYPINGS_EMBED = new MessageEmbed();
+        const NPM_TYPINGS_NAME = NPM_TYPINGS_REQUEST.body.name;
+        const NPM_TYPINGS_URL = 'https://npmjs.com/package/' + query;
+        const NPM_TYPINGS_VERSION = NPM_TYPINGS_REQUEST.body['dist-tags'].latest;
+        const NPM_TYPINGS_DESCRIPTION = NPM_TYPINGS_REQUEST.body.description;
+
+        NPM_TYPINGS_EMBED.setTitle(NPM_TYPINGS_NAME);
+        NPM_TYPINGS_EMBED.setAuthor('npm', NPM_LOGO, NPM_WEBSITE);
+        NPM_TYPINGS_EMBED.setURL(NPM_TYPINGS_URL);
+        NPM_TYPINGS_EMBED.setColor(0xCC3534);
+        NPM_TYPINGS_EMBED.setThumbnail(NPM_LOGO);
+        NPM_TYPINGS_EMBED.setDescription(
+          `${NPM_TYPINGS_DESCRIPTION}\n\n` +
+          `**Latest Version**: ${NPM_TYPINGS_VERSION}`,
+        );
+        NPM_TYPINGS_EMBED.setFooter('Powered by the npm registry API.');
+        NPM_TYPINGS_EMBED.setTimestamp();
+
+        console.log(NPM_TYPINGS_REQUEST.body);
+
+        return message.channel.send(NPM_TYPINGS_EMBED);
+
+      } catch (err) {
+        console.log(err);
+      }
     }
 
     try {
-      const NPM_REGISTRY_URL = `https://registry.npmjs.com/${NPM_QUERY}`;
       const { body: NPM_REQUEST } = await request.get(NPM_REGISTRY_URL);
       const NPM_EMBED = new MessageEmbed();
-      const NPM_LOGO = 'https://raw.githubusercontent.com/npm/logos/master/npm%20square/n-large.png';
       const NPM_PACKAGE_NAME = NPM_REQUEST.name;
       const NPM_PACKAGE_DESCRIPTION = NPM_REQUEST.description || 'No description available.';
       const NPM_PACKAGE_URL = 'https://www.npmjs.com/package/' + query;
@@ -82,7 +108,7 @@ export default class NPMCommand extends Command {
           'Please try a different package.');
       }
 
-      NPM_EMBED.setAuthor('npm', NPM_LOGO, 'https://www.npmjs.com/');
+      NPM_EMBED.setAuthor('npm', NPM_LOGO, NPM_WEBSITE);
       NPM_EMBED.setTitle(NPM_PACKAGE_NAME);
       NPM_EMBED.setColor(0xCC3534);
       NPM_EMBED.setURL(NPM_PACKAGE_URL);

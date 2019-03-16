@@ -48,7 +48,7 @@ export default class WikipediaCommand extends Command {
 
   public async exec(message: Message, { lang, query }: { lang: string; query: string }) {
     if (!lang || !query) {
-      return message.channel.send('You either didn\t enter a language shortcode, didn\t' +
+      return message.channel.send('You either didn\'t enter a language shortcode, didn\'t ' +
         'enter an article name to search for, or both. Please try again.',
       );
     }

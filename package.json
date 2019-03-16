@@ -49,13 +49,13 @@
     "@types/pokedex-promise-v2": "github:mudkipme/pokeapi-v2-typescript",
     "@types/signale": "^1.2.1",
     "@types/superagent": "^4.1.1",
-    "fs-nextra": "^0.4.3",
+    "fs-nextra": "^0.4.5",
     "gulp": "^4.0.0",
     "gulp-sourcemaps": "^2.6.5",
     "gulp-typescript": "^5.0.1",
     "merge2": "^1.2.3",
     "tslint": "^5.14.0",
     "tslint-config-airbnb": "^5.11.1",
-    "typescript": "^3.4.0-dev.20190315"
+    "typescript": "^3.4.0-rc"
   }
 }
