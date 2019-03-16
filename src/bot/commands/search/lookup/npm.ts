@@ -23,7 +23,7 @@ import * as request from 'superagent';
 import { Message, MessageEmbed } from 'discord.js';
 
 import { Command } from 'discord-akairo';
-import Constants from '../../util/Constants';
+import Constants from '../../../util/Constants';
 import moment from 'moment';
 
 export default class NPMCommand extends Command {
@@ -107,14 +107,14 @@ export default class NPMCommand extends Command {
 
       message.channel.send(NPM_EMBED);
 
-    } catch (e) {
-      if (e.status === 404) {
+    } catch (err) {
+      if (err.status === 404) {
         return message.channel.send(`I couldn't find \`${query}\` in the npm registry. Please try a ` +
           'differrent package name.');
       }
 
       this.client.logger.error('Encountered an error while getting npm registry results.');
-      console.log(e);
+      console.log(err);
       message.channel.send('I have encountered an error! Please try again later.');
     }
   }
