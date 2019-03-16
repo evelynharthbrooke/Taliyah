@@ -27,6 +27,7 @@ type Configuration = {
   owner?: string;
   prefix?: string;
   token?: string;
+  database?: string;
   lastfm?: string;
   spotify?: {
     clientID?: string,
@@ -46,6 +47,8 @@ export default class Config {
   readonly owner: string;
   /** The Discord API token to use, used for connecting to the Discord API. */
   readonly token: string;
+  /** The database URL to use. */
+  readonly database: string;
   /** The LastFM API key to use. */
   readonly lastfm: string;
   /** The Spotify client ID and client secret to use. */
@@ -67,6 +70,7 @@ export default class Config {
     this.owner = process.env.ELLIE_OWNER_ID || config.owner || '';
     this.prefix = process.env.ELLIE_PREFIX || config.prefix || '!';
     this.token = process.env.ELLIE_TOKEN || config.token || '';
+    this.database = process.env.ELLIE_DATABASE || config.database || '';
     this.lastfm = process.env.ELLIE_LASTFM_KEY || config.lastfm || '';
     this.spotify = {
       clientID: process.env.ELLIE_SPOTIFY_CLIENT_ID || spotify.clientID || '',
