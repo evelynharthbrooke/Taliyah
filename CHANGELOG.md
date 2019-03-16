@@ -19,6 +19,7 @@ Normal case.
 code, to their own individual class, just in case something needs to be reused, easier than just porting
 the code each time to a command's top level code.
 ### Changed
+- The bot has been renamed from Erica to Ellie. Nothing major really, just a slight name change.
 - Revamped the majority of the commands to use the embed description instead of embed fields. This (IMHO) 
 makes things a fair bit cleaner and improves things on the mobile side, since Rich Embeds on Discord's 
 mobile apps don't have multiple columns and show each field on a separate row, which doesn't look that

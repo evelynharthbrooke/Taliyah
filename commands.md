@@ -1,21 +1,20 @@
-# Erica Command List (14 total commands)
-This is the command list for Erica. New commands are being added all the time, so keep an eye on this list
+# Ellie Command List (14 total commands)
+This is the command list for Ellie. New commands are being added all the time, so keep an eye on this list
 when any new commands get added.
 
 ## Utilities:
 * **help:** Displays the current command list or displays useful information on a chosen command. 
-* **about:** Retrieves and displays detailed information about Erica.
+* **about:** Retrieves and displays detailed information about Ellie.
 * **ping:** Pings the Discord API gateway and displays message latency.
 
 ## Moderation:
-* **purge:** Deletes up to a total of 99 messages from the current Discord channel.
+* **purge:** Deletes up to a total of 99 (plus one) messages from the current Discord channel.
 
 ## Music:
 * **lastfm:** Retrieves information on the specified Last.fm user.
 
 ## Information:
-* **changelog:** Displays the most recent commits pushed to Erica's codebase.
-* **id:** Retrieves a user's Discord ID. Leave blank to fetch your own Disccord ID.
+* **changelog:** Displays the most recent commits pushed to Ellie's codebase. (NOT YET IMPLEMENTED IN REWRITE)
 * **user:** Retrieves detailed information on a chosen user.<sub><sup>1</sup></sub>
 * **server:** Retrieves detailed information in the current Discord guild.<sub><sup>2</sup></sub>
 
