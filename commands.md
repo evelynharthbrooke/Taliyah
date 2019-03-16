@@ -21,7 +21,7 @@ when any new commands get added.
 * **changelog:** Displays the most recent commits pushed to Ellie's codebase. (NOT YET IMPLEMENTED IN REWRITE)
 * **about:** Retrieves and displays detailed information about Ellie.
 * **user:** Retrieves detailed information on a chosen user.<sub><sup>1</sup></sub>
-* **server:** Retrieves detailed information in the current Discord guild.<sub><sup>2</sup></sub>
+* **guild:** Retrieves detailed information in the current Discord guild.<sub><sup>2</sup></sub>
 
 ## Search
 * **ghrepo:** Sends detailed information on a chosen GitHub repository. (NOT YET IMPLEMENTED in REWRITE)
