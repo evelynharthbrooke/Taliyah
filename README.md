@@ -166,7 +166,7 @@ npm start
 ```
 
 This will start up Ellie. You will see a bunch of messages letting you know that she is initializing. By
-default,  this will run Ellie viaPM2. Running Ellie via PM2 improves reliability and will automatically
+default,  this will run Ellie via PM2. Running Ellie via PM2 improves reliability and will automatically
 restart her when a  crash occurs. Due to this, you will need to install it. You can do this by running
 the following command:
 
