@@ -2,20 +2,8 @@
   "name": "ellie",
   "version": "2.0.0",
   "description": "A bot for Discord focused on being feature-packed.",
-  "main": "src/ellie.js",
-  "scripts": {
-    "prebuild": "npm run lint",
-    "build": "gulp",
-    "lint": "tslint -p tsconfig.json",
-    "start": "node dist/ellie.js --harmony"
-  },
-  "engines": {
-    "node": ">=10"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/KamranMackey/Ellie.git"
-  },
+  "homepage": "https://github.com/KamranMackey/Ellie#readme",
+  "bugs": "https://github.com/KamranMackey/Ellie/issues",
   "keywords": [
     "discord",
     "discordjs",
@@ -25,12 +13,19 @@
     "typescript",
     "ts"
   ],
-  "author": "KamranMackey",
-  "license": "GPL-3.0-or-later",
-  "bugs": {
-    "url": "https://github.com/KamranMackey/Ellie/issues"
+  "author": "KamranMackey <kamranm1200@gmail.com>",
+  "repository": "github:KamranMackey/Ellie",
+  "main": "src/ellie.js",
+  "scripts": {
+    "prebuild": "npm run lint",
+    "build": "gulp",
+    "lint": "tslint -p tsconfig.json",
+    "start": "node dist/ellie.js --harmony"
   },
-  "homepage": "https://github.com/KamranMackey/Ellie#readme",
+  "license": "GPL-3.0-or-later",
+  "engines": {
+    "node": ">=10"
+  },
   "dependencies": {
     "common-tags": "^1.8.0",
     "discord-akairo": "github:1computer1/discord-akairo",
