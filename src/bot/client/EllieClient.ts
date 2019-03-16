@@ -19,7 +19,13 @@
 
 import * as path from 'path';
 
-import { AkairoClient, AkairoOptions, CommandHandler, ListenerHandler } from 'discord-akairo';
+import {
+  AkairoClient,
+  AkairoOptions,
+  Command,
+  CommandHandler,
+  ListenerHandler,
+} from 'discord-akairo';
 
 import { ClientOptions } from 'discord.js';
 import Config from './Config';
@@ -46,19 +52,24 @@ export default class EllieClient extends AkairoClient {
   public constructor(config: Config, options: AkairoOptions & ClientOptions) {
     super(options);
 
+    /** Configure Signale. */
     this.logger.config({
       displayDate: true,
       displayTimestamp: true,
     });
 
+    /** Bind this.config to the bot's configuration. */
     this.config = config;
 
+    /** Initialize a new instance of the Spotify Web API client. */
     this.spotify = new Spotify({
       clientId: config.spotify.clientID,
       clientSecret: config.spotify.clientSecret,
+      redirectUri: 'ellie://callback',
     });
   }
 
+  /** Setup the bot's CommandHandler. */
   public commandHandler = new CommandHandler(this, {
     directory: path.join(__dirname, '..', 'commands'),
     prefix: this.config.prefix,
@@ -69,10 +80,12 @@ export default class EllieClient extends AkairoClient {
     commandUtilLifetime: 3e5,
   });
 
+  /** Setup the bot's ListenerHandler. */
   public listenerHandler = new ListenerHandler(this, {
     directory: path.join(__dirname, '..', 'listeners'),
   });
 
+  /** Do basic setup like loading modules and emitters. */
   public async setup() {
     this.commandHandler.useListenerHandler(this.listenerHandler);
     this.logger.info('Loading emitters.');
@@ -81,17 +94,16 @@ export default class EllieClient extends AkairoClient {
       listenerHandler: this.listenerHandler,
     });
 
-    this.logger.info('Loading modules.');
-
     try {
+      this.logger.info('Loading modules.');
       this.commandHandler.loadAll();
       this.listenerHandler.loadAll();
       const modules = this.commandHandler.modules.size + this.listenerHandler.modules.size;
-      this.logger.info(`Successfully loaded ${modules} modules.`);
 
+      this.logger.info(`Successfully loaded ${modules} modules.`);
     } catch (err) {
-      console.log(err);
-      this.logger.warn('I failed to load some handlers.');
+      this.logger.error(err);
+      this.logger.warn('Some modules failed to load.');
     }
   }
 
@@ -99,16 +111,16 @@ export default class EllieClient extends AkairoClient {
     this.logger.info(`Starting up Ellie v${version} and logging into the Discord API.`);
 
     if (process.version.includes('nightly') || process.version.includes('canary')) {
-      this.logger.warn('You are running Erica on an unstable version of Node. You may experience stability issues.');
+      this.logger.warn('You are running Ellie on an unstable version of Node. You may experience stability issues.');
       this.logger.warn('It is strongly recommended that you run a stable version of Node.');
     }
 
     if (process.env.pm_id) {
-      this.logger.info('You are running me with PM2. I will remain running in the background.');
-      this.logger.info('I will restart/reload if I crash and/or disconnect.');
+      this.logger.info('You are running Ellie with PM2. She will remain running in the background.');
+      this.logger.info('She will also automatically restart upon crashing or disconnecting.');
     } else {
-      this.logger.warn('You are not running me with PM2. This is not recommended! Please consider switching to PM2.');
-      this.logger.warn('It will allow me to gracefully restart/reload if I happen to crash and/or disconnect.');
+      this.logger.warn('You are not running Ellie with PM2. This is not recommended! Please consider switching to PM2.');
+      this.logger.warn('It will allow Ellie to gracefully restart if she crashes or disconnects.');
     }
   }
 

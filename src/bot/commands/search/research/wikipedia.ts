@@ -78,14 +78,7 @@ export default class WikipediaCommand extends Command {
         );
       }
 
-      function restrictedPages() {
-        return W_ARTICLE.title.includes('Main Page')
-          || W_ARTICLE.title.includes('Special:')
-          || query.includes('Main Page')
-          || query.includes('Special:');
-      }
-
-      if (restrictedPages()) {
+      if (query.includes('Main Page') || query.includes('Special:')) {
         return message.channel.send('I am unable to display the Main Page or pages labeled under ' +
           '`Special:`. Please try a different article/page.');
       }
