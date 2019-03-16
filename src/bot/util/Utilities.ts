@@ -18,7 +18,7 @@
  * along with Ellie. If not, see <https://www.gnu.org/licenses/>.
  */
 
-export class Util {
+export class Utilities {
 
   /**
    * The Shorten utility function.

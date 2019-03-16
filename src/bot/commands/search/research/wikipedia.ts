@@ -23,7 +23,7 @@ import * as request from 'superagent';
 import { Message, MessageEmbed } from 'discord.js';
 
 import { Command } from 'discord-akairo';
-import { Util } from '../../../util/Utilities';
+import { Utilities } from '../../../util/Utilities';
 
 export default class WikipediaCommand extends Command {
   public constructor() {
@@ -92,7 +92,7 @@ export default class WikipediaCommand extends Command {
       W_EMBED.setURL(ARTICLE_URL);
       W_EMBED.setAuthor('Wikipedia', W_LOGO, W_URL);
       W_EMBED.setColor(0xc7c8ca);
-      W_EMBED.setDescription(Util.shorten(ARTICLE_DESC, 1985));
+      W_EMBED.setDescription(Utilities.shorten(ARTICLE_DESC, 1985));
       W_EMBED.setFooter(`Page content for ${ARTICLE_NAME} is licensed under CC-BY-SA 3.0.`);
 
       message.channel.send(W_EMBED);
