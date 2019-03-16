@@ -18,7 +18,7 @@
  * along with Ellie. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { DiscordAPIError, GuildMember, Message, MessageEmbed } from 'discord.js';
+import { GuildMember, Message, MessageEmbed } from 'discord.js';
 
 import { Command } from 'discord-akairo';
 
