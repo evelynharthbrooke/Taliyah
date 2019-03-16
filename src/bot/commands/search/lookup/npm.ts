@@ -75,12 +75,12 @@ export default class NPMCommand extends Command {
         NPM_TYPINGS_EMBED.setFooter('Powered by the npm registry API.');
         NPM_TYPINGS_EMBED.setTimestamp();
 
-        console.log(NPM_TYPINGS_REQUEST.body);
-
         return message.channel.send(NPM_TYPINGS_EMBED);
 
       } catch (err) {
         console.log(err);
+        return message.channel.send('Sorry, unfortunately an error occurred while trying to get results ' +
+          'for those typings. Please try again later.');
       }
     }
 
