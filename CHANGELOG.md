@@ -5,7 +5,7 @@ This is a MAJOR release, moving from JavaScript to Microsoft's TypeScript langua
 projects like Visual Studio Code), as well as adding various new commands and new features.
 ### New Features
 - Ellie has been rewritten in TypeScript instead of JavaScript. This should improve stability and 
-speed. However, some commands were migrated from the JavaScript version, like !pokemon, just with 
+speed. However, some commands were migrated from the JavaScript version, like `!pokemon`, just with 
 a few changes to support TypeScript's syntax.
 - Added this Changelog, for keeping track of the stuff I change.
 - Added `!steamstatus`. Retrieves the current Steam server status.
