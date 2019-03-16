@@ -27,7 +27,14 @@ type Configuration = {
   owner?: string;
   prefix?: string;
   token?: string;
-  database?: string;
+  database?: {
+    type?: string,
+    host?: string,
+    port?: number,
+    username?: string,
+    password?: string,
+    name?: string,
+  };
   lastfm?: string;
   spotify?: {
     clientID?: string,
@@ -47,8 +54,11 @@ export default class Config {
   readonly owner: string;
   /** The Discord API token to use, used for connecting to the Discord API. */
   readonly token: string;
-  /** The database URL to use. */
-  readonly database: string;
+  /** The database to use for TypeORM. */
+  readonly database: {
+    type: string, host: string, port: number,
+    username: string, password: string, name: string,
+  };
   /** The LastFM API key to use. */
   readonly lastfm: string;
   /** The Spotify client ID and client secret to use. */
@@ -67,10 +77,18 @@ export default class Config {
   public constructor(string?: string) {
     const config = string ? (toml.parse(string) as Configuration) : {};
     const spotify = config.spotify || {};
-    this.owner = process.env.ELLIE_OWNER_ID || config.owner || '';
-    this.prefix = process.env.ELLIE_PREFIX || config.prefix || '!';
-    this.token = process.env.ELLIE_TOKEN || config.token || '';
-    this.database = process.env.ELLIE_DATABASE || config.database || '';
+    const database = config.database || {};
+    this.owner = config.owner || '';
+    this.prefix = config.prefix || '!';
+    this.token = config.token || '';
+    this.database = {
+      type: database.type || '',
+      host: database.host || '',
+      port: database.port || 3306, // This is not needed if users use SQLite.
+      username: database.username || '',
+      password: database.password || '',
+      name: database.name || '',
+    };
     this.lastfm = process.env.ELLIE_LASTFM_KEY || config.lastfm || '';
     this.spotify = {
       clientID: process.env.ELLIE_SPOTIFY_CLIENT_ID || spotify.clientID || '',
