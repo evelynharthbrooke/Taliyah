@@ -21,7 +21,7 @@ when any new commands get added.
 * **changelog:** Displays the most recent commits pushed to Ellie's codebase. (NOT YET IMPLEMENTED IN REWRITE)
 * **about:** Retrieves and displays detailed information about Ellie.
 * **user:** Retrieves detailed information on a chosen user.<sub><sup>1</sup></sub>
-* **guild:** Retrieves detailed information in the current Discord guild.<sub><sup>2</sup></sub>
+* **guild:** Retrieves detailed information in the current Discord guild.<sub><sup>1</sup></sub>
 
 ## Search
 * **ghrepo:** Sends detailed information on a chosen GitHub repository. (NOT YET IMPLEMENTED in REWRITE)
@@ -36,5 +36,4 @@ when any new commands get added.
 * **help:** Displays the current command list or displays useful information on a chosen command.
 * **ping:** Pings the Discord API gateway and displays message latency.
 
-<sub>1. This command is recommended to only be used in Discord guilds and not direct messages.</sub><br>
-<sub>2. This command can ONLY be used in Discord guilds and cannot be used inside private conversations.</sub>
+<sub>1. This command can ONLY be used in Discord guilds and cannot be used inside private conversations.</sub><br>
