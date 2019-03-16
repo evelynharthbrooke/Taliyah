@@ -15,7 +15,7 @@ present in this release.
 - Added the `convertToTitleCase` function to Utilities. Converts words or strings to (you guessed it) Title
 Case. Used in `!pokemon` to convert ability names to proper Title Case instead of being hyphenated and in
 Normal case.
-- Added a Constants class. This class moves anything that would've been at the top level of a command's
+- Added a `Constants` class. This class moves anything that would've been at the top level of a command's
 code, to their own individual class, just in case something needs to be reused, easier than just porting
 the code each time to a command's top level code.
 ### Changed
@@ -28,5 +28,5 @@ more information.
 - Changed the logging system from `winston` to `signale`. Signale looks a lot better and works without much
 configuration.
 ### Removed
-- Removed the `!id` command. Its functionality was replaced by the !user command, which displays far more
+- Removed the `!id` command. Its functionality was replaced by the `!user` command, which displays far more
 information.
