@@ -1,59 +1,66 @@
 {
-  "name": "erica",
-  "version": "1.0.3",
-  "description": "A bot for Discord focused on functionality and full integration with Discord's API.",
-  "main": "src/index.js",
+  "name": "ellie",
+  "version": "2.0.0",
+  "description": "A bot for Discord focused on being feature-packed.",
+  "main": "src/ellie.js",
   "scripts": {
-    "start": "pm2 start -f ./erica.js --node-args='--harmony'",
-    "logs": "pm2 logs erica",
-    "kill": "pm2 kill"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/KamranMackey/Erica.git"
+    "prebuild": "npm run lint",
+    "build": "gulp",
+    "lint": "tslint -p tsconfig.json",
+    "start": "node dist/ellie.js --harmony"
   },
   "engines": {
     "node": ">=10"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KamranMackey/Ellie.git"
+  },
   "keywords": [
     "discord",
-    "api",
-    "bot",
+    "discordjs",
+    "discord.js",
     "discord-js",
-    "node",
-    "javascript",
-    "js"
+    "bot",
+    "typescript",
+    "ts"
   ],
   "author": "KamranMackey",
   "license": "GPL-3.0-or-later",
   "bugs": {
-    "url": "https://github.com/KamranMackey/Erica/issues"
+    "url": "https://github.com/KamranMackey/Ellie/issues"
   },
-  "homepage": "https://github.com/KamranMackey/Erica#readme",
+  "homepage": "https://github.com/KamranMackey/Ellie#readme",
   "dependencies": {
-    "@discordjs/uws": "^11.149.1",
-    "common-tags": "^2.0.0-alpha.1",
-    "discord-akairo": "github:1Computer1/discord-akairo",
+    "common-tags": "^1.8.0",
+    "discord-akairo": "github:1computer1/discord-akairo",
     "discord.js": "github:discordjs/discord.js",
-    "discord.js-lavalink": "github:mrjacz/discord.js-lavalink",
-    "humanize-duration": "^3.17.0",
-    "i18n-iso-countries": "^3.7.8",
-    "lavalink": "^2.4.0",
-    "lodash": "^4.17.11",
     "moment": "^2.24.0",
     "moment-duration-format": "^2.2.2",
-    "mongoose": "^5.4.16",
-    "node-superfetch": "^0.1.9",
+    "node-opus": "^0.3.1",
     "numeral": "^2.0.6",
     "pluralize": "^7.0.0",
-    "pokedex-promise-v2": "github:PokeAPI/pokedex-promise-v2#master",
-    "sanitize-html": "^1.20.0",
-    "sequelize": "github:sequelize/sequelize",
+    "pokedex-promise-v2": "^3.1.1",
+    "signale": "^1.4.0",
     "spotify-web-api-node": "github:KamranMackey/spotify-web-api-node",
-    "winston": "^3.2.1",
-    "zlib-sync": "^0.1.4"
+    "superagent": "^4.1.0",
+    "toml": "^3.0.0",
+    "typeorm": "^0.2.15"
   },
   "devDependencies": {
-    "typescript": "^3.3.3333"
+    "@types/node": "^11.11.3",
+    "@types/numeral": "0.0.25",
+    "@types/pluralize": "0.0.29",
+    "@types/pokedex-promise-v2": "github:mudkipme/pokeapi-v2-typescript",
+    "@types/signale": "^1.2.1",
+    "@types/superagent": "^4.1.1",
+    "fs-nextra": "^0.4.3",
+    "gulp": "^4.0.0",
+    "gulp-sourcemaps": "^2.6.5",
+    "gulp-typescript": "^5.0.1",
+    "merge2": "^1.2.3",
+    "tslint": "^5.14.0",
+    "tslint-config-airbnb": "^5.11.1",
+    "typescript": "^3.4.0-dev.20190315"
   }
 }
