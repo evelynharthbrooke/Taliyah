@@ -89,16 +89,16 @@ export default class Config {
       password: database.password || '',
       name: database.name || '',
     };
-    this.lastfm = process.env.ELLIE_LASTFM_KEY || config.lastfm || '';
+    this.lastfm = config.lastfm || '';
     this.spotify = {
-      clientID: process.env.ELLIE_SPOTIFY_CLIENT_ID || spotify.clientID || '',
-      clientSecret: process.env.ELLIE_SPOTIFY_CLIENT_SECRET || spotify.clientSecret || '',
+      clientID: spotify.clientID || '',
+      clientSecret: spotify.clientSecret || '',
     };
-    this.github = process.env.ELLIE_GITHUB_TOKEN || config.github || '';
-    this.darksky = process.env.ELLIE_DARKSKY_KEY || config.darksky || '';
-    this.nexusmods = process.env.ELLIE_NEXUSMODS_KEY || config.nexusmods || '';
-    this.youtube = process.env.ELLIE_YOUTUBE_KEY || config.youtube || '';
-    this.repository = process.env.ELLIE_REPOSITORY || config.repository || '';
+    this.github = config.github || '';
+    this.darksky = config.darksky || '';
+    this.nexusmods = config.nexusmods || '';
+    this.youtube = config.youtube || '';
+    this.repository = config.repository || '';
   }
 
   /** Loads the bot's configuration from a configuration file. */
