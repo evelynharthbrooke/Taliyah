@@ -27,6 +27,15 @@ type Configuration = {
   owner?: string;
   prefix?: string;
   token?: string;
+  database?: {
+    user?: string,
+    password?: string,
+    host?: string,
+    name?: string,
+    dialect?: string,
+    port?: number,
+    logging?: boolean,
+  };
   lastfm?: string;
   spotify?: {
     clientID?: string,
@@ -46,6 +55,16 @@ export default class Config {
   readonly owner: string;
   /** The Discord API token to use, used for connecting to the Discord API. */
   readonly token: string;
+  /** The database to use. */
+  readonly database: {
+    user: string,
+    password: string,
+    host: string,
+    name: string,
+    dialect: any,
+    port: number,
+    logging: boolean,
+  };
   /** The LastFM API key to use. */
   readonly lastfm: string;
   /** The Spotify client ID and client secret to use. */
@@ -64,9 +83,19 @@ export default class Config {
   public constructor(string?: string) {
     const config = string ? (toml.parse(string) as Configuration) : {};
     const spotify = config.spotify || {};
+    const database = config.database || {};
     this.owner = config.owner || '';
     this.prefix = config.prefix || '!';
     this.token = config.token || '';
+    this.database = {
+      user: database.user || '',
+      password: database.password || '',
+      host: database.host || '',
+      name: database.name || '',
+      dialect: database.dialect || '',
+      port: database.port || 5432,
+      logging: database.logging || false,
+    };
     this.lastfm = config.lastfm || '';
     this.spotify = {
       clientID: spotify.clientID || '',

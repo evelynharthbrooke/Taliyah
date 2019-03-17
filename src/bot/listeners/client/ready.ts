@@ -34,6 +34,13 @@ export default class ReadyListener extends Listener {
   }
 
   public async exec() {
+
+    await this.client.database.authenticate().then(() => {
+      this.client.logger.info(`Ellie has successfully connected to the '${this.client.database.config.database}' database.`);
+    }).catch((err: any) => {
+      this.client.logger.error('Ellie was unable to connect to the database.', err);
+    });
+
     this.client.logger.info(`Ellie v${version} has successfully logged into the Discord API as ${this.client.user!.tag}.`);
 
     const mainActivity = activities[Math.floor(Math.random() * activities.length)];

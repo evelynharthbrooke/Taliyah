@@ -40,6 +40,7 @@
     "sequelize": "github:sequelize/sequelize",
     "signale": "^1.4.0",
     "spotify-web-api-node": "github:KamranMackey/spotify-web-api-node",
+    "sqlite3": "^4.0.6",
     "superagent": "^4.1.0",
     "toml": "^3.0.0"
   },

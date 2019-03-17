@@ -31,25 +31,28 @@ export default class WikipediaCommand extends Command {
       aliases: ['wikipedia', 'w', 'wiki'],
       category: 'Search',
       description: {
-        content: 'Allows you to a lookup a Wikipedia article.',
-        usage: '<lang> <query>',
+        content: 'Allows you to a retrieve info about a Wikipedia article.',
+        usage: '<query> --lang <lang code> (optional)',
       },
       args: [
         {
-          id: 'lang',
-        },
-        {
           id: 'query',
           match: 'rest',
+        },
+        {
+          id: 'lang',
+          type: 'string',
+          match: 'option',
+          flag: ['--lang', '-l'],
+          default: 'en',
         },
       ],
     });
   }
 
-  public async exec(message: Message, { lang, query }: { lang: string; query: string }) {
-    if (!lang || !query) {
-      return message.channel.send('You either didn\'t enter a language shortcode, didn\'t ' +
-        'enter an article name to search for, or both. Please try again.',
+  public async exec(message: Message, { query, lang }: { query: string, lang: string }) {
+    if (!query) {
+      return message.channel.send('You didn\'t enter an article name to search for! Please try again.',
       );
     }
 
