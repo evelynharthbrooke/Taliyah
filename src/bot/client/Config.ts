@@ -28,7 +28,7 @@ type Configuration = {
   prefix?: string;
   token?: string;
   database?: {
-    user?: string,
+    username?: string,
     password?: string,
     host?: string,
     name?: string,
@@ -57,7 +57,7 @@ export default class Config {
   readonly token: string;
   /** The database to use. */
   readonly database: {
-    user: string,
+    username: string,
     password: string,
     host: string,
     name: string,
@@ -88,7 +88,7 @@ export default class Config {
     this.prefix = config.prefix || '!';
     this.token = config.token || '';
     this.database = {
-      user: database.user || '',
+      username: database.username || '',
       password: database.password || '',
       host: database.host || '',
       name: database.name || '',

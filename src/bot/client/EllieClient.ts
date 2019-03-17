@@ -59,7 +59,7 @@ export default class EllieClient extends AkairoClient {
 
     /** Setup the bot's database. */
     this.database = new Sequelize({
-      username: config.database.user,
+      username: config.database.username,
       password: config.database.password,
       host: config.database.host,
       dialect: config.database.dialect,
