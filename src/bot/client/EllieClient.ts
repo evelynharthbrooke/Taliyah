@@ -23,7 +23,6 @@ import { AkairoClient, AkairoOptions, CommandHandler, ListenerHandler } from 'di
 
 import { ClientOptions } from 'discord.js';
 import Config from './Config';
-import { Sequelize } from 'sequelize';
 import { Signale } from 'signale';
 import Spotify from 'spotify-web-api-node';
 import { version } from '../../../package.json';
@@ -31,7 +30,6 @@ import { version } from '../../../package.json';
 declare module 'discord-akairo' {
   interface AkairoClient {
     logger: Signale;
-    database: Sequelize;
     config: Config;
     spotify: Spotify;
   }
@@ -56,17 +54,6 @@ export default class EllieClient extends AkairoClient {
 
     /** Bind this.config to the bot's configuration. */
     this.config = config;
-
-    /** Setup the bot's database. */
-    this.database = new Sequelize({
-      username: config.database.username,
-      password: config.database.password,
-      host: config.database.host,
-      dialect: config.database.dialect,
-      database: config.database.name,
-      port: config.database.port,
-      logging: config.database.logging,
-    });
 
     /** Initialize a new instance of the Spotify Web API client. */
     this.spotify = new Spotify({

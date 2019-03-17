@@ -37,7 +37,6 @@
     "pg": "^7.9.0",
     "pluralize": "^7.0.0",
     "pokedex-promise-v2": "^3.1.1",
-    "sequelize": "github:sequelize/sequelize",
     "signale": "^1.4.0",
     "spotify-web-api-node": "github:KamranMackey/spotify-web-api-node",
     "superagent": "^4.1.0",
