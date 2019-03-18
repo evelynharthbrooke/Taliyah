@@ -33,5 +33,4 @@ export default class WeatherCommand extends Command {
     const DARK_SKY_API_URL = 'https://api.darksky.net';
     return message.channel.send('Not implemented yet.');
   }
-
 }
