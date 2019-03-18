@@ -20,7 +20,7 @@
 
 import * as request from 'superagent';
 
-import { config } from '../../ellie';
+import { client } from '../../ellie';
 
 export class Utilities {
 

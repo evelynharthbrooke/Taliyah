@@ -34,6 +34,7 @@ type Configuration = {
   };
   github?: string;
   darksky?: string;
+  gmaps?: string,
   nexusmods?: string;
   youtube?: string;
   repository?: string;
@@ -54,6 +55,8 @@ export default class Config {
   readonly github: string;
   /** The Dark Sky API key to use. */
   readonly darksky: string;
+  /** The Google Maps API key to use. */
+  readonly gmaps: string;
   /** The Nexus Mods API key to use. */
   readonly nexusmods: string;
   /** The YouTube API key to use. */
@@ -74,6 +77,7 @@ export default class Config {
     };
     this.github = config.github || '';
     this.darksky = config.darksky || '';
+    this.gmaps = config.gmaps || '';
     this.nexusmods = config.nexusmods || '';
     this.youtube = config.youtube || '';
     this.repository = config.repository || '';
