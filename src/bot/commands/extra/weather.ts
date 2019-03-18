@@ -64,6 +64,7 @@ export default class WeatherCommand extends Command {
       `${darkSkySummary}\n\n` +
       `**Wind Speed**: ${darkSkyWindSpeed} km/h\n` +
       `**Condition**: ${darkSkyCondition}`);
+    darkSkyEmbed.setFooter('Powered by the Dark Sky API.');
 
     console.log(darkSkyRequest.body.daily);
 
