@@ -17,9 +17,13 @@
  * along with Ellie. If not, see <https://www.gnu.org/licenses/>.
  */
 
+import * as request from 'superagent';
+
 import { Message, MessageEmbed } from 'discord.js';
 
 import { Command } from 'discord-akairo';
+import { Utilities } from '../../util/Utilities';
+import { stringify } from 'querystring';
 
 export default class WeatherCommand extends Command {
   public constructor() {
@@ -34,13 +38,36 @@ export default class WeatherCommand extends Command {
         {
           id: 'location',
           type: 'string',
+          match: 'rest',
         },
       ],
     });
   }
 
   public async exec(message: Message, { location }: { location: string }) {
-    const DARK_SKY_API_URL = 'https://api.darksky.net';
-    return message.channel.send('Not implemented yet.');
+    const coordinates = await Utilities.getCoordinates(location);
+    const darkSkyApiUrl = 'https://api.darksky.net/forecast';
+    const darkSkyApiKey = this.client.config.darksky.key;
+    const darkSkyRequest = await request.get(
+      `${darkSkyApiUrl}/${darkSkyApiKey}/${coordinates.lat},${coordinates.long}?${stringify({
+        units: 'si',
+      })}`,
+    );
+
+    const darkSkyEmbed = new MessageEmbed();
+    const darkSkySummary = darkSkyRequest.body.daily.summary;
+    const darkSkyWindSpeed = darkSkyRequest.body.currently.windSpeed;
+    const darkSkyCondition = darkSkyRequest.body.daily.data[0].summary;
+
+    darkSkyEmbed.setTitle(`Weather information for ${coordinates.address}`);
+    darkSkyEmbed.setDescription(
+      `${darkSkySummary}\n\n` +
+      `**Wind Speed**: ${darkSkyWindSpeed} km/h\n` +
+      `**Condition**: ${darkSkyCondition}`);
+
+    console.log(darkSkyRequest.body.daily);
+
+    message.channel.send(darkSkyEmbed);
+
   }
 }

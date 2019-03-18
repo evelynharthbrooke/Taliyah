@@ -21,6 +21,8 @@ import * as fs from 'fs';
 import * as path from 'path';
 import * as toml from 'toml';
 
+import { triggerAsyncId } from 'async_hooks';
+
 const configFile = path.join(__dirname, '..', '..', '..', 'config.toml');
 
 type Configuration = {
@@ -34,7 +36,10 @@ type Configuration = {
   };
   google?: string;
   github?: string;
-  darksky?: string;
+  opencage?: string;
+  darksky?: {
+    key?: string;
+  }
   nexusmods?: string;
   repository?: string;
 };
@@ -52,10 +57,12 @@ export default class Config {
   readonly spotify: { clientID: string, clientSecret: string };
   /** The Google API key to use. */
   readonly google: string;
+  /** The OpenCage API key to use. */
+  readonly opencage: string;
   /** The GitHub authentication token to use. */
   readonly github: string;
   /** The Dark Sky API key to use. */
-  readonly darksky: string;
+  readonly darksky: { key: string };
   /** The Nexus Mods API key to use. */
   readonly nexusmods: string;
   /** The GitHub repository hosting the bot. */
@@ -64,6 +71,7 @@ export default class Config {
   public constructor(string?: string) {
     const config = string ? (toml.parse(string) as Configuration) : {};
     const spotify = config.spotify || {};
+    const darksky = config.darksky || {};
     this.owner = config.owner || '';
     this.prefix = config.prefix || '!';
     this.token = config.token || '';
@@ -73,7 +81,8 @@ export default class Config {
       clientSecret: spotify.clientSecret || '',
     };
     this.github = config.github || '';
-    this.darksky = config.darksky || '';
+    this.opencage = config.opencage || '';
+    this.darksky = { key: darksky.key || '' };
     this.nexusmods = config.nexusmods || '';
     this.google = config.google || '';
     this.repository = config.repository || '';

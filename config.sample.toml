@@ -28,6 +28,10 @@ google = ''
 # the bot's integration with the GitHub API.
 github = ''
 
+# The OpenCage API key to use for connecting and
+# interacting with the OpenCage API.
+opencage = ''
+
 # Variables used for accessing the Spotify API.
 [spotify]
 # The Spotify API client ID.

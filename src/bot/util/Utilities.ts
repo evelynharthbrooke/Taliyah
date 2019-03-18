@@ -21,6 +21,7 @@
 import * as request from 'superagent';
 
 import { client } from '../../ellie';
+import { stringify } from 'querystring';
 
 export class Utilities {
 
@@ -40,21 +41,27 @@ export class Utilities {
     return content.length > limit ? `${content.substr(0, limit - 3)}...` : content;
   }
 
-  /** Gets coordinates for a location. */
+  /**
+   * The getCoordinates function.
+   *
+   * Gets coordinates for a chosen location.
+   *
+   * @param location The location to get coordinates for.
+   */
   public static async getCoordinates(location: string) {
     const gmapsGeocodeUrl = 'https://maps.googleapis.com/maps/api/geocode/json';
 
-    const gmapsRequest = await request.get(gmapsGeocodeUrl).query({
+    const gmapsRequest = await request.get(`${gmapsGeocodeUrl}?${stringify({
       address: location,
-      key: client.config.google,
-    });
+      key: client.config.google!,
+    })}`);
 
     const coordinates = await gmapsRequest.body;
 
     return {
       address: coordinates.results[0].formatted_address,
-      lat: coordinates.results[0].location.lat,
-      long: coordinates.results[0].location.long,
+      lat: coordinates.results[0].geometry.location.lat,
+      long: coordinates.results[0].geometry.location.lng,
     };
   }
 
