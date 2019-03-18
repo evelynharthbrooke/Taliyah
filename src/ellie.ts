@@ -21,10 +21,8 @@
 import Config from './bot/client/Config';
 import EllieClient from './bot/client/EllieClient';
 
-/**
- * Initialize the config file.
- */
-export const config = Config.initConfigFromFile();
+/** Initialize the config file. */
+const config = Config.initConfigFromFile();
 
 /**
  * Create a new instance of EllieClient with
