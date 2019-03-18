@@ -21,8 +21,6 @@ import * as fs from 'fs';
 import * as path from 'path';
 import * as toml from 'toml';
 
-import { triggerAsyncId } from 'async_hooks';
-
 const configFile = path.join(__dirname, '..', '..', '..', 'config.toml');
 
 type Configuration = {
@@ -36,7 +34,6 @@ type Configuration = {
   };
   google?: string;
   github?: string;
-  opencage?: string;
   darksky?: {
     key?: string;
   }
@@ -57,8 +54,6 @@ export default class Config {
   readonly spotify: { clientID: string, clientSecret: string };
   /** The Google API key to use. */
   readonly google: string;
-  /** The OpenCage API key to use. */
-  readonly opencage: string;
   /** The GitHub authentication token to use. */
   readonly github: string;
   /** The Dark Sky API key to use. */
@@ -81,7 +76,6 @@ export default class Config {
       clientSecret: spotify.clientSecret || '',
     };
     this.github = config.github || '';
-    this.opencage = config.opencage || '';
     this.darksky = { key: darksky.key || '' };
     this.nexusmods = config.nexusmods || '';
     this.google = config.google || '';
