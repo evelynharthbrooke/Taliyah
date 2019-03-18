@@ -26,10 +26,20 @@ export default class WeatherCommand extends Command {
     super('weather', {
       aliases: ['weather', 'forecast'],
       category: 'Extra',
+      description: {
+        content: 'Displays the forecast for a specified location.',
+        usage: '<location>',
+      },
+      args: [
+        {
+          id: 'location',
+          type: 'string',
+        },
+      ],
     });
   }
 
-  public async exec(message: Message) {
+  public async exec(message: Message, { location }: { location: string }) {
     const DARK_SKY_API_URL = 'https://api.darksky.net';
     return message.channel.send('Not implemented yet.');
   }
