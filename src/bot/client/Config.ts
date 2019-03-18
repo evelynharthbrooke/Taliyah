@@ -32,11 +32,10 @@ type Configuration = {
     clientID?: string,
     clientSecret?: string;
   };
+  google?: string;
   github?: string;
   darksky?: string;
-  gmaps?: string,
   nexusmods?: string;
-  youtube?: string;
   repository?: string;
 };
 
@@ -51,16 +50,14 @@ export default class Config {
   readonly lastfm: string;
   /** The Spotify client ID and client secret to use. */
   readonly spotify: { clientID: string, clientSecret: string };
-  /** The GitHub username and password to use. */
+  /** The Google API key to use. */
+  readonly google: string;
+  /** The GitHub authentication token to use. */
   readonly github: string;
   /** The Dark Sky API key to use. */
   readonly darksky: string;
-  /** The Google Maps API key to use. */
-  readonly gmaps: string;
   /** The Nexus Mods API key to use. */
   readonly nexusmods: string;
-  /** The YouTube API key to use. */
-  readonly youtube: string;
   /** The GitHub repository hosting the bot. */
   readonly repository: string;
 
@@ -77,9 +74,8 @@ export default class Config {
     };
     this.github = config.github || '';
     this.darksky = config.darksky || '';
-    this.gmaps = config.gmaps || '';
     this.nexusmods = config.nexusmods || '';
-    this.youtube = config.youtube || '';
+    this.google = config.youtube || '';
     this.repository = config.repository || '';
   }
 

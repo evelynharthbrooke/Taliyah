@@ -20,6 +20,10 @@ owner = ''
 # integration.
 lastfm = ''
 
+# The API key used to connect and interact with
+# Google's suite of APIs.
+google = ''
+
 # The GitHub personal authentication token to use for
 # the bot's integration with the GitHub API.
 github = ''
@@ -38,10 +42,6 @@ darksky = ''
 # The API key used to interact with the Nexus Mods
 # API interface.
 nexusmods = ''
-
-# The API key used to interact with the YouTube API
-# interface.
-youtube = ''
 
 # The bot's GitHub repository.
 repository = ''
