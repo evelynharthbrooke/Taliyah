@@ -21,14 +21,16 @@
 import Config from './bot/client/Config';
 import EllieClient from './bot/client/EllieClient';
 
-/** Initialize the config file. */
-const config = Config.initConfigFromFile();
+/**
+ * Initialize the config file.
+ */
+export const config = Config.initConfigFromFile();
 
 /**
  * Create a new instance of EllieClient with
  * the configuration.
  */
-const client = new EllieClient(config, {
+export const client = new EllieClient(config, {
   ownerID: config.owner,
   disableEveryone: true,
   disabledEvents: ['TYPING_START'],

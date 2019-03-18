@@ -18,6 +18,10 @@
  * along with Ellie. If not, see <https://www.gnu.org/licenses/>.
  */
 
+import * as request from 'superagent';
+
+import { config } from '../../ellie';
+
 export class Utilities {
 
   /**
@@ -34,6 +38,10 @@ export class Utilities {
    */
   public static shorten(content: string, limit: number): string {
     return content.length > limit ? `${content.substr(0, limit - 3)}...` : content;
+  }
+
+  /** Gets coordinates for a location. */
+  public static getCoordinates(location: string) {
   }
 
   /**
