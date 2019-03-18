@@ -41,7 +41,21 @@ export class Utilities {
   }
 
   /** Gets coordinates for a location. */
-  public static getCoordinates(location: string) {
+  public static async getCoordinates(location: string) {
+    const gmapsGeocodeUrl = 'https://maps.googleapis.com/maps/api/geocode/json';
+
+    const gmapsRequest = await request.get(gmapsGeocodeUrl).query({
+      address: location,
+      key: client.config.google,
+    });
+
+    const coordinates = await gmapsRequest.body;
+
+    return {
+      address: coordinates.results[0].formatted_address,
+      lat: coordinates.results[0].location.lat,
+      long: coordinates.results[0].location.long,
+    };
   }
 
   /**

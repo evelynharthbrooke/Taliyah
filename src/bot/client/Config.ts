@@ -75,7 +75,7 @@ export default class Config {
     this.github = config.github || '';
     this.darksky = config.darksky || '';
     this.nexusmods = config.nexusmods || '';
-    this.google = config.youtube || '';
+    this.google = config.google || '';
     this.repository = config.repository || '';
   }
 
