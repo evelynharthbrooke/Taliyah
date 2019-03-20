@@ -23,7 +23,7 @@ import * as request from 'superagent';
 import { Message, MessageEmbed } from 'discord.js';
 
 import { Command } from 'discord-akairo';
-import Constants from '../../../util/Constants';
+import Constants from '../../../utils/Constants';
 import moment from 'moment';
 
 export default class NPMCommand extends Command {

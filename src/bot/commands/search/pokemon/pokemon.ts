@@ -21,7 +21,7 @@ import { Message, MessageEmbed } from 'discord.js';
 
 import { Command } from 'discord-akairo';
 import Pokedex from 'pokedex-promise-v2';
-import { Utilities } from '../../../util/Utilities';
+import { Util } from '../../../utils/Util';
 
 export default class PokemonCommand extends Command {
   public constructor() {
@@ -55,7 +55,7 @@ export default class PokemonCommand extends Command {
       const POKEMON_WEIGHT = '**Weight**: ' + res[0].weight / 10 + 'kg';
       // This is not the best looking code in existence, but it gets the job done nicely.
       const POKEMON_ABILITIES = '**Abilities**: ' + res[0].abilities.map((ability: any) => {
-        return Utilities.convertToTitleCase(ability.ability.name).replace('-', ' ');
+        return Util.convertToTitleCase(ability.ability.name).replace('-', ' ');
       }).join(', ');
 
       let POKEMON_FLAVOR_TEXT: string;

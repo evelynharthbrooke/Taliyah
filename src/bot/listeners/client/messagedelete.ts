@@ -19,9 +19,9 @@
  * along with Erica. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { GuildAuditLogsEntry, Message, MessageEmbed, TextChannel } from 'discord.js';
+import { Message, MessageEmbed, TextChannel } from 'discord.js';
 
-import Constants from '../../util/Constants';
+import Constants from '../../utils/Constants';
 import { Listener } from 'discord-akairo';
 import moment from 'moment';
 

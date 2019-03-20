@@ -23,7 +23,7 @@ import * as request from 'superagent';
 import { Message, MessageEmbed } from 'discord.js';
 
 import { Command } from 'discord-akairo';
-import Constants from '../../util/Constants';
+import Constants from '../../utils/Constants';
 
 export default class SteamStatusCommand extends Command {
   public constructor() {

@@ -21,7 +21,7 @@
 import { Message, MessageEmbed, User } from 'discord.js';
 
 import { Command } from 'discord-akairo';
-import Constants from '../../util/Constants';
+import Constants from '../../utils/Constants';
 import moment from 'moment';
 
 export default class UserCommand extends Command {

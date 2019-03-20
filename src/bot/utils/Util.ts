@@ -23,7 +23,7 @@ import * as request from 'superagent';
 import { client } from '../../ellie';
 import { stringify } from 'querystring';
 
-export class Utilities {
+export class Util {
 
   /**
    * The Shorten utility function.
@@ -63,6 +63,18 @@ export class Utilities {
       lat: coordinates.results[0].geometry.location.lat,
       long: coordinates.results[0].geometry.location.lng,
     };
+  }
+
+  /**
+   * The fahrenify function.
+   *
+   * Converts a temperature to Fahrenheit from Celsius.
+   *
+   * @param {number} temperature The temperature to convert to Fahrenheit.
+   * @returns {number} The temperature in Fahrenheit.
+   */
+  public static fahrenify(temperature: number): number {
+    return temperature * 1.8 + 32;
   }
 
   /**

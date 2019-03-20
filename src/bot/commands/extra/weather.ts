@@ -22,7 +22,8 @@ import * as request from 'superagent';
 import { Message, MessageEmbed } from 'discord.js';
 
 import { Command } from 'discord-akairo';
-import { Utilities } from '../../util/Utilities';
+import { Util } from '../../utils/Util';
+import moment from 'moment';
 import { stringify } from 'querystring';
 
 export default class WeatherCommand extends Command {
@@ -45,29 +46,62 @@ export default class WeatherCommand extends Command {
   }
 
   public async exec(message: Message, { location }: { location: string }) {
-    const coordinates = await Utilities.getCoordinates(location);
+
+    if (!location) {
+      return message.channel.send('You didn\'t enter a location name! Please enter one and ' +
+        'then try again.');
+    }
+
+    const locationCoordinates = await Util.getCoordinates(location);
     const darkSkyApiUrl = 'https://api.darksky.net/forecast';
     const darkSkyApiKey = this.client.config.darksky.key;
-    const darkSkyRequest = await request.get(
-      `${darkSkyApiUrl}/${darkSkyApiKey}/${coordinates.lat},${coordinates.long}?${stringify({
+    const { body: weather } = await request.get(
+      `${darkSkyApiUrl}/${darkSkyApiKey}/` +
+      `${locationCoordinates.lat},${locationCoordinates.long}?${stringify({
         units: 'si',
       })}`,
     );
 
+    /** Initialize the weather embed. */
     const darkSkyEmbed = new MessageEmbed();
-    const darkSkySummary = darkSkyRequest.body.daily.summary;
-    const darkSkyWindSpeed = darkSkyRequest.body.currently.windSpeed;
-    const darkSkyCondition = darkSkyRequest.body.daily.data[0].summary;
+    /** Weather Conditions */
+    const darkSkySummary = weather.daily.summary;
+    const darkSkyCondition = weather.daily.data[0].summary;
+    const darkSkyWindSpeed = weather.currently.windSpeed;
+    const darkSkyPresure = Math.round(weather.currently.pressure);
+    const darkSkyDewPoint = weather.currently.dewPoint;
+    const darkSkyHumidity = Math.round(weather.currently.humidity * 100);
+    const darkSkySunrise = weather.daily.data[0].sunriseTime * 1000;
+    const darkSkySunset = weather.daily.data[0].sunsetTime * 1000;
+    const darkSkyTemp = Math.round(weather.currently.temperature);
+    const darkSkyTempFahren = Math.round(Util.fahrenify(weather.currently.temperature));
+    const darkSkyTodayHigh = Math.round(weather.daily.data[0].temperatureHigh);
+    const darkSkyTodayHighFahren = Math.round(Util.fahrenify(darkSkyTodayHigh));
+    const darkSkyTodayLow = Math.round(weather.daily.data[0].temperatureLow);
+    const darkSkyTodayLowFahren = Math.round(Util.fahrenify(darkSkyTodayLow));
 
-    darkSkyEmbed.setTitle(`Weather information for ${coordinates.address}`);
+    darkSkyEmbed.setTitle(`Weather information for ${locationCoordinates.address}`);
+    darkSkyEmbed.setColor(0x8cbed6);
+
+    /** Set the embed description. Contains all the weather information. */
     darkSkyEmbed.setDescription(
       `${darkSkySummary}\n\n` +
+      `**Condition**: ${darkSkyCondition}\n` +
+      `**Currently**: ${darkSkyTemp} °C | ${darkSkyTempFahren} °F\n` +
+      `**Today's High**: ${darkSkyTodayHigh} °C | ${darkSkyTodayHighFahren} °F\n` +
+      `**Today's Low**: ${darkSkyTodayLow} °C | ${darkSkyTodayLowFahren} °F\n` +
       `**Wind Speed**: ${darkSkyWindSpeed} km/h\n` +
-      `**Condition**: ${darkSkyCondition}`);
+      `**Pressure**: ${darkSkyPresure} hPa\n` +
+      `**Dew Point**: ${darkSkyDewPoint} °C\n` +
+      `**Humidity**: ${darkSkyHumidity}%\n` +
+      `**Sunrise**: ${moment(darkSkySunrise).format('h:mm a')}\n` +
+      `**Sunset**: ${moment(darkSkySunset).format('h:mm a')}\n`,
+    );
+
+    /** Set the embed footer. */
     darkSkyEmbed.setFooter('Powered by the Dark Sky API.');
 
-    console.log(darkSkyRequest.body.daily);
-
+    /** Send the weather embed. */
     message.channel.send(darkSkyEmbed);
 
   }
