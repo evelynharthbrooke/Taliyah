@@ -37,7 +37,8 @@ clientSecret = ''
 
 # The API key used to interact with the Dark Sky
 # API interface.
-darksky = ''
+[darksky]
+key = ''
 
 # The API key used to interact with the Nexus Mods
 # API interface.
