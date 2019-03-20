@@ -66,14 +66,14 @@ export class Util {
   }
 
   /**
-   * The fahrenify function.
+   * The convertToFahrenheit function.
    *
    * Converts a temperature to Fahrenheit from Celsius.
    *
    * @param {number} temperature The temperature to convert to Fahrenheit.
    * @returns {number} The temperature in Fahrenheit.
    */
-  public static fahrenify(temperature: number): number {
+  public static convertToFahrenheit(temperature: number): number {
     return temperature * 1.8 + 32;
   }
 
