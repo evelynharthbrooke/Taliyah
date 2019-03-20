@@ -74,11 +74,11 @@ export default class WeatherCommand extends Command {
     const darkSkySunrise = weather.daily.data[0].sunriseTime * 1000;
     const darkSkySunset = weather.daily.data[0].sunsetTime * 1000;
     const darkSkyTemp = Math.round(weather.currently.temperature);
-    const darkSkyTempFahren = Math.round(Util.fahrenify(weather.currently.temperature));
+    const darkSkyTempFahren = Math.round(Util.convertToFahrenheit(weather.currently.temperature));
     const darkSkyTodayHigh = Math.round(weather.daily.data[0].temperatureHigh);
-    const darkSkyTodayHighFahren = Math.round(Util.fahrenify(darkSkyTodayHigh));
+    const darkSkyTodayHighFahren = Math.round(Util.convertToFahrenheit(darkSkyTodayHigh));
     const darkSkyTodayLow = Math.round(weather.daily.data[0].temperatureLow);
-    const darkSkyTodayLowFahren = Math.round(Util.fahrenify(darkSkyTodayLow));
+    const darkSkyTodayLowFahren = Math.round(Util.convertToFahrenheit(darkSkyTodayLow));
 
     darkSkyEmbed.setTitle(`Weather information for ${locationCoordinates.address}`);
     darkSkyEmbed.setColor(0x8cbed6);
