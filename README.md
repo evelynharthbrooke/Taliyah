@@ -1,7 +1,8 @@
-# Ellie, a bot for Discord
+<center><h1>Ellie -- Discord Bot</h1></center>
+<center>A bot for Discord written in TypeScript.<</center>
 
-This is the official GitHub repository for Ellie, a bot for Discord written using TypeScript and Node.js. This is my
-first full blown attempt at creating a proper Discord bot, and if any issues occur, please file them on either GitLab
+Welcome to the offiical GitHub/GitLab repository for Ellie, a bot for Discord written using TypeScript and Node.js. This is 
+my first full blown attempt at creating a proper Discord bot, and if any issues occur, please file them on either GitLab
 or GitHub and I will make sure that I take a look at them as soon as I can.
 
 Ellie uses the [Discord.js](https://github.com/discordjs/discord.js) library for basic interaction with the Discord
@@ -28,7 +29,9 @@ download the latest version available in the **Current** channel. You can also u
 but I should note that nightly builds can be unstable at times, and as such I currently recommend against using said
 builds, but if you still decide to use them, all I can say is that you _use them at your own risk_, and report any
 issues you experience with the bot while using the nightly builds to me via the respective issue trackers and I'll
-take a look.
+take a look if I can fix the problem. **NOTE**: I won't be able to fix dependency-related problems if there is no
+respective dependency update that fixes the problem with the latest Node.js verison! As I can't fork every available
+unmaintained dependency (if I happen to use any), please don't make any requests regarding this.
 
 #### macOS
 
