@@ -2,9 +2,9 @@
 
 > A bot for Discord writen in TypeScript
 
-Welcome to the offiical GitHub/GitLab repository for Ellie, a bot for Discord written using TypeScript and Node.js. This is 
-my first full blown attempt at creating a proper Discord bot, and if any issues occur, please file them on either GitLab
-or GitHub and I will make sure that I take a look at them as soon as I can.
+Welcome to the offiical repository for Ellie, a bot for Discord written using TypeScript and Node.js. This is my first
+my first attempt at creating a proper Discord bot, and if any issues occur, please file them on either GitLab or GitHub 
+and I will make sure that I take a look at them as soon as I can.
 
 Ellie uses the [Discord.js](https://github.com/discordjs/discord.js) library for basic interaction with the Discord
 API, as well as the fantastic and well-made Discord Akairo library, for easy integration of commands, listeners and
