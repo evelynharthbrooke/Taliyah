@@ -45,14 +45,14 @@ export default class WeatherCommand extends Command {
     });
   }
 
-  public async exec(message: Message, { location }: { location: string }) {
+  public async exec(message: Message, args: { location: string }) {
 
-    if (!location) {
+    if (!args.location) {
       return message.channel.send('You didn\'t enter a location name! Please enter one and ' +
         'then try again.');
     }
 
-    const locationCoordinates = await Util.getCoordinates(location);
+    const locationCoordinates = await Util.getCoordinates(args.location);
     const darkSkyApiUrl = 'https://api.darksky.net/forecast';
     const darkSkyApiKey = this.client.config.darksky.key;
     const { body: weather } = await request.get(
@@ -64,6 +64,7 @@ export default class WeatherCommand extends Command {
 
     /** Initialize the weather embed. */
     const darkSkyEmbed = new MessageEmbed();
+    const darkSkyImage = `https://darksky.net/images/weather-icons/${weather.currently.icon}.png`;
     /** Weather Conditions */
     const darkSkySummary = weather.daily.summary;
     const darkSkyCondition = weather.daily.data[0].summary;
@@ -80,16 +81,20 @@ export default class WeatherCommand extends Command {
     const darkSkyTodayLow = Math.round(weather.daily.data[0].temperatureLow);
     const darkSkyTodayLowFahren = Math.round(Util.convertToFahrenheit(darkSkyTodayLow));
 
-    darkSkyEmbed.setTitle(`Weather information for ${locationCoordinates.address}`);
+    darkSkyEmbed.setTitle(`Weather forecast for ${locationCoordinates.address}`);
+    darkSkyEmbed.setURL(`https://darksky.net/forecast/${locationCoordinates.lat},${locationCoordinates.long}`);
+    darkSkyEmbed.setThumbnail(darkSkyImage);
     darkSkyEmbed.setColor(0x8cbed6);
 
     /** Set the embed description. Contains all the weather information. */
     darkSkyEmbed.setDescription(
       `${darkSkySummary}\n\n` +
+      '**__General Forecast__**:\n' +
       `**Condition**: ${darkSkyCondition}\n` +
       `**Currently**: ${darkSkyTemp} °C | ${darkSkyTempFahren} °F\n` +
       `**Today's High**: ${darkSkyTodayHigh} °C | ${darkSkyTodayHighFahren} °F\n` +
-      `**Today's Low**: ${darkSkyTodayLow} °C | ${darkSkyTodayLowFahren} °F\n` +
+      `**Today's Low**: ${darkSkyTodayLow} °C | ${darkSkyTodayLowFahren} °F\n\n` +
+      '**__Detailed Forecast Info__**:\n' +
       `**Wind Speed**: ${darkSkyWindSpeed} km/h\n` +
       `**Pressure**: ${darkSkyPresure} hPa\n` +
       `**Dew Point**: ${darkSkyDewPoint} °C\n` +
@@ -99,7 +104,8 @@ export default class WeatherCommand extends Command {
     );
 
     /** Set the embed footer. */
-    darkSkyEmbed.setFooter('Powered by the Dark Sky API.');
+    darkSkyEmbed.setFooter('Powered by Dark Sky');
+    darkSkyEmbed.setTimestamp();
 
     /** Send the weather embed. */
     message.channel.send(darkSkyEmbed);

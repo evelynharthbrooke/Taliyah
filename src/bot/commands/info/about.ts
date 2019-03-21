@@ -56,7 +56,8 @@ export default class AboutCommand extends Command {
     INFO_EMBED.setDescription(
       'Information about Ellie, such as her uptime, used libraries, etc. You can view ' +
       'her source code on GitHub [here](https://github.com/KamranMackey/Ellie/) and check her ' +
-      'most recent commits by using **!changelog**.\n\n' +
+      'most recent commits by using **!changelog**. You can also view the help information for ' +
+      'Ellie by using **!help**.\n\n' +
       '**__General__**:\n' +
       `**Owner**: ${BOT_OWNER}\n` +
       `**Started**: ${BOT_UPTIME}\n` +
