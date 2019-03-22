@@ -56,6 +56,6 @@
     "merge2": "^1.2.3",
     "tslint": "^5.14.0",
     "tslint-config-airbnb": "^5.11.1",
-    "typescript": "^3.4.0-rc"
+    "typescript": "^3.4.0-dev.20190321"
   }
 }

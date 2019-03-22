@@ -104,8 +104,8 @@ export default class NPMCommand extends Command {
       const NPM_PACKAGE_MAINTAINERS = NPM_REQUEST.maintainers.map((user: any) => user.name).join(', ');
 
       if (NPM_REQUEST.time.unpublished) {
-        return message.channel.send('Looks like this package is no longer available on the npm registry.' +
-          'Please try a different package.');
+        return message.channel.send('Looks like this package is no longer available on the npm registry.'
+          + 'Please try a different package.');
       }
 
       NPM_EMBED.setAuthor('npm', NPM_LOGO, NPM_WEBSITE);
@@ -114,19 +114,19 @@ export default class NPMCommand extends Command {
       NPM_EMBED.setURL(NPM_PACKAGE_URL);
       NPM_EMBED.setThumbnail(NPM_LOGO);
       NPM_EMBED.setDescription(
-        `${NPM_PACKAGE_DESCRIPTION}\n\n` +
-        `**Latest Version**: ${NPM_PACKAGE_VERSION_LATEST}\n` +
-        `**RC Version**: ${NPM_PACKAGE_VERSION_RC}\n` +
-        `**Next Version**: ${NPM_PACKAGE_VERSION_NEXT}\n` +
-        `**Total Versions**: ${NPM_PACKAGE_VERSIONS}\n` +
-        `**License**: ${NPM_PACKAGE_LICENSE}\n` +
-        `**Author**: ${NPM_PACKAGE_AUTHOR}\n` +
-        `**Creation Date**: ${NPM_PACKAGE_CREATION_DATE}\n` +
-        `**Last Modified**: ${NPM_PACKAGE_LAST_MODIFIED}\n` +
-        `**Website**: ${NPM_PACKAGE_WEBSITE}\n` +
-        `**Bug Tracker**: ${NPM_PACKAGE_BUGS}\n` +
-        `**Main File**: ${NPM_PACKAGE_MAIN_FILE}\n` +
-        `**Maintainers**: ${NPM_PACKAGE_MAINTAINERS}`,
+        `${NPM_PACKAGE_DESCRIPTION}\n\n`
+        + `**Latest Version**: ${NPM_PACKAGE_VERSION_LATEST}\n`
+        + `**RC Version**: ${NPM_PACKAGE_VERSION_RC}\n`
+        + `**Next Version**: ${NPM_PACKAGE_VERSION_NEXT}\n`
+        + `**Total Versions**: ${NPM_PACKAGE_VERSIONS}\n`
+        + `**License**: ${NPM_PACKAGE_LICENSE}\n`
+        + `**Author**: ${NPM_PACKAGE_AUTHOR}\n`
+        + `**Creation Date**: ${NPM_PACKAGE_CREATION_DATE}\n`
+        + `**Last Modified**: ${NPM_PACKAGE_LAST_MODIFIED}\n`
+        + `**Website**: ${NPM_PACKAGE_WEBSITE}\n`
+        + `**Bug Tracker**: ${NPM_PACKAGE_BUGS}\n`
+        + `**Main File**: ${NPM_PACKAGE_MAIN_FILE}\n`
+        + `**Maintainers**: ${NPM_PACKAGE_MAINTAINERS}`,
       );
       NPM_EMBED.setFooter('Powered by the npm registry API.');
       NPM_EMBED.setTimestamp();
@@ -135,8 +135,9 @@ export default class NPMCommand extends Command {
 
     } catch (err) {
       if (err.status === 404) {
-        return message.channel.send(`I couldn't find \`${query}\` in the npm registry. Please try a ` +
-          'differrent package name.');
+        return message.channel.send(
+          `I was unable to find \`${query}\` in the npm registry. Please try a different `
+          + 'try a differrent package name.');
       }
 
       this.client.logger.error('Encountered an error while getting npm registry results.');
