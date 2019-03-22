@@ -54,24 +54,24 @@ export default class AboutCommand extends Command {
     INFO_EMBED.setColor(0x00AE86);
     INFO_EMBED.setThumbnail(this.client.user!.displayAvatarURL({ format: 'png', size: 1024 }));
     INFO_EMBED.setDescription(
-      'Information about Ellie, such as her uptime, used libraries, etc. You can view ' +
-      'her source code on GitHub [here](https://github.com/KamranMackey/Ellie/) and check her ' +
-      'most recent commits by using **!changelog**. You can also view the help information for ' +
-      'Ellie by using **!help**.\n\n' +
-      '**__General__**:\n' +
-      `**Owner**: ${BOT_OWNER}\n` +
-      `**Started**: ${BOT_UPTIME}\n` +
-      `**Guilds**: ${GUILD_COUNT}\n` +
-      `**Channels**: ${CHANNEL_COUNT}\n` +
-      `**Users**: ${USER_COUNT}\n` +
-      `**Version**: ${BOT_VERSION}\n` +
-      `**Memory Usage**: ${MEMORY_USAGE} MB\n\n` +
-      '**__Dependencies__**:\n' +
-      `**[Node.js](https://nodejs.org)**: ${NODEJS_VERSION}\n` +
-      `**[V8](https://v8.dev)**: ${V8_VERSION}\n` +
-      `**[TypeScript](https://www.typescriptlang.org)**: ${TYPESCRIPT_VERSION.substr(0, 9)}\n` +
-      `**[Discord.js](https://github.com/discordjs/discord.js)**: ${DISCORDJS_VERSION}\n` +
-      `**[Akairo](https://github.com/1Computer1/discord-akairo)**: ${DISCORD_AKAIRO_VERSION}\n`,
+      'Information about Ellie, such as her uptime, used libraries, etc. You can view '
+      + 'her source code on GitHub [here](https://github.com/KamranMackey/Ellie/) and check her '
+      + 'most recent commits by using **!changelog**. You can also view the help information for '
+      + 'Ellie by using **!help**.\n\n'
+      + '**__General__**:\n'
+      + `**Owner**: ${BOT_OWNER}\n`
+      + `**Started**: ${BOT_UPTIME}\n`
+      + `**Guilds**: ${GUILD_COUNT}\n`
+      + `**Channels**: ${CHANNEL_COUNT}\n`
+      + `**Users**: ${USER_COUNT}\n`
+      + `**Version**: ${BOT_VERSION}\n`
+      + `**Memory Usage**: ${MEMORY_USAGE} MB\n\n`
+      + '**__Dependencies__**:\n'
+      + `**[Node.js](https://nodejs.org)**: ${NODEJS_VERSION}\n`
+      + `**[V8](https://v8.dev)**: ${V8_VERSION}\n`
+      + `**[TypeScript](https://www.typescriptlang.org)**: ${TYPESCRIPT_VERSION.substr(0, 9)}\n`
+      + `**[Discord.js](https://github.com/discordjs/discord.js)**: ${DISCORDJS_VERSION}\n`
+      + `**[Akairo](https://github.com/1Computer1/discord-akairo)**: ${DISCORD_AKAIRO_VERSION}\n`,
     );
 
     return message.channel.send(INFO_EMBED);

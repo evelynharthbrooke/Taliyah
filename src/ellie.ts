@@ -25,8 +25,9 @@ import EllieClient from './bot/client/EllieClient';
 const config = Config.initConfigFromFile();
 
 /**
- * Create a new instance of EllieClient with
- * the configuration.
+ * Create a new instance of EllieClient, initializing
+ * the configuration and setting basic options.
+ *
  */
 export const client = new EllieClient(config, {
   ownerID: config.owner,
@@ -34,5 +35,8 @@ export const client = new EllieClient(config, {
   disabledEvents: ['TYPING_START'],
 });
 
-/** Finally, start Ellie. */
+/** 
+ * Login to Discord using the API token, and then 
+ * start the bot.
+*/
 client.loginToDiscord(config.token);
