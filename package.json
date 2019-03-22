@@ -43,7 +43,7 @@
     "toml": "^3.0.0"
   },
   "devDependencies": {
-    "@types/node": "^11.11.4",
+    "@types/node": "^11.11.5",
     "@types/numeral": "0.0.25",
     "@types/pluralize": "0.0.29",
     "@types/pokedex-promise-v2": "github:mudkipme/pokeapi-v2-typescript",
@@ -56,6 +56,6 @@
     "merge2": "^1.2.3",
     "tslint": "^5.14.0",
     "tslint-config-airbnb": "^5.11.1",
-    "typescript": "^3.4.0-dev.20190321"
+    "typescript": "^3.4.0-rc"
   }
 }
