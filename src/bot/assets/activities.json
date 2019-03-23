@@ -24,6 +24,10 @@
         "type": "PLAYING"
     },
     {
+        "name": "Minecraft",
+        "type": "PLAYING",
+    },
+    {
         "name": "sports",
         "type": "PLAYING"
     },
