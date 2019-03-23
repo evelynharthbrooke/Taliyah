@@ -29,6 +29,7 @@ export default class DebugListener extends Listener {
   }
 
   public exec(event: any) {
+    /** Log debug events. */
     this.client.logger.debug(event);
   }
 }
