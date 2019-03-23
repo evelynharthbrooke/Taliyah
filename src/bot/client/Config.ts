@@ -33,12 +33,15 @@ type Configuration = {
     clientSecret?: string;
   };
   google?: string;
-  github?: string;
+  github?: {
+    token?: string, // The personal authentication token.
+    repo?: string; // The GitHub repository.
+  };
   darksky?: {
     key?: string;
   }
   nexusmods?: string;
-  repository?: string;
+  repo?: string;
 };
 
 export default class Config {
@@ -54,19 +57,20 @@ export default class Config {
   readonly spotify: { clientID: string, clientSecret: string };
   /** The Google API key to use. */
   readonly google: string;
-  /** The GitHub authentication token to use. */
-  readonly github: string;
+  /** The GitHub authentication token and repository. */
+  readonly github: { token: string, repo: string };
   /** The Dark Sky API key to use. */
   readonly darksky: { key: string };
   /** The Nexus Mods API key to use. */
   readonly nexusmods: string;
   /** The GitHub repository hosting the bot. */
-  readonly repository: string;
+  readonly repo: string;
 
   public constructor(string?: string) {
     const config = string ? (toml.parse(string) as Configuration) : {};
     const spotify = config.spotify || {};
     const darksky = config.darksky || {};
+    const github = config.github || {};
     this.owner = config.owner || '';
     this.prefix = config.prefix || '!';
     this.token = config.token || '';
@@ -75,15 +79,18 @@ export default class Config {
       clientID: spotify.clientID || '',
       clientSecret: spotify.clientSecret || '',
     };
-    this.github = config.github || '';
+    this.github = {
+      token: github.token || '',
+      repo: github.repo || '',
+    };
     this.darksky = { key: darksky.key || '' };
     this.nexusmods = config.nexusmods || '';
     this.google = config.google || '';
-    this.repository = config.repository || '';
+    this.repo = config.repo || '';
   }
 
   /** Loads the bot's configuration from a configuration file. */
-  static initConfigFromFile(path: string = configFile): Config {
+  static loadConfig(path: string = configFile): Config {
     return new Config(fs.readFileSync(path, 'utf8'));
   }
 }

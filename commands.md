@@ -5,6 +5,9 @@ when any new commands get added.
 ## Fun
 * **steamstatus:**: Retrieves the current service status of Steam.
 
+# Extra
+* **weather**: Retrieves weather information for a specified location. Powered by Dark Sky.
+
 ## Moderation
 * **ban:** Bans a user from the guild the command was enacted from.
 * **kick:** Kicks a user from the guild the command was enacted from.
@@ -18,7 +21,7 @@ when any new commands get added.
 * **disconnect:** Disconnects Ellie from a voice channel.
 
 ## Information
-* **changelog:** Displays the most recent commits pushed to Ellie's codebase. (NOT YET IMPLEMENTED IN REWRITE)
+* **changelog:** Displays the most recent changed made to Ellie.
 * **about:** Retrieves and displays detailed information about Ellie.
 * **user:** Retrieves detailed information on a chosen user.<sub><sup>1</sup></sub>
 * **guild:** Retrieves detailed information in the current Discord guild.<sub><sup>1</sup></sub>

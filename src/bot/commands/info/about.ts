@@ -18,13 +18,13 @@
  * along with Ellie. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Command, version as DISCORD_AKAIRO_VERSION } from 'discord-akairo';
-import { version as DISCORDJS_VERSION, Message, MessageEmbed } from 'discord.js';
-
-import { version as BOT_VERSION } from '../../../../package.json';
-import { version as TYPESCRIPT_VERSION } from 'typescript';
+import { Command, version as DiscordAkairoVersion } from 'discord-akairo';
+import { Message, MessageEmbed, version as DiscordVersion } from 'discord.js';
 import moment from 'moment';
 import pluralize from 'pluralize';
+import { version as TypeScriptVersion } from 'typescript';
+
+import * as packageJSON from '../../../../package.json';
 
 export default class AboutCommand extends Command {
   public constructor() {
@@ -38,42 +38,46 @@ export default class AboutCommand extends Command {
   }
 
   public async exec(message: Message) {
-    const INFO_EMBED = new MessageEmbed();
-    const CHANNELS = this.client.channels.filter(channel => channel.type !== 'category').size;
-    const CHANNEL_COUNT = pluralize('channel', CHANNELS, true);
-    const GUILD_COUNT = pluralize('guild', this.client.guilds.size, true);
-    const USER_COUNT = pluralize('user', this.client.guilds.map(g => g.memberCount).reduce((f, l) => f + l), true);
-    const BOT_UPTIME = moment.duration(-this.client.uptime, 'milliseconds').humanize(true);
-    const MEMORY_USAGE = (process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2);
-    const BOT_OWNER_ID = this.client.ownerID as string;
-    const BOT_OWNER = this.client.users.get(BOT_OWNER_ID)!.tag;
-    const NODEJS_VERSION = process.version.substr(0, 8).replace('v', '');
-    const V8_VERSION = process.versions.v8;
+    const aboutEmbed = new MessageEmbed();
+    /** Basic Bot Information */
+    const botVersion = packageJSON.version;
+    const botCodename = packageJSON.codename;
+    const botOwnerID = this.client.ownerID as string;
+    const botOwner = this.client.users.get(botOwnerID)!.tag;
+    const botMemoryUsage = (process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2);
+    const botUptime = moment.duration(-this.client.uptime, 'milliseconds').humanize(true);
+    const nodeVersion = process.version.substr(0, 8).replace('v', '');
+    const v8Version = process.versions.v8;
+    /** Statistics */
+    const channelFilter = this.client.channels.filter(channel => channel.type !== 'category').size;
+    const channelCount = pluralize('channel', channelFilter, true);
+    const guildCount = pluralize('guild', this.client.guilds.size, true);
+    const userCount = pluralize('user', this.client.guilds.map(g => g.memberCount).reduce((f, l) => f + l), true);
 
-    INFO_EMBED.setTitle(`About ${this.client.user!.username}`);
-    INFO_EMBED.setColor(0x00AE86);
-    INFO_EMBED.setThumbnail(this.client.user!.displayAvatarURL({ format: 'png', size: 1024 }));
-    INFO_EMBED.setDescription(
+    aboutEmbed.setTitle(`About ${this.client.user!.username}`);
+    aboutEmbed.setColor(0x00AE86);
+    aboutEmbed.setThumbnail(this.client.user!.displayAvatarURL({ format: 'png', size: 1024 }));
+    aboutEmbed.setDescription(
       'Information about Ellie, such as her uptime, used libraries, etc. You can view '
       + 'her source code on GitHub [here](https://github.com/KamranMackey/Ellie/) and check her '
       + 'most recent commits by using **!changelog**. You can also view the help information for '
       + 'Ellie by using **!help**.\n\n'
       + '**__General__**:\n'
-      + `**Owner**: ${BOT_OWNER}\n`
-      + `**Started**: ${BOT_UPTIME}\n`
-      + `**Guilds**: ${GUILD_COUNT}\n`
-      + `**Channels**: ${CHANNEL_COUNT}\n`
-      + `**Users**: ${USER_COUNT}\n`
-      + `**Version**: ${BOT_VERSION}\n`
-      + `**Memory Usage**: ${MEMORY_USAGE} MB\n\n`
+      + `**Owner**: ${botOwner}\n`
+      + `**Started**: ${botUptime}\n`
+      + `**Guilds**: ${guildCount}\n`
+      + `**Channels**: ${channelCount}\n`
+      + `**Users**: ${userCount}\n`
+      + `**Version**: ${botVersion} ${botCodename}\n`
+      + `**Memory Usage**: ${botMemoryUsage} MB\n\n`
       + '**__Dependencies__**:\n'
-      + `**[Node.js](https://nodejs.org)**: ${NODEJS_VERSION}\n`
-      + `**[V8](https://v8.dev)**: ${V8_VERSION}\n`
-      + `**[TypeScript](https://www.typescriptlang.org)**: ${TYPESCRIPT_VERSION.substr(0, 9)}\n`
-      + `**[Discord.js](https://github.com/discordjs/discord.js)**: ${DISCORDJS_VERSION}\n`
-      + `**[Akairo](https://github.com/1Computer1/discord-akairo)**: ${DISCORD_AKAIRO_VERSION}\n`,
+      + `**[Node.js](https://nodejs.org)**: ${nodeVersion}\n`
+      + `**[V8](https://v8.dev)**: ${v8Version}\n`
+      + `**[TypeScript](https://www.typescriptlang.org)**: ${TypeScriptVersion.substr(0, 9)}\n`
+      + `**[Discord.js](https://github.com/discordjs/discord.js)**: ${DiscordVersion}\n`
+      + `**[Akairo](https://github.com/1Computer1/discord-akairo)**: ${DiscordAkairoVersion}\n`,
     );
 
-    return message.channel.send(INFO_EMBED);
+    return await message.channel.send(aboutEmbed);
   }
 }

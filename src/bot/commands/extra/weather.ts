@@ -17,14 +17,12 @@
  * along with Ellie. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import * as request from 'superagent';
-
 import { Message, MessageEmbed } from 'discord.js';
-
 import { Command } from 'discord-akairo';
 import { Util } from '../../utils/Util';
 import moment from 'moment';
 import { stringify } from 'querystring';
+import * as request from 'superagent';
 
 export default class WeatherCommand extends Command {
   public constructor() {

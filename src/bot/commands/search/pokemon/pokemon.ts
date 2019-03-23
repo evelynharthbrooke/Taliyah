@@ -89,12 +89,12 @@ export default class PokemonCommand extends Command {
       POKEMON_EMBED.setColor(0xFFCB05);
       POKEMON_EMBED.setThumbnail(POKEMON_THUMBNAIL);
       POKEMON_EMBED.setDescription(
-        `${POKEMON_TYPE}\n` +
-        `${POKEMON_HEIGHT}\n` +
-        `${POKEMON_WEIGHT}\n` +
-        `${POKEMON_ABILITIES}\n\n` +
-        `${POKEMON_FLAVOR_TEXT}\n\n` +
-        `More information is available on [Bulbapedia](${BULBAPEDIA_URL}).`,
+        `${POKEMON_TYPE}\n`
+        + `${POKEMON_HEIGHT}\n`
+        + `${POKEMON_WEIGHT}\n`
+        + `${POKEMON_ABILITIES}\n\n`
+        + `${POKEMON_FLAVOR_TEXT}\n\n`
+        + `More information is available on [Bulbapedia](${BULBAPEDIA_URL}).`,
       );
       POKEMON_EMBED.setFooter(`Pokédex entry ${POKEMON_ID} | Powered by PokéAPI.`);
 
