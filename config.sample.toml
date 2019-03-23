@@ -26,7 +26,13 @@ google = ''
 
 # The GitHub personal authentication token to use for
 # the bot's integration with the GitHub API.
-github = ''
+#
+# Also, set the repository name. This is used for
+# certain commands. Please make sure the repository
+# is public!
+[github]
+token = ''
+repo = ''
 
 # Variables used for accessing the Spotify API.
 [spotify]
@@ -43,6 +49,3 @@ key = ''
 # The API key used to interact with the Nexus Mods
 # API interface.
 nexusmods = ''
-
-# The bot's GitHub repository.
-repository = ''
