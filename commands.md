@@ -2,12 +2,6 @@
 This is the command list for Ellie. New commands are being added all the time, so keep an eye on this list
 when any new commands get added.
 
-## Fun
-* **steamstatus:**: Retrieves the current service status of Steam.
-
-# Extra
-* **weather**: Retrieves weather information for a specified location. Powered by Dark Sky.
-
 ## Moderation
 * **ban:** Bans a user from the guild the command was enacted from.
 * **kick:** Kicks a user from the guild the command was enacted from.
@@ -38,5 +32,9 @@ when any new commands get added.
 ## Utilities
 * **help:** Displays the current command list or displays useful information on a chosen command.
 * **ping:** Pings the Discord API gateway and displays message latency.
+
+# Extra
+* **steamstatus:**: Retrieves the current service status of Steam.
+* **weather**: Retrieves weather information for a specified location. Powered by Dark Sky.
 
 <sub>1. This command can ONLY be used in Discord guilds and cannot be used inside private conversations.</sub><br>

@@ -29,11 +29,11 @@ export default class SteamStatusCommand extends Command {
   public constructor() {
     super('steamstatus', {
       aliases: ['steamstatus'],
+      category: 'Extra',
       description: {
         content: 'Displays the current status of Steam.',
         usage: '<blank>',
       },
-      category: 'Fun',
     });
   }
 
