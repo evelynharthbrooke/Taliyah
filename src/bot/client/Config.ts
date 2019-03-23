@@ -76,13 +76,13 @@ export default class Config {
       clientID: spotify.clientID || '',
       clientSecret: spotify.clientSecret || '',
     };
+    this.google = config.google || '';
     this.github = {
       token: github.token || '',
       repo: github.repo || '',
     };
     this.darksky = { key: darksky.key || '' };
     this.nexusmods = config.nexusmods || '';
-    this.google = config.google || '';
   }
 
   /** Loads the bot's configuration from a configuration file. */
