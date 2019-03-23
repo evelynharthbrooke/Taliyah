@@ -41,7 +41,6 @@ type Configuration = {
     key?: string;
   }
   nexusmods?: string;
-  repo?: string;
 };
 
 export default class Config {
@@ -63,8 +62,6 @@ export default class Config {
   readonly darksky: { key: string };
   /** The Nexus Mods API key to use. */
   readonly nexusmods: string;
-  /** The GitHub repository hosting the bot. */
-  readonly repo: string;
 
   public constructor(string?: string) {
     const config = string ? (toml.parse(string) as Configuration) : {};
@@ -86,7 +83,6 @@ export default class Config {
     this.darksky = { key: darksky.key || '' };
     this.nexusmods = config.nexusmods || '';
     this.google = config.google || '';
-    this.repo = config.repo || '';
   }
 
   /** Loads the bot's configuration from a configuration file. */
