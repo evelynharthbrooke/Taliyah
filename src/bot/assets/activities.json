@@ -1,17 +1,5 @@
 [
     {
-        "name": "programming tutorials",
-        "type": "WATCHING"
-    },
-    {
-        "name": "Minecraft",
-        "type": "PLAYING"
-    },
-    {
-        "name": "video game playthroughs",
-        "type": "WATCHING"
-    },
-    {
         "name": "with my nails",
         "type": "PLAYING"
     },
@@ -20,11 +8,23 @@
         "type": "WATCHING"
     },
     {
+        "name": "Captain Marvel",
+        "type": "WATCHING"
+    },
+    {
+        "name": "movies",
+        "type": "WATCHING"
+    },
+    {
         "name": "with AI",
         "type": "PLAYING"
     }, 
     {
         "name": "Fortnite",
+        "type": "PLAYING"
+    },
+    {
+        "name": "sports",
         "type": "PLAYING"
     },
     {

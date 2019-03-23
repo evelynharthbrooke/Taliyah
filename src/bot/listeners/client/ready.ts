@@ -22,7 +22,7 @@
 import { Listener } from 'discord-akairo';
 import { version } from '../../../../package.json';
 
-const activities = require('../../../assets/json/activities.json');
+const activities = require('../../assets/activities.json');
 
 export default class ReadyListener extends Listener {
   public constructor() {
@@ -40,6 +40,7 @@ export default class ReadyListener extends Listener {
     const mainActivity = activities[Math.floor(Math.random() * activities.length)];
 
     this.client.user!.setActivity(mainActivity.name, { type: mainActivity.type });
+    this.client.logger.info(`Setting initial activity to ${mainActivity.type} ${mainActivity.name}.`);
 
     this.client.setInterval(() => {
       this.client.logger.info('Attempting to rotate between activities.');

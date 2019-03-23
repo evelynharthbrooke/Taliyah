@@ -27,7 +27,7 @@ google = ''
 # The GitHub personal authentication token to use for
 # the bot's integration with the GitHub API.
 #
-# Also, set the repository name. This is used for
+# You can also set the repository name. This is used for
 # certain commands. Please make sure the repository
 # is public!
 [github]
