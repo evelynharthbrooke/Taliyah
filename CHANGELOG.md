@@ -40,6 +40,13 @@ the code each time to a command's top level code.
 
 #### Command Changes
 
+#### General
+- Revamped the majority of the commands to use the embed description instead of embed fields. This (IMHO) 
+makes things a fair bit cleaner and improves things on the mobile side, since message embeds when viewed
+using Discord's mobile apps don't have multiple columns and show each field on a separate row, which doesn't 
+look that good. The only command that doesn't use embed descriptions throughout the entire command is `!help`, 
+for technical reasons.
+
 ##### Music
 * Lastfm:
   - Added a list of users' most recently played tracks (up to 5). Displays when a song is
@@ -47,15 +54,19 @@ the code each time to a command's top level code.
   - Switched to using the Spotify Web API instead of Last.fm's API for retrieving album
     artwork, due to Spotify having a wider selection of music and album art.
 
+##### Search
+* Pokémon:
+  - Implemented support for viewing a Pokémon's various abilities.
+  - Added a link to Bulbapedia which allows users to get more information on a Pokémon.
+
+##### Utilities
+* Help:
+  - Changed the layout when getting information on a individual command to use embed descriptions. However, please
+    note that this does not yet affect getting information on all commands. This may change in the future.
+
 #### General Changes
 
 - The bot has been renamed from Erica to Ellie. Nothing major really, just a slight name change.
-- Revamped the majority of the commands to use the embed description instead of embed fields. This (IMHO) 
-makes things a fair bit cleaner and improves things on the mobile side, since Rich Embeds on Discord's 
-mobile apps don't have multiple columns and show each field on a separate row, which doesn't look that
-good.
-- The `!pokemon` command now displays a Pokémon's abilities, and allows users to visit Bulbapedia to get
-more information.
 - Changed the logging library from `winston` to `signale`. Signale looks a lot better and works without much
 configuration.
 - Minor refinements to the codebase.
