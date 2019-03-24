@@ -17,7 +17,8 @@ a few changes to support TypeScript's syntax.
 - Added `!ban`. Bans a user from the current Discord guild.
 
 ##### Extra
-- Added `!steamstatus`. Retrieves the current Steam server status.
+- Added `!steamstatus`. Retrieves information about the current status of Steam and various services
+related to Steeam, such as the Steam Database, and Valve's CS:GO.
 
 #### Listeners
 - Added a `messagedelete` listener. Checks for message deletion, and logs it to a channel. Working on
