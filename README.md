@@ -1,5 +1,4 @@
-Ellie
-====
+# Ellie
 A feature-packed bot for Discord servers, written in TypeScript.
 
 [![Invite Ellie][invite-badge]][invite-link]
