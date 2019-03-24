@@ -1,18 +1,14 @@
 <div align="center">
   <h1>Ellie</h1>
   <p>A feature-packed bot for Discord servers, written in TypeScript.</p>
-  <a href="https://discordapp.com/oauth2/authorize?client_id=483499705108529163&scope=bot" target="_blank">
-  <img title="Invite Ellie to your Discord server!"
-       alt="Invite Ellie"
+  <a href="https://discordapp.com/oauth2/authorize?client_id=483499705108529163&scope=bot"><img 
+       title="Invite Ellie to your Discord server!"
        src="https://img.shields.io/badge/invite-to%20your%20Discord%20server-7289da.svg?style=flat-square&logo=discord"><img>
   </a>
-
-  <a href="https://github.com/KamranMackey/Ellie/blob/rewrite/LICENSE.txt">
-  <img title="Project license" 
-       alt="Project license"
+  <a href="https://github.com/KamranMackey/Ellie/blob/rewrite/LICENSE.txt"><img 
+       title="Project license" 
        src="https://img.shields.io/github/license/KamranMackey/Ellie.svg?color=FF69B4&label=License&style=flat-square"><img>
   </a>
-
 </div>
 
 Welcome to the offiical repository for Ellie, a bot for Discord written using TypeScript and Node.js. This is my first
