@@ -7,7 +7,7 @@
        src="https://img.shields.io/badge/invite-to%20your%20Discord%20server-7289da.svg?style=flat-square&logo=discord"><img>
   </a>
 
-  <a href="https://github.com/KamranMackey/Ellie/blob/rewrite/LICENSE.md">
+  <a href="https://github.com/KamranMackey/Ellie/blob/rewrite/LICENSE.txt">
   <img title="Project license" 
        alt="Project license"
        src="https://img.shields.io/github/license/KamranMackey/Ellie.svg?color=FF1493&label=License&style=flat-square"><img>
