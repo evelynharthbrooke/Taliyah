@@ -5,7 +5,7 @@ A feature-packed bot for Discord servers, written in TypeScript.
 [![Invite Ellie][invite-badge]][invite-link]
 [![License][license-badge]][license-link]
 
-====
+----
 
 Welcome to the offiical repository for Ellie, a bot for Discord written using TypeScript and Node.js. This is my first
 my first attempt at creating a proper Discord bot, and if any issues occur, please file them on either GitLab or GitHub 
