@@ -1,15 +1,9 @@
-<div align="center">
-  <h1>Ellie</h1>
-  <p>A feature-packed bot for Discord servers, written in TypeScript.</p>
-  <a href="https://discordapp.com/oauth2/authorize?client_id=483499705108529163&scope=bot"><img 
-       title="Invite Ellie to your Discord server!"
-       src="https://img.shields.io/badge/invite-to%20your%20Discord%20server-7289da.svg?style=flat-square&logo=discord"><img>
-  </a>
-  <a href="https://github.com/KamranMackey/Ellie/blob/rewrite/LICENSE.txt"><img 
-       title="Project license" 
-       src="https://img.shields.io/github/license/KamranMackey/Ellie.svg?color=FF69B4&label=License&style=flat-square"><img>
-  </a>
-</div>
+Ellie
+====
+A feature-packed bot for Discord servers, written in TypeScript.
+
+[![Invite Ellie][invite-badge]][invite-link]
+[![License][license-badge]][license-link]
 
 Welcome to the offiical repository for Ellie, a bot for Discord written using TypeScript and Node.js. This is my first
 my first attempt at creating a proper Discord bot, and if any issues occur, please file them on either GitLab or GitHub 
@@ -19,10 +13,8 @@ Ellie uses the [Discord.js](https://github.com/discordjs/discord.js) library for
 API, as well as the fantastic and well-made Discord Akairo library, for easy integration of commands, listeners and
 other stuff. You can check out said library by visitng the link [here](https://github.com/1Computer1/discord-akairo).
 
-Ellie focuses on having a strong command toolbelt, while also being intuitive to use. One example is that Ellie uses
-the prompting featureof the Akairo library, which intuitively asks users to enter their query in certain commands,
-in case they send said command without applying any arguments. At some point, I also plan on making Ellie support
-music so people can use it as a music bot as well, if they so desire.
+**NOTE:** Ellie does not yet properly support music. I know music is an essential part of a Discord bot, and I plan
+on implementing voice support in a later update.
 
 ## Installation
 
@@ -204,3 +196,10 @@ at the `LICENSE` file, located in the root directory.
 
     You should have received a copy of the GNU General Public License
     along with Ellie. If not, see <http://www.gnu.org/licenses/>.
+
+
+[invite-link]: https://discordapp.com/oauth2/authorize?client_id=483499705108529163&scope=bot
+[invite-badge]: https://img.shields.io/badge/invite-to%20your%20Discord%20server-7289da.svg?style=flat-square&logo=discord
+
+[license-link]: https://github.com/KamranMackey/blob/rewrite/LICENSE.txt
+[license-badge]: https://img.shields.io/github/license/KamranMackey/Ellie.svg?color=FF69B4&style=flat-square
