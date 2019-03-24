@@ -1,6 +1,6 @@
 <div align="center">
   <h1>Ellie — Discord bot written in TypeScript</h1>
-  <p>A feature-packed bot for Discord, written in TypeScript.</p>
+  <p>A feature-packed bot for Discord servers, written in TypeScript.</p>
   <a href="https://discordapp.com/oauth2/authorize?client_id=483499705108529163&scope=bot" target="_blank">
   <img src="https://img.shields.io/badge/invite-to%20your%20Discord%20server-7289da.svg?style=flat&logo=discord" alt="Invite Ellie"></a>
 </div>
