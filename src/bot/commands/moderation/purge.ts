@@ -51,12 +51,13 @@ export default class PurgeCommand extends Command {
     const messageCount = pluralize('message', count, true);
 
     if (!message.member.hasPermission(['MANAGE_MESSAGES'])) {
-      return message.channel.send('Looks like you don\'t have the proper permissions!');
+      return message.channel.send('Sorry, it looks like you don\'t have the Manage Messages permission, so '
+        + 'you cannot use this command!');
     }
 
     if (count > 99 || !count) {
-      return message.channel.send('You either didn\'t enter a number, or you entered a number larger than 99.' +
-        'Please try again.');
+      return message.channel.send('You either didn\'t enter a number, or you entered a number larger than 99. '
+        + 'Please try again.');
     }
 
     try {

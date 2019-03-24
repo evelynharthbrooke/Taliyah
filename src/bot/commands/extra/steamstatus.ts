@@ -60,6 +60,11 @@ export default class SteamStatusCommand extends Command {
     const STEAM_DB = STEAM_STATUS_REQUEST.body.services['database'].title;
     const STEAM_DOTA_2 = STEAM_STATUS_REQUEST.body.services['dota2'].title;
     const STEAM_TF2 = STEAM_STATUS_REQUEST.body.services['tf2'].title;
+    const STEAM_CSGO_SESSIONS = STEAM_STATUS_REQUEST.body.services['csgo_sessions'].title;
+    const STEAM_CSGO_INVENTORIES = STEAM_STATUS_REQUEST.body.services['csgo_community'].title;
+    const STEAM_CSGO_MM_SCHEDULER = STEAM_STATUS_REQUEST.body.services['csgo_mm_scheduler'].title;
+
+    console.log(STEAM_STATUS_REQUEST.body);
 
     STEAM_EMBED.setTitle('Steam Status');
     STEAM_EMBED.setThumbnail(Constants.STEAM_LOGO);
@@ -73,9 +78,13 @@ export default class SteamStatusCommand extends Command {
       `**Steam Web API**: ${STEAM_USER_API} (${STEAM_USER_API_TIME}ms)\n` +
       `**Steam Connection Managers**: ${STEAM_CMS}\n` +
       `**Steam Connection Managers (WS)**: ${STEAM_CMS_WS}\n\n` +
-      '**__Game Services__**:\n' +
-      `**Dota 2**: ${STEAM_DOTA_2}\n` +
-      `**Team Fortress 2**: ${STEAM_TF2}\n\n` +
+      '**__Game APIs__**:\n' +
+      `**Dota 2 API**: ${STEAM_DOTA_2}\n` +
+      `**Team Fortress 2 API**: ${STEAM_TF2}\n\n` +
+      '**__Counter-Strike: Global Offensive__**:\n' +
+      `**Sessions Logon**: ${STEAM_CSGO_SESSIONS}\n` +
+      `**Player Inventories**: ${STEAM_CSGO_INVENTORIES}\n` +
+      `**Matchmaking Scheduler**: ${STEAM_CSGO_MM_SCHEDULER}\n\n` +
       '**__Other Services__**:\n' +
       `**[Steam Database](https://steamdb.info)**: ${STEAM_DB}`,
     );
