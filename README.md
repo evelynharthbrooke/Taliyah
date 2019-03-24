@@ -10,7 +10,7 @@
   <a href="https://github.com/KamranMackey/Ellie/blob/rewrite/LICENSE.txt">
   <img title="Project license" 
        alt="Project license"
-       src="https://img.shields.io/github/license/KamranMackey/Ellie.svg?color=FF1493&label=License&style=flat-square"><img>
+       src="https://img.shields.io/github/license/KamranMackey/Ellie.svg?color=FF69B4&label=License&style=flat-square"><img>
   </a>
 
 </div>
