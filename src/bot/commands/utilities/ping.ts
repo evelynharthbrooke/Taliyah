@@ -48,9 +48,6 @@ export default class PingCommand extends Command {
       `**Message Latency**: \`${msgLatency}ms\`\n` +
       `**API Latency**: \`${apiLatency}ms\``);
 
-    msg.edit({
-      content: null,
-      embed: pingEmbed,
-    });
+    msg.edit({ content: null, embed: pingEmbed });
   }
 }
