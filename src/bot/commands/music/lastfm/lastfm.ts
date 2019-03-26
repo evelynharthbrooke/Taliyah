@@ -138,10 +138,16 @@ export default class LastFMCommand extends Command {
       });
     }).catch((err) => {
 
+      // Return a message if the Last.fm API
+      // responds with a 404 Not Found error.
       if (err.status === 404) {
         return message.channel.send('I was unable to find this last.fm user! Please try a different username.');
       }
 
+      // If the last.fm API responds with error 500,
+      // it means that the API is currently offline/not
+      // responding. Let the user know that the API is
+      // currently offline when that error is sent.
       if (err.status === 500) {
         return message.channel.send('Sorry, it looks like the last.fm API is currently offline. Please try again later!');
       }
