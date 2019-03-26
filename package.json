@@ -44,7 +44,7 @@
     "toml": "^3.0.0"
   },
   "devDependencies": {
-    "@types/node": "^11.11.6",
+    "@types/node": "^11.11.7",
     "@types/numeral": "0.0.25",
     "@types/pluralize": "0.0.29",
     "@types/pokedex-promise-v2": "github:mudkipme/pokeapi-v2-typescript",
