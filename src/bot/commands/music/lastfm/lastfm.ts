@@ -142,6 +142,10 @@ export default class LastFMCommand extends Command {
         return message.channel.send('I was unable to find this last.fm user! Please try a different username.');
       }
 
+      if (err.status === 500) {
+        return message.channel.send('Sorry, it looks like the last.fm API is currently offline. Please try again later!');
+      }
+
       console.log(err);
       return message.channel.send('Sorry! Looks like I encountered an error. Please try again later.');
 
