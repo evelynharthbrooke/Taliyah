@@ -141,6 +141,7 @@ export default class LastFMCommand extends Command {
       // Return a message if the Last.fm API
       // responds with a 404 Not Found error.
       if (err.status === 404) {
+        this.client.logger.error('User inputted invalid Last.fm username.');
         return message.channel.send('I was unable to find this last.fm user! Please try a different username.');
       }
 
@@ -149,6 +150,7 @@ export default class LastFMCommand extends Command {
       // responding. Let the user know that the API is
       // currently offline when that error is sent.
       if (err.status === 500) {
+        this.client.logger.error('Last.fm API currently offline. Can\'t send API response.');
         return message.channel.send('Sorry, it looks like the last.fm API is currently offline. Please try again later!');
       }
 

@@ -64,8 +64,6 @@ export default class SteamStatusCommand extends Command {
     const STEAM_CSGO_INVENTORIES = STEAM_STATUS_REQUEST.body.services['csgo_community'].title;
     const STEAM_CSGO_MM_SCHEDULER = STEAM_STATUS_REQUEST.body.services['csgo_mm_scheduler'].title;
 
-    console.log(STEAM_STATUS_REQUEST.body);
-
     STEAM_EMBED.setTitle('Steam Status');
     STEAM_EMBED.setThumbnail(Constants.STEAM_LOGO);
     STEAM_EMBED.setURL('https://store.steampowered.com');
