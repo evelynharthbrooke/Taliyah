@@ -25,13 +25,13 @@ import { ClientOptions } from 'discord.js';
 import Config from './Config';
 import { Signale } from 'signale';
 import Spotify from 'spotify-web-api-node';
-import { Connection } from 'typeorm';
+import { Connection, ConnectionManager } from 'typeorm';
 import { version } from '../../../package.json';
 
 declare module 'discord-akairo' {
   interface AkairoClient {
     logger: Signale;
-    database: Connection;
+    databaseConnection: Connection;
     config: Config;
     spotify: Spotify;
   }
@@ -44,6 +44,9 @@ export default class EllieClient extends AkairoClient {
 
   /** Initialize the Configuration. */
   public config = new Config();
+
+  /** Initialize the database connection. */
+  public databaseConnection!: Connection;
 
   public constructor(config: Config, options: AkairoOptions & ClientOptions) {
     super(options);

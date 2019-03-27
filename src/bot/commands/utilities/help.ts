@@ -67,7 +67,7 @@ export default class HelpCommand extends Command {
     function getAliases() {
       let aliases: string;
       if (command.aliases.length > 1) {
-        aliases = `**Aliases**: ${command.aliases.join(', ')}`;
+        aliases = `**Command Aliases**: ${command.aliases.join(', ')}`;
       } else {
         aliases = '';
       }
@@ -75,7 +75,7 @@ export default class HelpCommand extends Command {
     }
 
     const examples = command.description.examples
-      ? command.description.examples.join(', ')
+      ? command.description.examples.join('\n')
       : 'No examples given!';
 
     const embed = new MessageEmbed()
@@ -84,11 +84,13 @@ export default class HelpCommand extends Command {
       .setTitle(`Help information for command ${command.aliases[0]}`)
       .setDescription(
         `${command.description.content || '\u200b'}\n\n` +
-        `**Category**: ${command.category}\n` +
-        `**Usage**: ${prefix}${command.aliases[0]} ${command.description.usage ? command.description.usage : ''}\n` +
-        `**Examples**: ${examples}\n` +
-        `**Permissions**: ${command.userPermissions || 'No permissions necessary.'}\n` +
-        `${getAliases()}`,
+        `${getAliases()}\n` +
+        `**Command Category**: ${command.category}\n` +
+        `**Command Usage**: ${prefix}${command.aliases[0]} ${command.description.usage
+          ? command.description.usage
+          : ''}\n` +
+        `**Command Permissions**: ${command.clientPermissions || 'No permissions necessary.'}\n` +
+        `**Command Examples**: \n${examples}`,
       );
     return message.channel.send(embed);
   }

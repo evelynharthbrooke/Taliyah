@@ -20,6 +20,7 @@
 
 import Config from './bot/client/Config';
 import EllieClient from './bot/client/EllieClient';
+import { ConnectionManager } from 'typeorm';
 
 /** Load the configuration */
 const config = Config.loadConfig();

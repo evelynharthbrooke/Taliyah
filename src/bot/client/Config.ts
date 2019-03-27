@@ -20,6 +20,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import * as toml from 'toml';
+import { ConnectionOptions, ConnectionOptionsReader } from 'typeorm';
 
 const configFile = path.join(__dirname, '..', '..', '..', 'config.toml');
 
@@ -27,6 +28,10 @@ type Configuration = {
   owner?: string;
   prefix?: string;
   token?: string;
+  database?: {
+    type?: any,
+    name?: string,
+  }
   lastfm?: string;
   spotify?: {
     clientID?: string,
@@ -50,6 +55,8 @@ export default class Config {
   readonly owner: string;
   /** The Discord API token to use, used for connecting to the Discord API. */
   readonly token: string;
+  /** The database credentials to use. */
+  readonly database: { type: any, name: string };
   /** The LastFM API key to use. */
   readonly lastfm: string;
   /** The Spotify client ID and client secret to use. */
@@ -68,9 +75,14 @@ export default class Config {
     const spotify = config.spotify || {};
     const darksky = config.darksky || {};
     const github = config.github || {};
+    const database = config.database || {};
     this.owner = config.owner || '';
     this.prefix = config.prefix || '!';
     this.token = config.token || '';
+    this.database = {
+      name: database.name || '',
+      type: database.type,
+    };
     this.lastfm = config.lastfm || '';
     this.spotify = {
       clientID: spotify.clientID || '',

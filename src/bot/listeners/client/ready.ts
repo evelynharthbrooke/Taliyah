@@ -35,7 +35,10 @@ export default class ReadyListener extends Listener {
 
   public async exec() {
 
-    this.client.logger.info(`Ellie v${version} has successfully logged into the Discord API as ${this.client.user!.tag}.`);
+    this.client.logger.info(
+      `Ellie v${version} has successfully logged into the Discord API as ${this.client.user!.tag} and `
+      + `is connected to ${this.client.guilds.size} guild(s).`,
+    );
 
     const mainActivity = activities[Math.floor(Math.random() * activities.length)];
 
@@ -44,7 +47,9 @@ export default class ReadyListener extends Listener {
 
     this.client.setInterval(() => {
       this.client.logger.info('Attempting to rotate between activities.');
+
       const activity = activities[Math.floor(Math.random() * activities.length)];
+
       if (activity.name === this.client.user!.presence.activity.name) {
         this.client.logger.info('Activity is identical, leaving activity the same for now.');
       } else {
@@ -52,6 +57,7 @@ export default class ReadyListener extends Listener {
 
         this.client.logger.info(`Successfully changed the activity! New activity is "${activity.type} ${activity.name}".`);
       }
+
     }, 200000); // tslint:disable-line: align
 
   }
