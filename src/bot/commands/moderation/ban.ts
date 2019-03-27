@@ -55,6 +55,10 @@ export default class BanCommand extends Command {
 
   public async exec(message: Message, { member, days, reason }: { member: GuildMember, days: number, reason: string }) {
 
+    if (message.channel.type === 'dm') {
+      return message.channel.send('This command cannot be used in direct messages.');
+    }
+
     if (!member) {
       return message.channel.send('You did not mention the member you would like to ban.');
     }

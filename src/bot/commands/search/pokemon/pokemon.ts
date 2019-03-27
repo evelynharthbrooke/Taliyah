@@ -94,7 +94,7 @@ export default class PokemonCommand extends Command {
         + `${POKEMON_WEIGHT}\n`
         + `${POKEMON_ABILITIES}\n\n`
         + `${POKEMON_FLAVOR_TEXT}\n\n`
-        + `More information is available on [Bulbapedia](${BULBAPEDIA_URL}).`,
+        + `More information about **${POKEMON_NAME}** is available on [Bulbapedia](${BULBAPEDIA_URL}).`,
       );
       POKEMON_EMBED.setFooter(`Pokédex entry ${POKEMON_ID} | Powered by PokéAPI.`);
 

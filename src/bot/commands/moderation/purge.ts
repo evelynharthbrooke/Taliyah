@@ -36,7 +36,6 @@ export default class PurgeCommand extends Command {
       ratelimit: 5,
       clientPermissions: ['READ_MESSAGE_HISTORY', 'MANAGE_MESSAGES'],
       userPermissions: ['MANAGE_MESSAGES'],
-      channel: 'guild',
       args: [
         {
           id: 'count',
@@ -49,6 +48,10 @@ export default class PurgeCommand extends Command {
   public async exec(message: Message, { count }: { count: number }) {
     const channel = message.channel as GuildChannel;
     const messageCount = pluralize('message', count, true);
+
+    if (message.channel.type === 'dm') {
+      return message.channel.send('This command cannot be used in direct messages.');
+    }
 
     if (!message.member.hasPermission(['MANAGE_MESSAGES'])) {
       return message.channel.send('Sorry, it looks like you don\'t have the Manage Messages permission, so '
