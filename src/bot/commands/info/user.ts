@@ -55,8 +55,8 @@ export default class UserCommand extends Command {
     const ACCOUNT_ID = member.id;
     const ACCOUNT_TAG = member.user.tag;
     const ACCOUNT_TYPE = member.user.bot ? 'Bot' : 'User';
-    const ACCOUNT_PRESENCE = member.presence.activity
-      ? `, ${Constants.ACTIVITY_NAMES[member.presence.activity.type]} **${member.presence.activity.name}**`
+    const ACCOUNT_PRESENCE = member.user.presence.activity
+      ? `, ${Constants.ACTIVITY_NAMES[member.user.presence.activity.type]} **${member.user.presence.activity.name}**`
       : '';
     const GUILD_ACCOUNT_JOIN_DATE = moment.utc(member.joinedAt).format(Constants.DATE_FORMAT);
     const GUILD_ACCCOUNT_COLOR = member.displayHexColor;
@@ -67,11 +67,11 @@ export default class UserCommand extends Command {
     const GUILD_ROLE_COUNT = member.roles.filter(r => r !== message.guild.defaultRole).size;
 
     let ACCOUNT_STATUS: string;
-    if (member.presence.status === 'online') {
+    if (member.user.presence.status === 'online') {
       ACCOUNT_STATUS = 'Online';
-    } else if (member.presence.status === 'idle') {
+    } else if (member.user.presence.status === 'idle') {
       ACCOUNT_STATUS = 'Idle';
-    } else if (member.presence.status === 'dnd') {
+    } else if (member.user.presence.status === 'dnd') {
       ACCOUNT_STATUS = 'Do Not Disturb';
     } else {
       if (member.user.bot) {

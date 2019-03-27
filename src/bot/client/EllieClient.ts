@@ -25,11 +25,13 @@ import { ClientOptions } from 'discord.js';
 import Config from './Config';
 import { Signale } from 'signale';
 import Spotify from 'spotify-web-api-node';
+import { Connection } from 'typeorm';
 import { version } from '../../../package.json';
 
 declare module 'discord-akairo' {
   interface AkairoClient {
     logger: Signale;
+    database: Connection;
     config: Config;
     spotify: Spotify;
   }

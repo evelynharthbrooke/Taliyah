@@ -41,7 +41,8 @@
     "signale": "^1.4.0",
     "spotify-web-api-node": "github:KamranMackey/spotify-web-api-node",
     "superagent": "^4.1.0",
-    "toml": "^3.0.0"
+    "toml": "^3.0.0",
+    "typeorm": "^0.2.16"
   },
   "devDependencies": {
     "@types/node": "^11.12.0",
