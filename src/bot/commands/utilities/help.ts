@@ -57,9 +57,11 @@ export default class HelpCommand extends Command {
 
       for (const category of this.handler.categories.values()) {
         embed.addField(`❯ ${category.id}`, `${category.filter(
-          command => command.aliases.length > 0).map((cmd: Command) =>
-            `\`${cmd.aliases[0]}\``).join(' ')}`);
+          c => c.aliases.length > 0).map((c: Command) => `\`${c.aliases[0]}\``).join(' ')}`,
+        );
       }
+
+
 
       return message.channel.send(embed);
     }
@@ -74,6 +76,10 @@ export default class HelpCommand extends Command {
       return aliases;
     }
 
+    const examples = command.description.examples
+      ? command.description.examples.join(', ')
+      : 'No examples given!';
+
     const embed = new MessageEmbed()
       .setColor(0xFF4922)
       .setThumbnail(this.client.user!.displayAvatarURL({ format: 'png', size: 1024 }))
@@ -82,6 +88,7 @@ export default class HelpCommand extends Command {
         `${command.description.content || '\u200b'}\n\n` +
         `**Category**: ${command.category}\n` +
         `**Usage**: ${prefix}${command.aliases[0]} ${command.description.usage ? command.description.usage : ''}\n` +
+        `**Examples**: ${examples}\n` +
         `**Permissions**: ${command.userPermissions || 'No permissions necessary.'}\n` +
         `${getAliases()}`,
       );

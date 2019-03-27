@@ -48,20 +48,28 @@ export default class LastFMCommand extends Command {
   }
 
   public async exec(message: Message, { member }: { member: string }) {
+    // Last.fm embeds.
+    const errorEmbed = new MessageEmbed();
+    const lastfmEmbed = new MessageEmbed();
+
+    // Return an error if no Last.fm member username was given.
     if (!member) {
-      message.channel.send("Looks like you haven't entered a last.fm username!");
-      return;
+      errorEmbed.setTitle('Error: No last.fm username given.');
+      errorEmbed.setColor(0xFF0000);
+      errorEmbed.setDescription(
+        'No last.fm member username was given. Please enter one and then '
+        + 'try again!');
+
+      return message.channel.send(errorEmbed);
     }
 
     const lastfmBase = 'https://ws.audioscrobbler.com/2.0/?method=';
-    const lastfmKey = this.client.config.lastfm;
-    const lastfmQuery = `&user=${member}&api_key=${lastfmKey}&limit=5&format=json`;
+    const lastfmQuery = `&user=${member}&api_key=${this.client.config.lastfm}&limit=5&format=json`;
     const recentTracks = 'user.getRecentTracks';
     const userInfo = 'user.getInfo';
     const lovedTracks = 'user.getLovedTracks';
 
     await request.get(lastfmBase + recentTracks + lastfmQuery).then(async (res) => {
-      const lastfmEmbed = new MessageEmbed();
       const track = res.body.recenttracks.track[0];
       const trackName = track.name;
       const trackArtist = track.artist['#text'];

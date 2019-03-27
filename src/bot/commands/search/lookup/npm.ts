@@ -33,6 +33,10 @@ export default class NPMCommand extends Command {
       category: 'Search',
       description: {
         content: 'Retrieves information on the specified `npm` package.',
+        examples: [
+          'react',
+          '@types/node',
+        ],
         usage: '<package name>',
       },
       args: [
