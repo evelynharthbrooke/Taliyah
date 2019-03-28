@@ -53,7 +53,7 @@ export default class HelpCommand extends Command {
       embed.setDescription(
         'This is a list of all commands available to Ellie. For information on a specific command, ' +
         `please type **${prefix}help <command>**.`);
-      embed.setFooter(`${this.handler.modules.size} commands/sub-commands`);
+      embed.setFooter(`${this.handler.modules.size} commands/subcommands`);
 
       for (const category of this.handler.categories.values()) {
         embed.addField(`❯ ${category.id}`, `${category.filter(
@@ -67,7 +67,7 @@ export default class HelpCommand extends Command {
     function getAliases() {
       let aliases: string;
       if (command.aliases.length > 1) {
-        aliases = `**Command Aliases**: ${command.aliases.join(', ')}`;
+        aliases = `**Aliases**: ${command.aliases.join(', ')}`;
       } else {
         aliases = '';
       }
@@ -75,7 +75,9 @@ export default class HelpCommand extends Command {
     }
 
     const examples = command.description.examples
-      ? command.description.examples.join('\n')
+      ? `${prefix}${command.aliases[0]} ${command.description.examples.join(
+        `\n${prefix}${command.aliases[0]} `,
+      )}`
       : 'No examples given!';
 
     const embed = new MessageEmbed()
@@ -85,12 +87,10 @@ export default class HelpCommand extends Command {
       .setDescription(
         `${command.description.content || '\u200b'}\n\n` +
         `${getAliases()}\n` +
-        `**Command Category**: ${command.category}\n` +
-        `**Command Usage**: ${prefix}${command.aliases[0]} ${command.description.usage
-          ? command.description.usage
-          : ''}\n` +
-        `**Command Permissions**: ${command.clientPermissions || 'No permissions necessary.'}\n` +
-        `**Command Examples**: \n${examples}`,
+        `**Category**: ${command.category}\n` +
+        `**Usage**: ${prefix}${command.aliases[0]} ${command.description.usage ? command.description.usage : ''}\n` +
+        `**Permissions**: ${command.clientPermissions || 'No permissions necessary.'}\n` +
+        `**Examples**: \n${examples}`,
       );
     return message.channel.send(embed);
   }

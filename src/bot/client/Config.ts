@@ -36,6 +36,10 @@ type Configuration = {
   spotify?: {
     clientID?: string,
     clientSecret?: string;
+    // wgAccessToken is used for certain Spotify API endpoints.
+    // Note: This needs to be continually updated with a new
+    // access token every hour!
+    wgAccessToken?: string;
   };
   google?: string;
   github?: {
@@ -59,8 +63,8 @@ export default class Config {
   readonly database: { type: any, name: string };
   /** The LastFM API key to use. */
   readonly lastfm: string;
-  /** The Spotify client ID and client secret to use. */
-  readonly spotify: { clientID: string, clientSecret: string };
+  /** The Spotify client ID, client secret, and wgAccessToken to use. */
+  readonly spotify: { clientID: string, clientSecret: string, wgAccessToken: string };
   /** The Google API key to use. */
   readonly google: string;
   /** The GitHub authentication token and repository. */
@@ -87,6 +91,7 @@ export default class Config {
     this.spotify = {
       clientID: spotify.clientID || '',
       clientSecret: spotify.clientSecret || '',
+      wgAccessToken: spotify.wgAccessToken || '',
     };
     this.google = config.google || '';
     this.github = {
