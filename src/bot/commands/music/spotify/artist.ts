@@ -85,9 +85,10 @@ export default class SpotifyArtistCommand extends Command {
             //       in the configuration file every hour is quite a pain in the butt and
             //       will honestly get quite annoying after a while.
             Authorization: 'Bearer ' + this.client.config.spotify.wgAccessToken,
-            // Use the Chrome user agent to identify the bot as just a normal browser that's
-            // accessing the private API.
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3748.0 Safari/537.36',
+            // Use the Chrome user agent to identify the bot as just a normal web browser
+            // accessing the API.
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) '
+              + 'Chrome/75.0.3748.0 Safari/537.36',
           });
 
           let artistBiography: string;
