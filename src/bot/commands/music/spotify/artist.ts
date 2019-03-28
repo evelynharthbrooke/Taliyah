@@ -80,7 +80,7 @@ export default class SpotifyArtistCommand extends Command {
           const artistLink = res.body.external_urls.spotify;
           const artistImage = res.body.images[0].url;
 
-          const aboutRequest = await request.get(spotifyBackendFullUrl + artistId).set({
+          const artistAbout = await request.get(spotifyBackendFullUrl + artistId).set({
             // TODO: Make this automatically refresh somehow as having to put a new token
             //       in the configuration file every hour is quite a pain in the butt and
             //       will honestly get quite annoying after a while.
@@ -93,11 +93,13 @@ export default class SpotifyArtistCommand extends Command {
 
           let artistBiography: string;
 
-          if (aboutRequest.body.hasOwnProperty('bio')) {
-            artistBiography = stripHtml(Util.shorten(aboutRequest.body.bio, 600));
+          if (artistAbout.body.hasOwnProperty('bio')) {
+            artistBiography = stripHtml(Util.shorten(artistAbout.body.bio, 600));
           } else {
-            artistBiography = 'No biography :(';
+            artistBiography = 'No biography available.';
           }
+
+          const artistMonthlyListeners = artistAbout.body.artistInsights.monthly_listeners;
 
           const artistEmbed = new MessageEmbed();
           artistEmbed.setTitle(artistName);
@@ -107,7 +109,7 @@ export default class SpotifyArtistCommand extends Command {
           artistEmbed.setDescription(
             `${artistBiography}\n\n` +
             `**Followers**: ${artistFollowers}\n` +
-            `**Monthly Listeners**: ${aboutRequest.body.artistInsights.monthly_listeners}\n` +
+            `**Monthly Listeners**: ${artistMonthlyListeners}\n` +
             `**Genres**: ${artistGenres ? artistGenres : 'No genres available.'}`,
           );
           artistEmbed.setFooter(`Embed length: ${artistEmbed.length}`);
