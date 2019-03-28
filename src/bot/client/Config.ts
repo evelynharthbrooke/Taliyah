@@ -20,7 +20,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import * as toml from 'toml';
-import { ConnectionOptions, ConnectionOptionsReader } from 'typeorm';
 
 const configFile = path.join(__dirname, '..', '..', '..', 'config.toml');
 

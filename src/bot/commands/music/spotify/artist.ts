@@ -80,15 +80,25 @@ export default class SpotifyArtistCommand extends Command {
           const artistLink = res.body.external_urls.spotify;
           const artistImage = res.body.images[0].url;
 
+          const userAgent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) '
+            + 'Chrome/75.0.3748.0 Safari/537.36';
+
+          const accessTokenUrl = await request.agent().get('https://open.spotify.com').set({
+            'User-Agent': userAgent,
+          }).withCredentials();
+
+          // For now, this retrieves a new cookie every time a new request is made.
+          // However, I'd like to try and make this save the value for a specified
+          // time period (one hour, to be specific).
+          //
+          // TODO: Make this cache the value.
+          const accessToken = accessTokenUrl.header['set-cookie'][4].split('=')[1].split(';')[0];
+
           const artistAbout = await request.get(spotifyBackendFullUrl + artistId).set({
-            // TODO: Make this automatically refresh somehow as having to put a new token
-            //       in the configuration file every hour is quite a pain in the butt and
-            //       will honestly get quite annoying after a while.
-            Authorization: 'Bearer ' + this.client.config.spotify.wgAccessToken,
+            Authorization: 'Bearer ' + accessToken,
             // Use the Chrome user agent to identify the bot as just a normal web browser
             // accessing the API.
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) '
-              + 'Chrome/75.0.3748.0 Safari/537.36',
+            'User-Agent': userAgent,
           });
 
           let artistBiography: string;
