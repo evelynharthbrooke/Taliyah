@@ -32,7 +32,8 @@ export default class SpotifyCommand extends Command {
           + 'information, album information, song information, and more. ',
         usage: '<subcommand>',
         examples: [
-          'artist Alicia Keys',
+          'album reputation Taylor Swift',
+          'newreleases CA',
         ],
       },
       ratelimit: 2,
@@ -42,7 +43,8 @@ export default class SpotifyCommand extends Command {
   public *args() {
     const method = yield {
       type: [
-        ['spotify-artist', 'artist'],
+        ['spotify-album', 'album', 'release', 'al'],
+        ['spotify-newreleases', 'newreleases', 'nr'],
       ],
       otherwise: (msg: Message) => {
         const cmdPrefix = this.handler.prefix;
