@@ -34,6 +34,7 @@ export default class SpotifyCommand extends Command {
         examples: [
           'album reputation Taylor Swift',
           'newreleases CA',
+          'user mkbhd',
         ],
       },
       ratelimit: 2,
@@ -45,6 +46,7 @@ export default class SpotifyCommand extends Command {
       type: [
         ['spotify-album', 'album', 'release', 'al'],
         ['spotify-newreleases', 'newreleases', 'nr'],
+        ['spotify-user', 'user', 'u'],
       ],
       otherwise: (msg: Message) => {
         const cmdPrefix = this.handler.prefix;
