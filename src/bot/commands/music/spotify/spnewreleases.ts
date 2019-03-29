@@ -92,6 +92,5 @@ export default class SpotifyNewReleasesCommand extends Command {
         message.channel.send(newReleasesEmbed);
       });
     });
-
   }
 }
