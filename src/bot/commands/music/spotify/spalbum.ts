@@ -37,14 +37,21 @@ export default class SpotifyAlbumCommand extends Command {
       args: [
         {
           id: 'album',
-          match: 'content',
+          match: 'rest',
           type: 'string',
+        },
+        {
+          id: 'market',
+          type: 'string',
+          match: 'option',
+          flag: ['--market', '-m'],
+          default: 'US',
         },
       ],
     });
   }
 
-  public async exec(message: Message, { album }: { album: string }) {
+  public async exec(message: Message, { album, market }: { album: string, market: string }) {
     // Base album embed.
     const albumEmbed = new MessageEmbed().setColor(0x1DB954);
     // Base error embed.
@@ -61,7 +68,7 @@ export default class SpotifyAlbumCommand extends Command {
     this.client.spotify.clientCredentialsGrant().then((data) => {
       this.client.spotify.setAccessToken(data.body['access_token']);
 
-      this.client.spotify.searchAlbums(album, { limit: 1, offset: 0 }).then((resp) => {
+      this.client.spotify.searchAlbums(album, { market, limit: 1, offset: 0 }).then((resp) => {
         // The album's Spotify ID.
         const albumId = resp.body.albums.items[0].id;
         // Use getAlbum to get all album information that the normal
