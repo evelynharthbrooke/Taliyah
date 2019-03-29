@@ -1,5 +1,5 @@
 /**
- * spnewreleases.ts -- Retrieves information about a region's
+ * newreleases.ts -- Retrieves information about a region's
  * latest Spotify releases.
  *
  * Copyright (c) 2019-present Kamran Mackey.

@@ -35,6 +35,7 @@ export default class SpotifyCommand extends Command {
           'artist Taylor Swift',
           'album reputation Taylor Swift',
           'newreleases CA',
+          'track You Might Be (feat. Lils)',
           'user mkbhd',
         ],
       },
@@ -48,6 +49,7 @@ export default class SpotifyCommand extends Command {
         ['spotify-artist', 'artist'],
         ['spotify-album', 'album', 'release', 'al'],
         ['spotify-newreleases', 'newreleases', 'nr'],
+        ['spotify-track', 'track', 'tr', 't'],
         ['spotify-user', 'user', 'u'],
       ],
       otherwise: (msg: Message) => {

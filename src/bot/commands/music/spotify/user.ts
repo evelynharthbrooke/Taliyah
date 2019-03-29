@@ -1,5 +1,5 @@
 /**
- * spuser.ts -- Retrieves information on the specified Spotify user.
+ * user.ts -- Retrieves information on the specified Spotify user.
  *
  * Copyright (c) 2019-present Kamran Mackey.
  *
