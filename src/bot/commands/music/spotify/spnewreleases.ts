@@ -54,11 +54,7 @@ export default class SpotifyNewReleasesCommand extends Command {
     });
   }
 
-  public async exec(message: Message, { market, nrLimit, nrOffset }: {
-    market: string,
-    nrLimit: number,
-    nrOffset: number,
-  }) {
+  public async exec(message: Message, { market, nrLimit, nrOffset }: { market: string, nrLimit: number, nrOffset: number }) {
     // The base error embed.
     const errorEmbed = new MessageEmbed().setColor(0xB00020);
     // The new releases embed.
@@ -75,11 +71,7 @@ export default class SpotifyNewReleasesCommand extends Command {
     this.client.spotify.clientCredentialsGrant().then((data) => {
       this.client.spotify.setAccessToken(data.body['access_token']);
 
-      this.client.spotify.getNewReleases({
-        country: market,
-        limit: nrLimit,
-        offset: nrOffset,
-      }).then((res) => {
+      this.client.spotify.getNewReleases({ country: market, limit: nrLimit, offset: nrOffset }).then((res) => {
         const newReleases = res.body.albums.items.map((item) => {
           // The name of the track.
           const trackName = item.name;
