@@ -119,7 +119,7 @@ export default class SpotifyArtistCommand extends Command {
           artistEmbed.setDescription(
             `${artistBiography}\n\n` +
             `**Followers**: ${artistFollowers}\n` +
-            `**Monthly Listeners**: ${artistMonthlyListeners}\n` +
+            `**Monthly Listeners**: ${artistMonthlyListeners ? artistMonthlyListeners : 'No data.'}\n` +
             `**Genres**: ${artistGenres ? artistGenres : 'No genres available.'}`,
           );
           artistEmbed.setFooter(`Embed length: ${artistEmbed.length}`);
