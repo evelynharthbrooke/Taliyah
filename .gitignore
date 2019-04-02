@@ -42,7 +42,7 @@ build/Release
 node_modules/
 jspm_packages/
 
-# TypeScript v1 declaration files
+# TypeScript typing delcaration files
 typings/
 
 # Optional npm cache directory
