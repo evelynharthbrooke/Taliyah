@@ -35,7 +35,7 @@ export default class SpotifyCommand extends Command {
           'artist Taylor Swift',
           'album reputation Taylor Swift',
           'newreleases CA',
-          'track You Might Be (feat. Lils)',
+          'track New Years Day Taylor Swift',
           'user mkbhd',
         ],
       },

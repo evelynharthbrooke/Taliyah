@@ -87,7 +87,7 @@ export default class LastFMCommand extends Command {
       const user = userRequest.body.user;
       const userName = user.name;
       const userUrl = user.url;
-      const userPlayCount = numeral(user.playcount).format('0.0a');
+      const userPlayCount = numeral(user.playcount).format('0,0');
       const userCountry = user.country;
       const userJoinDate = moment.unix(user.registered.unixtime).format(Constants.DATE_FORMAT);
       const userLovedTracks = userLovedTracksRequest.body.lovedtracks['@attr'].total;
