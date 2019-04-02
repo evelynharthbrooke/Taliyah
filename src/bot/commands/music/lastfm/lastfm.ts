@@ -110,13 +110,13 @@ export default class LastFMCommand extends Command {
         let nowPlaying: string;
 
         if (track.hasOwnProperty('@attr')) {
-          nowPlaying = '— Now Playing';
+          nowPlaying = '— Now playing';
         } else {
           nowPlaying = '';
         }
 
         /** Return the track name and the artist. */
-        return `${name} — ${artist} ${nowPlaying}`;
+        return `**${name}** — ${artist} ${nowPlaying}`;
 
       }).join('\n');
 
