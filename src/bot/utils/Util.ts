@@ -92,6 +92,35 @@ export class Util {
   }
 
   /**
+   * The parseNodeVersion utility function.
+   *
+   * This function parses a Node.js version string, shortens
+   * the version to a limited amount of characters, and appends
+   * the version type to the end of the version string. This function
+   * is especially useful for if you want to avoid displaying Node's
+   * long version strings if you're using a nightly build, an RC build,
+   * or a version built from Node's V8 LKGR repository.
+   *
+   * @param version The Node.js version to parse.
+   * @returns The parsed node.js version.
+   */
+  public static parseNodeVersion(version: string) {
+    if (version.includes('nightly')) {
+      return version.substr(0, 7).replace('v', '').concat(' (nightly build)');
+    }
+
+    if (version.includes('canary')) {
+      return version.substr(0, 7).replace('v', '').concat(' (canary build)');
+    }
+
+    if (version.includes('rc')) {
+      return version.substr(0, 8).replace('v', '').concat(' (RC build)');
+    }
+
+    return version.substr(0, 8).replace('v', '').concat(' (stable build)');
+  }
+
+  /**
    * The convertToTitleCase utility function.
    *
    * Takes a string and converts it to be of Title Case.
