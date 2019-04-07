@@ -99,10 +99,13 @@ export class Util {
    * the version type to the end of the version string. This function
    * is especially useful for if you want to avoid displaying Node's
    * long version strings if you're using a nightly build, an RC build,
-   * or a version built from Node's V8 LKGR repository.
+   * or a version built from Node's V8 LKGR repository. This requires the
+   * user calling the function to feed it process.version, otherwise it
+   * will return nothing.
    *
    * @param version The Node.js version to parse.
-   * @returns The parsed node.js version.
+   * @returns The parsed node.js version if fed process.version, nothing if
+   * not fed process.version.
    */
   public static parseNodeVersion(version: string) {
 
