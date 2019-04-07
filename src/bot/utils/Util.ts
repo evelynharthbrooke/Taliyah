@@ -104,7 +104,7 @@ export class Util {
    * @param version The Node.js version to parse.
    * @returns The parsed node.js version.
    */
-  public static parseNodeVersion(version: string) {
+  public static parseNodeVersion(version: string): string {
     if (version.includes('nightly')) {
       return version.substr(0, 7).replace('v', '').concat(' (nightly build)');
     }
