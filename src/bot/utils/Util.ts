@@ -103,9 +103,9 @@ export class Util {
    * user calling the function to feed it process.version, otherwise it
    * will return nothing.
    *
-   * @param version The Node.js version to parse.
-   * @returns The parsed node.js version if fed process.version, nothing if
-   * not fed process.version.
+   * @param {string} version The Node.js version to parse.
+   * @returns {string} The parsed node.js version if fed process.version, nothing 
+   * if not fed process.version.
    */
   public static parseNodeVersion(version: string) {
 
