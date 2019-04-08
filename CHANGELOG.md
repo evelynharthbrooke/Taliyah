@@ -14,11 +14,13 @@ a few changes to support TypeScript's syntax.
 #### Commands
 
 ##### Moderation
-- Added `!ban`. Bans a user from the current Discord guild.
+- Added `ban` command. Allows server administrators and moderators (if they have the ability) to ban a
+specified user from the Discord guild.
 
 ##### Extra
-- Added `!steamstatus`. Retrieves information about the current status of Steam and various services
+- Added `steamstatus` command. Retrieves information about the current status of Steam and various services
 related to Steeam, such as the Steam Database, and Valve's CS:GO.
+- Added `weather` command. Gets the weather forcast for a specified location.
 
 #### Listeners
 - Added a `messagedelete` listener. Checks for message deletion, and logs it to a channel. Working on
