@@ -7,7 +7,7 @@ projects like Visual Studio Code), as well as adding various new commands and so
 ### Major Changes
 - Ellie has been rewritten in TypeScript instead of JavaScript. This should improve stability and 
 speed. However, some commands were migrated from the JavaScript version, like `!pokemon`, just with 
-a few changes to support TypeScript's syntax.
+a few changes made to them to take into account TypeScript's various syntax changes.
 
 ### New Features
 
@@ -19,7 +19,8 @@ specified user from the Discord guild.
 
 ##### Extra
 - Added `steamstatus` command. Retrieves information about the current status of Steam and various services
-related to Steam, such as the Steam Database, and Valve's CS:GO.
+related to Steam, such as the Steam Database, and certain Valve games like Dota 2 and Counter-Strike: Global
+Offensive.
 - Added `weather` command. Gets the weather forcast for a specified location.
 
 #### Listeners
