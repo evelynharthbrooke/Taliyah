@@ -19,7 +19,7 @@ specified user from the Discord guild.
 
 ##### Extra
 - Added `steamstatus` command. Retrieves information about the current status of Steam and various services
-related to Steeam, such as the Steam Database, and Valve's CS:GO.
+related to Steam, such as the Steam Database, and Valve's CS:GO.
 - Added `weather` command. Gets the weather forcast for a specified location.
 
 #### Listeners
