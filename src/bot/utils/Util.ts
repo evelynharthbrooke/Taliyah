@@ -104,10 +104,10 @@ export class Util {
    * will return nothing.
    *
    * @param {string} version The Node.js version to parse.
-   * @returns {string} The parsed node.js version if fed process.version, nothing 
+   * @returns {string} The parsed node.js version if fed process.version, nothing
    * if not fed process.version.
    */
-  public static parseNodeVersion(version: string) {
+  public static parseNodeVersion(version: string): string {
 
     if (version !== process.version) {
       client.logger.error('parseNodeVersion() should not be used for parsing non-Node.js ' +
