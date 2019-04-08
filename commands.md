@@ -9,10 +9,19 @@ when any new commands get added.
 
 ## Music
 * **lastfm:** Retrieves information on the specified Last.fm user.
+
 ### Voice
 **NOTE**: These commands require you to be in a voice channel before using them.
 * **connect:** Connects Ellie to a voice channel.
 * **disconnect:** Disconnects Ellie from a voice channel.
+
+### Spotify
+**NOTE**: These commands start with <prefix>spotify, they can't be used standalone.
+* **artist**: Retrieves information about an artist on Spotify.
+* **album**: Retrieves information about a specified album on Spotify.
+* **newreleases**: Gets a list of the newest releases on Spotify for a specified region.
+* **track**: Retrieves information about a specified track on Spotify. (NOT FULLY IMPLEMENTED)
+* **user**: Retrieves information about a specified user on Spotify.
 
 ## Information
 * **changelog:** Displays the most recent changed made to Ellie.

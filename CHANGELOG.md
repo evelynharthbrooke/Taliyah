@@ -54,6 +54,10 @@ for technical reasons.
     playing or not as well.
   - Switched to using the Spotify Web API instead of Last.fm's API for retrieving album
     artwork, due to Spotify having a wider selection of music and album art.
+* Spotify:
+  - Re-implemented the pre-existing set of Spotify commands, with some new features and a new look.
+  - Added `artist` subcommand. Retrieves information about a specified artist.
+  - Added `user` subcommand. Retrieves information about a specified user.
 
 ##### Search
 * Pokémon:
@@ -66,7 +70,6 @@ for technical reasons.
     note that this does not yet affect getting information on all commands. This may change in the future.
 
 #### General Changes
-
 - The bot has been renamed from Erica to Ellie. Nothing major really, just a slight name change.
 - Changed the logging library from `winston` to `signale`. Signale looks a lot better and works without much
 configuration.
