@@ -74,55 +74,44 @@ export default class SpotifyArtistCommand extends Command {
         const artistId = res.body.artists.items[0].id;
 
         this.client.spotify.getArtist(artistId).then(async (res) => {
-          const artistName = res.body.name;
-          const artistGenres = res.body.genres.join(', ');
-          const artistFollowers = res.body.followers.total;
-          const artistLink = res.body.external_urls.spotify;
-          const artistImage = res.body.images[0].url;
-
+          const artistEmbed = new MessageEmbed();
           const userAgent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) '
-            + 'Chrome/75.0.3748.0 Safari/537.36';
-
-          const accessTokenUrl = await request.agent().get('https://open.spotify.com').set({
-            'User-Agent': userAgent,
-          }).withCredentials();
-
-          // For now, this retrieves a new cookie every time a new request is made.
-          // However, I'd like to try and make this save the value for a specified
-          // time period (one hour, to be specific).
-          //
-          // TODO: Make this cache the value.
+            + 'Chrome/75.0.3759.0 Safari/537.36';
+          const accessTokenUrl = await request.get('https://open.spotify.com').set({ 'User-Agent': userAgent });
+          // TODO: Store token and only refresh the token when it expires.
           const accessToken = accessTokenUrl.header['set-cookie'][4].split('=')[1].split(';')[0];
 
           const artistAbout = await request.get(spotifyBackendFullUrl + artistId).set({
             Authorization: 'Bearer ' + accessToken,
-            // Use the Chrome user agent to identify the bot as just a normal web browser
-            // accessing the API.
             'User-Agent': userAgent,
           });
 
+          // Artist Information
           let artistBiography: string;
+          const artistName = res.body.name;
+          const artistGenres = Util.convertToTitleCase(res.body.genres.join(', '));
+          const artistLink = res.body.external_urls.spotify;
+          const artistImage = res.body.images[0].url;
+          // Statistics
+          const artistFollowers = res.body.followers.total;
+          const artistListeners = artistAbout.body.artistInsights.monthly_listeners;
 
           if (artistAbout.body.hasOwnProperty('bio')) {
-            artistBiography = stripHtml(Util.shorten(artistAbout.body.bio, 600));
+            artistBiography = stripHtml(Util.shorten(artistAbout.body.bio, 1000));
           } else {
             artistBiography = 'No biography available.';
           }
 
-          const artistMonthlyListeners = artistAbout.body.artistInsights.monthly_listeners;
-
-          const artistEmbed = new MessageEmbed();
           artistEmbed.setTitle(artistName);
           artistEmbed.setColor(0x1DB954);
           artistEmbed.setURL(artistLink);
           artistEmbed.setThumbnail(artistImage);
           artistEmbed.setDescription(
             `${artistBiography}\n\n` +
+            '**__Artist Stats__:**\n' +
             `**Followers**: ${artistFollowers}\n` +
-            `**Monthly Listeners**: ${artistMonthlyListeners ? artistMonthlyListeners : 'No data.'}\n` +
-            `**Genres**: ${artistGenres ? artistGenres : 'No genres available.'}`,
-          );
-          artistEmbed.setFooter(`Embed length: ${artistEmbed.length}`);
+            `**Listeners**: ${artistListeners ? artistListeners : `No users listen to ${artistName}.`}\n` +
+            `**Genres**: ${artistGenres ? artistGenres : 'No genres available.'}\n\n`);
 
           return message.channel.send(artistEmbed);
         });
