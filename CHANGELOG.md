@@ -79,5 +79,5 @@ configuration.
 - Removed the `!id` command. Its functionality was replaced by the `!user` command, which displays far more
 information.
 
-# 0.1.0 — Initial Release
+## 0.1.0 — Initial Release
 This was the initial release of Ellie.
