@@ -2,7 +2,7 @@
 
 ## 2.0.0 — Hydrogen (Unreleased)
 This is a MAJOR release, moving from JavaScript to Microsoft's TypeScript language (used in 
-projects like Visual Studio Code), as well as adding various new commands and new features.
+projects like Visual Studio Code), as well as adding various new commands and some new features.
 
 ### Major Changes
 - Ellie has been rewritten in TypeScript instead of JavaScript. This should improve stability and 
