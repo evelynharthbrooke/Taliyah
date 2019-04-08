@@ -89,7 +89,7 @@ export default class SpotifyArtistCommand extends Command {
           // Artist Information
           let artistBiography: string;
           const artistName = res.body.name;
-          const artistGenres = Util.convertToTitleCase(res.body.genres.join(', '));
+          const artistGenres = res.body.genres.join(', ');
           const artistLink = res.body.external_urls.spotify;
           const artistImage = res.body.images[0].url;
           // Statistics

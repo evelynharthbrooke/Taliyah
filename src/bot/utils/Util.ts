@@ -139,7 +139,7 @@ export class Util {
    * @returns {string} The string in Title Case.
    */
   public static convertToTitleCase(string: string): string {
-    const wordSeparators = /([ : - –—-])/;
+    const wordSeparators = /([ :–—-])/;
     const str = string.toLowerCase().split(wordSeparators);
 
     for (let i = 0; i < str.length; i++) {
