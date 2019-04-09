@@ -40,7 +40,7 @@ Normal case.
 code, to their own individual class, just in case something needs to be reused, easier than just porting
 the code each time to a command's top level code.
 
-### Changed
+### Changes
 
 #### Command Changes
 
