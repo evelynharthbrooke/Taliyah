@@ -105,7 +105,7 @@ export default class GitHubUserCommand extends Command {
       '**__Other Details__**:\n' +
       `**Is GitHub Employee**: ${GH_USER_EMPLOYEE}`);
     GITHUB_EMBED.setFooter('Powered by the GitHub GraphQL API.'); // Set the embed footer.
-    GITHUB_EMBED.setTimestamp();
+    GITHUB_EMBED.setTimestamp(); // Set the embed's timestamp.
 
     return message.channel.send(GITHUB_EMBED);
   }
