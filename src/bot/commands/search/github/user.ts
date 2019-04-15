@@ -56,6 +56,7 @@ export default class GitHubUserCommand extends Command {
         createdAt
         isEmployee
         avatarUrl
+        websiteUrl
         status {
           message
         }
@@ -80,6 +81,7 @@ export default class GitHubUserCommand extends Command {
     const GH_USER_BIOGRAPHY = GH_USER.bio ? GH_USER.bio : ''; // The biography listed on the user's GitHub profile.
     const GH_USER_FOLLOWING = GH_USER.following.totalCount; // The amount of users the user is following.
     const GH_USER_FOLLOWERS = GH_USER.followers.totalCount; // The amount of users who are following the user.
+    const GH_USER_WEBSITE = GH_USER.websiteUrl ? GH_USER.websiteUrl : 'No website listed.'; // The site listed on the user's profile.
     const GH_USER_STATUS = GH_USER.status ? GH_USER.status.message : 'No status listed.'; // The status listed on the user's profile.
     const GH_USER_LOCATION = GH_USER.location ? GH_USER.location : 'No location listed.'; // The location of the user.
     const GH_USER_COMPANY = GH_USER.company ? GH_USER.company : 'No company listed.'; // The company listed on the user's profile.
@@ -96,8 +98,9 @@ export default class GitHubUserCommand extends Command {
       `**Joined**: ${GH_USER_JOIN_DATE}\n` +
       `**Repositories**: ${GH_USER_REPOSITORIES}\n` +
       `**Location**: ${GH_USER_LOCATION}\n` +
-      `**Followers**: ${GH_USER_FOLLOWERS}\n` +
       `**Following**: ${GH_USER_FOLLOWING}\n` +
+      `**Followers**: ${GH_USER_FOLLOWERS}\n` +
+      `**Website**: ${GH_USER_WEBSITE}\n` +
       `**Company**: ${GH_USER_COMPANY}\n\n` +
       '**__Other Details__**:\n' +
       `**Is GitHub Employee**: ${GH_USER_EMPLOYEE}`,

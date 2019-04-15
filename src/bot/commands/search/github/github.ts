@@ -28,8 +28,7 @@ export default class GitHubCommand extends Command {
       category: 'Search',
       clientPermissions: ['EMBED_LINKS'],
       description: {
-        content: 'Gets a variety of information from the Spotify API, such as artist '
-          + 'information, album information, song information, and more. ',
+        content: 'Gets various information from the GitHub GraphQL API.',
         usage: '<subcommand>',
         examples: [
           'user nat',
