@@ -28,6 +28,7 @@
     "node": ">=11"
   },
   "dependencies": {
+    "@octokit/graphql": "^2.1.1",
     "common-tags": "^1.8.0",
     "discord-akairo": "github:1computer1/discord-akairo",
     "discord.js": "github:discordjs/discord.js",
