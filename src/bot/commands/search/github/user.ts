@@ -138,8 +138,10 @@ export default class GitHubUserCommand extends Command {
       `**Campus Expert**: ${GH_USER_CAMPUS_EXPERT}\n` +
       `**Developer Program Member**: ${GH_USER_DEV_PROGRAM_MEMBER}` +
       `**GitHub Employee**: ${GH_USER_EMPLOYEE}\n`);
-    GITHUB_EMBED.setFooter('Powered by the GitHub GraphQL API.'); // Set the embed footer.
-    GITHUB_EMBED.setTimestamp(); // Set the embed's timestamp.
+    // Set the embed footer.
+    GITHUB_EMBED.setFooter('Powered by the GitHub GraphQL API.');
+    // Set the embed's timestamp.
+    GITHUB_EMBED.setTimestamp();
 
     return message.channel.send(GITHUB_EMBED);
   }
