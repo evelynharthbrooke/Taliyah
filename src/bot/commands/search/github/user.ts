@@ -43,7 +43,22 @@ export default class GitHubUserCommand extends Command {
 
   public async exec(message: Message, { user }: { user: string }) {
     // The GitHub user embed.
-    const GITHUB_EMBED = new MessageEmbed();
+    const GITHUB_EMBED = new MessageEmbed().setColor(0xFFFFFF);
+    // The GitHub error embed.
+    const GITHUB_ERROR_EMBED = new MessageEmbed().setColor(0xB00020);
+
+    // If no query for user was provided, send an error message
+    // letting the user know that no username was provided.
+    if (!user) {
+      GITHUB_ERROR_EMBED.setTitle('Error: No username provided.');
+      GITHUB_ERROR_EMBED.setDescription(
+        'You did not provide the username of the user you would ' +
+        'like to get information on. Please provide one, and then try again.\n\n' +
+        '**Examples**: nat, afollestad',
+      );
+      return message.channel.send(GITHUB_ERROR_EMBED);
+    }
+
     // The GitHub API token.
     const GITHUB_TOKEN = this.client.config.github.token;
     // Initialize the GraphQL API wrapper.
@@ -136,8 +151,8 @@ export default class GitHubUserCommand extends Command {
       '**__Other Details__**:\n' +
       `**Bounty Hunter**: ${GH_USER_BUG_BOUNTY}\n` +
       `**Campus Expert**: ${GH_USER_CAMPUS_EXPERT}\n` +
-      `**Developer Program Member**: ${GH_USER_DEV_PROGRAM_MEMBER}` +
-      `**GitHub Employee**: ${GH_USER_EMPLOYEE}\n`);
+      `**Developer Program Member**: ${GH_USER_DEV_PROGRAM_MEMBER}\n` +
+      `**GitHub Employee**: ${GH_USER_EMPLOYEE}`);
     // Set the embed footer.
     GITHUB_EMBED.setFooter('Powered by the GitHub GraphQL API.');
     // Set the embed's timestamp.
