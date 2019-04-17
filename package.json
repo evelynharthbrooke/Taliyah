@@ -37,7 +37,7 @@
     "moment-duration-format": "^2.2.2",
     "node-opus": "^0.3.1",
     "numeral": "^2.0.6",
-    "pg": "^7.9.0",
+    "pg": "^7.10.0",
     "pluralize": "^7.0.0",
     "pokedex-promise-v2": "^3.1.1",
     "signale": "^1.4.0",
@@ -59,7 +59,7 @@
     "gulp-sourcemaps": "^2.6.5",
     "gulp-typescript": "^5.0.1",
     "merge2": "^1.2.3",
-    "tslint": "^5.15.0",
+    "tslint": "^5.16.0",
     "tslint-config-airbnb": "^5.11.1",
     "typescript": "^3.4.3"
   }
