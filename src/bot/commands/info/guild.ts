@@ -50,7 +50,7 @@ export default class GuildCommand extends Command {
       const GUILD_ID = message.guild!.id;
       const GUILD_OWNER = message.guild!.owner!.user.tag;
       const GUILD_MEMBERS = message.guild!.members.size;
-      const GUILD_MEMBERS_USERS = message.guild!.members.filter(m => !m.user.bot).size;
+      const GUILD_MEMBERS_USERS = message.guild!.members.filter(m => m.user.bot).size;
       const GUILD_MEMBERS_BOTS = message.guild!.members.filter(m => m.user.bot).size;
       const GUILD_PRESENCES = message.guild!.presences.size;
       const GUILD_PRESENCES_USERS = message.guild!.presences.filter(p => !p.user!.bot).size;
