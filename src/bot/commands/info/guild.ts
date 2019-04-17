@@ -65,8 +65,7 @@ export default class GuildCommand extends Command {
       const GUILD_EMOJIS_NORMAL = message.guild!.emojis.filter(e => !e.animated).size;
       const GUILD_EMOJIS_ANIMATED = message.guild!.emojis.filter(e => e.animated).size;
       const GUILD_CREATION_DATE = moment.utc(message.guild!.createdAt).format(Constants.DATE_FORMAT);
-      const GUILD_SERVER_REGION = message.guild!.region ? Constants.GUILD_REGIONS[message.guild!.region]
-        : message.guild!.region;
+      const GUILD_SERVER_REGION = message.guild!.region ? Constants.GUILD_REGIONS[message.guild!.region] : message.guild!.region;
       const GUILD_VERIFICATION_LEVEL = Constants.GUILD_VERIFICATION_LEVELS[message.guild!.verificationLevel];
       const GUILD_EXPLICIT_FILTER = Constants.GUILD_EXPLICIT_FILTER[message.guild!.explicitContentFilter];
       const GUILD_VERIFIED_STATUS = message.guild!.verified ? 'Yes' : 'No';
