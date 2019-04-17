@@ -46,7 +46,7 @@ export default class AboutCommand extends Command {
     const botOwnerID = this.client.ownerID as string;
     const botOwner = this.client.users.get(botOwnerID)!.tag;
     const botMemoryUsage = (process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2);
-    const botUptime = moment.duration(-this.client.uptime, 'milliseconds').humanize(true);
+    const botUptime = moment.duration(-this.client.uptime!, 'milliseconds').humanize(true);
     const nodeVersion = Util.parseNodeVersion(process.version);
     const v8Version = process.versions.v8;
     /** Statistics */

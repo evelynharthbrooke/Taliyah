@@ -35,8 +35,8 @@ export default class ConnectCommand extends Command {
   }
 
   public async exec(message: Message) {
-    if (!message.guild.voiceConnection) {
-      const channel = message.member.voice.channel as VoiceChannel;
+    if (!message.guild!.voiceConnection) {
+      const channel = message.member!.voice.channel as VoiceChannel;
       if (!channel) {
         return message.channel.send('You need to be in a voice channel before I can connect to it!');
       }

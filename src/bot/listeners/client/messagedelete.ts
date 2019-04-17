@@ -36,7 +36,7 @@ export default class MessageDeleteListener extends Listener {
 
   async exec(message: Message) {
     const LOG_EMBED = new MessageEmbed();
-    const LOG_CHANNEL = message.guild.channels.find(channel => channel.name === 'mod-logs') as TextChannel;
+    const LOG_CHANNEL = message.guild!.channels.find(channel => channel.name === 'mod-logs') as TextChannel;
 
     /** Do not log to channel if channel doesn't exist */
     if (typeof LOG_CHANNEL === 'undefined') {
@@ -47,17 +47,17 @@ export default class MessageDeleteListener extends Listener {
     }
 
     /** Ignore messages from bots. */
-    if (message.member.user.bot) {
+    if (message.member!.user.bot) {
       this.client.logger.info(`Message deleted was sent from a bot. Not logging to #${LOG_CHANNEL.name}.`);
       return null;
     }
 
     LOG_EMBED.setTitle('Message deleted!');
-    LOG_EMBED.setColor(message.member.displayHexColor);
+    LOG_EMBED.setColor(message.member!.displayHexColor);
     LOG_EMBED.setDescription(
       'Looks like a message was deleted...\n\n' +
       `**Channel of Origin**: ${message.channel}\n` +
-      `**Message Author**: ${message.author} (${message.author.id})\n` +
+      `**Message Author**: ${message.author} (${message.author!.id})\n` +
       `**Message Contents**: ${message.content}`,
     );
 

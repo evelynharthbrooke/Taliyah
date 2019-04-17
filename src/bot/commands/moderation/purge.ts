@@ -53,7 +53,7 @@ export default class PurgeCommand extends Command {
       return message.channel.send('This command cannot be used in direct messages.');
     }
 
-    if (!message.member.hasPermission(['MANAGE_MESSAGES'])) {
+    if (!message.member!.hasPermission(['MANAGE_MESSAGES'])) {
       return message.channel.send('Sorry, it looks like you don\'t have the Manage Messages permission, so '
         + 'you cannot use this command!');
     }

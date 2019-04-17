@@ -34,12 +34,12 @@ export default class DisconnectCommand extends Command {
   }
 
   public async exec(message: Message) {
-    if (!message.guild.voiceConnection) {
+    if (!message.guild!.voiceConnection) {
       return message.channel.send('I\'m not currently in a voice channel, so I can\'t ' +
         'disconnect from any.');
     }
 
-    const channel = message.guild.voiceConnection.channel;
+    const channel = message.guild!.voiceConnection.channel;
 
     channel.leave();
 

@@ -44,34 +44,35 @@ export default class GuildCommand extends Command {
 
   public async exec(message: Message) {
 
-    if (message.guild.available) {
+    if (message.guild!.available) {
       const GUILD_EMBED = new MessageEmbed();
-      const GUILD_NAME = message.guild.name;
-      const GUILD_ID = message.guild.id;
-      const GUILD_OWNER = message.guild.owner.user.tag;
-      const GUILD_MEMBERS = message.guild.members.size;
-      const GUILD_MEMBERS_USERS = message.guild.members.filter(m => !m.user.bot).size;
-      const GUILD_MEMBERS_BOTS = message.guild.members.filter(m => m.user.bot).size;
-      const GUILD_PRESENCES = message.guild.presences.size;
-      const GUILD_PRESENCES_USERS = message.guild.presences.filter(p => !p.user.bot).size;
-      const GUILD_PRESENCES_BOTS = message.guild.presences.filter(p => p.user.bot).size;
-      const GUILD_CHANNELS = message.guild.channels.filter(c => c.type !== 'category').size;
-      const GUILD_CHANNELS_TEXT = message.guild.channels.filter(c => c.type === 'text').size;
-      const GUILD_CHANNELS_VOICE = message.guild.channels.filter(c => c.type === 'voice').size;
-      const GUILD_ROLES = message.guild.roles.filter(r => r.name !== '@everyone').map((r) => { return r.name; }).join(', ');
-      const GUILD_ROLES_COUNT = message.guild.roles.filter(r => r.name !== '@everyone').size;
-      const GUILD_ROLES_HIGHEST = message.guild.roles.highest;
-      const GUILD_EMOJIS = message.guild.emojis.size || 'No emojis.';
-      const GUILD_EMOJIS_NORMAL = message.guild.emojis.filter(e => !e.animated).size;
-      const GUILD_EMOJIS_ANIMATED = message.guild.emojis.filter(e => e.animated).size;
-      const GUILD_CREATION_DATE = moment.utc(message.guild.createdAt).format(Constants.DATE_FORMAT);
-      const GUILD_SERVER_REGION = message.guild.region ? Constants.GUILD_REGIONS[message.guild.region] : message.guild.region;
-      const GUILD_VERIFICATION_LEVEL = Constants.GUILD_VERIFICATION_LEVELS[message.guild.verificationLevel];
-      const GUILD_EXPLICIT_FILTER = Constants.GUILD_EXPLICIT_FILTER[message.guild.explicitContentFilter];
-      const GUILD_VERIFIED_STATUS = message.guild.verified ? 'Yes' : 'No';
+      const GUILD_NAME = message.guild!.name;
+      const GUILD_ID = message.guild!.id;
+      const GUILD_OWNER = message.guild!.owner!.user.tag;
+      const GUILD_MEMBERS = message.guild!.members.size;
+      const GUILD_MEMBERS_USERS = message.guild!.members.filter(m => !m.user.bot).size;
+      const GUILD_MEMBERS_BOTS = message.guild!.members.filter(m => m.user.bot).size;
+      const GUILD_PRESENCES = message.guild!.presences.size;
+      const GUILD_PRESENCES_USERS = message.guild!.presences.filter(p => !p.user!.bot).size;
+      const GUILD_PRESENCES_BOTS = message.guild!.presences.filter(p => p.user!.bot).size;
+      const GUILD_CHANNELS = message.guild!.channels.filter(c => c.type !== 'category').size;
+      const GUILD_CHANNELS_TEXT = message.guild!.channels.filter(c => c.type === 'text').size;
+      const GUILD_CHANNELS_VOICE = message.guild!.channels.filter(c => c.type === 'voice').size;
+      const GUILD_ROLES = message.guild!.roles.filter(r => r.name !== '@everyone').map((r) => { return r.name; }).join(', ');
+      const GUILD_ROLES_COUNT = message.guild!.roles.filter(r => r.name !== '@everyone').size;
+      const GUILD_ROLES_HIGHEST = message.guild!.roles.highest;
+      const GUILD_EMOJIS = message.guild!.emojis.size || 'No emojis.';
+      const GUILD_EMOJIS_NORMAL = message.guild!.emojis.filter(e => !e.animated).size;
+      const GUILD_EMOJIS_ANIMATED = message.guild!.emojis.filter(e => e.animated).size;
+      const GUILD_CREATION_DATE = moment.utc(message.guild!.createdAt).format(Constants.DATE_FORMAT);
+      const GUILD_SERVER_REGION = message.guild!.region ? Constants.GUILD_REGIONS[message.guild!.region]
+        : message.guild!.region;
+      const GUILD_VERIFICATION_LEVEL = Constants.GUILD_VERIFICATION_LEVELS[message.guild!.verificationLevel];
+      const GUILD_EXPLICIT_FILTER = Constants.GUILD_EXPLICIT_FILTER[message.guild!.explicitContentFilter];
+      const GUILD_VERIFIED_STATUS = message.guild!.verified ? 'Yes' : 'No';
 
       GUILD_EMBED.setTitle(`Information on guild ${GUILD_NAME}`);
-      GUILD_EMBED.setThumbnail(message.guild.iconURL());
+      GUILD_EMBED.setThumbnail(message.guild!.iconURL());
       GUILD_EMBED.setColor(GUILD_ROLES_HIGHEST.hexColor);
       GUILD_EMBED.setDescription(
         `**Name**: ${GUILD_NAME}\n` +

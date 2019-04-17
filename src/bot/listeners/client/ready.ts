@@ -50,7 +50,7 @@ export default class ReadyListener extends Listener {
 
       const activity = activities[Math.floor(Math.random() * activities.length)];
 
-      if (activity.name === this.client.user!.presence.activity.name) {
+      if (activity.name === this.client.user!.presence.activity!.name) {
         this.client.logger.info('Activity is identical, leaving activity the same for now.');
       } else {
         this.client.user!.setActivity(activity.name, { type: activity.type });
