@@ -35,7 +35,6 @@
     "i18n-iso-countries": "^3.7.8",
     "moment": "^2.24.0",
     "moment-duration-format": "^2.2.2",
-    "node-opus": "^0.3.1",
     "numeral": "^2.0.6",
     "pg": "^7.10.0",
     "pluralize": "^7.0.0",
@@ -48,19 +47,19 @@
     "typeorm": "^0.2.16"
   },
   "devDependencies": {
-    "@types/node": "^11.13.5",
+    "@types/node": "^11.13.6",
     "@types/numeral": "0.0.25",
     "@types/pluralize": "0.0.29",
     "@types/pokedex-promise-v2": "github:mudkipme/pokeapi-v2-typescript",
     "@types/signale": "^1.2.1",
     "@types/superagent": "^4.1.1",
     "fs-nextra": "^0.4.5",
-    "gulp": "^4.0.0",
+    "gulp": "^4.0.1",
     "gulp-sourcemaps": "^2.6.5",
     "gulp-typescript": "^5.0.1",
     "merge2": "^1.2.3",
     "tslint": "^5.16.0",
     "tslint-config-airbnb": "^5.11.1",
-    "typescript": "^3.4.3"
+    "typescript": "^3.4.4"
   }
 }
