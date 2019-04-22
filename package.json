@@ -25,7 +25,7 @@
   },
   "license": "GPL-3.0-or-later",
   "engines": {
-    "node": ">=11"
+    "node": ">=12"
   },
   "dependencies": {
     "@octokit/graphql": "^2.1.1",
