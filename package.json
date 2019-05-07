@@ -54,7 +54,7 @@
     "@types/signale": "^1.2.1",
     "@types/superagent": "^4.1.1",
     "fs-nextra": "^0.4.5",
-    "gulp": "^4.0.1",
+    "gulp": "^4.0.2",
     "gulp-sourcemaps": "^2.6.5",
     "gulp-typescript": "^5.0.1",
     "merge2": "^1.2.3",
