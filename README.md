@@ -5,7 +5,7 @@ A feature-packed bot for Discord servers, written in TypeScript.
 [![License][license-badge]][license-link]
 
 > **NOTE**: Development on Ellie has been halted for the forseeable future. I may come back and work on Ellie at some
-> point, but for now, I've decided to put my full attention and focus on learning Android development.
+> point, but for now I have decided to put my full undivided attention towards learning Android development.
 
 Welcome to the offiical repository for Ellie, a bot for Discord written using TypeScript and Node.js. This is my first
 my first attempt at creating a proper Discord bot, and if any issues occur, please file them on either GitLab or GitHub 

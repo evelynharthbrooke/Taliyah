@@ -32,7 +32,7 @@
     "common-tags": "^1.8.0",
     "discord-akairo": "github:1computer1/discord-akairo",
     "discord.js": "github:discordjs/discord.js",
-    "i18n-iso-countries": "^3.7.8",
+    "i18n-iso-countries": "^4.0.0",
     "moment": "^2.24.0",
     "moment-duration-format": "^2.2.2",
     "numeral": "^2.0.6",
