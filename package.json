@@ -28,38 +28,38 @@
     "node": ">=12"
   },
   "dependencies": {
-    "@octokit/graphql": "^2.1.1",
+    "@octokit/graphql": "^4.0.0",
     "common-tags": "^1.8.0",
     "discord-akairo": "github:1computer1/discord-akairo",
     "discord.js": "github:discordjs/discord.js",
-    "i18n-iso-countries": "^4.0.0",
+    "i18n-iso-countries": "^4.3.1",
     "moment": "^2.24.0",
-    "moment-duration-format": "^2.2.2",
+    "moment-duration-format": "^2.3.2",
     "numeral": "^2.0.6",
-    "pg": "^7.10.0",
-    "pluralize": "^7.0.0",
-    "pokedex-promise-v2": "^3.1.1",
+    "pg": "^7.12.1",
+    "pluralize": "^8.0.0",
+    "pokedex-promise-v2": "^3.2.0",
     "signale": "^1.4.0",
     "spotify-web-api-node": "github:KamranMackey/spotify-web-api-node",
-    "string-strip-html": "^4.0.12",
-    "superagent": "^5.0.5",
+    "string-strip-html": "^4.0.30",
+    "superagent": "^5.1.0",
     "toml": "^3.0.0",
-    "typeorm": "^0.2.17"
+    "typeorm": "^0.2.18"
   },
   "devDependencies": {
-    "@types/node": "^12.0.0",
-    "@types/numeral": "0.0.25",
+    "@types/node": "^12.7.2",
+    "@types/numeral": "0.0.26",
     "@types/pluralize": "0.0.29",
     "@types/pokedex-promise-v2": "github:mudkipme/pokeapi-v2-typescript",
     "@types/signale": "^1.2.1",
-    "@types/superagent": "^4.1.1",
+    "@types/superagent": "^4.1.3",
     "fs-nextra": "^0.4.5",
     "gulp": "^4.0.2",
     "gulp-sourcemaps": "^2.6.5",
     "gulp-typescript": "^5.0.1",
-    "merge2": "^1.2.3",
-    "tslint": "^5.16.0",
+    "merge2": "^1.2.4",
+    "tslint": "^5.18.0",
     "tslint-config-airbnb": "^5.11.1",
-    "typescript": "^3.4.5"
+    "typescript": "^3.5.3"
   }
 }
