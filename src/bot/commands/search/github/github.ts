@@ -46,7 +46,7 @@ export default class GitHubCommand extends Command {
       otherwise: (msg: Message) => {
         const cmdPrefix = this.handler.prefix;
         return msg.channel.send('You did not enter a valid subcommand! Please check '
-          + `${cmdPrefix}help spotify to view the available commands.`);
+          + `${cmdPrefix}help github to view the available commands.`);
       },
     };
 
