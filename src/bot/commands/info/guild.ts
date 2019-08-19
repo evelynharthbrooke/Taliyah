@@ -72,6 +72,9 @@ export default class GuildCommand extends Command {
       const GUILD_EXPLICIT_FILTER = Constants.GUILD_EXPLICIT_FILTER[message.guild!.explicitContentFilter];
       const GUILD_VERIFIED_STATUS = message.guild!.verified ? 'Yes' : 'No';
 
+      // Guild Nitro Boost Information
+      const GUILD_BOOST_TIER = Constants.GUILD_TIERS[message.guild!.premiumTier];
+
       GUILD_EMBED.setTitle(`Information on guild ${GUILD_NAME}`);
       GUILD_EMBED.setThumbnail(GUILD_ICON_URL);
       GUILD_EMBED.setColor(GUILD_ROLES_HIGHEST.hexColor);
@@ -87,7 +90,9 @@ export default class GuildCommand extends Command {
         `**Verification Level**: ${GUILD_VERIFICATION_LEVEL}\n` +
         `**Explicit Content Filter**: ${GUILD_EXPLICIT_FILTER}\n` +
         `**Verified Server?** ${GUILD_VERIFIED_STATUS}\n` +
-        `**Roles (${GUILD_ROLES_COUNT})**: ${GUILD_ROLES}`,
+        `**Roles (${GUILD_ROLES_COUNT})**: ${GUILD_ROLES}\n\n` +
+        '**__Nitro Boost Information__**:\n' +
+        `**Boosting Tier**: ${GUILD_BOOST_TIER}`,
       );
       GUILD_EMBED.setFooter(`The ID belonging to ${GUILD_NAME} is ${GUILD_ID}.`);
 

@@ -36,6 +36,13 @@ export default {
     LISTENING: 'listening to',
   } as { [key: string]: string },
 
+  GUILD_TIERS: {
+    0: 'No Current Tier',
+    1: 'Level 1',
+    2: 'Level 2',
+    3: 'Level 3',
+  } as { [key: string]: string},
+
   GUILD_VERIFICATION_LEVELS: {
     0: 'None - Unrestricted',
     1: 'Low - Must have a verified email',

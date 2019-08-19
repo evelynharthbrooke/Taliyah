@@ -58,6 +58,11 @@ using Discord's mobile apps don't have multiple columns and show each field on a
 look that good. The only command that doesn't use embed descriptions throughout the entire command is `!help`, 
 for technical reasons.
 
+#### Information
+
+- Guild:
+  - Added information about a server's Nitro Boost tier.
+
 ##### Music
 
 - Lastfm:
