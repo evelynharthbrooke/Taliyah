@@ -62,8 +62,7 @@ export default class UserCommand extends Command {
     const GUILD_ACCCOUNT_COLOR = member.displayHexColor;
     const GUILD_ACCOUNT_NICK = member.nickname || 'No nickname.';
     const GUILD_MAIN_ROLE = member.roles.hoist ? member.roles.hoist.name : 'No main role.';
-    const GUILD_ROLES = member.roles.filter(r =>
-      r !== message.guild!.roles[0]).map(r => r.name).join(' | ') || 'No roles.';
+    const GUILD_ROLES = member.roles.filter(r => r.name !== "@everyone").map(r => r.name).join(' | ') || 'No roles.';
     const GUILD_ROLE_COUNT = member.roles.filter(r => r !== message.guild!.roles[0]).size;
 
     let ACCOUNT_STATUS: string;
