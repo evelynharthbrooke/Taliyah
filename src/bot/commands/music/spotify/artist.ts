@@ -76,10 +76,10 @@ export default class SpotifyArtistCommand extends Command {
         this.client.spotify.getArtist(artistId).then(async (res) => {
           const artistEmbed = new MessageEmbed();
           const userAgent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) '
-            + 'Chrome/75.0.3759.0 Safari/537.36';
+            + 'Chrome/78.0.3879.0 Safari/537.36 Edg/78.0.249.0';
           const accessTokenUrl = await request.get('https://open.spotify.com').set({ 'User-Agent': userAgent });
           // TODO: Store token and only refresh the token when it expires.
-          const accessToken = accessTokenUrl.header['set-cookie'][4].split('=')[1].split(';')[0];
+          const accessToken = accessTokenUrl.header['set-cookie'][3].split('=')[1].split(';')[0];
 
           const artistAbout = await request.get(spotifyBackendFullUrl + artistId).set({
             Authorization: 'Bearer ' + accessToken,
