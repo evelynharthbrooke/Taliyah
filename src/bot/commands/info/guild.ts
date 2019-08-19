@@ -23,6 +23,7 @@ import { Message, MessageEmbed } from 'discord.js';
 import { Command } from 'discord-akairo';
 import Constants from '../../utils/Constants';
 import moment from 'moment';
+import { type } from 'os';
 
 export default class GuildCommand extends Command {
   public constructor() {
@@ -50,6 +51,7 @@ export default class GuildCommand extends Command {
       const GUILD_ID = message.guild!.id;
       const GUILD_OWNER = message.guild!.owner!.user.tag;
       const GUILD_MEMBERS = message.guild!.members.size;
+      const GUILD_ICON_URL = message.guild!.iconURL() as string;
       const GUILD_MEMBERS_USERS = message.guild!.members.filter(m => m.user.bot).size;
       const GUILD_MEMBERS_BOTS = message.guild!.members.filter(m => m.user.bot).size;
       const GUILD_PRESENCES = message.guild!.presences.size;
@@ -71,7 +73,7 @@ export default class GuildCommand extends Command {
       const GUILD_VERIFIED_STATUS = message.guild!.verified ? 'Yes' : 'No';
 
       GUILD_EMBED.setTitle(`Information on guild ${GUILD_NAME}`);
-      GUILD_EMBED.setThumbnail(message.guild!.iconURL());
+      GUILD_EMBED.setThumbnail(GUILD_ICON_URL);
       GUILD_EMBED.setColor(GUILD_ROLES_HIGHEST.hexColor);
       GUILD_EMBED.setDescription(
         `**Name**: ${GUILD_NAME}\n` +

@@ -22,7 +22,8 @@ import { Command } from 'discord-akairo';
 import { Message, MessageEmbed } from 'discord.js';
 
 import moment from 'moment';
-import graphql from '@octokit/graphql';
+
+const { graphql } = require('@octokit/graphql');
 
 export default class GitHubUserCommand extends Command {
   public constructor() {
