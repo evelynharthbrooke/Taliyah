@@ -66,7 +66,8 @@ for technical reasons.
   - Switched to using the Spotify Web API instead of Last.fm's API for retrieving album
     artwork, due to Spotify having a wider selection of music and album art.
 - Spotify:
-  - Re-implemented the pre-existing set of Spotify commands, with some new features and a new look.
+  - Re-implemented the pre-existing set of Spotify commands, with some new features and a new consistent
+  appearance shared between the command set.
   - Added `artist` subcommand. Retrieves information about a specified artist.
   - Added `user` subcommand. Retrieves information about a specified user.
 
