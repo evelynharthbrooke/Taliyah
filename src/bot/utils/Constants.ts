@@ -37,10 +37,10 @@ export default {
   } as { [key: string]: string },
 
   GUILD_TIERS: {
-    0: 'No Current Tier',
-    1: 'Level 1',
-    2: 'Level 2',
-    3: 'Level 3',
+    0: 'No Current Tier (Not Boosted)',
+    1: 'Level 1 (2+ Boosts)',
+    2: 'Level 2 (10+ Boosts)',
+    3: 'Level 3 (50+ Boosts)',
   } as { [key: string]: string},
 
   GUILD_VERIFICATION_LEVELS: {

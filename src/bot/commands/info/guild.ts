@@ -74,6 +74,7 @@ export default class GuildCommand extends Command {
 
       // Guild Nitro Boost Information
       const GUILD_BOOST_TIER = Constants.GUILD_TIERS[message.guild!.premiumTier];
+      const GUILD_BOOST_COUNT = message.guild!.premiumSubscriptionCount;
 
       GUILD_EMBED.setTitle(`Information on guild ${GUILD_NAME}`);
       GUILD_EMBED.setThumbnail(GUILD_ICON_URL);
@@ -92,7 +93,8 @@ export default class GuildCommand extends Command {
         `**Verified Server?** ${GUILD_VERIFIED_STATUS}\n` +
         `**Roles (${GUILD_ROLES_COUNT})**: ${GUILD_ROLES}\n\n` +
         '**__Nitro Boost Information__**:\n' +
-        `**Boosting Tier**: ${GUILD_BOOST_TIER}`,
+        `**Boosting Tier**: ${GUILD_BOOST_TIER}\n` +
+        `**Users Boosting**: ${GUILD_BOOST_COUNT}`,
       );
       GUILD_EMBED.setFooter(`The ID belonging to ${GUILD_NAME} is ${GUILD_ID}.`);
 
