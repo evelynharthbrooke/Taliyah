@@ -20,6 +20,9 @@
 import { Command } from 'discord-akairo';
 import { Message, MessageEmbed } from 'discord.js';
 
+const moment = require('moment');
+require('moment-duration-format');
+
 export default class TrackCommand extends Command {
   public constructor() {
     super('spotify-track', {
@@ -40,6 +43,55 @@ export default class TrackCommand extends Command {
   }
 
   public async exec(message: Message, { track }: { track: string }) {
-    return message.channel.send('nothing to see here...yet');
+    const trackEmbed = new MessageEmbed().setColor(0x1DB954);
+    const errorEmbed = new MessageEmbed().setColor(0xB00020);
+
+    if (!track) {
+      errorEmbed.setTitle('Error: No track name provided.');
+      errorEmbed.setDescription('You did not provide the name of the track you would '
+        + 'like to get information on. Please provide one and then try again.');
+
+      return message.channel.send(errorEmbed);
+    }
+
+    this.client.spotify.clientCredentialsGrant().then((data) => {
+      this.client.spotify.setAccessToken(data.body.access_token);
+      this.client.spotify.searchTracks(track, { limit: 1, offset: 0 }, (err, res) => {
+        if (err) {
+          console.log(err);
+          return message.channel.send('Looks like an error occured while searching for a Spotify ' +
+            'track. Please try again later.!');
+        }
+
+        try {
+          const track = res.body.tracks.items[0];
+          const parent = res.body.tracks.items[0].album; // The album belonging to the track.
+          const title = track.name;
+          const album = parent.name;
+          const albumUrl = parent.external_urls.spotify;
+          const explicit = track.explicit ? 'Yes' : 'No';
+          const cover = parent.images[1].url;
+          const url = track.external_urls.spotify;
+          const date = moment(track.album.release_date).format('LL');
+          const artist = track.artists.map(a => `[${a.name}](${a.external_urls.spotify})`).join(', ');
+          const length = moment.duration(track.duration_ms, 'milliseconds').format('h[h] mm[m] s[s]');
+
+          trackEmbed.setTitle(title);
+          trackEmbed.setThumbnail(cover);
+          trackEmbed.setDescription(
+            `**Artist(s)**: ${artist}\n` +
+            `**Album**: [${album}](${albumUrl})\n` +
+            `**Explicit?** ${explicit}\n` +
+            `**Release Date**: ${date}\n` +
+            `**Duration**: ${length}\n\n` +
+            `[Play ${title} on Spotify →](${url})`);
+
+          return message.channel.send(trackEmbed);
+        } catch {
+          return message.channel.send('Sorry, I was unable to find that. Perhaps you made a typo? ' +
+            'Or Spotify lacks the track you were searching for. Please try again later.');
+        }
+      });
+    });
   }
 }
