@@ -79,7 +79,7 @@ export default class TrackCommand extends Command {
           const artist = track.artists.map(a => `[${a.name}](${a.external_urls.spotify})`).join(', ');
           const length = moment.duration(track.duration_ms, 'milliseconds').format('h[hr] mm[m] s[s]');
 
-          // Set basic embed variables before setting description.
+          // Set basic embed variables before setting the description.
           trackEmbed.setTitle(title);
           trackEmbed.setThumbnail(cover);
 
