@@ -29,6 +29,26 @@ export default {
     2: 'Offline',
   } as { [key: string]: string },
 
+  MUSIC_PITCH_CLASSES: {
+    0: 'C',
+    1: 'C♯, D♭',
+    2: 'D',
+    3: 'D♯',
+    4: 'E',
+    5: 'F',
+    6: 'F♯, G♭',
+    7: 'G',
+    8: 'G♯, A♭',
+    9: 'A',
+    10: 'A♯, B♭',
+    11: 'B',
+  } as { [key: string]: string },
+
+  MUSIC_MODES: {
+    0: 'Minor',
+    1: 'Major',
+  } as { [key: string]: string},
+
   ACTIVITY_NAMES: {
     PLAYING: 'playing',
     WATCHING: 'watching',
@@ -89,6 +109,7 @@ export default {
     SEND_MESSAGES: 'Send Messages',
     SEND_TTS_MESSAGES: 'Send TTS Messages',
     MANAGE_MESSAGES: 'Manage Messages',
+    STREAM: 'Go Live',
     EMBED_LINKS: 'Embed Links',
     ATTACH_FILES: 'Attach Files',
     READ_MESSAGE_HISTORY: 'See Message History',

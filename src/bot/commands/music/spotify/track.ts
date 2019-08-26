@@ -19,6 +19,7 @@
 
 import { Command } from 'discord-akairo';
 import { Message, MessageEmbed } from 'discord.js';
+import Constants from '../../../utils/Constants';
 
 const moment = require('moment');
 require('moment-duration-format');
@@ -69,24 +70,49 @@ export default class TrackCommand extends Command {
           const title = track.name;
           const album = parent.name;
           const albumUrl = parent.external_urls.spotify;
+          const popularity = track.popularity;
           const explicit = track.explicit ? 'Yes' : 'No';
           const cover = parent.images[1].url;
+          const markets = track.available_markets.length;
           const url = track.external_urls.spotify;
           const date = moment(track.album.release_date).format('LL');
           const artist = track.artists.map(a => `[${a.name}](${a.external_urls.spotify})`).join(', ');
-          const length = moment.duration(track.duration_ms, 'milliseconds').format('h[h] mm[m] s[s]');
+          const length = moment.duration(track.duration_ms, 'milliseconds').format('h[hr] mm[m] s[s]');
 
+          // Set basic embed variables before setting description.
           trackEmbed.setTitle(title);
           trackEmbed.setThumbnail(cover);
-          trackEmbed.setDescription(
-            `**Artist(s)**: ${artist}\n` +
-            `**Album**: [${album}](${albumUrl})\n` +
-            `**Explicit?** ${explicit}\n` +
-            `**Release Date**: ${date}\n` +
-            `**Duration**: ${length}\n\n` +
-            `[Play ${title} on Spotify →](${url})`);
 
-          return message.channel.send(trackEmbed);
+          this.client.spotify.getAudioAnalysisForTrack(track.id).then((res) => {
+            const analysis = res.body.track;
+            const key = Constants.MUSIC_PITCH_CLASSES[analysis.key];
+            const keyConfidence = analysis.key_confidence;
+            const loudness = analysis.loudness;
+            const mode = Constants.MUSIC_MODES[analysis.mode];
+            const modeConfidence = analysis.mode_confidence;
+            const tempo = analysis.tempo;
+            const tempoConfidence = analysis.tempo_confidence;
+            const timeSignature = analysis.time_signature;
+            const timeSignatureConfidence = analysis.time_signature_confidence;
+
+            trackEmbed.setDescription(
+              `**Artist(s)**: ${artist}\n` +
+              `**Album**: [${album}](${albumUrl})\n` +
+              `**Popularity**: ${popularity}\n` +
+              `**Explicit?** ${explicit}\n` +
+              `**Release Date**: ${date}\n` +
+              `**Spotify Markets**: ${markets}\n` +
+              `**Duration**: ${length}\n\n` +
+              '**__Technical Details__**:\n' +
+              `**Average Loudness**: ${loudness} dB\n` +
+              `**Key**: ${key} (Confidence: ${keyConfidence})\n` +
+              `**Mode**: ${mode} (Confidence: ${modeConfidence})\n` +
+              `**Tempo**: ${tempo} (Confidence: ${tempoConfidence})\n` +
+              `**Time Signature**: ${timeSignature} (Confidence: ${timeSignatureConfidence})\n\n` +
+              `[Play ${title} on Spotify →](${url})`);
+
+            return message.channel.send(trackEmbed);
+          });
         } catch {
           return message.channel.send('Sorry, I was unable to find that. Perhaps you made a typo? ' +
             'Or Spotify lacks the track you were searching for. Please try again later.');
