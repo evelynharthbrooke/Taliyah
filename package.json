@@ -41,7 +41,7 @@
     "pokedex-promise-v2": "^3.2.0",
     "signale": "^1.4.0",
     "spotify-web-api-node": "github:KamranMackey/spotify-web-api-node",
-    "string-strip-html": "^4.1.0",
+    "string-strip-html": "^4.1.1",
     "superagent": "^5.1.0",
     "toml": "^3.0.0",
     "typeorm": "^0.2.18"
@@ -60,6 +60,6 @@
     "merge2": "^1.2.4",
     "tslint": "^5.19.0",
     "tslint-config-airbnb": "^5.11.1",
-    "typescript": "^3.5.3"
+    "typescript": "^3.6.1-rc"
   }
 }
