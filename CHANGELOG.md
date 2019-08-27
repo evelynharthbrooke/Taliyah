@@ -73,8 +73,10 @@ for technical reasons.
 - Spotify:
   - Re-implemented the pre-existing set of Spotify commands, with some new features and a new consistent
   appearance shared between the command set.
-  - Added `artist` subcommand. Retrieves information about a specified artist.
-  - Added `user` subcommand. Retrieves information about a specified user.
+  - Added more detailed track information to the `track` subcommand. Now shows information like tempo and
+    average track loudness (in decibels). May expand this later on to display more information.
+  - Added the `artist` subcommand. Retrieves information about a specified artist.
+  - Added the `user` subcommand. Retrieves information about a specified user.
 
 ##### Search
 
