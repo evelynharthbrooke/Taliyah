@@ -93,6 +93,8 @@ export default class SpotifyArtistCommand extends Command {
           const image = res.body.images[0].url;
           const followers = res.body.followers.total;
           const listeners = about.body.artistInsights.monthly_listeners;
+          const listenersDelta = about.body.artistInsights.monthly_listeners_delta;
+          const chartPosition = about.body.artistInsights.global_chart_position;
 
           if (about.body.hasOwnProperty('bio')) {
             biography = stripHtml(Util.shorten(about.body.bio, 1000));
@@ -107,8 +109,9 @@ export default class SpotifyArtistCommand extends Command {
           artistEmbed.setDescription(
             `${biography}\n\n` +
             '**__Artist Stats__:**\n' +
+            `**Chart Position**: ${chartPosition}\n` +
             `**Followers**: ${followers}\n` +
-            `**Listeners**: ${listeners ? listeners : `No users listen to ${name}.`}\n` +
+            `**Listeners**: ${listeners ? listeners : `No users listen to ${name}.`} (${listenersDelta} delta)\n` +
             `**Genres**: ${genres ? genres : 'No genres available.'}\n\n`);
 
           return message.channel.send(artistEmbed);
