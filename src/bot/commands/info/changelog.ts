@@ -20,7 +20,6 @@
 
 import { Command } from 'discord-akairo';
 import { Message, MessageEmbed } from 'discord.js';
-import { Util } from '../../utils/Util';
 
 const { graphql } = require('@octokit/graphql');
 
@@ -80,7 +79,7 @@ export default class ChangelogCommand extends Command {
       const commit = c.node;
       const title = commit.messageHeadline;
       const hash = `[\`${commit.oid.slice(0, 7)}\`](${commit.url})`;
-      return `${hash} ${Util.shorten(title.split('\n')[0], 60)}`;
+      return `${hash} ${title}`;
     }).join('\n');
 
     embed.setTitle('Recent Changes');
