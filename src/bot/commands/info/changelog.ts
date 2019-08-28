@@ -72,10 +72,10 @@ export default class ChangelogCommand extends Command {
       },
     });
 
-    const repo = result.repository.defaultBranchRef.target;
-    const repoUrl = result.repository.url;
-    const repoBranch = result.repository.defaultBranchRef.name;
-    const commits = repo.history.edges.map((c: any) => {
+    const target = result.repository.defaultBranchRef.target;
+    const url = result.repository.url;
+    const branch = result.repository.defaultBranchRef.name;
+    const commits = target.history.edges.map((c: any) => {
       const commit = c.node;
       const title = commit.messageHeadline;
       const hash = `[\`${commit.oid.slice(0, 7)}\`](${commit.url})`;
@@ -83,9 +83,10 @@ export default class ChangelogCommand extends Command {
     }).join('\n');
 
     embed.setTitle('Recent Changes');
-    embed.setURL(`${repoUrl}/commits/${repoBranch}`);
+    embed.setURL(`${url}/commits/${branch}`);
     embed.setDescription(commits);
     embed.setFooter('Powered by the GitHub GraphQL API.');
+    embed.setTimestamp();
 
     return message.channel.send(embed);
   }
