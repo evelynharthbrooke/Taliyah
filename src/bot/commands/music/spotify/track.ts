@@ -17,8 +17,6 @@
  * along with Ellie. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import * as request from 'superagent';
-
 import { Command } from 'discord-akairo';
 import { Message, MessageEmbed } from 'discord.js';
 import Constants from '../../../utils/Constants';
@@ -116,7 +114,6 @@ export default class SpotifyTrackCommand extends Command {
           });
         } catch (error) {
           console.log(error.message);
-          console.log(error.data);
           return message.channel.send('Sorry, I was unable to find that. Perhaps you made a typo? ' +
             'Or Spotify lacks the track you were searching for. Please try again later.');
         }
