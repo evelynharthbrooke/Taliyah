@@ -48,18 +48,12 @@ export default class ChangelogCommand extends Command {
           name
           target {
             ... on Commit {
-              history(first: 8) {
+              history(first: 10) {
                 edges {
                   node {
                     ... on Commit {
                       messageHeadline
-                      author {
-                        user {
-                          login
-                        }
-                      }
                       oid
-                      committedDate
                       url
                     }
                   }
@@ -85,16 +79,14 @@ export default class ChangelogCommand extends Command {
     const commits = repo.history.edges.map((c: any) => {
       const commit = c.node;
       const title = commit.messageHeadline;
-      const author = commit.author.user.login;
       const hash = `[\`${commit.oid.slice(0, 7)}\`](${commit.url})`;
-      return `${hash} ${Util.shorten(title.split('\n')[0], 60)} (${author})`;
+      return `${hash} ${Util.shorten(title.split('\n')[0], 60)}`;
     }).join('\n');
 
-    embed.setTitle('Most recent commits');
+    embed.setTitle('Recent Changes');
     embed.setURL(`${repoUrl}/commits/${repoBranch}`);
     embed.setDescription(commits);
     embed.setFooter('Powered by the GitHub GraphQL API.');
-    embed.setTimestamp();
 
     return message.channel.send(embed);
   }
