@@ -50,7 +50,6 @@ export default class SpotifyCreditsCommand extends Command {
 
     this.client.spotify.clientCredentialsGrant().then((data) => {
       this.client.spotify.setAccessToken(data.body['access_token']);
-
       this.client.spotify.searchTracks(track, { limit: 1, offset: 0 }, async (err, res) => {
         const embed = new MessageEmbed();
 
@@ -67,8 +66,8 @@ export default class SpotifyCreditsCommand extends Command {
             + 'Chrome/78.0.3886.0 Safari/537.36 Edg/78.0.257.0';
           const url = await request.get('https://open.spotify.com').set({ 'User-Agent': agent });
           const token = url.header['set-cookie'][3].split('=')[1].split(';')[0];
+          
           const credits = await request.get(endpoint).set({ Authorization: 'Bearer ' + token, 'User-Agent': agent });
-
           const performers = credits.body.roleCredits[0].artists.map((a: any) => a.name).join('\n');
           const writers = credits.body.roleCredits[1].artists.map((a: any) => a.name).join('\n');
           const producers = credits.body.roleCredits[2].artists.map((a: any) => a.name).join('\n');
@@ -89,7 +88,6 @@ export default class SpotifyCreditsCommand extends Command {
           embed.setFooter(`Credits provided by ${source}.`);
 
           return message.channel.send(embed);
-
         } catch (error) {
           console.log(error.request);
           console.log(error.message);
