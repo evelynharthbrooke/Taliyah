@@ -60,6 +60,10 @@ for technical reasons.
 
 #### Information
 
+- Changelog:
+  - Moved away from the GitHub REST API in favor of switching to the newer v4 API based on GraphQL. This also 
+    in turn fixes an issue where the command would run into a 403 Forbidden error, preventing the command from
+    working.
 - Guild:
   - Added information about a server's Nitro Boost tier.
 

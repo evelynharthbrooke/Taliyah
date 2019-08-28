@@ -32,7 +32,8 @@ google = ''
 # is public!
 [github]
 token = ''
-repo = ''
+repo_name = ''
+repo_owner = ''
 
 # Variables used for accessing the Spotify API.
 [spotify]

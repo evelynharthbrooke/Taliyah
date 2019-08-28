@@ -20,9 +20,9 @@
 
 import { Command } from 'discord-akairo';
 import { Message, MessageEmbed } from 'discord.js';
-import * as request from 'superagent';
-
 import { Util } from '../../utils/Util';
+
+const { graphql } = require('@octokit/graphql');
 
 export default class ChangelogCommand extends Command {
   public constructor() {
@@ -37,28 +37,65 @@ export default class ChangelogCommand extends Command {
   }
 
   public async exec(message: Message) {
-    const CHANGELOG_EMBED = new MessageEmbed();
-    const GITHUB_API_URL = 'https://api.github.com/';
-    const GITHUB_COMMITS_ENDPOINT = GITHUB_API_URL + `repos/${this.client.config.github.repo}/commits`;
-    const GITHUB_COMMITS_URL = `https://github.com/${this.client.config.github.repo}/commits/master`;
-    const { body: GITHUB_COMMITS } = await request.get(GITHUB_COMMITS_ENDPOINT).set({
-      Authorization: `token ${this.client.config.github.token}`,
+    const embed = new MessageEmbed();
+    const token = this.client.config.github.token;
+    const owner = this.client.config.github.repo_owner;
+    const name  = this.client.config.github.repo_name;
+    const query = `query commits($owner: String!, $repo: String!) {
+      repository(owner: $owner, name: $repo) {
+        url
+        defaultBranchRef {
+          name
+          target {
+            ... on Commit {
+              history(first: 7) {
+                edges {
+                  node {
+                    ... on Commit {
+                      messageHeadline
+                      author {
+                        user {
+                          login
+                        }
+                      }
+                      oid
+                      committedDate
+                      url
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }`;
+
+    const result = await graphql(query, {
+      owner: `${owner}`,
+      repo: `${name}`,
+      headers: {
+        authorization: `bearer ${token}`,
+      },
     });
 
-    const COMMITS = GITHUB_COMMITS.slice(0, 10);
+    const repo = result.repository.defaultBranchRef.target;
+    const repoUrl = result.repository.url;
+    const repoBranch = result.repository.defaultBranchRef.name;
+    const commits = repo.history.edges.map((c: any) => {
+      const commit = c.node;
+      const title = commit.messageHeadline;
+      const author = commit.author.user.login;
+      const hash = `[\`${commit.oid.slice(0, 7)}\`](${commit.url})`;
+      return `${hash} ${Util.shorten(title.split('\n')[0], 60)} (${author})`;
+    }).join('\n');
 
-    CHANGELOG_EMBED.setTitle('Most recent commits');
-    CHANGELOG_EMBED.setURL(GITHUB_COMMITS_URL);
-    CHANGELOG_EMBED.setColor(0x315665);
-    CHANGELOG_EMBED.setDescription(COMMITS.map((commit: any) => {
-      const sha = `[\`${commit.sha.slice(0, 7)}\`](${commit.html_url})`;
-      return `${sha} ${Util.shorten(commit.commit.message.split('\n')[0], 50)} `
-        + `(${commit.author.login})`;
-    }).join('\n'));
-    CHANGELOG_EMBED.setFooter('Powered by the GitHub REST API.');
-    CHANGELOG_EMBED.setTimestamp();
+    embed.setTitle('Most recent commits');
+    embed.setURL(`${repoUrl}/commits/${repoBranch}`);
+    embed.setDescription(commits);
+    embed.setFooter('Powered by the GitHub GraphQL API.');
+    embed.setTimestamp();
 
-    /** Send the changelog. */
-    return message.channel.send(CHANGELOG_EMBED);
+    return message.channel.send(embed);
   }
 }

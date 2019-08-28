@@ -39,7 +39,8 @@ type Configuration = {
   google?: string;
   github?: {
     token?: string, // The personal authentication token.
-    repo?: string; // The GitHub repository.
+    repo_owner?: string; // The owner of the GitHub repository.
+    repo_name?: string; // The title of the GitHub repository.
   };
   darksky?: {
     key?: string;
@@ -63,7 +64,7 @@ export default class Config {
   /** The Google API key to use. */
   readonly google: string;
   /** The GitHub authentication token and repository. */
-  readonly github: { token: string, repo: string };
+  readonly github: { token: string, repo_owner: string, repo_name: string };
   /** The Dark Sky API key to use. */
   readonly darksky: { key: string };
   /** The Nexus Mods API key to use. */
@@ -90,7 +91,8 @@ export default class Config {
     this.google = config.google || '';
     this.github = {
       token: github.token || '',
-      repo: github.repo || '',
+      repo_owner: github.repo_owner || '',
+      repo_name: github.repo_name || '',
     };
     this.darksky = { key: darksky.key || '' };
     this.nexusmods = config.nexusmods || '';
