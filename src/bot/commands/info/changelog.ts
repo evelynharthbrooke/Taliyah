@@ -1,6 +1,6 @@
 /**
  * changelog.ts -- Gets the most recent commits (changes) made to
- * Ellie.
+ * Ellie via the GitHub GraphQL API.
  *
  * Copyright (c) 2019-present Kamran Mackey.
  *
