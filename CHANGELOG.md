@@ -81,6 +81,7 @@ for technical reasons.
     average track loudness (in decibels). May expand this later on to display more information.
   - Added the `artist` subcommand. Retrieves information about a specified artist.
   - Added the `user` subcommand. Retrieves information about a specified user.
+  - Added the `credits` subcommand. Retrieves the credits for a specified Spotify track.
 
 ##### Search
 

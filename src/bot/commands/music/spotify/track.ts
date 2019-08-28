@@ -17,6 +17,8 @@
  * along with Ellie. If not, see <https://www.gnu.org/licenses/>.
  */
 
+import * as request from 'superagent';
+
 import { Command } from 'discord-akairo';
 import { Message, MessageEmbed } from 'discord.js';
 import Constants from '../../../utils/Constants';
@@ -24,7 +26,7 @@ import Constants from '../../../utils/Constants';
 const moment = require('moment');
 require('moment-duration-format');
 
-export default class TrackCommand extends Command {
+export default class SpotifyTrackCommand extends Command {
   public constructor() {
     super('spotify-track', {
       category: 'Music',
@@ -57,7 +59,8 @@ export default class TrackCommand extends Command {
 
     this.client.spotify.clientCredentialsGrant().then((data) => {
       this.client.spotify.setAccessToken(data.body.access_token);
-      this.client.spotify.searchTracks(track, { limit: 1, offset: 0 }, (err, res) => {
+      this.client.spotify.searchTracks(track, { limit: 1, offset: 0 }, async (err, res) => {
+
         if (err) {
           console.log(err);
           return message.channel.send('Looks like an error occured while searching for a Spotify ' +
@@ -66,7 +69,7 @@ export default class TrackCommand extends Command {
 
         try {
           const track = res.body.tracks.items[0];
-          const parent = res.body.tracks.items[0].album; // The album belonging to the track.
+          const parent = track.album;
           const title = track.name;
           const album = parent.name;
           const albumUrl = parent.external_urls.spotify;
@@ -76,12 +79,8 @@ export default class TrackCommand extends Command {
           const markets = track.available_markets.length;
           const url = track.external_urls.spotify;
           const date = moment(track.album.release_date).format('LL');
-          const artist = track.artists.map(a => `[${a.name}](${a.external_urls.spotify})`).join(', ');
+          const artist = track.artists.map((a: any) => `[${a.name}](${a.external_urls.spotify})`).join(', ');
           const length = moment.duration(track.duration_ms, 'milliseconds').format('h[hr] mm[m] s[s]');
-
-          // Set basic embed variables before setting the description.
-          trackEmbed.setTitle(title);
-          trackEmbed.setThumbnail(cover);
 
           this.client.spotify.getAudioAnalysisForTrack(track.id).then((res) => {
             const analysis = res.body.track;
@@ -95,6 +94,8 @@ export default class TrackCommand extends Command {
             const timeSignature = analysis.time_signature;
             const timeSignatureConfidence = analysis.time_signature_confidence;
 
+            trackEmbed.setTitle(title);
+            trackEmbed.setThumbnail(cover);
             trackEmbed.setDescription(
               `**Artist(s)**: ${artist}\n` +
               `**Album**: [${album}](${albumUrl})\n` +
@@ -113,7 +114,9 @@ export default class TrackCommand extends Command {
 
             return message.channel.send(trackEmbed);
           });
-        } catch {
+        } catch (error) {
+          console.log(error.message);
+          console.log(error.data);
           return message.channel.send('Sorry, I was unable to find that. Perhaps you made a typo? ' +
             'Or Spotify lacks the track you were searching for. Please try again later.');
         }

@@ -36,6 +36,7 @@ export default class SpotifyCommand extends Command {
           'album reputation Taylor Swift',
           'newreleases CA',
           'track New Years Day Taylor Swift',
+          'credits Thief Alice Chater',
           'user mkbhd',
         ],
       },
@@ -48,6 +49,7 @@ export default class SpotifyCommand extends Command {
       type: [
         ['spotify-artist', 'artist'],
         ['spotify-album', 'album', 'release', 'al'],
+        ['spotify-credits', 'credits', 'c'],
         ['spotify-newreleases', 'newreleases', 'nr'],
         ['spotify-track', 'track', 'tr', 't'],
         ['spotify-user', 'user', 'u'],
