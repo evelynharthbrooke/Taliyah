@@ -48,7 +48,7 @@ export default class ChangelogCommand extends Command {
           name
           target {
             ... on Commit {
-              history(first: 7) {
+              history(first: 8) {
                 edges {
                   node {
                     ... on Commit {
