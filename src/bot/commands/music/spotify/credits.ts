@@ -74,7 +74,7 @@ export default class SpotifyCreditsCommand extends Command {
           const producers = credits.body.roleCredits[2].artists.map((a: any) => a.name).join('\n');
           const source = credits.body.source.value;
 
-          embed.setTitle(`Song Credits for ${name}`);
+          embed.setTitle(`${name} Credits`);
           embed.setThumbnail(cover);
           embed.setURL(link);
           embed.setColor(0x1DB954);
