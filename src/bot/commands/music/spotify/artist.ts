@@ -70,7 +70,7 @@ export default class SpotifyArtistCommand extends Command {
       const spotifyBackendEndpoint = '/artists/';
       const spotifyBackendFullUrl = spotifyBackendUrl + spotifyBackendEndpoint;
 
-      this.client.spotify.searchArtists(artist, { limit: 1, offset: 0 }, (res: any) => {
+      this.client.spotify.searchArtists(artist, { limit: 1, offset: 0 }, (err, res) => {
         const artistId = res.body.artists.items[0].id;
 
         this.client.spotify.getArtist(artistId).then(async (res) => {

@@ -20,8 +20,6 @@
 		"noImplicitAny": false,
 		"noErrorTruncation": true,
 		"noFallthroughCasesInSwitch": true,
-		"noUnusedLocals": true,
-		"noUnusedParameters": true,
 	},
 
 	"include": [
