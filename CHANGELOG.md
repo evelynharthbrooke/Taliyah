@@ -51,6 +51,13 @@ projects like Visual Studio Code), as well as adding various new commands and so
 
 ### Changes
 
+#### General Changes
+
+- The bot has been renamed from Erica to Ellie. Nothing major really, just a slight name change.
+- Changed the logging library from `winston` to `signale`. Signale looks a lot better and works without much
+  configuration.
+- Minor refinements to the codebase.
+
 #### Command Changes
 
 #### General
@@ -97,13 +104,6 @@ projects like Visual Studio Code), as well as adding various new commands and so
 - Help:
   - Changed the layout when getting information on a individual command to use embed descriptions. However, please
     note that this does not yet affect getting information on all commands. This may change in the future.
-
-#### General Changes
-
-- The bot has been renamed from Erica to Ellie. Nothing major really, just a slight name change.
-- Changed the logging library from `winston` to `signale`. Signale looks a lot better and works without much
-  configuration.
-- Minor refinements to the codebase.
 
 ### Bugfixes
 
