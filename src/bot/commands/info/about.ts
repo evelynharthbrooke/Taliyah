@@ -23,7 +23,7 @@ import { Message, MessageEmbed, version as DiscordVersion } from 'discord.js';
 import { Util } from '../../utils/Util';
 import moment from 'moment';
 import pluralize from 'pluralize';
-import { version as TypeScriptVersion } from 'typescript';
+import { version as tsVersion } from 'typescript';
 
 import * as packageJSON from '../../../../package.json';
 
@@ -74,7 +74,7 @@ export default class AboutCommand extends Command {
       + '**__Dependencies__**:\n'
       + `**[Node.js](https://nodejs.org)**: ${nodeVersion}\n`
       + `**[V8](https://v8.dev)**: ${v8Version}\n`
-      + `**[TypeScript](https://www.typescriptlang.org)**: ${TypeScriptVersion.substr(0, 9)}\n`
+      + `**[TypeScript](https://www.typescriptlang.org)**: ${tsVersion.substring(0, 9)}\n`
       + `**[Discord.js](https://github.com/discordjs/discord.js)**: ${DiscordVersion}\n`
       + `**[Akairo](https://github.com/1Computer1/discord-akairo)**: ${DiscordAkairoVersion}\n`,
     );

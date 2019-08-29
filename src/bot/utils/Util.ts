@@ -39,7 +39,7 @@ export class Util {
    * @returns {string} The shortened content.
    */
   public static shorten(content: string, limit: number): string {
-    return content.length > limit ? `${content.substr(0, limit - 3)}...` : content;
+    return content.length > limit ? `${content.substring(0, limit - 3)}...` : content;
   }
 
   /**
@@ -119,7 +119,7 @@ export class Util {
     if (version.includes('nightly')) {
       const node = version.substring(0, 7).replace('v', '');
       const date = moment(version.substring(15, 23)).format('ll');
-      return node.concat(` (nightly build, compiled on ${date})`);
+      return node.concat(` (nightly build, built on ${date})`);
     }
 
     if (version.includes('canary')) {
