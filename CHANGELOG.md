@@ -8,8 +8,8 @@ projects like Visual Studio Code), as well as adding various new commands and so
 ### Major Changes
 
 - Ellie has been rewritten in TypeScript instead of JavaScript. This should improve stability and 
-speed. However, some commands were migrated from the JavaScript version, like `!pokemon`, just with 
-a few changes made to them to take into account TypeScript's various syntax changes.
+  speed. However, some commands were migrated from the JavaScript version, like `!pokemon`, just with 
+  a few changes made to them to take into account TypeScript's various syntax changes.
 - Moved away from using `gulp` as the build system in favor of just using the default TypeScript compiler. This
   doesn't impact any user-facing behavior. It just improves build times and reduces reliance on unnecessary 
   libraries.
@@ -21,33 +21,33 @@ a few changes made to them to take into account TypeScript's various syntax chan
 ##### Moderation
 
 - Added `ban` command. Allows server administrators and moderators (if they have the ability) to ban a
-specified user from the Discord guild.
+  specified user from the Discord guild.
 
 ##### Extra
 
 - Added `steamstatus` command. Retrieves information about the current status of Steam and various services
-related to Steam, such as the Steam Database, and certain Valve games like Dota 2 and Counter-Strike: Global
-Offensive.
+  related to Steam, such as the Steam Database, and certain Valve games like Dota 2 and Counter-Strike: Global
+  Offensive.
 - Added `weather` command. Gets the weather forcast for a specified location.
 
 #### Listeners
 
 - Added a `messagedelete` listener. Checks for message deletion, and logs it to a channel. Working on
-making this support per-guild channels instead of hardcoding the channel name, but that most likely will
-not be present in this release.
+  making this support per-guild channels instead of hardcoding the channel name, but that most likely will
+  not be present in this release.
 - Added the `debug` listener. Checks for debug events and then logs them to the console. Examples of
-debug events would be heartbeat ACKs and shard spawns.
+  debug events would be heartbeat ACKs and shard spawns.
 
 ### Other Features
 
 #### Miscellaneous
 
 - Added the `convertToTitleCase` function to Utilities. Converts words or strings to (you guessed it) Title
-Case. Used in `!pokemon` to convert ability names to proper Title Case instead of being hyphenated and in
-Normal case.
+  Case. Used in `!pokemon` to convert ability names to proper Title Case instead of being hyphenated and in
+  Normal case.
 - Added a `Constants` class. This class moves anything that would've been at the top level of a command's
-code, to their own individual class, just in case something needs to be reused, easier than just porting
-the code each time to a command's top level code.
+  code, to their own individual class, just in case something needs to be reused, easier than just porting
+  the code each time to a command's top level code.
 
 ### Changes
 
@@ -56,10 +56,10 @@ the code each time to a command's top level code.
 #### General
 
 - Revamped the majority of the commands to use the embed description instead of embed fields. This (IMHO) 
-makes things a fair bit cleaner and improves things on the mobile side, since message embeds when viewed
-using Discord's mobile apps don't have multiple columns and show each field on a separate row, which doesn't 
-look that good. The only command that doesn't use embed descriptions throughout the entire command is `!help`, 
-for technical reasons.
+  makes things a fair bit cleaner and improves things on the mobile side, since message embeds when viewed
+  using Discord's mobile apps don't have multiple columns and show each field on a separate row, which doesn't 
+  look that good. The only command that doesn't use embed descriptions throughout the entire command is `!help`, 
+  for technical reasons.
 
 #### Information
 
@@ -102,20 +102,20 @@ for technical reasons.
 
 - The bot has been renamed from Erica to Ellie. Nothing major really, just a slight name change.
 - Changed the logging library from `winston` to `signale`. Signale looks a lot better and works without much
-configuration.
+  configuration.
 - Minor refinements to the codebase.
 
 ### Bugfixes
 
 - Fixed a bug where the bot would fail to build with newer versions of TypeScript due to a semantic
-error involving the Guild command.
+  error involving the Guild command.
 - Fixed implementation issues with the GitHub user command, by swapping from importing the graphql
-library to instead requiring it via a constant.
+  library to instead requiring it via a constant.
 
 ### Removed
 
 - Removed the `!id` command. Its functionality was replaced by the `!user` command, which displays far more
-information.
+  information.
 
 ## 0.1.0 — Initial Release
 
