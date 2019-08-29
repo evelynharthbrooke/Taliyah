@@ -11,7 +11,8 @@ projects like Visual Studio Code), as well as adding various new commands and so
 speed. However, some commands were migrated from the JavaScript version, like `!pokemon`, just with 
 a few changes made to them to take into account TypeScript's various syntax changes.
 - Moved away from using `gulp` as the build system in favor of just using the default TypeScript compiler. This
-  doesn't impact any user-facing behavior. It just improves build times and reliance on unnecessary libraries.
+  doesn't impact any user-facing behavior. It just improves build times and reduces reliance on unnecessary 
+  libraries.
 
 ### New Features
 
