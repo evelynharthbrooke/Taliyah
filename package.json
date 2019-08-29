@@ -19,14 +19,21 @@
   "main": "src/ellie.js",
   "scripts": {
     "prebuild": "npm run lint",
-    "build": "gulp",
+    "build": "tsc",
+    "copyfiles": "copy-files-from-to",
     "lint": "tslint -p tsconfig.json",
-    "start": "node dist/ellie.js --harmony"
+    "start": "node dist/src/ellie.js --harmony"
   },
   "license": "GPL-3.0-or-later",
   "engines": {
     "node": ">=12"
   },
+  "copyFiles": [
+    {
+      "from": "config.toml",
+      "to": "./dist/config.toml"
+    }
+  ],
   "dependencies": {
     "@octokit/graphql": "^4.0.0",
     "common-tags": "^1.8.0",
@@ -53,11 +60,7 @@
     "@types/pokedex-promise-v2": "github:mudkipme/pokeapi-v2-typescript",
     "@types/signale": "^1.2.1",
     "@types/superagent": "^4.1.3",
-    "fs-nextra": "^0.4.5",
-    "gulp": "^4.0.2",
-    "gulp-sourcemaps": "^2.6.5",
-    "gulp-typescript": "^5.0.1",
-    "merge2": "^1.2.4",
+    "copy-files-from-to": "2.1.0",
     "tslint": "^5.19.0",
     "tslint-config-airbnb": "^5.11.1",
     "typescript": "^3.5.3"

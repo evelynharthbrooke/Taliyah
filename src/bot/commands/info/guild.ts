@@ -23,7 +23,6 @@ import { Message, MessageEmbed } from 'discord.js';
 import { Command } from 'discord-akairo';
 import Constants from '../../utils/Constants';
 import moment from 'moment';
-import { type } from 'os';
 
 export default class GuildCommand extends Command {
   public constructor() {

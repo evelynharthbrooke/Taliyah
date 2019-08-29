@@ -1,37 +1,38 @@
 {
 	"compilerOptions": {
-		"baseUrl": ".",
-		"paths": {
-			"*": [
-				"types/*"
-			]
-		},
-		"strict": true,
-		"module": "commonjs",
-		"incremental": true,
-		"moduleResolution": "node",
+		"outDir": "./dist",
 		"target": "es2018",
-		"lib": [
-			"dom",
-			"esnext",
-			"esnext.array",
-			"esnext.asynciterable",
-			"esnext.intl",
-			"esnext.symbol"
-		],
-		"declaration": true,
-		"sourceMap": true,
-		"removeComments": false,
-		"experimentalDecorators": true,
+		"module": "commonjs",
+		"moduleResolution": "node",
+		"types": [],
+
+		"incremental": true,
 		"resolveJsonModule": true,
 		"esModuleInterop": true,
+		"skipLibCheck": true,
+		"experimentalDecorators": true,
 		"emitDecoratorMetadata": true,
-		"alwaysStrict": true,
-		"noImplicitAny": false,
 		"allowSyntheticDefaultImports": true,
-		"pretty": true
+		"removeComments": true,
+		"pretty": true,
+
+		"strict": true,
+		"noImplicitAny": false,
+		"noErrorTruncation": true,
+		"noFallthroughCasesInSwitch": true,
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
 	},
+
 	"include": [
-		"./src"
-	]
+		"src/**/*", 
+		"src/**/*.json"
+	],
+	"exclude": [
+		"node_modules",
+		"./node_modules",
+		"./node_modules/*",
+		"./node_modules/@types/node/index.d.ts", 
+		"dist/", 
+		".ignore/"]
 }

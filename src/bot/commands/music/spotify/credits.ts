@@ -50,7 +50,7 @@ export default class SpotifyCreditsCommand extends Command {
 
     this.client.spotify.clientCredentialsGrant().then((data) => {
       this.client.spotify.setAccessToken(data.body['access_token']);
-      this.client.spotify.searchTracks(track, { limit: 1, offset: 0 }, async (err, res) => {
+      this.client.spotify.searchTracks(track, { limit: 1, offset: 0 }, async (res: any) => {
         const embed = new MessageEmbed();
 
         try {

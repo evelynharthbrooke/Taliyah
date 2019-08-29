@@ -25,7 +25,7 @@ import { ClientOptions } from 'discord.js';
 import Config from './Config';
 import { Signale } from 'signale';
 import Spotify from 'spotify-web-api-node';
-import { Connection, ConnectionManager } from 'typeorm';
+import { Connection } from 'typeorm';
 import { version } from '../../../package.json';
 
 declare module 'discord-akairo' {
