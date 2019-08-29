@@ -21,6 +21,7 @@
 import * as request from 'superagent';
 
 import { client } from '../../ellie';
+import moment from 'moment';
 import { stringify } from 'querystring';
 
 export class Util {
@@ -116,18 +117,20 @@ export class Util {
     }
 
     if (version.includes('nightly')) {
-      return version.substr(0, 7).replace('v', '').concat(' (nightly build)');
+      const node = version.substring(0, 7).replace('v', '');
+      const date = moment(version.substring(15, 23)).format('ll');
+      return node.concat(` (nightly build, compiled on ${date})`);
     }
 
     if (version.includes('canary')) {
-      return version.substr(0, 7).replace('v', '').concat(' (canary build)');
+      return version.substring(0, 7).replace('v', '').concat(' (canary build)');
     }
 
     if (version.includes('rc')) {
-      return version.substr(0, 8).replace('v', '').concat(' (RC build)');
+      return version.substring(0, 8).replace('v', '').concat(' (RC build)');
     }
 
-    return version.substr(0, 8).replace('v', '').concat(' (stable build)');
+    return version.substring(0, 8).replace('v', '').concat(' (stable build)');
   }
 
   /**
