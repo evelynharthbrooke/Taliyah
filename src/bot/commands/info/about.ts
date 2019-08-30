@@ -25,7 +25,7 @@ import moment from 'moment';
 import pluralize from 'pluralize';
 import { version as typescript } from 'typescript';
 
-import * as packageJSON from '../../../../package.json';
+import * as pjson from '../../../../package.json';
 
 export default class AboutCommand extends Command {
   public constructor() {
@@ -41,8 +41,8 @@ export default class AboutCommand extends Command {
   public async exec(message: Message) {
     const embed = new MessageEmbed();
     // Bot Information
-    const version = packageJSON.version;
-    const codename = packageJSON.codename;
+    const version = pjson.version;
+    const codename = pjson.codename;
     const ownerID = this.client.ownerID as string;
     const owner = this.client.users.get(ownerID)!.tag;
     const memory = (process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2);
