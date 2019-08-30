@@ -78,10 +78,7 @@ export default class SpotifyArtistCommand extends Command {
           const tu = await request.get('https://open.spotify.com').set({ 'User-Agent': agent });
           const token = tu.header['set-cookie'][3].split('=')[1].split(';')[0];
 
-          const about = await request.get(url + id).set({
-            Authorization: 'Bearer ' + token,
-            'User-Agent': agent,
-          });
+          const about = await request.get(url + id).set({ Authorization: 'Bearer ' + token, 'User-Agent': agent });
 
           let biography: string;
           const name = res.body.name;
