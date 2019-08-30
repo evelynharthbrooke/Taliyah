@@ -129,7 +129,7 @@ export class Util {
     }
 
     if (version.includes('rc')) {
-      return node.concat(' (RC build)');
+      return version.substring(0, 8).replace('v', '').concat(' (RC build)');
     }
 
     return version.substring(0, 8).replace('v', '').concat(' (stable build)');
