@@ -141,7 +141,6 @@ export default class LastFMCommand extends Command {
           }
 
           return message.channel.send(lastfmEmbed);
-
         });
       });
     }).catch((err) => {
@@ -164,7 +163,6 @@ export default class LastFMCommand extends Command {
 
       console.log(err);
       return message.channel.send('Sorry! Looks like I encountered an error. Please try again later.');
-
     });
   }
 }

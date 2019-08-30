@@ -19,7 +19,7 @@
 		"strict": true,
 		"noImplicitAny": false,
 		"noErrorTruncation": true,
-		"noFallthroughCasesInSwitch": true,
+		"noFallthroughCasesInSwitch": true
 	},
 
 	"include": [
