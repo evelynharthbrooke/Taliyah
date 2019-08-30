@@ -116,18 +116,20 @@ export class Util {
       return '';
     }
 
+    const node = version.substring(0, 7).replace('v', '');
+
     if (version.includes('nightly')) {
-      const node = version.substring(0, 7).replace('v', '');
       const date = moment(version.substring(15, 23)).format('ll');
       return node.concat(` (nightly build, built on ${date})`);
     }
 
     if (version.includes('canary')) {
-      return version.substring(0, 7).replace('v', '').concat(' (canary build)');
+      const date = moment(version.substring(17, 25)).format('ll');
+      return node.concat(` (canary build, built on ${date})`);
     }
 
     if (version.includes('rc')) {
-      return version.substring(0, 8).replace('v', '').concat(' (RC build)');
+      return node.concat(' (RC build)');
     }
 
     return version.substring(0, 8).replace('v', '').concat(' (stable build)');
