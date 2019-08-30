@@ -70,7 +70,7 @@ export default class SpotifyTrackCommand extends Command {
           const parent = track.album;
           const title = track.name;
           const album = parent.name;
-          const albumUrl = parent.external_urls.spotify;
+          const albumLink = parent.external_urls.spotify;
           const popularity = track.popularity;
           const explicit = track.explicit ? 'Yes' : 'No';
           const cover = parent.images[1].url;
@@ -96,7 +96,7 @@ export default class SpotifyTrackCommand extends Command {
             trackEmbed.setThumbnail(cover);
             trackEmbed.setDescription(
               `**Artist(s)**: ${artist}\n` +
-              `**Album**: [${album}](${albumUrl})\n` +
+              `**Album**: [${album}](${albumLink})\n` +
               `**Popularity**: ${popularity}\n` +
               `**Explicit?** ${explicit}\n` +
               `**Release Date**: ${date}\n` +

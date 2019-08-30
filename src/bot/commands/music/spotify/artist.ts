@@ -46,16 +46,14 @@ export default class SpotifyArtistCommand extends Command {
   }
 
   public async exec(message: Message, { artist }: { artist: string }) {
-    const errEmbed = new MessageEmbed();
-
     if (!artist) {
-      errEmbed.setColor(0x1DB954);
-      errEmbed.setTitle('Error: No artist name provided.');
-      errEmbed.setDescription('You didn\'t provide an artist name. Please provide one and then '
+      const embed = new MessageEmbed();
+      embed.setColor(0x1DB954);
+      embed.setTitle('Error: No artist name provided.');
+      embed.setDescription('You didn\'t provide an artist name. Please provide one and then '
         + 'try again!',
       );
-
-      return message.channel.send(errEmbed);
+      return message.channel.send(embed);
     }
 
     this.client.spotify.clientCredentialsGrant().then((data) => {
@@ -66,24 +64,23 @@ export default class SpotifyArtistCommand extends Command {
       // to sadly resort to using their backend API used with their app clients and web
       // player to be able to retrieve artist biographies. I really hope this will only
       // be a short-term solution, but honestly you never know with Spotify.
-      const spotifyBackendUrl = 'https://spclient.wg.spotify.com/open-backend-2/v1';
-      const spotifyBackendEndpoint = '/artists/';
-      const spotifyBackendFullUrl = spotifyBackendUrl + spotifyBackendEndpoint;
+      const backend = 'https://spclient.wg.spotify.com/open-backend-2/v1';
+      const endpoint = '/artists/';
+      const url = backend + endpoint;
 
       this.client.spotify.searchArtists(artist, { limit: 1, offset: 0 }, (err, res) => {
-        const artistId = res.body.artists.items[0].id;
+        const id = res.body.artists.items[0].id;
 
-        this.client.spotify.getArtist(artistId).then(async (res) => {
-          const artistEmbed = new MessageEmbed();
-          const userAgent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) '
+        this.client.spotify.getArtist(id).then(async (res) => {
+          const embed = new MessageEmbed();
+          const agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) '
             + 'Chrome/78.0.3886.0 Safari/537.36 Edg/78.0.257.0';
-          const accessTokenUrl = await request.get('https://open.spotify.com').set({ 'User-Agent': userAgent });
-          // TODO: Store token and only refresh the token when it expires.
-          const accessToken = accessTokenUrl.header['set-cookie'][3].split('=')[1].split(';')[0];
+          const tu = await request.get('https://open.spotify.com').set({ 'User-Agent': agent });
+          const token = tu.header['set-cookie'][3].split('=')[1].split(';')[0];
 
-          const about = await request.get(spotifyBackendFullUrl + artistId).set({
-            Authorization: 'Bearer ' + accessToken,
-            'User-Agent': userAgent,
+          const about = await request.get(url + id).set({
+            Authorization: 'Bearer ' + token,
+            'User-Agent': agent,
           });
 
           let biography: string;
@@ -93,8 +90,8 @@ export default class SpotifyArtistCommand extends Command {
           const image = res.body.images[0].url;
           const followers = res.body.followers.total;
           const listeners = about.body.artistInsights.monthly_listeners;
-          const listenersDelta = about.body.artistInsights.monthly_listeners_delta;
-          const chartPosition = about.body.artistInsights.global_chart_position;
+          const delta = about.body.artistInsights.monthly_listeners_delta;
+          const position = about.body.artistInsights.global_chart_position;
 
           if (about.body.hasOwnProperty('bio')) {
             biography = stripHtml(Util.shorten(about.body.bio, 1000));
@@ -102,19 +99,19 @@ export default class SpotifyArtistCommand extends Command {
             biography = 'No biography available.';
           }
 
-          artistEmbed.setTitle(name);
-          artistEmbed.setColor(0x1DB954);
-          artistEmbed.setURL(link);
-          artistEmbed.setThumbnail(image);
-          artistEmbed.setDescription(
+          embed.setTitle(name);
+          embed.setColor(0x1DB954);
+          embed.setURL(link);
+          embed.setThumbnail(image);
+          embed.setDescription(
             `${biography}\n\n` +
             '**__Artist Stats__:**\n' +
-            `**Chart Position**: ${chartPosition}\n` +
+            `**Chart Position**: ${position}\n` +
             `**Followers**: ${followers}\n` +
-            `**Listeners**: ${listeners ? listeners : `No users listen to ${name}.`} (${listenersDelta} delta)\n` +
+            `**Listeners**: ${listeners ? listeners : `No users listen to ${name}.`} (${delta} delta)\n` +
             `**Genres**: ${genres ? genres : 'No genres available.'}\n\n`);
 
-          return message.channel.send(artistEmbed);
+          return message.channel.send(embed);
         });
       });
     });
