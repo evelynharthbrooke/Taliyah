@@ -126,6 +126,9 @@ export default class EllieClient extends AkairoClient {
   public async loginToDiscord(token: string) {
     await this.start();
     await this.setup();
+
+    process.on('uncaughtException', error => this.logger.error(`Uncaught Exception: ${error}`));
+
     return this.login(token);
   }
 }
