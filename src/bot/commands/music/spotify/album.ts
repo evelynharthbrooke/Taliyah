@@ -52,78 +52,58 @@ export default class SpotifyAlbumCommand extends Command {
   }
 
   public async exec(message: Message, { album, market }: { album: string, market: string }) {
-    // Base album embed.
-    const albumEmbed = new MessageEmbed().setColor(0x1DB954);
-    // Base error embed.
-    const errorEmbed = new MessageEmbed().setColor(0xB00020);
+    const embed = new MessageEmbed().setColor(0x1DB954);
+    const error = new MessageEmbed().setColor(0xB00020);
 
     if (!album) {
-      errorEmbed.setTitle('Error: No album name provided.');
-      errorEmbed.setDescription('You did not provide the name of the album you would '
+      error.setTitle('Error: No album name provided.');
+      error.setDescription('You did not provide the name of the album you would '
         + 'like to get information on. Please provide one and then try again.');
 
-      return message.channel.send(errorEmbed);
+      return message.channel.send(error);
     }
 
     this.client.spotify.clientCredentialsGrant().then((data) => {
       this.client.spotify.setAccessToken(data.body['access_token']);
-
       this.client.spotify.searchAlbums(album, { market, limit: 1, offset: 0 }).then((resp) => {
-        // The album's Spotify ID.
-        const albumId = resp.body.albums.items[0].id;
-        // Use getAlbum to get all album information that the normal
-        // searchAlbums endpoint doesn't provide.
-        this.client.spotify.getAlbum(albumId).then((res) => {
-          // The name of the release.
-          const albumName = res.body.name;
-          // The image attached to the release.
-          const albumImage = res.body.images[0].url;
-          // The number of tracks on the release.
-          const albumTrackCount = pluralize('track', res.body.tracks.total, true);
-          // The Spotify album URL of the release.
-          const albumUrl = res.body.external_urls.spotify;
-          // The artists listed on the release.
-          const albumArtists = res.body.artists.map(a => `[${a.name}](${a.external_urls.spotify})`).join(', ');
-          // The release date of the release.
-          const albumReleaseDate = moment(res.body.release_date).format('LL');
-          // The copyright information associated with this release.
-          let albumCopyright: string;
-          // Since some artists do not provide copyright text with their
-          // releases when uploading them to Spotify, work around that by
-          // replacing the copyright text with the record label/individual
-          // entity who published the release.
+
+        const id = resp.body.albums.items[0].id;
+
+        this.client.spotify.getAlbum(id).then((res) => {
+          const name = res.body.name;
+          const image = res.body.images[0].url;
+          const count = pluralize('track', res.body.tracks.total, true);
+          const link = res.body.external_urls.spotify;
+          const artists = res.body.artists.map(a => `[${a.name}](${a.external_urls.spotify})`).join(', ');
+          const released = moment(res.body.release_date).format('LL');
+
+          let copyright: string;
           if (Object.entries(res.body.copyrights).length === 0) {
-            albumCopyright = res.body.label;
+            copyright = res.body.label;
           } else {
-            albumCopyright = res.body.copyrights[0].text;
+            copyright = res.body.copyrights[0].text;
           }
-          // The tracks part of the release.
-          const albumTracks = res.body.tracks.items.map((track) => {
-            // The name of the track.
-            const trackName = track.name;
-            // The track number of the track.
-            const trackNumber = track.track_number;
-            // The URL of the track.
-            const trackUrl = track.external_urls.spotify;
-            // The duration of the track.
-            const trackLength = moment.duration(track.duration_ms, 'milliseconds').format();
-            // Whether or not the track is explict.
-            const trackExplicitness = track.explicit ? ' — Explicit' : '';
-            // Return the track.
-            return `**${trackNumber}.** [${trackName}](${trackUrl}) ${trackExplicitness} — ${trackLength}`;
+
+          const tracklist = res.body.tracks.items.map((track) => {
+            const name = track.name;
+            const number = track.track_number;
+            const link = track.external_urls.spotify;
+            const length = moment.duration(track.duration_ms, 'milliseconds').format();
+            const explicit = track.explicit ? ' — Explicit' : '';
+            return `**${number}.** [${name}](${link}) ${explicit} — ${length}`;
           }).join('\n');
 
-          albumEmbed.setTitle(albumName);
-          albumEmbed.setURL(albumUrl);
-          albumEmbed.setThumbnail(albumImage);
-          albumEmbed.setDescription(
-            `**Artist(s)**: ${albumArtists}\n` +
-            `**Release Date**: ${albumReleaseDate}\n` +
-            `**Tracks**: ${albumTrackCount}\n\n` +
-            '**Track Listing**:\n' +
-            `${albumTracks}\n\n`,
+          embed.setTitle(name);
+          embed.setURL(link);
+          embed.setThumbnail(image);
+          embed.setDescription(
+            `**Artist(s)**: ${artists}\n` +
+            `**Release Date**: ${released}\n` +
+            `**Tracks**: ${count}\n\n` +
+            '**Tracklist**:\n' +
+            `${tracklist}\n\n`,
           );
-          albumEmbed.setFooter(`${albumCopyright} | Powered by the Spotify API.`);
+          embed.setFooter(`${copyright} | Powered by the Spotify API.`);
 
           // Unfortunately, due to Discord's API limitations with regards to rich embeds,
           // do not display any albums that surpass Discord's embed description character
@@ -131,24 +111,23 @@ export default class SpotifyAlbumCommand extends Command {
           // hopes that it will. Oh well. Kind of silly how Discord imposes char limits
           // on specific components such as descriptions instead of setting a hard limit
           // too.
-          if (albumEmbed.length >= 2048) {
-            errorEmbed.setTitle('Error: Album tracklist too big.');
-            errorEmbed.setDescription('Unfortunately, it looks like this album\'s tracklist is too ' +
+          if (embed.length >= 2048) {
+            error.setTitle('Error: Album tracklist too big.');
+            error.setDescription('Unfortunately, it looks like this album\'s tracklist is too ' +
               'big to display. Please try a different album.');
-            message.channel.send(errorEmbed);
+            message.channel.send(error);
           } else {
-            message.channel.send(albumEmbed);
+            message.channel.send(embed);
           }
         }).catch((err) => {
           console.log(err);
         });
       }).catch((err) => {
         if (err.name === 'TypeError') {
-          errorEmbed.setTitle('Error: Invalid album name provided.');
-          errorEmbed.setDescription('You did not provide a valid album name. Please ' +
+          error.setTitle('Error: Invalid album name provided.');
+          error.setDescription('You did not provide a valid album name. Please ' +
             'provide one and then try again.');
-
-          message.channel.send(errorEmbed);
+          message.channel.send(error);
         } else {
           console.log(err);
         }
