@@ -54,7 +54,7 @@
     "typeorm": "^0.2.18"
   },
   "devDependencies": {
-    "@types/node": "^12.7.2",
+    "@types/node": "^12.7.3",
     "@types/numeral": "0.0.26",
     "@types/pluralize": "0.0.29",
     "@types/pokedex-promise-v2": "github:mudkipme/pokeapi-v2-typescript",
