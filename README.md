@@ -180,10 +180,12 @@ any guild you'd like! (if you have the permission to of course!)
 on how to run Ellie using it.
 
 ### Licensing and Other Information
+
 Ellie is licensed under the terms of the GNU General Public License, version 3.0, or any later versions that
 may release in the near or far future. The license snippet is below, and the full terms can be found by looking 
 at the `LICENSE` file, located in the root directory.
 
+```text
     Copyright © 2018-present Kamran Mackey
 
     Ellie is free software: you can redistribute it and/or modify
@@ -198,7 +200,7 @@ at the `LICENSE` file, located in the root directory.
 
     You should have received a copy of the GNU General Public License
     along with Ellie. If not, see <http://www.gnu.org/licenses/>.
-
+```
 
 [invite-link]: https://discordapp.com/oauth2/authorize?client_id=483499705108529163&scope=bot
 [invite-badge]: https://img.shields.io/badge/invite-to%20your%20Discord%20server-7289da.svg?style=flat-square&logo=discord
