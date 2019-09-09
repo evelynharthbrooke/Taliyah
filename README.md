@@ -1,4 +1,5 @@
 # Ellie
+
 A feature-packed bot for Discord servers, written in TypeScript.
 
 [![Invite Ellie][invite-badge]][invite-link]
@@ -56,6 +57,7 @@ brew update
 ```
 
 ##### With the Node Version Manager
+
 This option allows you to install Node.js with the Node Version Manager, which is strongly recommended because `nvm`
 allows you to e.g. manage multiple Node.js versions, which is ridiculously useful for testing purposes. But, you can
 also install node without `nvm` and I'll describe how to do that in the next section.
@@ -76,6 +78,7 @@ nvm install node # this installs the latest Node.js version
 ```
 
 ##### Without the Node Version Manager
+
 This option allows you to install Node.js without the Node Version Manager. If you would like to proceed with this route,
 you only have to accomplish one step, which is to install Node.js using Homebrew. This will install `icu4c` which allows
 full Unicode support, as well as Node.js itself. You can also install Node.js with OpenSSL 1.1 support, but its optional, 
@@ -100,7 +103,7 @@ commands to install the latest current version of Node.js, as well as npm. (thes
 Node.js Linux installation page on the Node.js website, which will be listed below).
 
 ```bash
-curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
+curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -
 sudo apt-get install -y nodejs
 sudo apt-get install -y build-essential # required if you want to install native Node.js modules via npm!
 ```
