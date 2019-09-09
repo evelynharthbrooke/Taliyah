@@ -186,20 +186,20 @@ may release in the near or far future. The license snippet is below, and the ful
 at the `LICENSE` file, located in the root directory.
 
 ```text
-    Copyright © 2018-present Kamran Mackey
+Copyright © 2018-present Kamran Mackey
 
-    Ellie is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+Ellie is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
 
-    Ellie is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-    GNU General Public License for more details.
+Ellie is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with Ellie. If not, see <http://www.gnu.org/licenses/>.
+You should have received a copy of the GNU General Public License
+along with Ellie. If not, see <http://www.gnu.org/licenses/>.
 ```
 
 [invite-link]: https://discordapp.com/oauth2/authorize?client_id=483499705108529163&scope=bot
