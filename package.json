@@ -35,7 +35,7 @@
     }
   ],
   "dependencies": {
-    "@octokit/graphql": "^4.2.0",
+    "@octokit/graphql": "^4.3.1",
     "common-tags": "^1.8.0",
     "discord-akairo": "github:1computer1/discord-akairo",
     "discord.js": "github:discordjs/discord.js",
@@ -48,21 +48,21 @@
     "pokedex-promise-v2": "^3.2.0",
     "signale": "^1.4.0",
     "spotify-web-api-node": "github:KamranMackey/spotify-web-api-node",
-    "string-strip-html": "^4.2.0",
+    "string-strip-html": "^4.3.5",
     "superagent": "^5.1.0",
     "toml": "^3.0.0",
-    "typeorm": "^0.2.18"
+    "typeorm": "^0.2.20"
   },
   "devDependencies": {
-    "@types/node": "^12.7.4",
+    "@types/node": "^12.12.5",
     "@types/numeral": "0.0.26",
     "@types/pluralize": "0.0.29",
     "@types/pokedex-promise-v2": "github:mudkipme/pokeapi-v2-typescript",
     "@types/signale": "^1.2.1",
-    "@types/superagent": "^4.1.3",
+    "@types/superagent": "^4.1.4",
     "copy-files-from-to": "2.1.0",
     "tslint": "^5.20.0",
-    "tslint-config-airbnb": "^5.11.1",
-    "typescript": "^3.6.3"
+    "tslint-config-airbnb": "^5.11.2",
+    "typescript": "^3.6.4"
   }
 }
