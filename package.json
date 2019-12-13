@@ -49,7 +49,7 @@
     "signale": "^1.4.0",
     "spotify-web-api-node": "github:KamranMackey/spotify-web-api-node",
     "string-strip-html": "^4.3.10",
-    "superagent": "^5.1.2",
+    "superagent": "^5.1.0",
     "toml": "^3.0.0",
     "typeorm": "^0.2.21"
   },

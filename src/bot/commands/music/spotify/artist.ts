@@ -73,8 +73,8 @@ export default class SpotifyArtistCommand extends Command {
 
         this.client.spotify.getArtist(id).then(async (res) => {
           const embed = new MessageEmbed();
-          const agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) '
-            + 'Chrome/78.0.3886.0 Safari/537.36 Edg/78.0.257.0';
+          const agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) ' +
+                        'Chrome/80.0.3987.0 Safari/537.36 Edg/80.0.361.0';
           const tu = await request.get('https://open.spotify.com').set({ 'User-Agent': agent });
           const token = tu.header['set-cookie'][3].split('=')[1].split(';')[0];
 
