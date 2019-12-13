@@ -21,7 +21,7 @@
 
 import { Message, MessageEmbed, TextChannel } from 'discord.js';
 
-import Constants from '../../utils/Constants';
+import Constants from '../../../utils/Constants';
 import { Listener } from 'discord-akairo';
 import moment from 'moment';
 
