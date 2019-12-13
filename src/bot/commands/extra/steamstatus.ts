@@ -39,27 +39,28 @@ export default class SteamStatusCommand extends Command {
 
   public async exec(message: Message) {
     const STEAM_EMBED = new MessageEmbed();
-    const STEAM_REQUEST = await request.get('https://steamgaug.es/api/v2');
     const STEAM_STATUS_REQUEST = await request.get('https://crowbar.steamstat.us/Barney');
 
-    if (STEAM_STATUS_REQUEST.status === 500 || STEAM_REQUEST.status === 500) {
+    if (STEAM_STATUS_REQUEST.status === 500) {
       return message.channel.send(
-        'Looks like either steamstat.us or steamgaug.es is down! ' +
-        'I cannot get the current Steam status. Please try again later.');
+        'Looks like steamstat.us is currently offline, so I am unable to ' +
+        'retrieve the current Steam status at this time. Please try again ' +
+        'later.');
     }
 
-    const STEAM_COMMUNITY = Constants.STEAM_STATUS_CODES[STEAM_REQUEST.body.SteamCommunity.online];
-    const STEAM_COMMUNITY_TIME = STEAM_REQUEST.body.SteamCommunity.time;
-    const STEAM_STORE = Constants.STEAM_STATUS_CODES[STEAM_REQUEST.body.SteamStore.online];
-    const STEAM_STORE_TIME = STEAM_REQUEST.body.SteamStore.time;
-    const STEAM_USER_API = Constants.STEAM_STATUS_CODES[STEAM_REQUEST.body.ISteamUser.online];
-    const STEAM_USER_API_TIME = STEAM_REQUEST.body.ISteamUser.time;
+    const STEAM_COMMUNITY = STEAM_STATUS_REQUEST.body.services['community'].title;
+    const STEAM_STORE = STEAM_STATUS_REQUEST.body.services['store'].title;
+    const STEAM_USER_API = STEAM_STATUS_REQUEST.body.services['webapi'].title;
     const STEAM_USERS_ONLINE = STEAM_STATUS_REQUEST.body.services['online'].title;
     const STEAM_CMS = STEAM_STATUS_REQUEST.body.services['cms'].title;
     const STEAM_CMS_WS = STEAM_STATUS_REQUEST.body.services['cms-ws'].title;
     const STEAM_DB = STEAM_STATUS_REQUEST.body.services['database'].title;
+    const STEAM_DB_GRAPHS = STEAM_STATUS_REQUEST.body.services['graphs'].title;
+    const STEAM_ARTIFACT = STEAM_STATUS_REQUEST.body.services['artifact'].title;
+    const STEAM_CSGO = STEAM_STATUS_REQUEST.body.services['csgo'].title;
     const STEAM_DOTA_2 = STEAM_STATUS_REQUEST.body.services['dota2'].title;
     const STEAM_TF2 = STEAM_STATUS_REQUEST.body.services['tf2'].title;
+    const STEAM_UNDERLORDS = STEAM_STATUS_REQUEST.body.services['underlords'].title;
     const STEAM_CSGO_SESSIONS = STEAM_STATUS_REQUEST.body.services['csgo_sessions'].title;
     const STEAM_CSGO_INVENTORIES = STEAM_STATUS_REQUEST.body.services['csgo_community'].title;
     const STEAM_CSGO_MM_SCHEDULER = STEAM_STATUS_REQUEST.body.services['csgo_mm_scheduler'].title;
@@ -71,22 +72,26 @@ export default class SteamStatusCommand extends Command {
     STEAM_EMBED.setDescription(
       '**__Steam Services__**:\n' +
       `**Users Online on Steam**: ${STEAM_USERS_ONLINE}\n` +
-      `**Steam Community**: ${STEAM_COMMUNITY} (${STEAM_COMMUNITY_TIME}ms)\n` +
-      `**Steam Store**: ${STEAM_STORE} (${STEAM_STORE_TIME}ms)\n` +
-      `**Steam Web API**: ${STEAM_USER_API} (${STEAM_USER_API_TIME}ms)\n` +
+      `**Steam Community**: ${STEAM_COMMUNITY}\n` +
+      `**Steam Store**: ${STEAM_STORE}\n` +
+      `**Steam Web API**: ${STEAM_USER_API}\n` +
       `**Steam Connection Managers**: ${STEAM_CMS}\n` +
       `**Steam Connection Managers (WS)**: ${STEAM_CMS_WS}\n\n` +
-      '**__Game APIs__**:\n' +
-      `**Dota 2 API**: ${STEAM_DOTA_2}\n` +
-      `**Team Fortress 2 API**: ${STEAM_TF2}\n\n` +
+      '**__Game Coordinators__**:\n' +
+      `**Artifact**: ${STEAM_ARTIFACT}\n` +
+      `**Counter-Strike: Global Offensive**: ${STEAM_CSGO}\n` +
+      `**Dota 2**: ${STEAM_DOTA_2}\n` +
+      `**Team Fortress 2**: ${STEAM_TF2}\n` +
+      `**Underlords**: ${STEAM_UNDERLORDS}\n\n` +
       '**__Counter-Strike: Global Offensive__**:\n' +
       `**Sessions Logon**: ${STEAM_CSGO_SESSIONS}\n` +
       `**Player Inventories**: ${STEAM_CSGO_INVENTORIES}\n` +
       `**Matchmaking Scheduler**: ${STEAM_CSGO_MM_SCHEDULER}\n\n` +
       '**__Other Services__**:\n' +
-      `**[Steam Database](https://steamdb.info)**: ${STEAM_DB}`,
+      `**[Steam Database](https://steamdb.info)**: ${STEAM_DB}\n` +
+      `**[Steam Database Graphs](https://steamdb.info/graph/)**: ${STEAM_DB_GRAPHS}`,
     );
-    STEAM_EMBED.setFooter('Powered by steamgaug.es & steamstat.us');
+    STEAM_EMBED.setFooter('Powered by the steamstat.us API');
     STEAM_EMBED.setTimestamp();
 
     return message.channel.send(STEAM_EMBED);
