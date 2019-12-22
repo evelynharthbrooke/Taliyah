@@ -20,6 +20,7 @@ use std::env;
 use commands::music::lastfm::*;
 use commands::utils::help::*;
 use commands::utils::ping::*;
+use commands::utils::version::*;
 
 // Define the Handler struct.
 struct Handler;
@@ -84,7 +85,7 @@ group!({
     options: {
         description: "Ellie's selection of utility commands."
     },
-    commands: [ping]
+    commands: [ping, version]
 });
 
 group!({

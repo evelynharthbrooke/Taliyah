@@ -20,7 +20,6 @@ use std::env;
 #[description("Retrieves various Last.fm user stats.")]
 #[usage("<user> <limit>")]
 pub fn lastfm(ctx: &mut Context, message: &Message, mut args: Args) -> CommandResult {
-
     if args.rest().is_empty() {
         let _ = message.channel_id.send_message(&ctx, |m| {
             m.embed(|e| {
@@ -33,8 +32,8 @@ pub fn lastfm(ctx: &mut Context, message: &Message, mut args: Args) -> CommandRe
         })?;
         println!("No Last.fm username was provided.");
     }
-    
-    let username: String = args.single::<String>()?;
+
+    let user: String = args.single::<String>()?;
     let mut limit: usize = 4;
 
     match args.single() {
@@ -45,45 +44,48 @@ pub fn lastfm(ctx: &mut Context, message: &Message, mut args: Args) -> CommandRe
     let api_key: String = env::var("LASTFM_KEY").expect("No API key detected");
     let mut client: Client = Client::new(&api_key);
 
-    let recent_tracks = client.recent_tracks(&username).with_limit(limit).send().unwrap().tracks;
-    let loved_tracks = client.loved_tracks(&username).with_limit(1).send().unwrap().attrs.total;
+    let recent_tracks = client.recent_tracks(&user).with_limit(limit).send().unwrap().tracks;
+    let loved_tracks = client.loved_tracks(&user).with_limit(1).send().unwrap().attrs.total;
 
     let track = recent_tracks.first().unwrap();
 
     let mut track_strings: Vec<String> = Vec::with_capacity(limit);
-    for t in &recent_tracks {
-        let now_playing: &str;
+    
+    for track in &recent_tracks {
+        let mut now_playing: String = "".to_string();
 
-        if t.attrs.as_ref().is_none() {
-            now_playing = ""
-        } else {
-            now_playing = "\x5c▶️"
+        if !track.attrs.as_ref().is_none() {
+            now_playing = "\x5c▶️".to_string()
         }
 
-        track_strings.push(format!("{} **{}** — {}", now_playing, &t.name, &t.artist.name));
+        let mut track_string: String = now_playing.to_string();
+        track_string.push_str(" **");
+        track_string.push_str(&track.name);
+        track_string.push_str("**");
+        track_string.push_str(" —");
+        track_string.push_str(&track.artist.name);
+
+        track_strings.push(track_string);
     }
 
-    let track_play_state: &str;
-    if track.attrs.as_ref().is_none() {
-        track_play_state = "last listened to"
-    } else {
-        track_play_state = "is currently listening to"
+    let mut track_play_state: String = "last liistened to".to_string();
+
+    if !track.attrs.as_ref().is_none() {
+        track_play_state = "is currently listening to".to_string()
     }
+
+    let currently_playing: String = format!(
+        "{} {} {} by {} on {}.",
+        user, track_play_state, track.name, track.artist.name, track.album.name
+    );
 
     let _ = message.channel_id.send_message(&ctx, |m| {
         m.embed(|e| {
-            e.title(format!("{}'s Last.fm Details", username));
+            e.title(format!("{}'s Last.fm Details", user));
             e.color(0x00d5_1007);
             e.description(format!(
-                "{} {} {} by {} on {}.\n
-                **__User Information:__**
-                **Loved Tracks**: {}\n
-                **__Recently Played:__**\n{}",
-                username,
-                track_play_state,
-                &track.name,
-                &track.artist.name,
-                &track.album.name,
+                "{}\n\n**__User Information:__**\n**Loved Tracks**: {}\n\n**__Recently Played:__**\n{}",
+                currently_playing,
                 loved_tracks,
                 track_strings.join("\n")
             ));
