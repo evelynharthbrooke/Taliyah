@@ -13,12 +13,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "9267dff192e68f3399525901e709a48c1d3982c9c072fa32f2127a0cb0babf14"
 
 [[package]]
-name = "arraymap"
-version = "0.1.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "47a0618a0d3f3ea1dc31d76667b4f2c3a3b6f2b8183e103c8b4baaa59fefa416"
-
-[[package]]
 name = "autocfg"
 version = "0.1.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -333,7 +327,6 @@ checksum = "bb1f6b1ce1c140482ea30ddd3335fc0024ac7ee112895426e0a629a6c20adfe3"
 name = "ellie"
 version = "0.1.0"
 dependencies = [
- "arraymap",
  "chrono",
  "dotenv",
  "lastfm-rs",
