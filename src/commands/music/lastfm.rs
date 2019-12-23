@@ -62,7 +62,7 @@ pub fn lastfm(ctx: &mut Context, message: &Message, mut args: Args) -> CommandRe
         track_string.push_str(" **");
         track_string.push_str(&track.name);
         track_string.push_str("**");
-        track_string.push_str(" —");
+        track_string.push_str(" — ");
         track_string.push_str(&track.artist.name);
 
         track_strings.push(track_string);

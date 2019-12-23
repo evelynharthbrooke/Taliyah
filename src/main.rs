@@ -18,6 +18,7 @@ use std::collections::HashSet;
 use std::env;
 
 use commands::music::lastfm::*;
+use commands::info::user::*;
 use commands::utils::help::*;
 use commands::utils::ping::*;
 use commands::utils::version::*;
@@ -71,6 +72,7 @@ pub fn main() {
         StandardFramework::new()
             .configure(|c| c.with_whitespace(true).prefix(&prefix).owners(owners).on_mention(Some(bot_id)))
             .help(&HELP)
+            .group(&INFO_GROUP)
             .group(&UTILITIES_GROUP)
             .group(&MUSIC_GROUP),
     );
@@ -79,6 +81,14 @@ pub fn main() {
         println!("An error occurred while running the client: {:?}", err);
     }
 }
+
+group!({
+    name: "Info",
+    options: {
+        description: "Various informational commands."
+    },
+    commands: [user]
+});
 
 group!({
     name: "Utilities",
