@@ -36,6 +36,7 @@ pub fn user(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
 
     let mut activity_kind = "".to_string();
     let mut activity_name = "".to_string();
+    let mut main_role = "".to_string();
 
     match presence.activity.is_none() {
         true => println!("No activity could be detected. Omitting."),
@@ -78,30 +79,43 @@ pub fn user(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
 
     let tag = user.tag();
     let id = user.id;
-    let colour = member.colour(cache).ok_or("Could not retrieve member color")?;
+    let color = member.colour(cache).ok_or("Could not retrieve member color")?;
+    let color_hex = color.hex();
     let created = user.created_at().format("%B %e, %Y - %I:%M %p");
-    
+
+    match member.highest_role_info(&cache).is_none() {
+        true => println!("Cannot get role information."),
+        false => {
+            let hoist_role_id = member.highest_role_info(&cache).ok_or("cannot get role id")?.0;
+            let hoist_role = guild.roles.get(&hoist_role_id).ok_or("Cannot get role")?;
+            main_role = hoist_role.name.to_string();
+        }
+    }
+
     let nickname = member.nick.map_or("None".to_owned(), |nick| nick.clone());
-    // let joined = member.joined_at.map_or("Unavailable".to_owned(), |d| {
-    //     let formatted_string = d.format("%B %e, %Y - %H:%M %p");
-    //     format!("{}", formatted_string)
-    // });
+    let joined = member.joined_at.map_or("Unavailable".to_owned(), |d| {
+        let formatted_string = d.format("%B %e, %Y - %I:%M %p");
+        format!("{}", formatted_string)
+    });
 
     msg.channel_id
         .send_message(&ctx, move |m| {
             m.embed(move |e| {
-                e.author(|a| a.name(&user.name).icon_url(&user.face()))
-                    .colour(colour)
-                    .description(format!(
-                        "**__General__**:\n\
+                e.author(|a| a.name(&user.name).icon_url(&user.face())).colour(color).description(format!(
+                    "**__General__**:\n\
                         **Status**: {}{} {}\n\
                         **Type**: {}\n\
                         **Tag**: {}\n\
                         **ID**: {}\n\
-                        **Creation Date**: {}\n\
+                        **Creation Date**: {}\n\n\
+                        **__Guild-related Information__**:\n\
+                        **Join Date**: {}\n\
+                        **Nickname**: {}\n\
+                        **Display Color**: #{}\n\
+                        **Main Role**: {}\n\
                         ",
-                        status, activity_kind, activity_name, account_type, tag, id, created
-                    ))
+                    status, activity_kind, activity_name, account_type, tag, id, created, joined, nickname, color_hex, main_role
+                ))
             })
         })
         .map_or_else(|e| Err(CommandError(e.to_string())), |_| Ok(()))
