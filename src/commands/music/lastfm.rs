@@ -46,7 +46,7 @@ pub fn lastfm(ctx: &mut Context, message: &Message, mut args: Args) -> CommandRe
     let track = recent_tracks.first().unwrap();
 
     let mut track_strings: Vec<String> = Vec::with_capacity(limit);
-    
+
     for track in &recent_tracks {
         let mut now_playing: String = "".to_string();
 

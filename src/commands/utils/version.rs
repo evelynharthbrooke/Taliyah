@@ -9,7 +9,6 @@ use std::process::Command;
 #[description("Retrieves the bot version, as well as the underlying Rust / Cargo versions.")]
 #[usage("<blank>")]
 pub fn version(ctx: &mut Context, message: &Message) -> CommandResult {
-
     let bot_version = env!("CARGO_PKG_VERSION");
 
     let rust_version = if cfg!(target_os = "windows") {
