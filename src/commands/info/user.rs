@@ -7,6 +7,7 @@ use serenity::framework::standard::{CommandError, CommandResult};
 use serenity::model::gateway::ActivityType;
 use serenity::model::prelude::Message;
 use serenity::model::user::OnlineStatus;
+use serenity::utils::Colour;
 
 #[command]
 #[description = "Shows various information about a user"]
@@ -99,28 +100,39 @@ pub fn user(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
         false => "User".to_string(),
     };
 
+    let activity = format!("({}{}{})", activity_kind, activity_emoji, activity_name);
+    let created = user.created_at().format("%B %e, %Y - %I:%M %p");
     let tag = user.tag();
     let id = user.id;
-    let color = member.colour(cache).ok_or("Could not retrieve member color")?;
-    let color_hex = color.hex();
-    let created = user.created_at().format("%B %e, %Y - %I:%M %p");
-    let activity = format!("({}{}{})", activity_kind, activity_emoji, activity_name);
+    let color: Colour;
+    let color_hex: String;
     
-    let roles;
-    match member.roles(&cache).is_none() {
+    match member.colour(cache).is_none() {
         true => {
-            println!("No roles available for this user.");
-            roles = "None".to_string();
+            color = Colour::new(0xFFFFFF);
+            color_hex = "No display color available.".to_string()
         },
         false => {
+            color = member.colour(cache).ok_or("Could not retrieve member color")?;
+            color_hex = format!("#{}", color.hex());
+        }
+    }
+    
+    let mut roles: String = "".to_string();
+    match member.roles(&cache).is_none() {
+        true => println!("No roles available for this user."),
+        false => {
             roles = member.roles(&cache).unwrap().iter().map(|r| &r.name).join(" | ");
+            if roles.is_empty() {
+                roles = "No roles available.".to_string();
+            }
         }
     }
 
     match member.highest_role_info(&cache).is_none() {
         true => {
             println!("Cannot get role information.");
-            main_role = "None".to_owned();
+            main_role = "No main role available.".to_string();
         }
         false => {
             let hoist_role_id = member.highest_role_info(&cache).ok_or("cannot get role id")?.0;
@@ -129,8 +141,8 @@ pub fn user(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
         }
     }
 
-    let nickname = member.nick.map_or("None".to_owned(), |nick| nick.clone());
-    let joined = member.joined_at.map_or("Unavailable".to_owned(), |d| {
+    let nickname = member.nick.map_or("None".to_string(), |nick| nick.clone());
+    let joined = member.joined_at.map_or("Unavailable".to_string(), |d| {
         let formatted_string = d.format("%B %e, %Y - %I:%M %p");
         format!("{}", formatted_string)
     });
@@ -148,7 +160,7 @@ pub fn user(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
                         **__Guild-related Information__**:\n\
                         **Join Date**: {}\n\
                         **Nickname**: {}\n\
-                        **Display Color**: #{}\n\
+                        **Display Color**: {}\n\
                         **Main Role**: {}\n\
                         **Roles**: {}
                         ",
