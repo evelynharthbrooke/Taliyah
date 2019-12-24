@@ -36,7 +36,7 @@ pub fn user(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
     let status: String;
     let main_role: String;
     let mut activity_kind = "".to_string();
-    let mut activity_name = "not doing anything".to_string();
+    let mut activity_name = "no available activity".to_string();
     let mut activity_emoji = "".to_string();
 
     match guild.presences.get(&user.id).is_none() {
@@ -105,6 +105,17 @@ pub fn user(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
     let color_hex = color.hex();
     let created = user.created_at().format("%B %e, %Y - %I:%M %p");
     let activity = format!("({}{}{})", activity_kind, activity_emoji, activity_name);
+    
+    let roles;
+    match member.roles(&cache).is_none() {
+        true => {
+            println!("No roles available for this user.");
+            roles = "None".to_string();
+        },
+        false => {
+            roles = member.roles(&cache).unwrap().iter().map(|r| &r.name).join(" | ");
+        }
+    }
 
     match member.highest_role_info(&cache).is_none() {
         true => {
@@ -117,8 +128,6 @@ pub fn user(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
             main_role = hoist_role.name.to_string();
         }
     }
-
-    let roles = member.roles(&cache).unwrap().iter().map(|r| &r.name).join(" | ");
 
     let nickname = member.nick.map_or("None".to_owned(), |nick| nick.clone());
     let joined = member.joined_at.map_or("Unavailable".to_owned(), |d| {
