@@ -34,7 +34,8 @@ pub fn user(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
     let status: String;
     let main_role: String;
     let mut activity_kind = "".to_string();
-    let mut activity_name = "".to_string();
+    let mut activity_name = "not doing anything".to_string();
+    let mut activity_emoji = "".to_string();
 
     match guild.presences.get(&user.id).is_none() {
         true => {
@@ -47,16 +48,28 @@ pub fn user(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
                 true => println!("No activity could be detected. Omitting."),
                 false => {
                     let activity = presence.activity.as_ref().ok_or("Cannot retrieve status")?;
+                    let emoji = match activity.emoji.is_none() {
+                        true => "".to_string(),
+                        false => activity.emoji.as_ref().unwrap().name.to_string(),
+                    };
 
                     activity_kind = match activity.kind {
-                        ActivityType::Listening => ", listening to".to_string(),
-                        ActivityType::Playing => ", playing".to_string(),
-                        ActivityType::Streaming => ", streaming".to_string(),
+                        ActivityType::Listening => "listening to ".to_string(),
+                        ActivityType::Playing => "playing ".to_string(),
+                        ActivityType::Streaming => "streaming ".to_string(),
                         _ => "".to_string(),
                     };
 
-                    if activity.name.is_empty() {
-                        activity_name = "".to_string();
+                    if activity.kind == ActivityType::Custom {
+                        activity_name = match activity.state.is_none() {
+                            true => " ".to_string(),
+                            false => activity.state.as_ref().unwrap().to_string(),
+                        };
+                        activity_emoji = match activity.emoji.is_none() {
+                            true => "".to_string(),
+                            false => emoji,
+                        };
+                        activity_emoji.push_str(" ");
                     } else {
                         activity_name = activity.name.to_string()
                     }
@@ -89,6 +102,7 @@ pub fn user(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
     let color = member.colour(cache).ok_or("Could not retrieve member color")?;
     let color_hex = color.hex();
     let created = user.created_at().format("%B %e, %Y - %I:%M %p");
+    let activity = format!("({}{}{})", activity_kind, activity_emoji, activity_name);
 
     match member.highest_role_info(&cache).is_none() {
         true => {
@@ -113,7 +127,7 @@ pub fn user(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
             m.embed(move |e| {
                 e.author(|a| a.name(&user.name).icon_url(&user.face())).colour(color).description(format!(
                     "**__General__**:\n\
-                        **Status**: {}{} {}\n\
+                        **Status**: {} {}\n\
                         **Type**: {}\n\
                         **Tag**: {}\n\
                         **ID**: {}\n\
@@ -124,7 +138,7 @@ pub fn user(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
                         **Display Color**: #{}\n\
                         **Main Role**: {}\n\
                         ",
-                    status, activity_kind, activity_name, account_type, tag, id, created, joined, nickname, color_hex, main_role
+                    status, activity, account_type, tag, id, created, joined, nickname, color_hex, main_role
                 ))
             })
         })

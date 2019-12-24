@@ -3,9 +3,6 @@
 //! Retrieves a chosen user's last.fm state, along with various
 //! user information such as their most recent tracks.
 
-extern crate reqwest;
-extern crate rustfm;
-
 use serenity::client::Context;
 use serenity::framework::standard::macros::command;
 use serenity::framework::standard::Args;
@@ -23,7 +20,7 @@ pub fn lastfm(ctx: &mut Context, message: &Message, mut args: Args) -> CommandRe
     if args.rest().is_empty() {
         let _ = message.channel_id.send_message(&ctx, |m| {
             m.embed(|e| {
-                e.title("Error: No last.fm username was provided.");
+                e.title("Error: No Last.fm username was provided.");
                 e.description("You did not provide a Last.fm username. Please enter one and then try again.");
                 e.color(0x00FF_0000);
                 e
@@ -46,7 +43,6 @@ pub fn lastfm(ctx: &mut Context, message: &Message, mut args: Args) -> CommandRe
 
     let recent_tracks = client.recent_tracks(&user).with_limit(limit).send().unwrap().tracks;
     let loved_tracks = client.loved_tracks(&user).with_limit(1).send().unwrap().attrs.total;
-
     let track = recent_tracks.first().unwrap();
 
     let mut track_strings: Vec<String> = Vec::with_capacity(limit);

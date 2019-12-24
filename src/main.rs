@@ -17,11 +17,23 @@ use serenity::model::user::OnlineStatus;
 use std::collections::HashSet;
 use std::env;
 
-use commands::music::lastfm::*;
 use commands::info::user::*;
+use commands::music::lastfm::*;
 use commands::utils::help::*;
 use commands::utils::ping::*;
 use commands::utils::version::*;
+
+#[group]
+#[commands(user)]
+struct Info;
+
+#[group]
+#[commands(ping, version)]
+struct Utilities;
+
+#[group]
+#[commands(lastfm)]
+struct Music;
 
 // Define the Handler struct.
 struct Handler;
@@ -81,27 +93,3 @@ pub fn main() {
         println!("An error occurred while running the client: {:?}", err);
     }
 }
-
-group!({
-    name: "Info",
-    options: {
-        description: "Various informational commands."
-    },
-    commands: [user]
-});
-
-group!({
-    name: "Utilities",
-    options: {
-        description: "Ellie's selection of utility commands."
-    },
-    commands: [ping, version]
-});
-
-group!({
-    name: "Music",
-    options: {
-        description: "Various music-focused commands."
-    },
-    commands: [lastfm]
-});
