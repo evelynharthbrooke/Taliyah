@@ -8,9 +8,9 @@ checksum = "5d2e7343e7fc9de883d1b0341e0b13970f764c14101234857d2ddafa1cb1cac2"
 
 [[package]]
 name = "anyhow"
-version = "1.0.25"
+version = "1.0.26"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "9267dff192e68f3399525901e709a48c1d3982c9c072fa32f2127a0cb0babf14"
+checksum = "7825f6833612eb2414095684fcf6c635becf3ce97fe48cf6421321e93bfbd53c"
 
 [[package]]
 name = "autocfg"
@@ -172,7 +172,7 @@ dependencies = [
 [[package]]
 name = "command_attr"
 version = "0.1.6"
-source = "git+https://github.com/Erk-/serenity.git?branch=add_custom#515a8299447339c07ab1ffab943bf56903365a53"
+source = "git+https://github.com/serenity-rs/serenity.git?branch=current#346a7feb0da9167760bd69d1d1cc3478c6c379b6"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -1421,7 +1421,7 @@ dependencies = [
 [[package]]
 name = "serenity"
 version = "0.7.4"
-source = "git+https://github.com/Erk-/serenity.git?branch=add_custom#515a8299447339c07ab1ffab943bf56903365a53"
+source = "git+https://github.com/serenity-rs/serenity.git?branch=current#346a7feb0da9167760bd69d1d1cc3478c6c379b6"
 dependencies = [
  "base64 0.10.1",
  "bitflags",

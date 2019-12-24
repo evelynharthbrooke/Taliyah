@@ -7,7 +7,7 @@ edition = "2018"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-serenity = { git = "https://github.com/Erk-/serenity.git", branch = "add_custom" }
+serenity = { git = "https://github.com/serenity-rs/serenity.git", branch = "current" }
 dotenv = "0.15"
 reqwest = "0.9"
 chrono = "0.4"
