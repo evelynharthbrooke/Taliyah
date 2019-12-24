@@ -24,14 +24,17 @@ use commands::utils::ping::*;
 use commands::utils::version::*;
 
 #[group]
+#[description = "Various informational commands."]
 #[commands(user)]
 struct Info;
 
 #[group]
+#[description = "Ellie's selection of utility commands."]
 #[commands(ping, version)]
 struct Utilities;
 
 #[group]
+#[description = "Music-focused commands."]
 #[commands(lastfm)]
 struct Music;
 

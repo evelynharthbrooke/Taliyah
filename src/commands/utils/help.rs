@@ -9,13 +9,19 @@ use serenity::model::prelude::{Message, UserId};
 use std::collections::HashSet;
 
 #[help]
+#[no_help_available_text(
+    "**Error**: I was unable to find any information on this command, \
+    usually indicating that this command does not exist or does not have \
+    any help available for said command. Please try again later, or try \
+    searching for a different command instead."
+)]
 fn help(
     context: &mut Context,
-    msg: &Message,
-    args: Args,
-    help_options: &'static HelpOptions,
+    message: &Message,
+    arguments: Args,
+    options: &'static HelpOptions,
     groups: &[&'static CommandGroup],
     owners: HashSet<UserId>,
 ) -> CommandResult {
-    with_embeds(context, msg, args, &help_options, groups, owners)
+    with_embeds(context, message, arguments, &options, groups, owners)
 }
