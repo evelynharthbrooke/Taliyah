@@ -113,7 +113,7 @@ pub fn user(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
             color_hex = "No display color available.".to_string()
         },
         false => {
-            color = member.colour(cache).ok_or("Could not retrieve member color")?;
+            color = member.colour(cache).unwrap();
             color_hex = format!("#{}", color.hex());
         }
     }
