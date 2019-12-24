@@ -10,17 +10,16 @@ use serenity::model::user::OnlineStatus;
 #[description = "Shows various information about a user"]
 #[only_in("guilds")]
 pub fn user(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
-    let cache = &ctx.cache; // get a reference to serenity's cache
+    let cache = &ctx.cache;
     let guild_id = msg.guild_id.ok_or("Failed to get GuildID from Message.")?;
+    let cached_guild = cache.read().guild(guild_id).ok_or("Unable to retrieve guild")?;
     let member = if msg.mentions.is_empty() {
         if args.is_empty() {
             msg.member(&ctx).ok_or("Could not find member.")?
         } else {
-            (*(guild_id
-                .to_guild_cached(cache)
-                .ok_or("couldn't get guild")?
+            (*(cached_guild
                 .read()
-                .members_starting_with(args.rest(), false, true)
+                .members_containing(args.rest(), false, true)
                 .first()
                 .ok_or("couldn't find member")?))
             .clone()
@@ -29,47 +28,55 @@ pub fn user(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
         guild_id.member(&ctx, msg.mentions.first().ok_or("Failed to get user mentioned.")?)?
     };
 
-    let cached_guild = cache.read().guild(guild_id).ok_or("Unable to retrieve guild")?;
     let user = member.user.read();
     let guild = cached_guild.read();
-    let presence = guild.presences.get(&user.id).ok_or("Cannot retrieve status")?;
 
+    let status: String;
+    let main_role: String;
     let mut activity_kind = "".to_string();
     let mut activity_name = "".to_string();
-    let mut main_role = "".to_string();
 
-    match presence.activity.is_none() {
-        true => println!("No activity could be detected. Omitting."),
-        false => {
-            let activity = presence.activity.as_ref().ok_or("Cannot retrieve status")?;
-
-            activity_kind = match activity.kind {
-                ActivityType::Listening => ", listening to".to_string(),
-                ActivityType::Playing => ", playing".to_string(),
-                ActivityType::Streaming => ", streaming".to_string(),
-                _ => "".to_string(),
-            };
-
-            if activity.name.is_empty() {
-                activity_name = "".to_string();
-            } else {
-                activity_name = activity.name.to_string()
-            }
+    match guild.presences.get(&user.id).is_none() {
+        true => {
+            println!("No status for this user could be found.");
+            status = "No status available.".to_string();
         }
-    }
+        false => {
+            let presence = guild.presences.get(&user.id).unwrap();
+            match presence.activity.is_none() {
+                true => println!("No activity could be detected. Omitting."),
+                false => {
+                    let activity = presence.activity.as_ref().ok_or("Cannot retrieve status")?;
 
-    let status = match presence.status {
-        OnlineStatus::Online => match user.bot {
-            true => "Available".to_string(),
-            false => "Online".to_string(),
-        },
-        OnlineStatus::Idle => "Idle".to_string(),
-        OnlineStatus::DoNotDisturb => "Do Not Disturb".to_string(),
-        OnlineStatus::Invisible => "Invisible".to_string(),
-        _ => match user.bot {
-            true => "Unavailable".to_string(),
-            false => "Offline".to_string(),
-        },
+                    activity_kind = match activity.kind {
+                        ActivityType::Listening => ", listening to".to_string(),
+                        ActivityType::Playing => ", playing".to_string(),
+                        ActivityType::Streaming => ", streaming".to_string(),
+                        _ => "".to_string(),
+                    };
+
+                    if activity.name.is_empty() {
+                        activity_name = "".to_string();
+                    } else {
+                        activity_name = activity.name.to_string()
+                    }
+                }
+            }
+
+            status = match presence.status {
+                OnlineStatus::Online => match user.bot {
+                    true => "Available".to_string(),
+                    false => "Online".to_string(),
+                },
+                OnlineStatus::Idle => "Idle".to_string(),
+                OnlineStatus::DoNotDisturb => "Do Not Disturb".to_string(),
+                OnlineStatus::Invisible => "Invisible".to_string(),
+                _ => match user.bot {
+                    true => "Unavailable".to_string(),
+                    false => "Offline".to_string(),
+                },
+            };
+        }
     };
 
     let account_type = match user.bot {
@@ -84,7 +91,10 @@ pub fn user(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
     let created = user.created_at().format("%B %e, %Y - %I:%M %p");
 
     match member.highest_role_info(&cache).is_none() {
-        true => println!("Cannot get role information."),
+        true => {
+            println!("Cannot get role information.");
+            main_role = "None".to_owned();
+        }
         false => {
             let hoist_role_id = member.highest_role_info(&cache).ok_or("cannot get role id")?.0;
             let hoist_role = guild.roles.get(&hoist_role_id).ok_or("Cannot get role")?;

@@ -27,7 +27,11 @@ pub fn version(ctx: &mut Context, message: &Message) -> CommandResult {
     let _ = message.channel_id.say(
         &ctx,
         format!(
-            "**Version:**: {}**Rust:**\n{}\n**Cargo:**:\n{}",
+            "**Version:**: {}\n\n\
+            **Rust:**\n\
+            {}\n\
+            **Cargo:**:\n\
+            {}",
             bot_version,
             String::from_utf8_lossy(&rust_version.stdout),
             String::from_utf8_lossy(&cargo_version.stdout)

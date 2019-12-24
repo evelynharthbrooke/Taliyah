@@ -84,7 +84,11 @@ pub fn lastfm(ctx: &mut Context, message: &Message, mut args: Args) -> CommandRe
             e.title(format!("{}'s Last.fm Details", user));
             e.color(0x00d5_1007);
             e.description(format!(
-                "{}\n\n**__User Information:__**\n**Loved Tracks**: {}\n\n**__Recently Played:__**\n{}",
+                "{}\n\n\
+                **__User Information:__**\n\
+                **Loved Tracks**: {}\n\n\
+                **__Recently Played:__**\n\
+                {}",
                 currently_playing,
                 loved_tracks,
                 track_strings.join("\n")
