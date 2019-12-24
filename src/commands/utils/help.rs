@@ -15,6 +15,13 @@ use std::collections::HashSet;
     any help available for said command. Please try again later, or try \
     searching for a different command instead."
 )]
-fn help(ctx: &mut Context, msg: &Message, args: Args, opts: &'static HelpOptions, groups: &[&'static CommandGroup], owners: HashSet<UserId>) -> CommandResult {
+fn help(
+    ctx: &mut Context,
+    msg: &Message,
+    args: Args,
+    opts: &'static HelpOptions,
+    groups: &[&'static CommandGroup],
+    owners: HashSet<UserId>,
+) -> CommandResult {
     with_embeds(ctx, msg, args, &opts, groups, owners)
 }
