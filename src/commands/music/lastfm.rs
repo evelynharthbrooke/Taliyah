@@ -50,8 +50,9 @@ pub fn lastfm(ctx: &mut Context, message: &Message, mut args: Args) -> CommandRe
     for track in &recent_tracks {
         let mut now_playing: String = "".to_string();
 
-        if !track.attrs.as_ref().is_none() {
-            now_playing = "\x5c▶️".to_string()
+        match track.attrs.as_ref().is_none() {
+            true => (),
+            false => now_playing = "\x5c▶️".to_string()
         }
 
         let mut track_string: String = now_playing.to_string();

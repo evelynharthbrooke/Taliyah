@@ -1,3 +1,5 @@
+use itertools::Itertools;
+
 use serenity::client::Context;
 use serenity::framework::standard::macros::command;
 use serenity::framework::standard::Args;
@@ -62,7 +64,7 @@ pub fn user(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
 
                     if activity.kind == ActivityType::Custom {
                         activity_name = match activity.state.is_none() {
-                            true => " ".to_string(),
+                            true => "".to_string(),
                             false => activity.state.as_ref().unwrap().to_string(),
                         };
                         activity_emoji = match activity.emoji.is_none() {
@@ -116,6 +118,8 @@ pub fn user(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
         }
     }
 
+    let roles = member.roles(&cache).unwrap().iter().map(|r| &r.name).join(" | ");
+
     let nickname = member.nick.map_or("None".to_owned(), |nick| nick.clone());
     let joined = member.joined_at.map_or("Unavailable".to_owned(), |d| {
         let formatted_string = d.format("%B %e, %Y - %I:%M %p");
@@ -137,8 +141,9 @@ pub fn user(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
                         **Nickname**: {}\n\
                         **Display Color**: #{}\n\
                         **Main Role**: {}\n\
+                        **Roles**: {}
                         ",
-                    status, activity, account_type, tag, id, created, joined, nickname, color_hex, main_role
+                    status, activity, account_type, tag, id, created, joined, nickname, color_hex, main_role, roles
                 ))
             })
         })
