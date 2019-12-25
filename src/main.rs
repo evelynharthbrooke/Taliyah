@@ -5,6 +5,12 @@
 
 mod commands;
 
+use commands::info::user::*;
+use commands::music::lastfm::*;
+use commands::utils::help::*;
+use commands::utils::ping::*;
+use commands::utils::version::*;
+
 use dotenv::dotenv;
 
 use serenity::client::{Client, Context, EventHandler};
@@ -16,12 +22,6 @@ use serenity::model::user::OnlineStatus;
 
 use std::collections::HashSet;
 use std::env;
-
-use commands::info::user::*;
-use commands::music::lastfm::*;
-use commands::utils::help::*;
-use commands::utils::ping::*;
-use commands::utils::version::*;
 
 #[group]
 #[description = "Various informational commands."]

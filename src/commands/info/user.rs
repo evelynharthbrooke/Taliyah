@@ -119,10 +119,12 @@ pub fn user(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
     }
     
     let mut roles: String = "".to_string();
+    let mut role_count = 0;
     match member.roles(&cache).is_none() {
         true => println!("No roles available for this user."),
         false => {
             roles = member.roles(&cache).unwrap().iter().map(|r| &r.name).join(" | ");
+            role_count = member.roles(&cache).unwrap().len();
             if roles.is_empty() {
                 roles = "No roles available.".to_string();
             }
@@ -162,9 +164,9 @@ pub fn user(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
                         **Nickname**: {}\n\
                         **Display Color**: {}\n\
                         **Main Role**: {}\n\
-                        **Roles**: {}
+                        **Roles ({})**: {}
                         ",
-                    status, activity, account_type, tag, id, created, joined, nickname, color_hex, main_role, roles
+                    status, activity, account_type, tag, id, created, joined, nickname, color_hex, main_role, role_count, roles
                 ))
             })
         })
