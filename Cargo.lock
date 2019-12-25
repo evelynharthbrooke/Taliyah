@@ -13,6 +13,16 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "7825f6833612eb2414095684fcf6c635becf3ce97fe48cf6421321e93bfbd53c"
 
 [[package]]
+name = "atty"
+version = "0.2.13"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "1803c647a3ec87095e7ae7acfca019e98de5ec9a7d01343f611cf3152ed71a90"
+dependencies = [
+ "libc",
+ "winapi 0.3.8",
+]
+
+[[package]]
 name = "autocfg"
 version = "0.1.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -170,9 +180,20 @@ dependencies = [
 ]
 
 [[package]]
+name = "colored"
+version = "1.9.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "433e7ac7d511768127ed85b0c4947f47a254131e37864b2dc13f52aa32cd37e5"
+dependencies = [
+ "atty",
+ "lazy_static",
+ "winapi 0.3.8",
+]
+
+[[package]]
 name = "command_attr"
 version = "0.1.6"
-source = "git+https://github.com/serenity-rs/serenity.git?branch=current#346a7feb0da9167760bd69d1d1cc3478c6c379b6"
+source = "git+https://github.com/serenity-rs/serenity.git?branch=current#d6699c26c2ae2c29be1e1463b254e104fbd80064"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -327,6 +348,7 @@ name = "ellie"
 version = "0.0.1"
 dependencies = [
  "chrono",
+ "colored",
  "dotenv",
  "itertools",
  "lastfm-rs",
@@ -1431,7 +1453,7 @@ dependencies = [
 [[package]]
 name = "serenity"
 version = "0.7.4"
-source = "git+https://github.com/serenity-rs/serenity.git?branch=current#346a7feb0da9167760bd69d1d1cc3478c6c379b6"
+source = "git+https://github.com/serenity-rs/serenity.git?branch=current#d6699c26c2ae2c29be1e1463b254e104fbd80064"
 dependencies = [
  "base64 0.10.1",
  "bitflags",
@@ -1444,6 +1466,7 @@ dependencies = [
  "rustls",
  "serde",
  "serde_json",
+ "static_assertions",
  "threadpool",
  "tungstenite",
  "typemap",
@@ -1497,6 +1520,12 @@ name = "spin"
 version = "0.5.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "6e63cff320ae2c57904679ba7cb63280a3dc4613885beafb148ee7bf9aa9042d"
+
+[[package]]
+name = "static_assertions"
+version = "1.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a2eb9349b6444b326872e140eb1cf5e7c522154d69e7a0ffb0fb81c06b37543f"
 
 [[package]]
 name = "string"

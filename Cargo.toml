@@ -8,6 +8,7 @@ edition = "2018"
 
 [dependencies]
 serenity = { git = "https://github.com/serenity-rs/serenity.git", branch = "current" }
+colored = "1.9"
 dotenv = "0.15"
 reqwest = "0.9"
 chrono = "0.4"
