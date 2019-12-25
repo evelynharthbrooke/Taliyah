@@ -125,7 +125,7 @@ pub fn user(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
     match member.roles(&cache).is_none() {
         true => println!("No roles available for this user."),
         false => {
-            roles = member.roles(&cache).unwrap().iter().map(|r| &r.name).join(" | ");
+            roles = member.roles(&cache).unwrap().iter().map(|r| &r.name).join(" / ");
             role_count = member.roles(&cache).unwrap().len();
             if roles.is_empty() {
                 roles = "No roles available.".to_string();
@@ -155,7 +155,7 @@ pub fn user(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
         .send_message(&ctx, move |m| {
             m.embed(move |e| {
                 e.author(|a| a.name(&user.name).icon_url(&user.face())).colour(color).description(format!(
-                        "**__General__**:\n\
+                    "**__General__**:\n\
                         **Status**: {} {}\n\
                         **Type**: {}\n\
                         **Tag**: {}\n\

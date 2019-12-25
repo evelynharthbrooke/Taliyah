@@ -4,6 +4,7 @@
 //! a powerful set of features, while remaining quick to respond.
 
 mod commands;
+mod listeners;
 
 use commands::info::user::*;
 use commands::music::lastfm::*;
@@ -13,13 +14,11 @@ use commands::utils::version::*;
 
 use dotenv::dotenv;
 
-use serenity::client::{Client, Context, EventHandler};
+use listeners::handler::Handler;
+
+use serenity::client::Client;
 use serenity::framework::standard::macros::group;
 use serenity::framework::StandardFramework;
-use serenity::model::event::ResumedEvent;
-use serenity::model::gateway::{Activity, Ready};
-use serenity::model::user::OnlineStatus;
-
 use std::collections::HashSet;
 use std::env;
 
@@ -37,33 +36,6 @@ struct Utilities;
 #[description = "Music-focused commands."]
 #[commands(lastfm)]
 struct Music;
-
-// Define the Handler struct.
-struct Handler;
-impl EventHandler for Handler {
-    // When the ready event happens, print a message to the
-    // console letting us know which user authenticated with
-    // the Discord API, and also print the amount of guilds
-    // we are currently connected to.
-    fn ready(&self, ctx: Context, ready: Ready) {
-        // Print that we have logged into the Discord API.
-        println!(
-            "Successfully logged into the Discord API as {}#{}. (ID: {})",
-            ready.user.name, ready.user.discriminator, ready.user.id
-        );
-
-        // Print how many guilds we are currently connected to.
-        println!("Connected to {} guild(s).", ready.guilds.len());
-
-        // Set the bot's presence.
-        ctx.set_presence(Some(Activity::playing("!help")), OnlineStatus::Online);
-    }
-
-    // Handle the resume event. Doesn't do much yet.
-    fn resume(&self, _: Context, _: ResumedEvent) {
-        println!("Resumed!");
-    }
-}
 
 pub fn main() {
     // Initialize the reading of the .env environment file.

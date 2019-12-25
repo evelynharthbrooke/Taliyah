@@ -52,8 +52,8 @@ pub fn lastfm(ctx: &mut Context, message: &Message, mut args: Args) -> CommandRe
 
     match recent_tracks.is_empty() {
         true => {
-            println!("No tracks available :(");
-            tracks = "No tracks available".to_string();
+            println!("This user does not have any recent tracks.");
+            tracks = "No recent tracks available".to_string();
         }
         false => {
             tracks = recent_tracks.iter().map(|t: &Track| {
