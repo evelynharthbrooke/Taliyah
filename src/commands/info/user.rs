@@ -10,7 +10,9 @@ use serenity::model::user::OnlineStatus;
 use serenity::utils::Colour;
 
 #[command]
-#[description = "Shows various information about a user"]
+#[description = "Shows various information about a user."]
+#[usage = "<user> or <blank>"]
+#[aliases("user", "userinfo", "uinfo", "u")]
 #[only_in("guilds")]
 pub fn user(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
     let cache = &ctx.cache;

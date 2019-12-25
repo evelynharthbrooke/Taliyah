@@ -26,7 +26,7 @@ use std::env;
 #[group]
 #[description = "Various informational commands."]
 #[commands(user)]
-struct Info;
+struct Information;
 
 #[group]
 #[description = "Ellie's selection of utility commands."]
@@ -87,7 +87,7 @@ pub fn main() {
         StandardFramework::new()
             .configure(|c| c.with_whitespace(true).prefix(&prefix).owners(owners).on_mention(Some(bot_id)))
             .help(&HELP)
-            .group(&INFO_GROUP)
+            .group(&INFORMATION_GROUP)
             .group(&UTILITIES_GROUP)
             .group(&MUSIC_GROUP),
     );

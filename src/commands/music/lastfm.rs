@@ -3,6 +3,8 @@
 //! Retrieves a chosen user's last.fm state, along with various
 //! user information such as their most recent tracks.
 
+use itertools::Itertools;
+
 use serenity::client::Context;
 use serenity::framework::standard::macros::command;
 use serenity::framework::standard::Args;
@@ -10,6 +12,7 @@ use serenity::framework::standard::CommandResult;
 use serenity::model::prelude::Message;
 
 use rustfm::Client;
+use rustfm::user::recent_tracks::Track;
 
 use std::env;
 
@@ -31,7 +34,7 @@ pub fn lastfm(ctx: &mut Context, message: &Message, mut args: Args) -> CommandRe
     }
 
     let user: String = args.single::<String>()?;
-    let mut limit: usize = 4;
+    let mut limit: usize = 5;
 
     match args.single() {
         Ok(value) => limit = value,
@@ -45,30 +48,31 @@ pub fn lastfm(ctx: &mut Context, message: &Message, mut args: Args) -> CommandRe
     let loved_tracks = client.loved_tracks(&user).with_limit(1).send().unwrap().attrs.total;
     let track = recent_tracks.first().unwrap();
 
-    let mut track_strings: Vec<String> = Vec::with_capacity(limit);
+    let tracks: String;
 
-    for track in &recent_tracks {
-        let mut now_playing: String = "".to_string();
-
-        match track.attrs.as_ref().is_none() {
-            true => (),
-            false => now_playing = "\x5c▶️".to_string()
+    match recent_tracks.is_empty() {
+        true => {
+            println!("No tracks available :(");
+            tracks = "No tracks available".to_string();
         }
+        false => {
+            tracks = recent_tracks.iter().map(|t: &Track| {
+                let mut now_playing: String = "".to_string();
 
-        let mut track_string: String = now_playing.to_string();
-        track_string.push_str(" **");
-        track_string.push_str(&track.name);
-        track_string.push_str("**");
-        track_string.push_str(" — ");
-        track_string.push_str(&track.artist.name);
+                match t.attrs.as_ref().is_none() {
+                    true => println!("No track attributes associated with this track."),
+                    false => now_playing = "\x5c▶️".to_string()
+                }
 
-        track_strings.push(track_string);
-    }
+                format!("{} **{}** — {}", now_playing, t.name, t.artist.name) 
+            }).join("\n");
+        }
+    };
 
-    let mut track_play_state: String = "last liistened to".to_string();
-
-    if !track.attrs.as_ref().is_none() {
-        track_play_state = "is currently listening to".to_string()
+    let track_play_state: String;
+    match track.attrs.as_ref().is_none() {
+        true => track_play_state = "last listened to".to_string(),
+        false => track_play_state = "is currently listening to".to_string()
     }
 
     let currently_playing: String = format!(
@@ -86,9 +90,7 @@ pub fn lastfm(ctx: &mut Context, message: &Message, mut args: Args) -> CommandRe
                 **Loved Tracks**: {}\n\n\
                 **__Recently Played:__**\n\
                 {}",
-                currently_playing,
-                loved_tracks,
-                track_strings.join("\n")
+                currently_playing, loved_tracks, tracks,
             ));
             e.footer(|f| f.text("Powered by the Last.fm API."));
             e
