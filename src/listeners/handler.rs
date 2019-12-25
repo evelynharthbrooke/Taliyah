@@ -5,7 +5,7 @@ use serenity::model::gateway::Ready;
 
 pub struct Handler;
 impl EventHandler for Handler {
-    fn ready(&self, ctx: Context, ready: Ready) {
-        ready::ready(ctx, ready);
+    fn ready(&self, context: Context, ready: Ready) {
+        ready::ready(context, ready);
     }
 }
