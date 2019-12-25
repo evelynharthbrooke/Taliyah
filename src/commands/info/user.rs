@@ -106,18 +106,18 @@ pub fn user(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
     let id = user.id;
     let color: Colour;
     let color_hex: String;
-    
+
     match member.colour(cache).is_none() {
         true => {
             color = Colour::new(0xFFFFFF);
             color_hex = "No display color available.".to_string()
-        },
+        }
         false => {
             color = member.colour(cache).unwrap();
             color_hex = format!("#{}", color.hex());
         }
     }
-    
+
     let mut roles: String = "".to_string();
     let mut role_count = 0;
     match member.roles(&cache).is_none() {
@@ -153,7 +153,7 @@ pub fn user(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
         .send_message(&ctx, move |m| {
             m.embed(move |e| {
                 e.author(|a| a.name(&user.name).icon_url(&user.face())).colour(color).description(format!(
-                    "**__General__**:\n\
+                        "**__General__**:\n\
                         **Status**: {} {}\n\
                         **Type**: {}\n\
                         **Tag**: {}\n\
