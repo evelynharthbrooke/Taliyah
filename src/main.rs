@@ -7,6 +7,7 @@ mod commands;
 mod listeners;
 
 use commands::info::user::*;
+use commands::info::guild::*;
 use commands::music::lastfm::*;
 use commands::utils::help::*;
 use commands::utils::ping::*;
@@ -24,7 +25,7 @@ use std::env;
 
 #[group]
 #[description = "Various informational commands."]
-#[commands(user)]
+#[commands(user, guild)]
 struct Information;
 
 #[group]

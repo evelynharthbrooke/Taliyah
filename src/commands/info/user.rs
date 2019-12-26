@@ -5,6 +5,7 @@ use serenity::framework::standard::macros::command;
 use serenity::framework::standard::Args;
 use serenity::framework::standard::{CommandError, CommandResult};
 use serenity::model::gateway::ActivityType;
+use serenity::model::guild::Role;
 use serenity::model::prelude::Message;
 use serenity::model::user::OnlineStatus;
 use serenity::utils::Colour;
@@ -125,7 +126,7 @@ pub fn user(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
     match member.roles(&cache).is_none() {
         true => println!("No roles available for this user."),
         false => {
-            roles = member.roles(&cache).unwrap().iter().map(|r| &r.name).join(" / ");
+            roles = member.roles(&cache).unwrap().iter().map(|r: &Role| &r.name).join(" / ");
             role_count = member.roles(&cache).unwrap().len();
             if roles.is_empty() {
                 roles = "No roles available.".to_string();
