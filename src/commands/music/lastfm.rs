@@ -53,15 +53,15 @@ pub fn lastfm(ctx: &mut Context, message: &Message, mut args: Args) -> CommandRe
     match recent_tracks.is_empty() {
         true => {
             println!("This user does not have any recent tracks.");
-            tracks = "No recent tracks available".to_string();
+            tracks = "No recent tracks available".to_owned();
         }
         false => {
             tracks = recent_tracks.iter().map(|t: &Track| {
-                let mut now_playing: String = "".to_string();
+                let mut now_playing: String = "".to_owned();
 
                 match t.attrs.as_ref().is_none() {
                     true => println!("No track attributes associated with this track."),
-                    false => now_playing = "\x5c▶️".to_string()
+                    false => now_playing = "\x5c▶️".to_owned()
                 }
 
                 format!("{} **{}** — {}", now_playing, t.name, t.artist.name) 
@@ -71,8 +71,8 @@ pub fn lastfm(ctx: &mut Context, message: &Message, mut args: Args) -> CommandRe
 
     let track_play_state: String;
     match track.attrs.as_ref().is_none() {
-        true => track_play_state = "last listened to".to_string(),
-        false => track_play_state = "is currently listening to".to_string()
+        true => track_play_state = "last listened to".to_owned(),
+        false => track_play_state = "is currently listening to".to_owned()
     }
 
     let currently_playing: String = format!(

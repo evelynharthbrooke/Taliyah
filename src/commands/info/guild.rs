@@ -31,50 +31,50 @@ pub fn guild(ctx: &mut Context, msg: &Message) -> CommandResult {
     let guild_icon = guild.icon_url().unwrap();
 
     let guild_explicit_filter = match guild.explicit_content_filter.num() {
-        0 => "Disabled".to_string(),
-        1 => "No role".to_string(),
-        2 => "Everyone".to_string(),
-        _ => "Unrecognized filter setting.".to_string(),
+        0 => "Disabled".to_owned(),
+        1 => "No role".to_owned(),
+        2 => "Everyone".to_owned(),
+        _ => "Unrecognized filter setting.".to_owned(),
     };
 
     let guild_region = match guild.region.as_str() {
-        "brazil" => "Brazil".to_string(),
-        "europe" => "Europe".to_string(),
-        "eu-central" => "Central Europe".to_string(),
-        "eu-west" => "Western Europe".to_string(),
-        "hongkong" => "Hong Kong".to_string(),
-        "india" => "India".to_string(),
-        "japan" => "Japan".to_string(),
-        "russia" => "Russia".to_string(),
-        "singapore" => "Singapore".to_string(),
-        "southafrica" => "South Africa".to_string(),
-        "sydney" => "Sydney, Australia".to_string(),
-        "us-central" => "Central United States".to_string(),
-        "us-east" => "Eastern United States".to_string(),
-        "us-south" => "Southern United States".to_string(),
-        "us-west" => "Western United States".to_string(),
-        &_ => guild.region.to_string(),
+        "brazil" => "Brazil".to_owned(),
+        "europe" => "Europe".to_owned(),
+        "eu-central" => "Central Europe".to_owned(),
+        "eu-west" => "Western Europe".to_owned(),
+        "hongkong" => "Hong Kong".to_owned(),
+        "india" => "India".to_owned(),
+        "japan" => "Japan".to_owned(),
+        "russia" => "Russia".to_owned(),
+        "singapore" => "Singapore".to_owned(),
+        "southafrica" => "South Africa".to_owned(),
+        "sydney" => "Sydney, Australia".to_owned(),
+        "us-central" => "Central United States".to_owned(),
+        "us-east" => "Eastern United States".to_owned(),
+        "us-south" => "Southern United States".to_owned(),
+        "us-west" => "Western United States".to_owned(),
+        &_ => guild.region.to_owned(),
     };
 
     let guild_boosts = guild.premium_subscription_count;
     let guild_boost_tier = match guild.premium_tier.num() {
-        0 => "No current tier (not boosted)".to_string(),
-        1 => "Level 1 (2+ boosts)".to_string(),
-        2 => "Level 2 (15+ boosts)".to_string(),
-        3 => "Level 3 (30+ boosts)".to_string(),
-        _ => "Unrecognized boost tier.".to_string()
+        0 => "No current tier (not boosted)".to_owned(),
+        1 => "Level 1 (2+ boosts)".to_owned(),
+        2 => "Level 2 (15+ boosts)".to_owned(),
+        3 => "Level 3 (30+ boosts)".to_owned(),
+        _ => "Unrecognized boost tier.".to_owned()
     };
 
     let guild_roles = guild.roles.iter().filter(|&(_, r)| &r.id != guild_id.as_u64()).map(|(_, r)| &r.name).join(" / ");
     let guild_role_count = guild.roles.iter().filter(|&(_, r)| &r.id != guild_id.as_u64()).collect::<Vec<_>>().len();
 
     let guild_verification_level = match guild.verification_level.num() {
-        0 => "None - Unrestricted.".to_string(),
-        1 => "Low - Must have a verified email.".to_string(),
-        2 => "Medium - Registered on Discord for 5+ minutes.".to_string(),
-        3 => "(╯°□°）╯︵ ┻━┻ - In the server for 10+ minutes.".to_string(),
-        4 => "┻━┻ ﾐヽ(ಠ益ಠ)ノ彡┻━┻) - Must have a verified phone number.".to_string(),
-        _ => "Unrecognized verification level.".to_string()
+        0 => "None - Unrestricted.".to_owned(),
+        1 => "Low - Must have a verified email.".to_owned(),
+        2 => "Medium - Registered on Discord for 5+ minutes.".to_owned(),
+        3 => "(╯°□°）╯︵ ┻━┻ - In the server for 10+ minutes.".to_owned(),
+        4 => "┻━┻ ﾐヽ(ಠ益ಠ)ノ彡┻━┻) - Must have a verified phone number.".to_owned(),
+        _ => "Unrecognized verification level.".to_owned()
     };
 
     let mut highest = None;

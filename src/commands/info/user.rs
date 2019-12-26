@@ -39,14 +39,14 @@ pub fn user(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
 
     let status: String;
     let main_role: String;
-    let mut activity_kind = "".to_string();
-    let mut activity_name = "no available activity".to_string();
-    let mut activity_emoji = "".to_string();
+    let mut activity_kind = "".to_owned();
+    let mut activity_name = "no available activity".to_owned();
+    let mut activity_emoji = "".to_owned();
 
     match guild.presences.get(&user.id).is_none() {
         true => {
             println!("No status for this user could be found.");
-            status = "No status available.".to_string();
+            status = "No status available.".to_owned();
         }
         false => {
             let presence = guild.presences.get(&user.id).unwrap();
@@ -55,52 +55,52 @@ pub fn user(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
                 false => {
                     let activity = presence.activity.as_ref().ok_or("Cannot retrieve status")?;
                     let emoji = match activity.emoji.is_none() {
-                        true => "".to_string(),
-                        false => activity.emoji.as_ref().unwrap().name.to_string(),
+                        true => "".to_owned(),
+                        false => activity.emoji.as_ref().unwrap().name.to_owned(),
                     };
 
                     activity_kind = match activity.kind {
-                        ActivityType::Listening => "listening to ".to_string(),
-                        ActivityType::Playing => "playing ".to_string(),
-                        ActivityType::Streaming => "streaming ".to_string(),
-                        _ => "".to_string(),
+                        ActivityType::Listening => "listening to ".to_owned(),
+                        ActivityType::Playing => "playing ".to_owned(),
+                        ActivityType::Streaming => "streaming ".to_owned(),
+                        _ => "".to_owned(),
                     };
 
                     if activity.kind == ActivityType::Custom {
                         activity_name = match activity.state.is_none() {
-                            true => "".to_string(),
-                            false => activity.state.as_ref().unwrap().to_string(),
+                            true => "".to_owned(),
+                            false => activity.state.as_ref().unwrap().to_owned(),
                         };
                         activity_emoji = match activity.emoji.is_none() {
-                            true => "".to_string(),
+                            true => "".to_owned(),
                             false => emoji,
                         };
                         activity_emoji.push_str(" ");
                     } else {
-                        activity_name = activity.name.to_string()
+                        activity_name = activity.name.to_owned()
                     }
                 }
             }
 
             status = match presence.status {
                 OnlineStatus::Online => match user.bot {
-                    true => "Available".to_string(),
-                    false => "Online".to_string(),
+                    true => "Available".to_owned(),
+                    false => "Online".to_owned(),
                 },
-                OnlineStatus::Idle => "Idle".to_string(),
-                OnlineStatus::DoNotDisturb => "Do Not Disturb".to_string(),
-                OnlineStatus::Invisible => "Invisible".to_string(),
+                OnlineStatus::Idle => "Idle".to_owned(),
+                OnlineStatus::DoNotDisturb => "Do Not Disturb".to_owned(),
+                OnlineStatus::Invisible => "Invisible".to_owned(),
                 _ => match user.bot {
-                    true => "Unavailable".to_string(),
-                    false => "Offline".to_string(),
+                    true => "Unavailable".to_owned(),
+                    false => "Offline".to_owned(),
                 },
             };
         }
     };
 
     let account_type = match user.bot {
-        true => "Bot".to_string(),
-        false => "User".to_string(),
+        true => "Bot".to_owned(),
+        false => "User".to_owned(),
     };
 
     let activity = format!("({}{}{})", activity_kind, activity_emoji, activity_name);
@@ -113,7 +113,7 @@ pub fn user(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
     match member.colour(cache).is_none() {
         true => {
             color = Colour::new(0xFFFFFF);
-            color_hex = "No display color available.".to_string()
+            color_hex = "No display color available.".to_owned()
         }
         false => {
             color = member.colour(cache).unwrap();
@@ -121,7 +121,7 @@ pub fn user(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
         }
     }
 
-    let mut roles: String = "".to_string();
+    let mut roles: String = "".to_owned();
     let mut role_count = 0;
     match member.roles(&cache).is_none() {
         true => println!("No roles available for this user."),
@@ -129,7 +129,7 @@ pub fn user(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
             roles = member.roles(&cache).unwrap().iter().map(|r: &Role| &r.name).join(" / ");
             role_count = member.roles(&cache).unwrap().len();
             if roles.is_empty() {
-                roles = "No roles available.".to_string();
+                roles = "No roles available.".to_owned();
             }
         }
     }
@@ -137,17 +137,17 @@ pub fn user(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
     match member.highest_role_info(&cache).is_none() {
         true => {
             println!("Cannot get role information.");
-            main_role = "No main role available.".to_string();
+            main_role = "No main role available.".to_owned();
         }
         false => {
             let hoist_role_id = member.highest_role_info(&cache).ok_or("cannot get role id")?.0;
             let hoist_role = guild.roles.get(&hoist_role_id).ok_or("Cannot get role")?;
-            main_role = hoist_role.name.to_string();
+            main_role = hoist_role.name.to_owned();
         }
     }
 
-    let nickname = member.nick.map_or("None".to_string(), |nick| nick.clone());
-    let joined = member.joined_at.map_or("Unavailable".to_string(), |d| {
+    let nickname = member.nick.map_or("None".to_owned(), |nick| nick.clone());
+    let joined = member.joined_at.map_or("Unavailable".to_owned(), |d| {
         let formatted_string = d.format("%B %e, %Y - %I:%M %p");
         format!("{}", formatted_string)
     });
