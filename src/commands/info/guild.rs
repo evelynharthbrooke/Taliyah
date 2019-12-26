@@ -59,7 +59,7 @@ pub fn guild(ctx: &mut Context, msg: &Message) -> CommandResult {
     let guild_boosts = guild.premium_subscription_count;
     let guild_boost_tier = match guild.premium_tier.num() {
         0 => "No current tier (not boosted)".to_string(),
-        1 => "Level 1 (5+ boosts)".to_string(),
+        1 => "Level 1 (2+ boosts)".to_string(),
         2 => "Level 2 (15+ boosts)".to_string(),
         3 => "Level 3 (30+ boosts)".to_string(),
         _ => "Unrecognized boost tier.".to_string()
