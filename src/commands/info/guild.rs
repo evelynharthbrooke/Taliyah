@@ -70,7 +70,7 @@ pub fn guild(ctx: &mut Context, msg: &Message) -> CommandResult {
     let guild_role_count = guild.roles.iter().filter(|&(_, r)| &r.id != guild_id.as_u64()).collect::<Vec<_>>().len();
 
     let guild_verification_level = match guild.verification_level {
-        VerificationLevel::None => "None - Unrestricted".to_string(),
+        VerificationLevel::None => "None - Unrestricted.".to_string(),
         VerificationLevel::Low => "Low - Must have a verified email.".to_string(),
         VerificationLevel::Medium => "Medium - Registered on Discord for 5+ minutes.".to_string(),
         VerificationLevel::High => "(╯°□°）╯︵ ┻━┻ - In the server for 10+ minutes.".to_string(),
