@@ -24,8 +24,8 @@ pub fn guild(ctx: &mut Context, msg: &Message) -> CommandResult {
     let guild_channels_voice = guild.channels.iter().filter(|(_, c)| c.read().kind == Voice).collect::<Vec<_>>().len();
     let guild_creation_date = guild_id.created_at().format("%B %e, %Y - %I:%M %p");
     let guild_emojis = guild.emojis.len();
-    let guild_emojis_normal = guild.emojis.iter().filter(|(_, e)| e.animated == false).collect::<Vec<_>>().len();
     let guild_emojis_animated = guild.emojis.iter().filter(|(_, e)| e.animated == true).collect::<Vec<_>>().len();
+    let guild_emojis_normal = guild.emojis.iter().filter(|(_, e)| e.animated == false).collect::<Vec<_>>().len();
     let guild_presences = guild.presences.len();
     let guild_members = guild.member_count;
     let guild_icon = guild.icon_url().unwrap();
