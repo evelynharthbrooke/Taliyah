@@ -4,7 +4,6 @@ use serenity::client::Context;
 use serenity::framework::standard::macros::command;
 use serenity::framework::standard::{CommandError, CommandResult};
 use serenity::model::channel::ChannelType::{Category, Text, Voice};
-use serenity::model::guild::{ExplicitContentFilter, VerificationLevel};
 use serenity::model::prelude::Message;
 
 #[command]
@@ -31,11 +30,11 @@ pub fn guild(ctx: &mut Context, msg: &Message) -> CommandResult {
     let guild_members = guild.member_count;
     let guild_icon = guild.icon_url().unwrap();
 
-    let guild_explicit_filter = match guild.explicit_content_filter {
-        ExplicitContentFilter::None => "Disabled".to_string(),
-        ExplicitContentFilter::WithoutRole => "No role".to_string(),
-        ExplicitContentFilter::All => "Everyone".to_string(),
-        _ => "".to_string(),
+    let guild_explicit_filter = match guild.explicit_content_filter.num() {
+        0 => "Disabled".to_string(),
+        1 => "No role".to_string(),
+        2 => "Everyone".to_string(),
+        _ => "Unrecognized filter setting.".to_string(),
     };
 
     let guild_region = match guild.region.as_str() {
@@ -63,19 +62,19 @@ pub fn guild(ctx: &mut Context, msg: &Message) -> CommandResult {
         1 => "Level 1 (5+ boosts)".to_string(),
         2 => "Level 2 (15+ boosts)".to_string(),
         3 => "Level 3 (30+ boosts)".to_string(),
-        _ => "".to_string()
+        _ => "Unrecognized boost tier.".to_string()
     };
 
     let guild_roles = guild.roles.iter().filter(|&(_, r)| &r.id != guild_id.as_u64()).map(|(_, r)| &r.name).join(" / ");
     let guild_role_count = guild.roles.iter().filter(|&(_, r)| &r.id != guild_id.as_u64()).collect::<Vec<_>>().len();
 
-    let guild_verification_level = match guild.verification_level {
-        VerificationLevel::None => "None - Unrestricted.".to_string(),
-        VerificationLevel::Low => "Low - Must have a verified email.".to_string(),
-        VerificationLevel::Medium => "Medium - Registered on Discord for 5+ minutes.".to_string(),
-        VerificationLevel::High => "(╯°□°）╯︵ ┻━┻ - In the server for 10+ minutes.".to_string(),
-        VerificationLevel::Higher => "┻━┻ ﾐヽ(ಠ益ಠ)ノ彡┻━┻) - Must have a verified phone number.".to_string(),
-        _ => "".to_string()
+    let guild_verification_level = match guild.verification_level.num() {
+        0 => "None - Unrestricted.".to_string(),
+        1 => "Low - Must have a verified email.".to_string(),
+        2 => "Medium - Registered on Discord for 5+ minutes.".to_string(),
+        3 => "(╯°□°）╯︵ ┻━┻ - In the server for 10+ minutes.".to_string(),
+        4 => "┻━┻ ﾐヽ(ಠ益ಠ)ノ彡┻━┻) - Must have a verified phone number.".to_string(),
+        _ => "Unrecognized verification level.".to_string()
     };
 
     let mut highest = None;
