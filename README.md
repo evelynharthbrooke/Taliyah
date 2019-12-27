@@ -209,5 +209,5 @@ along with Ellie. If not, see <http://www.gnu.org/licenses/>.
 [invite-link]: https://discordapp.com/oauth2/authorize?client_id=483499705108529163&scope=bot
 [invite-badge]: https://img.shields.io/badge/invite-to%20your%20Discord%20server-7289da.svg?style=flat-square&logo=discord
 
-[license-link]: https://github.com/KamranMackey/blob/rewrite/LICENSE.txt
+[license-link]: https://github.com/KamranMackey/blob/rust-rewrite/LICENSE.txt
 [license-badge]: https://img.shields.io/github/license/KamranMackey/Ellie.svg?color=FF69B4&style=flat-square
