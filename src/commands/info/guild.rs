@@ -120,7 +120,7 @@ pub fn guild(ctx: &mut Context, msg: &Message) -> CommandResult {
                     guild_explicit_filter, guild_boosts, guild_boost_tier, highest_role_name, 
                     guild_role_count, guild_roles
                 ));
-                e.footer(|f| f.text(format!("The ID belonging to {} is {}.", guild_name, guild_id)));
+                e.footer(|f| f.text(format!("The ID belonging to {} is {}.", guild_name, guild_id)))
             })
         })
         .map_or_else(|e| Err(CommandError(e.to_string())), |_| Ok(()))
