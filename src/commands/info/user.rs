@@ -10,6 +10,8 @@ use serenity::model::prelude::Message;
 use serenity::model::user::OnlineStatus;
 use serenity::utils::Colour;
 
+use log::info;
+
 #[command]
 #[description = "Shows various information about a user."]
 #[usage = "<user> or <blank>"]
@@ -45,13 +47,13 @@ pub fn user(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
 
     match guild.presences.get(&user.id).is_none() {
         true => {
-            println!("No status for this user could be found.");
+            info!("No status for this user could be found.");
             status = "No status available.".to_owned();
         }
         false => {
             let presence = guild.presences.get(&user.id).unwrap();
             match presence.activity.is_none() {
-                true => println!("No activity could be detected. Omitting."),
+                true => info!("No activity could be detected. Omitting."),
                 false => {
                     let activity = presence.activity.as_ref().ok_or("Cannot retrieve status")?;
                     let emoji = match activity.emoji.is_none() {
@@ -124,7 +126,7 @@ pub fn user(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
     let mut roles: String = "".to_owned();
     let mut role_count = 0;
     match member.roles(&cache).is_none() {
-        true => println!("No roles available for this user."),
+        true => info!("No roles available for this user."),
         false => {
             roles = member.roles(&cache).unwrap().iter().map(|r: &Role| &r.name).join(" / ");
             role_count = member.roles(&cache).unwrap().len();
@@ -136,7 +138,7 @@ pub fn user(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
 
     match member.highest_role_info(&cache).is_none() {
         true => {
-            println!("Cannot get role information.");
+            info!("Cannot get role information.");
             main_role = "No main role available.".to_owned();
         }
         false => {

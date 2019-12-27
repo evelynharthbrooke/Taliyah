@@ -6,8 +6,8 @@
 mod commands;
 mod listeners;
 
-use commands::info::user::*;
 use commands::info::guild::*;
+use commands::info::user::*;
 use commands::music::lastfm::*;
 use commands::utils::help::*;
 use commands::utils::ping::*;
@@ -15,11 +15,14 @@ use commands::utils::version::*;
 
 use dotenv::dotenv;
 
+use log::error;
+
 use listeners::handler::Handler;
 
 use serenity::client::Client;
 use serenity::framework::standard::macros::group;
 use serenity::framework::StandardFramework;
+
 use std::collections::HashSet;
 use std::env;
 
@@ -39,13 +42,14 @@ struct Utilities;
 struct Music;
 
 pub fn main() {
-    // Initialize the reading of the .env environment file.
     dotenv().expect("Unable to read / access the .env file!");
 
     let token: String = env::var("DISCORD_TOKEN").expect("Unable to read the bot token.");
     let prefix: String = env::var("DISCORD_PREFIX").expect("Unable to get the bot prefix.");
 
     let mut client: Client = Client::new(&token, Handler).expect("Error creating client.");
+
+    pretty_env_logger::init();
 
     let (owners, bot_id) = match client.cache_and_http.http.get_current_application_info() {
         Ok(info) => {
@@ -66,6 +70,6 @@ pub fn main() {
     );
 
     if let Err(err) = client.start() {
-        println!("An error occurred while running the client: {:?}", err);
+        error!("An error occurred while running the client: {:?}", err);
     }
 }

@@ -5,14 +5,16 @@
 
 use itertools::Itertools;
 
+use log::{info, warn};
+
 use serenity::client::Context;
 use serenity::framework::standard::macros::command;
 use serenity::framework::standard::Args;
 use serenity::framework::standard::CommandResult;
 use serenity::model::prelude::Message;
 
-use rustfm::Client;
 use rustfm::user::recent_tracks::Track;
+use rustfm::Client;
 
 use std::env;
 
@@ -52,27 +54,30 @@ pub fn lastfm(ctx: &mut Context, message: &Message, mut args: Args) -> CommandRe
 
     match recent_tracks.is_empty() {
         true => {
-            println!("This user does not have any recent tracks.");
+            info!("This user does not have any recent tracks.");
             tracks = "No recent tracks available".to_owned();
         }
         false => {
-            tracks = recent_tracks.iter().map(|t: &Track| {
-                let mut now_playing: String = "".to_owned();
+            tracks = recent_tracks
+                .iter()
+                .map(|t: &Track| {
+                    let mut now_playing: String = "".to_owned();
 
-                match t.attrs.as_ref().is_none() {
-                    true => println!("No track attributes associated with this track."),
-                    false => now_playing = "\x5c▶️".to_owned()
-                }
+                    match t.attrs.as_ref().is_none() {
+                        true => warn!("No track attributes associated with this track."),
+                        false => now_playing = "\x5c▶️".to_owned(),
+                    }
 
-                format!("{} **{}** — {}", now_playing, t.name, t.artist.name) 
-            }).join("\n");
+                    format!("{} **{}** — {}", now_playing, t.name, t.artist.name)
+                })
+                .join("\n");
         }
     };
 
     let track_play_state: String;
     match track.attrs.as_ref().is_none() {
         true => track_play_state = "last listened to".to_owned(),
-        false => track_play_state = "is currently listening to".to_owned()
+        false => track_play_state = "is currently listening to".to_owned(),
     }
 
     let currently_playing: String = format!(
