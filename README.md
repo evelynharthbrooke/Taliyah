@@ -10,7 +10,7 @@ A feature-packed bot for Discord servers, written in TypeScript.
 [![License][license-badge]][license-link]
 
 Welcome to the offiical repository for Ellie, a bot for Discord written using TypeScript and Node.js. This is my first
-my first attempt at creating a proper Discord bot, and if any issues occur, please file them on either GitLab or GitHub 
+my first attempt at creating a proper Discord bot, and if any issues occur, please file them on either GitLab or GitHub
 and I will make sure that I take a look at them as soon as I can.
 
 Ellie uses the [Discord.js](https://github.com/discordjs/discord.js) library for basic interaction with the Discord
@@ -42,11 +42,11 @@ unmaintained dependency (if I happen to use any), please don't make any requests
 #### macOS
 
 First, let's get Homebrew installed if it isn't already, so we can easily install the Node Version Manager (nvm), a
-really nice utility to manage and install multiple Node.js versions! 
+really nice utility to manage and install multiple Node.js versions!
 
-**Note**: You may need Xcode and Xcode's tools for certain Homebrew features but I am not 100% sure on this. However, 
-Xcode's comandline tools include Apple's version of git (currently at version 2.17.1). I'm not sure if git is already 
-included in macOS without the dev tools, but installing the tools are pretty useful for other development purposes, 
+**Note**: You may need Xcode and Xcode's tools for certain Homebrew features but I am not 100% sure on this. However,
+Xcode's comandline tools include Apple's version of git (currently at version 2.17.1). I'm not sure if git is already
+included in macOS without the dev tools, but installing the tools are pretty useful for other development purposes,
 so go ahead and install them.
 
 ```bash
@@ -85,8 +85,8 @@ nvm install node # this installs the latest Node.js version
 
 This option allows you to install Node.js without the Node Version Manager. If you would like to proceed with this route,
 you only have to accomplish one step, which is to install Node.js using Homebrew. This will install `icu4c` which allows
-full Unicode support, as well as Node.js itself. You can also install Node.js with OpenSSL 1.1 support, but its optional, 
-since macOS already comes with its own SSL library, LibreSSL, found in BSD operating systems such as OpenBSD and FreeBSD. 
+full Unicode support, as well as Node.js itself. You can also install Node.js with OpenSSL 1.1 support, but its optional,
+since macOS already comes with its own SSL library, LibreSSL, found in BSD operating systems such as OpenBSD and FreeBSD.
 Anyways, babbling aside, you can install Node with the below command.
 
 ```bash
@@ -95,7 +95,7 @@ brew install node # simple, right?
 
 #### Linux
 
-Installing Node.js on Linux is pretty easy, just use your respective package manager included in your distribution 
+Installing Node.js on Linux is pretty easy, just use your respective package manager included in your distribution
 to install Node.js. As an example, on Arch Linux, you can run the following command and you'll be done:
 
 ```bash
@@ -117,14 +117,14 @@ website, which you can visit [here](https://nodejs.org/en/download/package-manag
 
 ### Installing the Bot
 
-Now, we can actually download Ellie and set her up. This step 100% requires Git, as that is how we will 
+Now, we can actually download Ellie and set her up. This step 100% requires Git, as that is how we will
 be downloading her.
 
 ```bash
 git clone https://github.com/KamranMackey/Ellie
 ```
 
-If you'd like to use GitLab for the cloning process instead of GitHub, you can do that too. Just use 
+If you'd like to use GitLab for the cloning process instead of GitHub, you can do that too. Just use
 the following command instead to clone from Ellie's GitLab mirror.
 
 ```bash
@@ -137,15 +137,15 @@ Alright, now let's `cd` into the download directory where we downloaded Ellie to
 cd Ellie
 ```
 
-Now we can install Ellie's dependencies. On Windows, you will need to install the `windows-build-tools` 
-package using npm, as Windows does not natively include build tools like Linux does. For macOS, just 
+Now we can install Ellie's dependencies. On Windows, you will need to install the `windows-build-tools`
+package using npm, as Windows does not natively include build tools like Linux does. For macOS, just
 install Xcode and the commandline tools.
 
 ```bash
 npm install
 ```
 
-Just be patient while this process completes. It may take a while to complete, depending on your Internet 
+Just be patient while this process completes. It may take a while to complete, depending on your Internet
 speed as well as the speed of your system's SSD and/or hardrive.
 
 ### Configuring the Bot
@@ -186,7 +186,7 @@ on how to run Ellie using it.
 ### Licensing and Other Information
 
 Ellie is licensed under the terms of the GNU General Public License, version 3.0, or any later versions that
-may release in the near or far future. The license snippet is below, and the full terms can be found by looking 
+may release in the near or far future. The license snippet is below, and the full terms can be found by looking
 at the `LICENSE` file, located in the root directory.
 
 ```text
