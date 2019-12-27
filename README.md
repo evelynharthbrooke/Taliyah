@@ -210,4 +210,4 @@ along with Ellie. If not, see <http://www.gnu.org/licenses/>.
 [invite-badge]: https://img.shields.io/badge/invite-to%20your%20Discord%20server-7289da.svg?style=flat-square&logo=discord
 
 [license-link]: https://github.com/KamranMackey/Ellie/blob/rust_rewrite/LICENSE.txt
-[license-badge]: https://img.shields.io/github/license/KamranMackey/Ellie.svg?color=FF69B4&style=flat-square
+[license-badge]: https://img.shields.io/github/license/KamranMackey/Ellie.svg?color=ff1f46&style=flat-square
