@@ -40,6 +40,13 @@ fn album(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
     let album_id = album_result.first().unwrap().id.as_ref().unwrap();
 
     let album = spotify().album(album_id).unwrap();
+    let album_type = match album.album_type.clone().as_str() {
+        "album" => "Album".to_owned(),
+        "single" => "Single".to_owned(),
+        "appears_on" => "Appears On".to_owned(),
+        "compiliation" => "Compilation".to_owned(),
+        &_ => "".to_owned()
+    };
     let album_name = &album.name;
     let album_url = &album.external_urls["spotify"];
     let album_image = &album.images.first().unwrap().url;
@@ -89,13 +96,15 @@ fn album(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
                 e.color(0x1DB954);
                 e.thumbnail(album_image);
                 e.description(format!(
-                    "**Artist(s)**: {}\n\
+                    "\
+                    **Album type**: {}\n\
+                    **Artist(s)**: {}\n\
                     **Release date**: {}\n\
                     **Markets**: {}\n\
                     **Track count**: {}\n\n\
                     **Tracks**: \n{}\n\
                     ",
-                    album_artists, album_date, album_markets, album_tracks_total,
+                    album_type, album_artists, album_date, album_markets, album_tracks_total,
                     album_tracks
                 ));
                 e.footer(|f| {

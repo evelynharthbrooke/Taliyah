@@ -52,6 +52,7 @@ fn track(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
     
     let track_popularity = &track.popularity;
     let track_position = &track.track_number;
+    let track_disc = &track.disc_number;
     
     let track_preview_url = match track.preview_url.is_none() {
         true => "No preview available.".to_owned(),
@@ -118,7 +119,7 @@ fn track(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
             e.description(format!(
                 "\
                 **Artist(s)**: {}\n\
-                **Album**: [{}]({}) (track {})\n\
+                **Album**: [{}]({}) (disc {}, track {})\n\
                 **Popularity**: {}\n\
                 **Explicit?**: {}\n\
                 **Release date**: {}\n\
@@ -132,7 +133,7 @@ fn track(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
                 **Time Signature**: {} (confidence: {})\n\n\
                 [Play {} on Spotify →]({})
                 ", 
-                track_artists, track_album_name, track_album_url, track_position, 
+                track_artists, track_album_name, track_album_url, track_disc, track_position, 
                 track_popularity, track_explicit, track_date, track_preview_url, track_markets, 
                 track_length, track_loudness, track_key, track_key_confidence, track_mode, 
                 track_mode_confidence,track_tempo, track_tempo_confidence, track_time_signature, 
