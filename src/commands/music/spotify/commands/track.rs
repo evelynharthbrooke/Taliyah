@@ -50,6 +50,7 @@ fn track(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
     };
     let track_popularity = &track.popularity;
     let track_position = &track.track_number;
+    let track_preview_url = track.preview_url.as_ref().unwrap();
     let track_markets = &track.available_markets.len();
     let track_length = format_duration(Duration::from_millis(track.duration_ms as u64 / 1000 * 1000));
     let track_url = &track.external_urls["spotify"];
@@ -100,22 +101,25 @@ fn track(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
             e.description(format!(
                 "\
                 **Artist(s)**: {}\n\
-                **Album**: [{}]({}) (track {})\n\
+                **Album**: [{}]({}) (track #{})\n\
                 **Popularity**: {}\n\
                 **Explicit?**: {}\n\
                 **Release date**: {}\n\
+                **Play preview**: [click here]({})\n\
                 **Markets**: {}\n\
                 **Length**: {}\n\
                 **Loudness**: {} dB\n\
                 **Key**: {} (confidence: {})\n\
                 **Mode**: {} (confidence: {})\n\
                 **Tempo**: {} (confidence: {})\n\
-                **Time Signature**: {} (confidence: {})\n\
+                **Time Signature**: {} (confidence: {})\n\n\
+                [Play {} on Spotify →]({})
                 ", 
                 track_artists, track_album_name, track_album_url, track_position, 
-                track_popularity, track_explicit, track_date, track_markets, track_length, 
-                track_loudness, track_key, track_key_confidence, track_mode, track_mode_confidence,
-                track_tempo, track_tempo_confidence, track_time_signature, track_time_signature_confidence
+                track_popularity, track_explicit, track_date, track_preview_url, track_markets, 
+                track_length, track_loudness, track_key, track_key_confidence, track_mode, 
+                track_mode_confidence,track_tempo, track_tempo_confidence, track_time_signature, 
+                track_time_signature_confidence, track_name, track_url
             ));
             e.footer(|f| f.text("Powered by the Spotify Web API."))
         })
