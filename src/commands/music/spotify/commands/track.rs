@@ -44,10 +44,12 @@ fn track(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
     let track_album_name = &track_album.name;
     let track_album_url = &track_album.external_urls["spotify"];
     let track_date = track_album.release_date.unwrap();
+    
     let track_explicit = match track.explicit {
         true => "Yes".to_owned(),
         false => "No".to_owned()
     };
+    
     let track_popularity = &track.popularity;
     let track_position = &track.track_number;
     let track_preview_url = track.preview_url.as_ref().unwrap();
@@ -64,6 +66,7 @@ fn track(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
     let track_url = &track.external_urls["spotify"];
     let track_image = &track_album.images.first().unwrap().url;
     let track_artists = &track.artists.iter().map(|a| format!("[{}]({})", &a.name, &a.external_urls["spotify"])).join(", ");
+    
     let track_date = NaiveDate::parse_from_str(&track_date, "%Y-%m-%d").map_or(track_date, move |d| {
         let formatted_string = d.format("%B %-e, %Y").to_string();
         format!("{}", formatted_string.trim())
@@ -89,11 +92,13 @@ fn track(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
 
     let track_key_confidence = track_analysis.key_confidence;
     let track_loudness = track_analysis.loudness;
+    
     let track_mode = match track_analysis.mode as u32 {
         0 => "Minor".to_owned(),
         1 => "Major".to_owned(),
         _ => track_analysis.mode.to_string() 
     };
+    
     let track_mode_confidence = track_analysis.mode_confidence;
     let track_tempo = track_analysis.tempo;
     let track_tempo_confidence = track_analysis.tempo_confidence;

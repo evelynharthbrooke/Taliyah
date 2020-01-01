@@ -43,7 +43,15 @@ fn album(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
     let album_name = &album.name;
     let album_url = &album.external_urls["spotify"];
     let album_image = &album.images.first().unwrap().url;
-    let album_markets = &album.available_markets.len();
+    
+    let mut album_markets = album.available_markets.len().to_string();
+
+    // This will have to be updated as Spotify is launched
+    // in more markets / countries.
+    if album_markets == "79" {
+        album_markets.push_str(" (Worldwide)");
+    }
+    
     let album_artists = &album.artists.iter().map(|a| {
         format!("[{}]({})", &a.name, &a.external_urls["spotify"])
     }).join(", ");
@@ -59,6 +67,7 @@ fn album(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
     };
 
     let album_tracks_total = album.tracks.total;
+    
     let album_tracks = album.tracks.items.iter().map(|track: &SimplifiedTrack| {
         let name = &track.name;
         let position = &track.track_number;
