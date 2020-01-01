@@ -9,6 +9,7 @@ mod listeners;
 use commands::info::guild::*;
 use commands::info::user::*;
 use commands::music::lastfm::*;
+use commands::music::spotify::commands::spotify::*;
 use commands::utils::help::*;
 use commands::utils::ping::*;
 use commands::utils::version::*;
@@ -22,6 +23,9 @@ use listeners::handler::Handler;
 use serenity::client::Client;
 use serenity::framework::standard::macros::group;
 use serenity::framework::StandardFramework;
+
+use rspotify::spotify::client::Spotify;
+use rspotify::spotify::oauth2::SpotifyClientCredentials;
 
 use std::collections::HashSet;
 use std::env;
@@ -38,7 +42,7 @@ struct Utilities;
 
 #[group]
 #[description = "Music-focused commands."]
-#[commands(lastfm)]
+#[commands(lastfm, spotify)]
 struct Music;
 
 pub fn main() {
@@ -62,7 +66,13 @@ pub fn main() {
 
     client.with_framework(
         StandardFramework::new()
-            .configure(|c| c.with_whitespace(true).prefix(&prefix).owners(owners).on_mention(Some(bot_id)))
+            .configure(|c| {
+                c.with_whitespace(true)
+                    .prefix(&prefix)
+                    .case_insensitivity(true)
+                    .owners(owners)
+                    .on_mention(Some(bot_id))
+            })
             .help(&HELP)
             .group(&INFORMATION_GROUP)
             .group(&UTILITIES_GROUP)
@@ -72,4 +82,9 @@ pub fn main() {
     if let Err(err) = client.start() {
         error!("An error occurred while running the client: {:?}", err);
     }
+}
+
+pub fn spotify() -> Spotify {
+    let client_credential = SpotifyClientCredentials::default().build();
+    return Spotify::default().client_credentials_manager(client_credential).build();
 }
