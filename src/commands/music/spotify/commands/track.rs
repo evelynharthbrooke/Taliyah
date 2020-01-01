@@ -49,6 +49,7 @@ fn track(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
         false => "No".to_owned()
     };
     let track_popularity = &track.popularity;
+    let track_position = &track.track_number;
     let track_markets = &track.available_markets.len();
     let track_length = format_duration(Duration::from_millis(track.duration_ms as u64 / 1000 * 1000));
     let track_url = &track.external_urls["spotify"];
@@ -99,7 +100,7 @@ fn track(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
             e.description(format!(
                 "\
                 **Artist(s)**: {}\n\
-                **Album**: [{}]({})\n\
+                **Album**: [{}]({}) (track {})\n\
                 **Popularity**: {}\n\
                 **Explicit?**: {}\n\
                 **Release date**: {}\n\
@@ -111,11 +112,10 @@ fn track(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
                 **Tempo**: {} (confidence: {})\n\
                 **Time Signature**: {} (confidence: {})\n\
                 ", 
-                track_artists, track_album_name, track_album_url, track_popularity, 
-                track_explicit, track_date, track_markets, track_length, track_loudness,
-                track_key, track_key_confidence, track_mode, track_mode_confidence,
-                track_tempo, track_tempo_confidence, track_time_signature,
-                track_time_signature_confidence
+                track_artists, track_album_name, track_album_url, track_position, 
+                track_popularity, track_explicit, track_date, track_markets, track_length, 
+                track_loudness, track_key, track_key_confidence, track_mode, track_mode_confidence,
+                track_tempo, track_tempo_confidence, track_time_signature, track_time_signature_confidence
             ));
             e.footer(|f| f.text("Powered by the Spotify Web API."))
         })
