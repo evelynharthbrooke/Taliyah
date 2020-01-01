@@ -105,7 +105,7 @@ pub fn user(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
         false => "User".to_owned(),
     };
 
-    let activity = format!("({}{}{})", activity_kind, activity_emoji, activity_name);
+    let activity = format!("({}{}**{}**)", activity_kind, activity_emoji, activity_name);
     let created = user.created_at().format("%B %e, %Y - %I:%M %p");
     let tag = user.tag();
     let id = user.id;

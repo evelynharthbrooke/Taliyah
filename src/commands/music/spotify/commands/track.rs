@@ -52,7 +52,11 @@ fn track(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
     
     let track_popularity = &track.popularity;
     let track_position = &track.track_number;
-    let track_preview_url = track.preview_url.as_ref().unwrap();
+    
+    let track_preview_url = match track.preview_url.is_none() {
+        true => "No preview available.".to_owned(),
+        false => format!("[click here]({})", track.preview_url.as_ref().unwrap())
+    };
     
     let mut track_markets = track.available_markets.len().to_string();
 
@@ -118,7 +122,7 @@ fn track(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
                 **Popularity**: {}\n\
                 **Explicit?**: {}\n\
                 **Release date**: {}\n\
-                **Play preview**: [click here]({})\n\
+                **Song preview**: {}\n\
                 **Markets**: {}\n\
                 **Length**: {}\n\
                 **Loudness**: {} dB\n\
