@@ -101,7 +101,7 @@ fn track(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
             e.description(format!(
                 "\
                 **Artist(s)**: {}\n\
-                **Album**: [{}]({}) (track #{})\n\
+                **Album**: [{}]({}) (track {})\n\
                 **Popularity**: {}\n\
                 **Explicit?**: {}\n\
                 **Release date**: {}\n\
