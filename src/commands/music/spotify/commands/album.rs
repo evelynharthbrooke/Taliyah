@@ -43,6 +43,7 @@ fn album(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
     let album_name = &album.name;
     let album_url = &album.external_urls["spotify"];
     let album_image = &album.images.first().unwrap().url;
+    let album_markets = &album.available_markets.len();
     let album_artists = &album.artists.iter().map(|a| {
         format!("[{}]({})", &a.name, &a.external_urls["spotify"])
     }).join(", ");
@@ -81,10 +82,12 @@ fn album(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
                 e.description(format!(
                     "**Artist(s)**: {}\n\
                     **Release date**: {}\n\
+                    **Markets**: {}\n\
                     **Track count**: {}\n\n\
                     **Tracks**: \n{}\n\
                     ",
-                    album_artists, album_date, album_tracks_total, album_tracks
+                    album_artists, album_date, album_markets, album_tracks_total,
+                    album_tracks
                 ));
                 e.footer(|f| {
                     f.text(format!("{} | Powered by the Spotify Web API.", album_copyright))

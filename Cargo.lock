@@ -423,7 +423,6 @@ dependencies = [
  "itertools",
  "lastfm-rs",
  "log 0.4.8",
- "percent-encoding 1.0.1",
  "pretty_env_logger",
  "reqwest",
  "rspotify",
