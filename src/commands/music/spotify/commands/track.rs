@@ -51,7 +51,15 @@ fn track(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
     let track_popularity = &track.popularity;
     let track_position = &track.track_number;
     let track_preview_url = track.preview_url.as_ref().unwrap();
-    let track_markets = &track.available_markets.len();
+    
+    let mut track_markets = track.available_markets.len().to_string();
+
+    // This will have to be updated as Spotify is launched
+    // in more markets / countries.
+    if track_markets == "79" {
+        track_markets.push_str(" (Worldwide)");
+    }
+    
     let track_length = format_duration(Duration::from_millis(track.duration_ms as u64 / 1000 * 1000));
     let track_url = &track.external_urls["spotify"];
     let track_image = &track_album.images.first().unwrap().url;
