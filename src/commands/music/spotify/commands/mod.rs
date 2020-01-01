@@ -1,3 +1,3 @@
 pub mod album;
-pub mod track;
 pub mod spotify;
+pub mod track;
