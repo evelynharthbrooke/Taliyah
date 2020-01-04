@@ -40,6 +40,11 @@ fn album(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
     let album_id = album_result.first().unwrap().id.as_ref().unwrap();
 
     let album = spotify().album(album_id).unwrap();
+    let album_name = &album.name;
+    let album_popularity = &album.popularity;
+    let album_url = &album.external_urls["spotify"];
+    let album_image = &album.images.first().unwrap().url;
+
     let album_type = match album.album_type.clone().as_str() {
         "album" => "Album".to_owned(),
         "single" => "Single".to_owned(),
@@ -47,10 +52,7 @@ fn album(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
         "compilation" => "Compilation".to_owned(),
         &_ => album.album_type.as_str().to_owned()
     };
-    let album_name = &album.name;
-    let album_url = &album.external_urls["spotify"];
-    let album_image = &album.images.first().unwrap().url;
-    
+
     let mut album_markets = album.available_markets.len().to_string();
 
     // This will have to be updated as Spotify is launched
@@ -79,13 +81,14 @@ fn album(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
         let position = &track.track_number;
         let external_link = &track.external_urls["spotify"];
         let length = format_duration(Duration::from_millis(track.duration_ms as u64 / 1000 * 1000));
+        let artists = &track.artists.iter().map(|a| &a.name).join(", ");
 
         let explicit = match track.explicit {
-            true => "— Explicit".to_string(),
+            true => "(explicit)".to_string(),
             false => "".to_string()
         };
 
-        return format!("**{}.** [{}]({}) {} — {}", position, name, external_link, explicit, length);
+        return format!("**{}.** [{}]({}) — {} — {} {}", position, name, external_link, artists, length, explicit);
     }).join("\n");
     
     msg.channel_id.send_message(&ctx, move |m| {
@@ -101,12 +104,13 @@ fn album(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
                     **Album type**: {}\n\
                     **Artist(s)**: {}\n\
                     **Release date**: {}\n\
+                    **Popularity**: {}\n\
                     **Markets**: {}\n\
                     **Track count**: {}\n\n\
                     **Tracks**: \n{}\n\
                     ",
-                    album_type, album_artists, album_date, album_markets, album_tracks_total,
-                    album_tracks
+                    album_type, album_artists, album_date, album_popularity, album_markets, 
+                    album_tracks_total, album_tracks
                 ));
                 e.footer(|f| {
                     f.text(format!("{}", album_copyright))
