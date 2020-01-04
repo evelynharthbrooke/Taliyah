@@ -90,10 +90,12 @@ fn album(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
     
     msg.channel_id.send_message(&ctx, move |m| {
             m.embed(move |e| {
-                e.title(album_name);
-                e.url(album_url);
+                e.author(|a| {
+                    a.name(album_name);
+                    a.url(album_url);
+                    a.icon_url(album_image)
+                });
                 e.color(0x1DB954);
-                e.thumbnail(album_image);
                 e.description(format!(
                     "\
                     **Album type**: {}\n\

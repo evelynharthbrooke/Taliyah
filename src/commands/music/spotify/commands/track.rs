@@ -59,10 +59,10 @@ fn track(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
     };
 
     let track_explicit = match track.explicit {
-        true => "Yes".to_owned(),
+        true => "Yes.".to_owned(),
         false => match track_label.as_str() {
-            "Walt Disney Records" => "Of course not, it's Disney".to_owned(),
-            _ => "No".to_owned()
+            "Walt Disney Records" => "Of course not, it's Disney.".to_owned(),
+            _ => "No.".to_owned()
         }
     };
 
@@ -129,10 +129,12 @@ fn track(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
 
     msg.channel_id.send_message(&ctx, move |m| {
         m.embed(move |e| {
-            e.title(track_name);
-            e.url(track_url);
+            e.author(|a| {
+                a.name(track_name);
+                a.url(track_url);
+                a.icon_url(track_image)
+            });
             e.color(0x1DB954);
-            e.thumbnail(track_image);
             e.description(format!(
                 "\
                 **Artist(s)**: {}\n\
