@@ -47,7 +47,7 @@ fn track(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
 
     let track_album_name = &track_album.name;
     let track_album_url = &track_album.external_urls["spotify"];
-    let track_label = &track_album.clone().label;
+    let track_label = track_album.clone().label;
     let track_date = track_album.release_date;
 
     let track_copyright = match &track_album.copyrights.is_empty() {
