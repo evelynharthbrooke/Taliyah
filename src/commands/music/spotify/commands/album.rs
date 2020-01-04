@@ -44,8 +44,8 @@ fn album(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
         "album" => "Album".to_owned(),
         "single" => "Single".to_owned(),
         "appears_on" => "Appears On".to_owned(),
-        "compiliation" => "Compilation".to_owned(),
-        &_ => "".to_owned()
+        "compilation" => "Compilation".to_owned(),
+        &_ => album.album_type.as_str().to_owned()
     };
     let album_name = &album.name;
     let album_url = &album.external_urls["spotify"];
@@ -69,12 +69,11 @@ fn album(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
     });
 
     let album_copyright = match album.copyrights.is_empty() {
-        true => &album.label,
-        false => &album.copyrights.first().unwrap()["text"]
+        true => album.label,
+        false => format!("{} ({})", album.copyrights.first().unwrap()["text"], album.label)
     };
 
     let album_tracks_total = album.tracks.total;
-    
     let album_tracks = album.tracks.items.iter().map(|track: &SimplifiedTrack| {
         let name = &track.name;
         let position = &track.track_number;
@@ -108,7 +107,7 @@ fn album(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
                     album_tracks
                 ));
                 e.footer(|f| {
-                    f.text(format!("{} | Powered by the Spotify Web API.", album_copyright))
+                    f.text(format!("{}", album_copyright))
                 })
             })
         }).map_or_else(|e| Err(CommandError(e.to_string())), |_| Ok(()))

@@ -40,15 +40,32 @@ fn track(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
     let track = track_result.first().unwrap();
     let track_id = &track.id.clone().unwrap();
     let track_album = track.album.clone();
+    let track_album_id = &track_album.id.unwrap();
     let track_name = &track.name;
+
+    let track_album = spotify().album(track_album_id).unwrap();
+
     let track_album_name = &track_album.name;
     let track_album_url = &track_album.external_urls["spotify"];
-    let track_date = track_album.release_date.unwrap();
-    
+    let track_label = &track_album.clone().label;
+    let track_date = track_album.release_date;
+
+    let track_copyright = match &track_album.copyrights.is_empty() {
+        true => track_album.label,
+        false => {
+            let copyright = &track_album.copyrights.first().unwrap()["text"];
+            format!("{} ({})", copyright, track_label)
+        }
+    };
+
     let track_explicit = match track.explicit {
         true => "Yes".to_owned(),
-        false => "No".to_owned()
+        false => match track_label.as_str() {
+            "Walt Disney Records" => "Of course not, it's Disney".to_owned(),
+            _ => "No".to_owned()
+        }
     };
+
     
     let track_popularity = &track.popularity;
     let track_position = &track.track_number;
@@ -139,7 +156,9 @@ fn track(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
                 track_mode_confidence,track_tempo, track_tempo_confidence, track_time_signature, 
                 track_time_signature_confidence, track_name, track_url
             ));
-            e.footer(|f| f.text("Powered by the Spotify Web API."))
+            e.footer(|f| {
+                f.text(format!("{}", track_copyright))
+            })
         })
     }).map_or_else(|e| Err(CommandError(e.to_string())), |_| Ok(()))
 }
