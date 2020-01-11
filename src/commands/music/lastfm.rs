@@ -67,7 +67,7 @@ pub fn lastfm(ctx: &mut Context, message: &Message, mut args: Args) -> CommandRe
     let user_url = user_info.url;
     let user_username = user_info.username.to_string();
     let user_registered = NaiveDateTime::from_timestamp(user_info.registered.friendly_date, 0).format("%B %e, %Y - %I:%M %p");
-    let user_scrobbles = utilities::format_int(user_info.total_tracks.unwrap().parse::<isize>().unwrap());
+    let user_scrobbles = utilities::format_int(user_info.total_tracks.parse::<isize>().unwrap());
 
     let track = recent_tracks.first().unwrap();
 
