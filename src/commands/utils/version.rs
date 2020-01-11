@@ -22,13 +22,18 @@ fn version_info() -> &'static str {
 #[usage("<blank>")]
 pub fn version(ctx: &mut Context, message: &Message) -> CommandResult {
     let bot_version = version_info();
+    let bot_codename = std::env::var("BOT_CODENAME").unwrap();
     let bot_name = ctx.cache.read().user.name.to_string();
-    let rustc_version = env!("RUSTC_VERSION");
+    let rust_version = env!("RUSTC_VERSION");
 
     let _ = message.channel_id.send_message(&ctx, |m| {
         m.embed(|e| {
             e.title(format_args!("Version information for {}", bot_name));
-            e.description(format_args!("**Bot Version**: {}\n**Rust Version**: {}", bot_version, rustc_version))
+            e.description(format_args!(
+                "
+                **Bot Version**: {}\n\
+                **Bot Codename**: {}\n\
+                **Rust Version**: {}", bot_version, bot_codename, rust_version))
         })
     });
 
