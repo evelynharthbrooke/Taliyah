@@ -419,9 +419,11 @@ version = "0.0.1"
 dependencies = [
  "chrono",
  "dotenv 0.15.0",
+ "git-testament",
  "humantime",
  "itertools",
  "lastfm-rs",
+ "lazy_static",
  "log 0.4.8",
  "pretty_env_logger",
  "reqwest 0.9.24",
@@ -641,6 +643,27 @@ dependencies = [
  "cfg-if",
  "libc",
  "wasi",
+]
+
+[[package]]
+name = "git-testament"
+version = "0.1.7"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "3ef4008ae8759f8f634e9b4db201b2205cbc9992fc36fdacb54a9a7dbd045207"
+dependencies = [
+ "git-testament-derive",
+]
+
+[[package]]
+name = "git-testament-derive"
+version = "0.1.8"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d4262cd02031d4ce8dad7069232c2cfce38ff9f8557647ea96d130a99f2aa543"
+dependencies = [
+ "chrono",
+ "log 0.4.8",
+ "quote 1.0.2",
+ "syn 1.0.12",
 ]
 
 [[package]]
