@@ -1,4 +1,4 @@
-pub fn pretty_print_int(i: isize) -> String {
+pub fn format_int(i: isize) -> String {
     let mut s = String::new();
     let i_str = i.to_string();
     let a = i_str.chars().rev().enumerate();
