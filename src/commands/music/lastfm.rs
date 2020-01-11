@@ -3,9 +3,13 @@
 //! Retrieves a chosen user's last.fm state, along with various
 //! user information such as their most recent tracks.
 
+use chrono::NaiveDateTime;
+
+use crate::utilities::pretty_print_int;
+
 use itertools::Itertools;
 
-use log::{info, warn};
+use log::warn;
 
 use serenity::client::Context;
 use serenity::framework::standard::macros::command;
@@ -47,16 +51,30 @@ pub fn lastfm(ctx: &mut Context, message: &Message, mut args: Args) -> CommandRe
     let mut client: Client = Client::new(&api_key);
 
     let recent_tracks = client.recent_tracks(&user).with_limit(limit).send().unwrap().tracks;
-    let loved_tracks = client.loved_tracks(&user).with_limit(1).send().unwrap().attrs.total;
+    let loved_tracks = client.loved_tracks(&user).send().unwrap().attrs.total;
+    let user_info = client.user_info(&user).send().unwrap().user;
+
+    let user_country = match user_info.country.clone().unwrap().is_empty() {
+        true => "No country available.".to_owned(),
+        false => user_info.country.unwrap(),
+    };
+
+    let user_display_name = match user_info.display_name.clone().unwrap().is_empty() {
+        true => "No display name available.".to_string(),
+        false => user_info.display_name.unwrap(),
+    };
+
+    let user_url = user_info.url;
+    let user_username = user_info.username.to_string();
+    let user_registered = NaiveDateTime::from_timestamp(user_info.registered.friendly_date, 0).format("%B %e, %Y - %I:%M %p");
+    let user_scrobbles = pretty_print_int(user_info.total_tracks.unwrap().parse::<isize>().unwrap());
+
     let track = recent_tracks.first().unwrap();
 
     let tracks: String;
 
     match recent_tracks.is_empty() {
-        true => {
-            info!("This user does not have any recent tracks.");
-            tracks = "No recent tracks available".to_owned();
-        }
+        true => tracks = "No recent tracks available".to_owned(),
         false => {
             tracks = recent_tracks
                 .iter()
@@ -82,20 +100,25 @@ pub fn lastfm(ctx: &mut Context, message: &Message, mut args: Args) -> CommandRe
 
     let currently_playing: String = format!(
         "{} {} {} by {} on {}.",
-        user, track_play_state, track.name, track.artist.name, track.album.name
+        user_username, track_play_state, track.name, track.artist.name, track.album.name
     );
 
     let _ = message.channel_id.send_message(&ctx, |m| {
         m.embed(|e| {
-            e.title(format!("{}'s Last.fm Details", user));
+            e.title(format!("{}'s Last.fm details", user_username));
+            e.url(user_url);
             e.color(0x00d5_1007);
             e.description(format!(
                 "{}\n\n\
-                **__User Information:__**\n\
-                **Loved Tracks**: {}\n\n\
-                **__Recently Played:__**\n\
+                **__User information:__**\n\
+                **Display name**: {}\n\
+                **Country**: {}\n\
+                **Join date**: {}\n\
+                **Loved tracks**: {}\n\
+                **Total track plays**: {}\n\n\
+                **__Recent tracks:__**\n\
                 {}",
-                currently_playing, loved_tracks, tracks,
+                currently_playing, user_display_name, user_country, user_registered, loved_tracks, user_scrobbles, tracks
             ));
             e.footer(|f| f.text("Powered by the Last.fm API."));
             e

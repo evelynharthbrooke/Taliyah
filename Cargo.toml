@@ -12,7 +12,7 @@ build = "build.rs"
 humantime = "1.3.0"
 serenity = { git = "https://github.com/serenity-rs/serenity.git", branch = "current" }
 dotenv = "0.15"
-reqwest = "0.9"
+reqwest = "0.10"
 chrono = "0.4"
 itertools = "0.8"
 serde = "1.0"

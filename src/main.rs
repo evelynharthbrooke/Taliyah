@@ -3,6 +3,7 @@
 //! Ellie is a bot for the Discord chat platform focused on giving users
 //! a powerful set of features, while remaining quick to respond.
 
+pub mod utilities;
 mod commands;
 mod listeners;
 

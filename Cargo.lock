@@ -433,7 +433,7 @@ dependencies = [
  "lazy_static",
  "log 0.4.8",
  "pretty_env_logger",
- "reqwest 0.9.24",
+ "reqwest 0.10.1",
  "rspotify",
  "serde",
  "serde_json",
@@ -891,6 +891,19 @@ dependencies = [
 ]
 
 [[package]]
+name = "hyper-tls"
+version = "0.4.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "3adcd308402b9553630734e9c36b77a7e48b3821251ca2493e8cd596763aafaa"
+dependencies = [
+ "bytes 0.5.3",
+ "hyper 0.13.1",
+ "native-tls",
+ "tokio 0.2.9",
+ "tokio-tls",
+]
+
+[[package]]
 name = "ident_case"
 version = "1.0.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -988,7 +1001,7 @@ checksum = "a91d884b6667cd606bb5a69aa0c99ba811a115fc68915e7056ec08a46e93199a"
 [[package]]
 name = "lastfm-rs"
 version = "0.2.0"
-source = "git+https://github.com/KamranMackey/lastfm-rs#be91ebc8e912032b28fc7d69b6721a50245a492d"
+source = "git+https://github.com/KamranMackey/lastfm-rs#d65c73c5bb353425806bec1988d4112401933df9"
 dependencies = [
  "hyper 0.10.16",
  "serde",
@@ -1611,7 +1624,7 @@ dependencies = [
  "futures",
  "http 0.1.21",
  "hyper 0.12.35",
- "hyper-tls",
+ "hyper-tls 0.3.2",
  "log 0.4.8",
  "mime 0.3.16",
  "mime_guess",
@@ -1645,11 +1658,13 @@ dependencies = [
  "http-body 0.3.1",
  "hyper 0.13.1",
  "hyper-rustls",
+ "hyper-tls 0.4.1",
  "js-sys",
  "lazy_static",
  "log 0.4.8",
  "mime 0.3.16",
  "mime_guess",
+ "native-tls",
  "percent-encoding 2.1.0",
  "pin-project-lite",
  "rustls",
@@ -1659,6 +1674,7 @@ dependencies = [
  "time",
  "tokio 0.2.9",
  "tokio-rustls",
+ "tokio-tls",
  "url 2.1.1",
  "wasm-bindgen",
  "wasm-bindgen-futures",
@@ -2220,6 +2236,16 @@ dependencies = [
  "futures",
  "slab",
  "tokio-executor",
+]
+
+[[package]]
+name = "tokio-tls"
+version = "0.3.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "7bde02a3a5291395f59b06ec6945a3077602fac2b07eeeaf0dee2122f3619828"
+dependencies = [
+ "native-tls",
+ "tokio 0.2.9",
 ]
 
 [[package]]
