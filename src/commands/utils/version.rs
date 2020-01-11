@@ -16,7 +16,7 @@ fn version_info() -> &'static str {
 
 #[command]
 #[description(
-    "Retrieves the bot version, as well as the version of Rust that\
+    "Retrieves the bot version, as well as the version of Rust that \
     the bot was built with."
 )]
 #[usage("<blank>")]
