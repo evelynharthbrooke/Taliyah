@@ -15,7 +15,10 @@ fn version_info() -> &'static str {
 }
 
 #[command]
-#[description("Retrieves the bot version, as well as the underlying rustc version.")]
+#[description(
+    "Retrieves the bot version, as well as the version of Rust that\
+    the bot was built with."
+)]
 #[usage("<blank>")]
 pub fn version(ctx: &mut Context, message: &Message) -> CommandResult {
     let bot_version = version_info();
