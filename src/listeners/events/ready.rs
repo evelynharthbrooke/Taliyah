@@ -19,6 +19,7 @@ pub fn ready(context: Context, ready: Ready) {
     info!("Bot user ID: {}", ready.user.id);
     info!("Connected to version {} of the Discord gateway.", ready.version);
     info!("Connected to {} guild(s).", ready.guilds.len());
+    info!("Serving {} users.", ready.presences.len());
     // Set a basic presence. This will be improved later on.
     context.set_presence(Some(Activity::playing("!help")), OnlineStatus::Online);
 }
