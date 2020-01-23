@@ -18,5 +18,5 @@ pub fn show_head_rev(repo: &Repository) -> String {
     let revspec = repo.revparse("HEAD").unwrap();
     let revision = revspec.from().unwrap();
     let revision_id = revision.short_id().unwrap().as_str().unwrap().to_string();
-    return revision_id.to_string();
+    return revision_id;
 }
