@@ -24,6 +24,7 @@ use listeners::handler::Handler;
 use serenity::client::Client;
 use serenity::framework::standard::macros::group;
 use serenity::framework::StandardFramework;
+use serenity::framework::standard::DispatchError;
 
 use rspotify::spotify::client::Spotify;
 use rspotify::spotify::oauth2::SpotifyClientCredentials;
@@ -70,9 +71,24 @@ pub fn main() {
             .configure(|c| {
                 c.with_whitespace(true)
                     .prefix(&prefix)
+                    .ignore_webhooks(false)
                     .case_insensitivity(true)
                     .owners(owners)
                     .on_mention(Some(bot_id))
+            })
+            .on_dispatch_error(|ctx, msg, err| match err {
+                DispatchError::Ratelimited(secs) => {
+                    let _ = msg.channel_id.say(&ctx.http, &format!("Try this again in {} seconds", secs));
+                },
+                DispatchError::OnlyForOwners => {
+                    let _ = msg.channel_id.say(&ctx.http, "This is only available for owners.");
+                },
+                DispatchError::IgnoredBot => {},
+                _ => error!("Dispatch Error: {} failed: {:?}", msg.content, err),
+            })
+            .after(|ctx, msg, cmd_name, err| if let Err(why) = err {
+                let _ = msg.channel_id.say(&ctx.http, "An error occured while running this command, please try again later.");
+                error!("Command Error: {} triggered by {} has errored: {:#?}", cmd_name, msg.author.tag(), why);
             })
             .help(&HELP)
             .group(&INFORMATION_GROUP)
