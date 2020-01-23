@@ -45,7 +45,7 @@ fn album(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
     let album_url = &album.external_urls["spotify"];
     let album_image = &album.images.first().unwrap().url;
 
-    let album_type = match album.album_type.clone().as_str() {
+    let mut album_type = match album.album_type.clone().as_str() {
         "album" => "Album".to_owned(),
         "single" => "Single".to_owned(),
         "appears_on" => "Appears On".to_owned(),
@@ -54,6 +54,11 @@ fn album(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
     };
 
     let mut album_markets = album.available_markets.len().to_string();
+    
+    let album_genres = match album.genres.is_empty() {
+        true => "No genres available.".to_string(),
+        false => album.genres.iter().map(|g| g).join(", ")
+    };
 
     // This will have to be updated as Spotify is launched
     // in more markets / countries.
@@ -76,19 +81,23 @@ fn album(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
     };
 
     let album_tracks_total = album.tracks.total;
+
+    if album_tracks_total <= 6 && album_tracks_total > 1 {
+        album_type = "Extended Play (EP)".to_string()
+    }
+
     let album_tracks = album.tracks.items.iter().map(|track: &SimplifiedTrack| {
         let name = &track.name;
         let position = &track.track_number;
         let external_link = &track.external_urls["spotify"];
         let length = format_duration(Duration::from_millis(track.duration_ms as u64 / 1000 * 1000));
-        let artists = &track.artists.iter().map(|a| &a.name).join(", ");
 
         let explicit = match track.explicit {
             true => "(explicit)".to_string(),
             false => "".to_string()
         };
 
-        return format!("**{}.** [{}]({}) — {} — {} {}", position, name, external_link, artists, length, explicit);
+        return format!("**{}.** [{}]({}) — {} {}", position, name, external_link, length, explicit);
     }).join("\n");
     
     msg.channel_id.send_message(&ctx, move |m| {
@@ -104,13 +113,14 @@ fn album(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
                     **Album type**: {}\n\
                     **Artist(s)**: {}\n\
                     **Release date**: {}\n\
+                    **Genres**: {}\n\
                     **Popularity**: {}\n\
                     **Markets**: {}\n\
                     **Track count**: {}\n\n\
                     **Tracks**: \n{}\n\
                     ",
-                    album_type, album_artists, album_date, album_popularity, album_markets, 
-                    album_tracks_total, album_tracks
+                    album_type, album_artists, album_date, album_genres, album_popularity, 
+                    album_markets, album_tracks_total, album_tracks
                 ));
                 e.footer(|f| {
                     f.text(format!("{}", album_copyright))
