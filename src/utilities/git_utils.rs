@@ -14,6 +14,7 @@ pub fn show_branch(repo: &Repository) -> String {
     return head.unwrap().to_string()
 }
 
+/// Retrieves the latest HEAD revision for the current git repository.
 pub fn show_head_rev(repo: &Repository) -> String {
     let revspec = repo.revparse("HEAD").unwrap();
     let revision = revspec.from().unwrap();
