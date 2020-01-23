@@ -1,4 +1,5 @@
 pub mod built_info;
+pub mod git_utils;
 
 pub fn format_int(i: isize) -> String {
     let mut s = String::new();
