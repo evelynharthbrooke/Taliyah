@@ -1,3 +1,5 @@
+pub mod built_info;
+
 pub fn format_int(i: isize) -> String {
     let mut s = String::new();
     let i_str = i.to_string();

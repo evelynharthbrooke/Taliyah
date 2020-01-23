@@ -1,18 +1,11 @@
-use git_testament::{git_testament, render_testament};
-use lazy_static::lazy_static;
+use crate::utilities::built_info;
+
 use serenity::client::Context;
 use serenity::framework::standard::macros::command;
 use serenity::framework::standard::CommandResult;
 use serenity::model::prelude::Message;
 
-git_testament!(TESTAMENT);
-
-fn version_info() -> &'static str {
-    lazy_static! {
-        static ref RENDERED: String = render_testament!(TESTAMENT, "rust_rewrite");
-    }
-    &RENDERED
-}
+use std::env;
 
 #[command]
 #[description(
@@ -21,19 +14,27 @@ fn version_info() -> &'static str {
 )]
 #[usage("<blank>")]
 pub fn version(ctx: &mut Context, message: &Message) -> CommandResult {
-    let bot_version = version_info();
-    let bot_codename = std::env::var("BOT_CODENAME").unwrap();
-    let bot_name = ctx.cache.read().user.name.to_string();
-    let rust_version = env!("RUSTC_VERSION");
+    let build_target = built_info::TARGET;
+    let build_date = built_info::BUILT_TIME_UTC;
+    let codename = env::var("BOT_CODENAME").unwrap();
+    let rust_runtime = built_info::RUSTC_VERSION;
+    let git_version = built_info::GIT_VERSION.map_or_else(|| "".to_owned(), |v| format!(" (git {})", v));
+    let name = ctx.cache.read().user.name.to_string();
+    let version = built_info::PKG_VERSION;
 
     let _ = message.channel_id.send_message(&ctx, |m| {
         m.embed(|e| {
-            e.title(format_args!("Version information for {}", bot_name));
+            e.title(format_args!("{} version information", name));
             e.description(format_args!(
                 "
-                **Bot Version**: {}\n\
-                **Bot Codename**: {}\n\
-                **Rust Version**: {}", bot_version, bot_codename, rust_version))
+                **Version**: {} {}\n\
+                **Codename**: {}\n\
+                **Built for**: {}\n\
+                **Built at**: {}\n\
+                **Rust runtime**: {}", 
+                version, git_version, codename, build_target, build_date, 
+                rust_runtime
+            ))
         })
     });
 
