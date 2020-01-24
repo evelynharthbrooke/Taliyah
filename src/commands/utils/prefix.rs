@@ -10,9 +10,18 @@ use serenity::prelude::Context;
 
 #[command]
 #[only_in(guilds)]
-#[owners_only]
+#[owners_only(true)]
 #[sub_commands(get, set, clear)]
-#[description("Retrieves, sets, or clears the command prefix for the current guild.")]
+#[description(
+    "\
+    Retrieves, sets, or clears the command prefix for the current guild.\n\n\
+    Sub-commands:\n\
+    `get`: Retrieves the currently set command prefix for the guild.\n\
+    `set`: Sets the guild's command prefix.\n\
+    `clear`: Clears the guild's currently set command prefix. This will reset the \
+    command prefix back to the default value in the bot's configuration file.\
+    "
+)]
 fn prefix(ctx: &mut Context, message: &Message) -> CommandResult {
     message
         .channel_id
@@ -47,33 +56,7 @@ pub fn get(ctx: &mut Context, message: &Message) -> CommandResult {
 
     return message
         .channel_id
-        .say(&ctx.http, format!("The currently set command prefix for {} is {}.", guild_name, prefix))
-        .map_or_else(|e| Err(CommandError(e.to_string())), |_| Ok(()));
-}
-
-#[command]
-#[only_in(guilds)]
-#[owners_only]
-#[aliases(clear, delete)]
-#[description = "Clears the current server's currently set command prefix."]
-pub fn clear(ctx: &mut Context, message: &Message) -> CommandResult {
-    let _ = database::clear_prefix(&message.guild_id.unwrap());
-
-    let guild = match message.guild(&ctx.cache) {
-        Some(guild) => guild,
-        None => {
-            return message
-                .channel_id
-                .say(&ctx.http, "Unable to clear the command prefix, as the guild cannot be located.")
-                .map_or_else(|e| Err(CommandError(e.to_string())), |_| Ok(()))
-        }
-    };
-
-    let guild_name = &guild.read().name;
-
-    return message
-        .channel_id
-        .say(&ctx.http, format!("The command prefix for {} has been cleared.", guild_name))
+        .say(&ctx.http, format!("The currently set command prefix for {} is `{}`.", guild_name, prefix))
         .map_or_else(|e| Err(CommandError(e.to_string())), |_| Ok(()));
 }
 
@@ -110,6 +93,33 @@ pub fn set(ctx: &mut Context, message: &Message, args: Args) -> CommandResult {
 
     return message
         .channel_id
-        .say(&ctx.http, format!("The command prefix for {} has been set to {}.", guild_name, prefix))
+        .say(&ctx.http, format!("The command prefix for {} has been set to `{}`.", guild_name, prefix))
+        .map_or_else(|e| Err(CommandError(e.to_string())), |_| Ok(()));
+}
+
+
+#[command]
+#[only_in(guilds)]
+#[owners_only]
+#[aliases(clear, delete)]
+#[description = "Clears the current server's currently set command prefix."]
+pub fn clear(ctx: &mut Context, message: &Message) -> CommandResult {
+    let _ = database::clear_prefix(&message.guild_id.unwrap());
+
+    let guild = match message.guild(&ctx.cache) {
+        Some(guild) => guild,
+        None => {
+            return message
+                .channel_id
+                .say(&ctx.http, "Unable to clear the command prefix, as the guild cannot be located.")
+                .map_or_else(|e| Err(CommandError(e.to_string())), |_| Ok(()))
+        }
+    };
+
+    let guild_name = &guild.read().name;
+
+    return message
+        .channel_id
+        .say(&ctx.http, format!("The command prefix for {} has been cleared.", guild_name))
         .map_or_else(|e| Err(CommandError(e.to_string())), |_| Ok(()));
 }
