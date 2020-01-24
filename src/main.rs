@@ -3,7 +3,7 @@
 //! Ellie is a bot for the Discord chat platform focused on giving users
 //! a powerful set of features, while remaining quick to respond.
 
-pub mod utilities;
+mod utilities;
 mod commands;
 mod listeners;
 
@@ -12,6 +12,7 @@ use commands::info::user::*;
 use commands::music::lastfm::*;
 use commands::music::spotify::commands::spotify::*;
 use commands::utils::help::*;
+use commands::utils::prefix::*;
 use commands::utils::ping::*;
 use commands::utils::version::*;
 
@@ -21,16 +22,19 @@ use log::error;
 
 use listeners::handler::Handler;
 
+use rspotify::spotify::client::Spotify;
+use rspotify::spotify::oauth2::SpotifyClientCredentials;
+
 use serenity::client::Client;
 use serenity::framework::standard::macros::group;
 use serenity::framework::StandardFramework;
 use serenity::framework::standard::DispatchError;
 
-use rspotify::spotify::client::Spotify;
-use rspotify::spotify::oauth2::SpotifyClientCredentials;
-
 use std::collections::HashSet;
 use std::env;
+
+use utilities::database::create_database;
+use utilities::database::get_prefix;
 
 #[group]
 #[description = "Various informational commands."]
@@ -39,7 +43,7 @@ struct Information;
 
 #[group]
 #[description = "Ellie's selection of utility commands."]
-#[commands(ping, version)]
+#[commands(ping, prefix, version)]
 struct Utilities;
 
 #[group]
@@ -50,8 +54,9 @@ struct Music;
 pub fn main() {
     dotenv().expect("Unable to read / access the .env file!");
 
+    create_database();
+
     let token: String = env::var("DISCORD_TOKEN").expect("Unable to read the bot token.");
-    let prefix: String = env::var("DISCORD_PREFIX").expect("Unable to get the bot prefix.");
 
     let mut client: Client = Client::new(&token, Handler).expect("Error creating client.");
 
@@ -70,10 +75,21 @@ pub fn main() {
         StandardFramework::new()
             .configure(|c| {
                 c.with_whitespace(true)
-                    .prefix(&prefix)
                     .ignore_webhooks(false)
                     .case_insensitivity(true)
                     .owners(owners)
+                    .dynamic_prefix(|_, message| {
+                        let def_prefix: String = env::var("DISCORD_PREFIX").expect("Unable to get the bot prefix.");
+                        if message.is_private() {
+                            return Some(def_prefix.clone().to_string());
+                        }
+                        if let Some(guild_id) = message.guild_id {
+                            let prefix = get_prefix(&guild_id).map_or_else(|_| def_prefix.clone().to_string(), |prefix| prefix);
+                            return Some(prefix);
+                        } else {
+                            return Some(def_prefix.to_string())
+                        }
+                    })
                     .on_mention(Some(bot_id))
             })
             .on_dispatch_error(|ctx, msg, err| match err {
