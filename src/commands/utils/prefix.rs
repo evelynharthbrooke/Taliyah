@@ -54,6 +54,7 @@ pub fn get(ctx: &mut Context, message: &Message) -> CommandResult {
 #[command]
 #[only_in(guilds)]
 #[owners_only]
+#[aliases(clear, delete)]
 #[description = "Clears the current server's currently set command prefix."]
 pub fn clear(ctx: &mut Context, message: &Message) -> CommandResult {
     let _ = database::clear_prefix(&message.guild_id.unwrap());
@@ -63,7 +64,7 @@ pub fn clear(ctx: &mut Context, message: &Message) -> CommandResult {
         None => {
             return message
                 .channel_id
-                .say(&ctx.http, "Unable to get the command prefix, as the guild cannot be located.")
+                .say(&ctx.http, "Unable to clear the command prefix, as the guild cannot be located.")
                 .map_or_else(|e| Err(CommandError(e.to_string())), |_| Ok(()))
         }
     };
