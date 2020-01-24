@@ -3,17 +3,17 @@
 //! Ellie is a bot for the Discord chat platform focused on giving users
 //! a powerful set of features, while remaining quick to respond.
 
-mod utilities;
 mod commands;
 mod listeners;
+mod utilities;
 
 use commands::info::guild::*;
 use commands::info::user::*;
 use commands::music::lastfm::*;
 use commands::music::spotify::commands::spotify::*;
 use commands::utils::help::*;
-use commands::utils::prefix::*;
 use commands::utils::ping::*;
+use commands::utils::prefix::*;
 use commands::utils::version::*;
 
 use dotenv::dotenv;
@@ -27,8 +27,8 @@ use rspotify::spotify::oauth2::SpotifyClientCredentials;
 
 use serenity::client::Client;
 use serenity::framework::standard::macros::group;
-use serenity::framework::StandardFramework;
 use serenity::framework::standard::DispatchError;
+use serenity::framework::StandardFramework;
 
 use std::collections::HashSet;
 use std::env;
@@ -54,11 +54,9 @@ struct Music;
 pub fn main() {
     dotenv().expect("Unable to read / access the .env file!");
 
-    create_database();
+    let token = env::var("DISCORD_TOKEN").expect("Unable to read the bot token.").to_string();
 
-    let token: String = env::var("DISCORD_TOKEN").expect("Unable to read the bot token.");
-
-    let mut client: Client = Client::new(&token, Handler).expect("Error creating client.");
+    let mut client = Client::new(&token, Handler).expect("Error creating client.");
 
     pretty_env_logger::init();
 
@@ -70,6 +68,8 @@ pub fn main() {
         }
         Err(why) => panic!("Couldn't get app info: {:?}", why),
     };
+
+    create_database();
 
     client.with_framework(
         StandardFramework::new()
@@ -87,7 +87,7 @@ pub fn main() {
                             let prefix = get_prefix(&guild_id).map_or_else(|_| def_prefix.clone().to_string(), |prefix| prefix);
                             return Some(prefix);
                         } else {
-                            return Some(def_prefix.to_string())
+                            return Some(def_prefix.to_string());
                         }
                     })
                     .on_mention(Some(bot_id))
@@ -95,16 +95,20 @@ pub fn main() {
             .on_dispatch_error(|ctx, msg, err| match err {
                 DispatchError::Ratelimited(secs) => {
                     let _ = msg.channel_id.say(&ctx.http, &format!("Try this again in {} seconds", secs));
-                },
+                }
                 DispatchError::OnlyForOwners => {
                     let _ = msg.channel_id.say(&ctx.http, "This is only available for owners.");
-                },
-                DispatchError::IgnoredBot => {},
+                }
+                DispatchError::IgnoredBot => {}
                 _ => error!("Dispatch Error: {} failed: {:?}", msg.content, err),
             })
-            .after(|ctx, msg, cmd_name, err| if let Err(why) = err {
-                let _ = msg.channel_id.say(&ctx.http, "An error occured while running this command, please try again later.");
-                error!("Command Error: {} triggered by {} has errored: {:#?}", cmd_name, msg.author.tag(), why);
+            .after(|ctx, msg, cmd_name, err| {
+                if let Err(why) = err {
+                    let _ = msg
+                        .channel_id
+                        .say(&ctx.http, "An error occured while running this command, please try again later.");
+                    error!("Command Error: {} triggered by {} has errored: {:#?}", cmd_name, msg.author.tag(), why);
+                }
             })
             .help(&HELP)
             .group(&INFORMATION_GROUP)

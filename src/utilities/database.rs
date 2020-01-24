@@ -11,13 +11,22 @@ use std::path::Path;
 
 pub fn create_database() {
     let database = Path::new("database.sqlite3");
+
     if !database.exists() {
         match File::create(&database) {
             Ok(_) => (),
             Err(e) => error!("Failed to create database file: {}", e),
         }
     }
+
     if let Ok(connection) = Connection::open(&database) {
+        // Set user_version to 1.
+        match connection.execute("PRAGMA user_version = 1;", NO_PARAMS) {
+            Ok(_) => (),
+            Err(e) => error!("{}", e),
+        }
+
+        // Create guild_settings table.
         match connection.execute(
             "CREATE TABLE IF NOT EXISTS guild_settings (
                 guild_id TEXT PRIMARY KEY,
@@ -27,18 +36,29 @@ pub fn create_database() {
             NO_PARAMS,
         ) {
             Ok(_) => (),
-            Err(e) => {
-                error!("{}", e);
-            }
+            Err(e) => error!("{}", e),
+        };
+
+        // Create profile table.
+        match connection.execute(
+            "CREATE TABLE IF NOT EXISTS profile (
+                user_id TEXT PRIMARY KEY,
+                user_name TEXT NOT NULL,
+                lastfm TEXT NOT NULL
+            )",
+            NO_PARAMS,
+        ) {
+            Ok(_) => (),
+            Err(e) => error!("{}", e),
         }
     } else {
-        error!("Could not open connection to database ({})", &database.to_string_lossy());
-    }
+        error!("Could not open connection to database ({})", &database.to_string_lossy())
+    };
 }
 
 pub fn get_database() -> Result<Connection, Box<dyn Error>> {
-    let db = Path::new("database.sqlite3");
-    Ok(Connection::open(db)?)
+    let database_file = Path::new("database.sqlite3");
+    Ok(Connection::open(database_file)?)
 }
 
 pub fn get_sqlite_version() -> String {
@@ -51,4 +71,12 @@ pub fn get_prefix(guild_id: &GuildId) -> Result<String, Box<dyn Error>> {
     let mut statement = connection.prepare("SELECT prefix FROM guild_settings WHERE guild_id == ?1;")?;
     let mut rows = statement.query(&[&guild_id.as_u64().to_string()])?;
     Ok(rows.next()?.ok_or("Guild not found.")?.get(0)?)
+}
+
+pub fn clear_prefix(guild_id: &GuildId) {
+    let connection = match get_database() {
+        Ok(d) => d,
+        Err(e) => return error!("An error occured while getting the database: {}", e)
+    };
+    let _ = connection.execute("DELETE FROM guild_settings where guild_id == ?1;", &[guild_id.to_string()]);
 }

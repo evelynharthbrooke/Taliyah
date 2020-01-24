@@ -11,8 +11,8 @@ use serenity::prelude::Context;
 #[command]
 #[only_in(guilds)]
 #[owners_only]
-#[sub_commands(get, set)]
-#[description("Retrieves or sets the command prefix for the current guild.")]
+#[sub_commands(get, set, clear)]
+#[description("Retrieves, sets, or clears the command prefix for the current guild.")]
 fn prefix(ctx: &mut Context, message: &Message) -> CommandResult {
     message
         .channel_id
@@ -48,6 +48,31 @@ pub fn get(ctx: &mut Context, message: &Message) -> CommandResult {
     return message
         .channel_id
         .say(&ctx.http, format!("The currently set command prefix for {} is {}.", guild_name, prefix))
+        .map_or_else(|e| Err(CommandError(e.to_string())), |_| Ok(()));
+}
+
+#[command]
+#[only_in(guilds)]
+#[owners_only]
+#[description = "Clears the current server's currently set command prefix."]
+pub fn clear(ctx: &mut Context, message: &Message) -> CommandResult {
+    let _ = database::clear_prefix(&message.guild_id.unwrap());
+
+    let guild = match message.guild(&ctx.cache) {
+        Some(guild) => guild,
+        None => {
+            return message
+                .channel_id
+                .say(&ctx.http, "Unable to get the command prefix, as the guild cannot be located.")
+                .map_or_else(|e| Err(CommandError(e.to_string())), |_| Ok(()))
+        }
+    };
+
+    let guild_name = &guild.read().name;
+
+    return message
+        .channel_id
+        .say(&ctx.http, format!("The command prefix for {} has been cleared.", guild_name))
         .map_or_else(|e| Err(CommandError(e.to_string())), |_| Ok(()));
 }
 

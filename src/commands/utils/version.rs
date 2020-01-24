@@ -26,6 +26,7 @@ pub fn version(ctx: &mut Context, msg: &Message) -> CommandResult {
     let codename = env::var("BOT_CODENAME").unwrap();
     let branch = show_branch(&repo);
     let revision = show_head_rev(&repo);
+    let build_host = built_info::HOST;
     let build_target = built_info::TARGET;
     let build_date = built_info::BUILT_TIME_UTC;
     let rust_runtime = built_info::RUSTC_VERSION;
@@ -33,18 +34,19 @@ pub fn version(ctx: &mut Context, msg: &Message) -> CommandResult {
     msg.channel_id
         .send_message(&ctx, |m| {
             m.embed(|e| {
-                e.title(format_args!("{} version information", name));
-                e.description(format_args!(
-                    "
+                e.title(format!("{} version information", name));
+                e.description(format!("
                 **Version**: v{} {}\n\
                 **Branch**: {}\n\
                 **Revision**: {}\n\
                 **Codename**: {}\n\
                 **Build date**: {}\n\
+                **Build host**: {}\n\
                 **Build target**: {}\n\
-                **Rust runtime**: {}",
-                    version, git_version, branch, revision, codename, build_date, build_target, rust_runtime
-                ))
+                **Rust runtime**: {}", 
+                version, git_version, branch, revision, codename, 
+                build_date, build_host, build_target, rust_runtime
+            ))
             })
         })
         .map_or_else(|e| Err(CommandError(e.to_string())), |_| Ok(()))
