@@ -1,8 +1,8 @@
+use crate::utilities::database::get_sqlite_version;
+
 use serenity::client::Context;
 use serenity::model::gateway::{Activity, Ready};
 use serenity::model::user::OnlineStatus;
-
-use crate::utilities::database::get_sqlite_version;
 
 use log::info;
 
