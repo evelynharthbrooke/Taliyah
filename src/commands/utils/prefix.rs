@@ -9,8 +9,7 @@ use serenity::model::prelude::Message;
 use serenity::prelude::Context;
 
 #[command]
-#[description("Get or set the command prefix for the current server."
-)]
+#[description("Get or set the command prefix for the current server.")]
 #[sub_commands(get, set)]
 fn prefix(ctx: &mut Context, message: &Message) -> CommandResult {
     message
