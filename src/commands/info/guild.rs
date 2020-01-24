@@ -28,6 +28,7 @@ pub fn guild(ctx: &mut Context, msg: &Message) -> CommandResult {
     let guild_emojis_normal = guild.emojis.iter().filter(|(_, e)| e.animated == false).collect::<Vec<_>>().len();
     let guild_presences = guild.presences.len();
     let guild_members = guild.member_count;
+    let guild_prefix = crate::utilities::database::get_prefix(&guild_id).unwrap().to_string();
     let guild_icon = guild.icon_url().unwrap();
 
     let guild_explicit_filter = match guild.explicit_content_filter.num() {
@@ -102,6 +103,7 @@ pub fn guild(ctx: &mut Context, msg: &Message) -> CommandResult {
                 e.description(format!("
                     **Name**: {}\n\
                     **Owner**: {}\n\
+                    **Prefix**: `{}`\n\
                     **Members**: {}\n\
                     **Members Online**: {}\n\
                     **Channels**: {} ({} text, {} voice)\n\
@@ -114,7 +116,7 @@ pub fn guild(ctx: &mut Context, msg: &Message) -> CommandResult {
                     **Nitro Boost Level**: {}\n\
                     **Highest Role**: {}\n\
                     **Roles ({})**: {}\n",
-                    guild_name, guild_owner, guild_members, guild_presences, guild_channels,
+                    guild_name, guild_owner, guild_prefix, guild_members, guild_presences, guild_channels,
                     guild_channels_text, guild_channels_voice, guild_emojis, guild_emojis_animated, 
                     guild_emojis_normal, guild_region, guild_creation_date, guild_verification_level, 
                     guild_explicit_filter, guild_boosts, guild_boost_tier, highest_role_name, 

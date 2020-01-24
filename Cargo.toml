@@ -1,6 +1,6 @@
 [package]
 name = "ellie"
-version = "0.2.1"
+version = "0.2.2"
 authors = ["Kamran Mackey <kamranm1200@gmail.com>"]
 publish = false
 build = "build.rs"
