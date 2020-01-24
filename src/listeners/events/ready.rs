@@ -2,6 +2,8 @@ use serenity::client::Context;
 use serenity::model::gateway::{Activity, Ready};
 use serenity::model::user::OnlineStatus;
 
+use crate::utilities::database::get_sqlite_version;
+
 use log::info;
 
 /// Ready event handler
@@ -18,6 +20,7 @@ pub fn ready(context: Context, ready: Ready) {
     info!("Bot username: {}#{}", ready.user.name, ready.user.discriminator);
     info!("Bot user ID: {}", ready.user.id);
     info!("Connected to version {} of the Discord gateway.", ready.version);
+    info!("Connected to SQLite version {}.", get_sqlite_version());
     info!("Connected to {} guild(s).", ready.guilds.len());
     // Set a basic presence. This will be improved later on.
     context.set_presence(Some(Activity::playing("!help")), OnlineStatus::Online);

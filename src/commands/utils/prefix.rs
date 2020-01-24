@@ -9,8 +9,10 @@ use serenity::model::prelude::Message;
 use serenity::prelude::Context;
 
 #[command]
-#[description("Get or set the command prefix for the current server.")]
+#[only_in(guilds)]
+#[owners_only]
 #[sub_commands(get, set)]
+#[description("Get or set the command prefix for the current server.")]
 fn prefix(ctx: &mut Context, message: &Message) -> CommandResult {
     message
         .channel_id
@@ -60,9 +62,8 @@ pub fn set(ctx: &mut Context, message: &Message, args: Args) -> CommandResult {
         &[&guild_id, &guild_name, prefix],
     );
 
-    let _ = message
+    return message
         .channel_id
-        .say(&ctx.http, format!("The command prefix for {} has been set to {}.", guild_name, prefix));
-
-    Ok(())
+        .say(&ctx.http, format!("The command prefix for {} has been set to {}.", guild_name, prefix))
+        .map_or_else(|e| Err(CommandError(e.to_string())), |_| Ok(()));
 }

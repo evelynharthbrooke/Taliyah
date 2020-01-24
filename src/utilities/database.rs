@@ -41,9 +41,14 @@ pub fn get_database() -> Result<Connection, Box<dyn Error>> {
     Ok(Connection::open(db)?)
 }
 
-pub fn get_prefix(guildid: &GuildId) -> Result<String, Box<dyn Error>> {
-    let conn = get_database()?;
-    let mut statement = conn.prepare("SELECT prefix FROM guild_settings WHERE guild_id == ?1;")?;
-    let mut rows = statement.query(&[&guildid.as_u64().to_string()])?;
+pub fn get_sqlite_version() -> String {
+    let sqlite_version = rusqlite::version();
+    return sqlite_version.to_string();
+}
+
+pub fn get_prefix(guild_id: &GuildId) -> Result<String, Box<dyn Error>> {
+    let connection = get_database()?;
+    let mut statement = connection.prepare("SELECT prefix FROM guild_settings WHERE guild_id == ?1;")?;
+    let mut rows = statement.query(&[&guild_id.as_u64().to_string()])?;
     Ok(rows.next()?.ok_or("Guild not found.")?.get(0)?)
 }
