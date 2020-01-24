@@ -24,6 +24,7 @@ use std::env;
 
 #[command]
 #[description("Retrieves various Last.fm user stats.")]
+#[aliases("fm", "lfm", "lastfm")]
 #[usage("<user> <limit>")]
 pub fn lastfm(ctx: &mut Context, message: &Message, mut args: Args) -> CommandResult {
     if args.rest().is_empty() {

@@ -12,15 +12,15 @@ use serenity::prelude::Context;
 #[only_in(guilds)]
 #[owners_only]
 #[sub_commands(get, set)]
-#[description("Get or set the command prefix for the current server.")]
+#[description("Retrieves or sets the command prefix for the current guild.")]
 fn prefix(ctx: &mut Context, message: &Message) -> CommandResult {
     message
         .channel_id
         .send_message(&ctx, move |m| {
-            m.embed(move |e| {
-                e.title("Error: Invalid / No Subcommand Entered!");
-                e.description("Please use subcommand get or set to use this command.");
-                e
+            m.embed(move |embed| {
+                embed.title("Error: Invalid / No Subcommand Entered!");
+                embed.description("Please use subcommand get or set to use this command.");
+                embed
             })
         })
         .map_or_else(|e| Err(CommandError(e.to_string())), |_| Ok(()))
@@ -31,8 +31,18 @@ fn prefix(ctx: &mut Context, message: &Message) -> CommandResult {
 #[owners_only]
 #[description = "Retrieves the command prefix for the current server."]
 pub fn get(ctx: &mut Context, message: &Message) -> CommandResult {
-    let prefix = database::get_prefix(&message.guild_id.unwrap()).unwrap().to_string();
-    let guild = message.guild(&ctx.cache).unwrap();
+    let prefix = database::get_prefix(&message.guild_id.unwrap())?.to_string();
+
+    let guild = match message.guild(&ctx.cache) {
+        Some(guild) => guild,
+        None => {
+            return message
+                .channel_id
+                .say(&ctx.http, "Unable to get the command prefix, as the guild cannot be located.")
+                .map_or_else(|e| Err(CommandError(e.to_string())), |_| Ok(()))
+        }
+    };
+
     let guild_name = &guild.read().name;
 
     return message
@@ -53,7 +63,17 @@ pub fn set(ctx: &mut Context, message: &Message, args: Args) -> CommandResult {
     };
 
     let prefix = args.current().unwrap_or(";");
-    let guild = message.guild(&ctx.cache).unwrap();
+
+    let guild = match message.guild(&ctx.cache) {
+        Some(guild) => guild,
+        None => {
+            return message
+                .channel_id
+                .say(&ctx.http, "Unable to set command prefix, as the guild cannot be located.")
+                .map_or_else(|e| Err(CommandError(e.to_string())), |_| Ok(()))
+        }
+    };
+
     let guild_id = guild.read().clone().id.as_u64().to_string();
     let guild_name = guild.read().clone().name;
 
