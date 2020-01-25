@@ -896,7 +896,7 @@ checksum = "a91d884b6667cd606bb5a69aa0c99ba811a115fc68915e7056ec08a46e93199a"
 [[package]]
 name = "lastfm-rs"
 version = "0.2.0"
-source = "git+https://github.com/KamranMackey/lastfm-rs#e77a7c70a1f5785ac4833c6a5895907537bb9e8c"
+source = "git+https://github.com/KamranMackey/lastfm-rs#c0c8c6396ec857823a0c161511403e7b62a0d5b5"
 dependencies = [
  "hyper 0.10.16",
  "serde",

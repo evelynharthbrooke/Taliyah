@@ -13,7 +13,7 @@ use serenity::model::prelude::Message;
 #[usage = "<user> or <blank>"]
 #[sub_commands(set)]
 #[only_in("guilds")]
-pub fn profile(ctx: &mut Context, message: &Message, args: Args) -> CommandResult {
+pub fn profile(ctx: &mut Context, message: &Message, _args: Args) -> CommandResult {
     let user_name = message.author.tag().to_string();
     let user_id = message.author.id;
     let display_name = match database::get_user_display_name(&user_id) {
