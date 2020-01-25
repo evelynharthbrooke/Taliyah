@@ -132,7 +132,12 @@ pub fn lastfm(ctx: &mut Context, message: &Message, mut args: Args) -> CommandRe
     };
 
     let user_url = user_info.url;
-    let user_username = user_info.username.to_string();
+    
+    let user_username = match database::get_user_display_name(&message.author.id) {
+        Ok(dn) => dn.to_string(),
+        Err(_) => user_info.username.to_string()
+    };
+    
     let user_registered = NaiveDateTime::from_timestamp(user_info.registered.friendly_date, 0).format("%B %e, %Y - %I:%M %p");
     let user_scrobbles = utilities::format_int(user_info.total_tracks.parse::<isize>().unwrap());
 
@@ -174,7 +179,7 @@ pub fn lastfm(ctx: &mut Context, message: &Message, mut args: Args) -> CommandRe
         .channel_id
         .send_message(&ctx, |m| {
             m.embed(|e| {
-                e.title(format!("{}'s Last.fm details", user_username));
+                e.title(format!("{}'s Last.fm", user_username));
                 e.url(user_url);
                 e.color(0x00d5_1007);
                 e.description(format!(
