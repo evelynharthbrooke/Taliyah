@@ -20,7 +20,7 @@ use serenity::prelude::Context;
     `set`: Sets the guild's command prefix.\n\
     `clear`: Clears the guild's currently set command prefix. This will reset the \
     command prefix back to the default value in the bot's configuration file.\
-    "
+    "x
 )]
 fn prefix(ctx: &mut Context, message: &Message) -> CommandResult {
     message

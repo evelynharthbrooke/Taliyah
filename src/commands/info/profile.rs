@@ -43,7 +43,7 @@ pub fn profile(ctx: &mut Context, message: &Message, args: Args) -> CommandResul
     let display_name = match database::get_user_display_name(&user_id) {
         Ok(dn) => dn.to_string(),
         Err(e) => {
-            error!("Could not get display name from database: {}", e);
+            error!("Error while retrieving the Display Name from the database: {}", e);
             "No display name set.".to_string()
         }
     };
@@ -51,8 +51,23 @@ pub fn profile(ctx: &mut Context, message: &Message, args: Args) -> CommandResul
     let lastfm_name = match database::get_user_lastfm_username(&user_id) {
         Ok(ln) => ln.to_string(),
         Err(e) => {
-            error!("Couldn't get lastfm username from database: {}", e);
+            error!("Error while retrieving Last.fm username from the database: {}", e);
             "No last.fm username set.".to_string()
+        }
+    };
+
+    let twitter_name = match database::get_user_twitter(&user_id) {
+        Ok(tn) => {
+            let twitter_url = "https://twitter.com".to_string();
+            format!(
+                "[{twitter_username}]({twitter_url}/{twitter_username})",
+                twitter_url = twitter_url,
+                twitter_username = tn.to_string()
+            )
+        }
+        Err(e) => {
+            error!("Error while retrieving the Twitter username from the database: {}", e);
+            "No Twitter username set.".to_string()
         }
     };
 
@@ -68,9 +83,10 @@ pub fn profile(ctx: &mut Context, message: &Message, args: Args) -> CommandResul
                 e.description(format!(
                     "\
                     **Display Name**: {}\n\
-                    **Last.fm Username**: {}\
+                    **Last.fm Username**: {}\n\
+                    **Twitter**: {}\n\
                     ",
-                    display_name, lastfm_name
+                    display_name, lastfm_name, twitter_name
                 ))
             })
         })
@@ -91,6 +107,19 @@ pub fn set(ctx: &mut Context, message: &Message, arguments: Args) -> CommandResu
     let user_id = message.author.id.to_string();
 
     match property.as_str() {
+        "twitter" => {
+            if value.is_empty() {
+                return message
+                    .channel_id
+                    .say(&ctx.http, "You did not provide a Twitter username. Please provide one!")
+                    .map_or_else(|e| Err(CommandError(e.to_string())), |_| Ok(()));
+            };
+            let _ = connection.execute("UPDATE profile SET twitter = ?1 WHERE user_id = ?2;", &[&value, &&user_id]);
+            return message
+                .channel_id
+                .say(&ctx.http, format!("Your Twitter username has been set to `{}`.", &value))
+                .map_or_else(|e| Err(CommandError(e.to_string())), |_| Ok(()));
+        }
         "lastfm" => {
             let api_key: String = env::var("LASTFM_KEY").expect("No API key detected");
             let mut client: Client = Client::new(&api_key);
