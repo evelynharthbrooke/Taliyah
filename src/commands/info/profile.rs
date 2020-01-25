@@ -86,8 +86,8 @@ pub fn set(ctx: &mut Context, message: &Message, arguments: Args) -> CommandResu
                                 .channel_id
                                 .send_message(&ctx, |m| {
                                     m.embed(|e| {
-                                        e.title("Error: Invalid Last.fm username provided.");
-                                        e.description("You cannot use this username as your Last.fm display name.");
+                                        e.title("Error: Invalid username provided.");
+                                        e.description("You cannot use this as your profile's Last.fm username.");
                                         e.color(0x00FF_0000)
                                     })
                                 })
