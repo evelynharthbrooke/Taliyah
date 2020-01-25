@@ -1,2 +1,2 @@
 pub mod ready;
-pub mod messagecreate;
+pub mod message;

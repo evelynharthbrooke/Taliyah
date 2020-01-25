@@ -195,6 +195,7 @@ pub fn set(ctx: &mut Context, message: &Message, arguments: Args) -> CommandResu
                     .map_or_else(|e| Err(CommandError(e.to_string())), |_| Ok(()));
             };
             let _ = connection.execute("UPDATE profile SET display_name = ?1 WHERE user_id = ?2;", &[&value, &&user_id]);
+            let _ = connection.close().unwrap();
             return message
                 .channel_id
                 .say(&ctx.http, format!("Your name has been set to {}.", &value))
