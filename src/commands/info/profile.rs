@@ -8,6 +8,12 @@ use serenity::framework::standard::Args;
 use serenity::framework::standard::{CommandError, CommandResult};
 use serenity::model::prelude::Message;
 
+use std::env;
+
+use rustfm::error::Error;
+use rustfm::error::LastFMErrorResponse::InvalidParameter;
+use rustfm::Client;
+
 #[command]
 #[description = "Shows the information about a user via their profile details."]
 #[usage = "<user> or <blank>"]
@@ -68,6 +74,31 @@ pub fn set(ctx: &mut Context, message: &Message, arguments: Args) -> CommandResu
 
     match property.as_str() {
         "lastfm" => {
+            let api_key: String = env::var("LASTFM_KEY").expect("No API key detected");
+            let mut client: Client = Client::new(&api_key);
+
+            match client.user_info(&value).send() {
+                Ok(_) => (),
+                Err(e) => match e {
+                    Error::LastFMError(InvalidParameter(e)) => match e.message.as_str() {
+                        "User not found" => {
+                            return message
+                                .channel_id
+                                .send_message(&ctx, |m| {
+                                    m.embed(|e| {
+                                        e.title("Error: Invalid Last.fm username provided.");
+                                        e.description("You cannot use this username as your Last.fm display name.");
+                                        e.color(0x00FF_0000)
+                                    })
+                                })
+                                .map_or_else(|e| Err(CommandError(e.to_string())), |_| Ok(()))
+                        }
+                        _ => (),
+                    },
+                    _ => (),
+                },
+            };
+
             if value.is_empty() {
                 return message
                     .channel_id

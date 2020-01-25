@@ -75,7 +75,7 @@ pub fn lastfm(ctx: &mut Context, message: &Message, mut args: Args) -> CommandRe
                             m.embed(|e| {
                                 e.title("Error: Invalid Last.fm username provided.");
                                 e.description(
-                                    "You have entered an invalid Last.fm username. Please provide a valid one and then try again.",
+                                    "You have entered an invalid username. Please provide a valid one and then try again.",
                                 );
                                 e.color(0x00FF_0000);
                                 e
@@ -85,6 +85,7 @@ pub fn lastfm(ctx: &mut Context, message: &Message, mut args: Args) -> CommandRe
                         .map_or_else(|e| Err(CommandError(e.to_string())), |_| Ok(()))
                 }
                 _ => {
+                    error!("Unknown Last.fm parameter error: {:#?}", e);
                     return message
                         .channel_id
                         .send_message(&ctx, |m| {
@@ -100,6 +101,7 @@ pub fn lastfm(ctx: &mut Context, message: &Message, mut args: Args) -> CommandRe
                 }
             },
             _ => {
+                error!("Unknown Last.fm error encountered: {:#?}", e);
                 return message
                     .channel_id
                     .send_message(&ctx, |m| {
