@@ -48,7 +48,7 @@ pub fn profile(ctx: &mut Context, message: &Message, args: Args) -> CommandResul
         }
     };
 
-    let lastfm_name = match database::get_user_lastfm_username(&user_id) {
+    let lastfm_name = match database::get_user_lastfm(&user_id) {
         Ok(ln) => ln.to_string(),
         Err(e) => {
             error!("Error while retrieving Last.fm username from the database: {}", e);
@@ -71,6 +71,21 @@ pub fn profile(ctx: &mut Context, message: &Message, args: Args) -> CommandResul
         }
     };
 
+    let steam_id = match database::get_user_steam(&user_id) {
+        Ok(si) => {
+            let steam_url = "https://steamcommunity.com/id".to_string();
+            format!(
+                "[{steam_id}]({steam_url}/{steam_id})",
+                steam_id = si.to_string(),
+                steam_url = steam_url,
+            )
+        }
+        Err(e) => {
+            error!("Error while retrieving the Steam ID from the database: {}", e);
+            "No Steam ID set.".to_string()
+        }
+    };
+
     return message
         .channel_id
         .send_message(&ctx, |m| {
@@ -82,11 +97,12 @@ pub fn profile(ctx: &mut Context, message: &Message, args: Args) -> CommandResul
                 e.color(0xff99cc);
                 e.description(format!(
                     "\
-                    **Display Name**: {}\n\
-                    **Last.fm Username**: {}\n\
-                    **Twitter**: {}\n\
+                    **Display name**: {}\n\
+                    **Last.fm username**: {}\n\
+                    **Twitter handle**: {}\n\
+                    **Steam ID**: {}\n\
                     ",
-                    display_name, lastfm_name, twitter_name
+                    display_name, lastfm_name, twitter_name, steam_id
                 ))
             })
         })
@@ -156,6 +172,19 @@ pub fn set(ctx: &mut Context, message: &Message, arguments: Args) -> CommandResu
             return message
                 .channel_id
                 .say(&ctx.http, format!("Your lastfm username has been set to {}.", &value))
+                .map_or_else(|e| Err(CommandError(e.to_string())), |_| Ok(()));
+        }
+        "steam" => {
+            if value.is_empty() {
+                return message
+                    .channel_id
+                    .say(&ctx.http, "You did not provide a Steam ID. Please provide one!")
+                    .map_or_else(|e| Err(CommandError(e.to_string())), |_| Ok(()));
+            };
+            let _ = connection.execute("UPDATE profile SET steam = ?1 WHERE user_id = ?2;", &[&value, &&user_id]);
+            return message
+                .channel_id
+                .say(&ctx.http, format!("Your Steam ID has been set to `{}`.", &value))
                 .map_or_else(|e| Err(CommandError(e.to_string())), |_| Ok(()));
         }
         "name" => {

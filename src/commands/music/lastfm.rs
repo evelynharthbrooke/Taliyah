@@ -5,6 +5,7 @@
 
 use chrono::NaiveDateTime;
 
+use crate::spotify;
 use crate::utilities;
 use crate::utilities::database;
 
@@ -36,7 +37,7 @@ pub fn lastfm(ctx: &mut Context, message: &Message, mut args: Args) -> CommandRe
     if !args.rest().is_empty() {
         user = args.single::<String>().unwrap();
     } else {
-        user = match database::get_user_lastfm_username(&message.author.id) {
+        user = match database::get_user_lastfm(&message.author.id) {
             Ok(l) => l,
             Err(e) => {
                 error!("Could not get Last.fm username in database: {}", e);
@@ -139,7 +140,7 @@ pub fn lastfm(ctx: &mut Context, message: &Message, mut args: Args) -> CommandRe
 
     let user_username = match database::get_user_display_name(&message.author.id) {
         Ok(dn) => {
-            let lastfm_name = match database::get_user_lastfm_username(&message.author.id) {
+            let lastfm_name = match database::get_user_lastfm(&message.author.id) {
                 Ok(l) => l,
                 Err(_) => user_info.username.to_string(),
             };
@@ -157,6 +158,13 @@ pub fn lastfm(ctx: &mut Context, message: &Message, mut args: Args) -> CommandRe
     let user_scrobbles = utilities::format_int(user_info.total_tracks.parse::<isize>().unwrap());
 
     let track = recent_tracks.first().unwrap();
+
+    let sp_track_search_string = format!("track: {} artist: {}", track.name, track.artist.name);
+
+    let sp_track_search = spotify().search_track(&sp_track_search_string[..], 1, 0, None);
+    let sp_track_result = &sp_track_search.unwrap();
+    let sp_track = sp_track_result.tracks.items.first().unwrap();
+    let track_art = &sp_track.album.images.first().unwrap().url;
 
     let tracks: String;
 
@@ -196,6 +204,7 @@ pub fn lastfm(ctx: &mut Context, message: &Message, mut args: Args) -> CommandRe
             m.embed(|e| {
                 e.title(format!("{}'s Last.fm", user_username));
                 e.url(user_url);
+                e.thumbnail(track_art);
                 e.color(0x00d5_1007);
                 e.description(format!(
                     "{}\n\n\
