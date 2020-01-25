@@ -6,14 +6,16 @@
 use chrono::NaiveDateTime;
 
 use crate::utilities;
+use crate::utilities::database;
 
 use itertools::Itertools;
 
-use log::warn;
+use log::{error, info, warn};
 
 use serenity::client::Context;
 use serenity::framework::standard::macros::command;
 use serenity::framework::standard::Args;
+use serenity::framework::standard::CommandError;
 use serenity::framework::standard::CommandResult;
 use serenity::model::prelude::Message;
 
@@ -27,20 +29,31 @@ use std::env;
 #[aliases("fm", "lfm", "lastfm")]
 #[usage("<user> <limit>")]
 pub fn lastfm(ctx: &mut Context, message: &Message, mut args: Args) -> CommandResult {
-    if args.rest().is_empty() {
-        let _ = message.channel_id.send_message(&ctx, |m| {
-            m.embed(|e| {
-                e.title("Error: No Last.fm username was provided.");
-                e.description("You did not provide a Last.fm username. Please enter one and then try again.");
-                e.color(0x00FF_0000);
-                e
-            });
-            m
-        })?;
-        println!("No Last.fm username was provided.");
+    let user: String;
+
+    if !args.rest().is_empty() {
+        user = args.single::<String>().unwrap();
+    } else {
+        user = match database::get_user_lastfm_username(&message.author.id) {
+            Ok(l) => l,
+            Err(e) => {
+                error!("Could not get lastfm username in database: {}", e);
+                match args.single::<String>() {
+                    Ok(a) => a.to_string(),
+                    Err(_) => return message.channel_id.send_message(&ctx, |m| {
+                        m.embed(|e| {
+                            e.title("Error: No Last.fm username was provided.");
+                            e.description("You did not provide a Last.fm username. Please enter one and then try again.");
+                            e.color(0x00FF_0000);
+                            e
+                        });
+                        m
+                    }).map_or_else(|e| Err(CommandError(e.to_string())), |_| Ok(()))
+                }
+            }
+        };
     }
 
-    let user: String = args.single::<String>()?;
     let mut limit: usize = 5;
 
     match args.single() {
@@ -104,13 +117,15 @@ pub fn lastfm(ctx: &mut Context, message: &Message, mut args: Args) -> CommandRe
         user_username, track_play_state, track.name, track.artist.name, track.album.name
     );
 
-    let _ = message.channel_id.send_message(&ctx, |m| {
-        m.embed(|e| {
-            e.title(format!("{}'s Last.fm details", user_username));
-            e.url(user_url);
-            e.color(0x00d5_1007);
-            e.description(format!(
-                "{}\n\n\
+    return message
+        .channel_id
+        .send_message(&ctx, |m| {
+            m.embed(|e| {
+                e.title(format!("{}'s Last.fm details", user_username));
+                e.url(user_url);
+                e.color(0x00d5_1007);
+                e.description(format!(
+                    "{}\n\n\
                 **__User information:__**\n\
                 **Display name**: {}\n\
                 **Country**: {}\n\
@@ -119,13 +134,12 @@ pub fn lastfm(ctx: &mut Context, message: &Message, mut args: Args) -> CommandRe
                 **Total track plays**: {}\n\n\
                 **__Recent tracks:__**\n\
                 {}",
-                currently_playing, user_display_name, user_country, user_registered, loved_tracks, user_scrobbles, tracks
-            ));
-            e.footer(|f| f.text("Powered by the Last.fm API."));
-            e
-        });
-        m
-    })?;
-
-    Ok(())
+                    currently_playing, user_display_name, user_country, user_registered, loved_tracks, user_scrobbles, tracks
+                ));
+                e.footer(|f| f.text("Powered by the Last.fm API."));
+                e
+            });
+            m
+        })
+        .map_or_else(|e| Err(CommandError(e.to_string())), |_| Ok(()));
 }

@@ -4,6 +4,7 @@ use rusqlite::Connection;
 use rusqlite::NO_PARAMS;
 
 use serenity::model::prelude::GuildId;
+use serenity::model::prelude::UserId;
 
 use std::error::Error;
 use std::fs::File;
@@ -42,9 +43,10 @@ pub fn create_database() {
         // Create profile table.
         match connection.execute(
             "CREATE TABLE IF NOT EXISTS profile (
-                user_id TEXT PRIMARY KEY,
-                user_name TEXT NOT NULL,
-                lastfm TEXT NOT NULL
+                user_id TEXT PRIMARY KEY NOT NULL,
+                user_tag TEXT NOT NULL,
+                display_name TEXT,
+                lastfm TEXT
             )",
             NO_PARAMS,
         ) {
@@ -66,6 +68,20 @@ pub fn get_sqlite_version() -> String {
     return sqlite_version.to_string();
 }
 
+pub fn get_user_display_name(user_id: &UserId) -> Result<String, Box<dyn Error>> {
+    let connection = get_database()?;
+    let mut statement = connection.prepare("SELECT display_name FROM profile WHERE user_id == ?1;")?;
+    let mut rows = statement.query(&[&user_id.as_u64().to_string()])?;
+    Ok(rows.next()?.ok_or("User not found in database")?.get(0)?)
+}
+
+pub fn get_user_lastfm_username(user_id: &UserId) -> Result<String, Box<dyn Error>> {
+    let connection = get_database()?;
+    let mut statement = connection.prepare("SELECT lastfm FROM profile WHERE user_id == ?1;")?;
+    let mut rows = statement.query(&[&user_id.as_u64().to_string()])?;
+    Ok(rows.next()?.ok_or("User not found in database")?.get(0)?)
+}
+
 pub fn get_prefix(guild_id: &GuildId) -> Result<String, Box<dyn Error>> {
     let connection = get_database()?;
     let mut statement = connection.prepare("SELECT prefix FROM guild_settings WHERE guild_id == ?1;")?;
@@ -76,7 +92,7 @@ pub fn get_prefix(guild_id: &GuildId) -> Result<String, Box<dyn Error>> {
 pub fn clear_prefix(guild_id: &GuildId) {
     let connection = match get_database() {
         Ok(d) => d,
-        Err(e) => return error!("An error occured while getting the database: {}", e)
+        Err(e) => return error!("An error occured while getting the database: {}", e),
     };
     let _ = connection.execute("DELETE FROM guild_settings where guild_id == ?1;", &[guild_id.to_string()]);
 }

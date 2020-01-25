@@ -8,6 +8,7 @@ mod listeners;
 mod utilities;
 
 use commands::info::guild::*;
+use commands::info::profile::*;
 use commands::info::user::*;
 use commands::music::lastfm::*;
 use commands::music::spotify::commands::spotify::*;
@@ -38,7 +39,7 @@ use utilities::database::get_prefix;
 
 #[group]
 #[description = "Various informational commands."]
-#[commands(user, guild)]
+#[commands(user, guild, profile)]
 struct Information;
 
 #[group]

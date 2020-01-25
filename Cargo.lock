@@ -855,9 +855,9 @@ dependencies = [
 
 [[package]]
 name = "itoa"
-version = "0.4.4"
+version = "0.4.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "501266b7edd0174f8530248f87f99c88fbe60ca4ef3dd486835b8d8d53136f7f"
+checksum = "b8b7a7c0c47db5545ed3fef7468ee7bb5b74691498139e4b3f6a20685dc6dd8e"
 
 [[package]]
 name = "jobserver"
@@ -896,7 +896,7 @@ checksum = "a91d884b6667cd606bb5a69aa0c99ba811a115fc68915e7056ec08a46e93199a"
 [[package]]
 name = "lastfm-rs"
 version = "0.2.0"
-source = "git+https://github.com/KamranMackey/lastfm-rs#437b5757a58e9579cdbe67650383d089258e8292"
+source = "git+https://github.com/KamranMackey/lastfm-rs#e77a7c70a1f5785ac4833c6a5895907537bb9e8c"
 dependencies = [
  "hyper 0.10.16",
  "serde",
