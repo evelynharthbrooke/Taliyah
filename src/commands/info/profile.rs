@@ -19,9 +19,27 @@ use rustfm::Client;
 #[usage = "<user> or <blank>"]
 #[sub_commands(set)]
 #[only_in("guilds")]
-pub fn profile(ctx: &mut Context, message: &Message, _args: Args) -> CommandResult {
-    let user_name = message.author.tag().to_string();
-    let user_id = message.author.id;
+pub fn profile(ctx: &mut Context, message: &Message, args: Args) -> CommandResult {
+    let cache = &ctx.cache;
+    let guild_id = message.guild_id.ok_or("Failed to get GuildID from Message.")?;
+    let cached_guild = cache.read().guild(guild_id).ok_or("Unable to retrieve guild")?;
+    let member = if message.mentions.is_empty() {
+        if args.is_empty() {
+            message.member(&ctx).ok_or("Could not find member.")?
+        } else {
+            (*(cached_guild
+                .read()
+                .members_containing(args.rest(), false, true)
+                .first()
+                .ok_or("couldn't find member")?))
+            .clone()
+        }
+    } else {
+        guild_id.member(&ctx, message.mentions.first().ok_or("Failed to get user mentioned.")?)?
+    };
+
+    let user_name = member.user.read().tag().to_string();
+    let user_id = member.user.read().id;
     let display_name = match database::get_user_display_name(&user_id) {
         Ok(dn) => dn.to_string(),
         Err(e) => {
@@ -44,7 +62,7 @@ pub fn profile(ctx: &mut Context, message: &Message, _args: Args) -> CommandResu
             m.embed(|e| {
                 e.author(|a| {
                     a.name(format!("{}'s profile", user_name));
-                    a.icon_url(&message.author.face())
+                    a.icon_url(&member.user.read().face())
                 });
                 e.color(0xff99cc);
                 e.description(format!(
