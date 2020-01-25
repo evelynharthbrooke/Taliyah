@@ -49,10 +49,12 @@ pub fn lastfm(ctx: &mut Context, message: &Message, mut args: Args) -> CommandRe
                                 m.embed(|e| {
                                     e.title("Error: No Last.fm username was found or provided.");
                                     e.description(
-                                        "I could not find a Last.fm username pertaining to your user record, or \
+                                        "\
+                                        I could not find a Last.fm username pertaining to your user record, or \
                                         you did not provide a Last.fm username as an argument. Please set a username \
                                         via the profile command, or provide a Last.fm username as an argument.\
-                                        ");
+                                        ",
+                                    );
                                     e.color(0x00FF_0000);
                                     e
                                 });
