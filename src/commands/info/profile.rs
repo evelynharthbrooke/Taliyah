@@ -32,10 +32,13 @@ pub fn profile(ctx: &mut Context, message: &Message, args: Args) -> CommandResul
         }
     };
 
-    return message.channel_id.send_message(&ctx, |m| m.embed(|e| {
+    return message
+        .channel_id
+        .send_message(&ctx, |m| {
+            m.embed(|e| {
                 e.author(|a| {
                     a.name(format!("{}'s profile", user_name));
-                    a.icon_url(&message.author.face()) 
+                    a.icon_url(&message.author.face())
                 });
                 e.color(0xff99cc);
                 e.description(format!(
@@ -45,7 +48,8 @@ pub fn profile(ctx: &mut Context, message: &Message, args: Args) -> CommandResul
                     ",
                     display_name, lastfm_name
                 ))
-            }))
+            })
+        })
         .map_or_else(|e| Err(CommandError(e.to_string())), |_| Ok(()));
 }
 
@@ -64,6 +68,12 @@ pub fn set(ctx: &mut Context, message: &Message, arguments: Args) -> CommandResu
 
     match property.as_str() {
         "lastfm" => {
+            if value.is_empty() {
+                return message
+                    .channel_id
+                    .say(&ctx.http, "You did not provide your last.fm username. Please provide one!")
+                    .map_or_else(|e| Err(CommandError(e.to_string())), |_| Ok(()));
+            };
             let _ = connection.execute("UPDATE profile SET lastfm = ?1 WHERE user_id = ?2;", &[&value, &&user_id]);
             return message
                 .channel_id
@@ -71,6 +81,12 @@ pub fn set(ctx: &mut Context, message: &Message, arguments: Args) -> CommandResu
                 .map_or_else(|e| Err(CommandError(e.to_string())), |_| Ok(()));
         }
         "name" => {
+            if value.is_empty() {
+                return message
+                    .channel_id
+                    .say(&ctx.http, "You did not provide a name. Please provide one!")
+                    .map_or_else(|e| Err(CommandError(e.to_string())), |_| Ok(()));
+            };
             let _ = connection.execute("UPDATE profile SET display_name = ?1 WHERE user_id = ?2;", &[&value, &&user_id]);
             return message
                 .channel_id
