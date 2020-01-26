@@ -44,7 +44,7 @@ pub fn profile(ctx: &mut Context, message: &Message, args: Args) -> CommandResul
     };
 
     let lastfm_name = match database::get_user_lastfm(&user_id) {
-        Ok(ln) => ln.to_string(),
+        Ok(username) => username.to_string(),
         Err(e) => {
             error!("Error while retrieving Last.fm username from the database: {}", e);
             "No last.fm username set.".to_string()
@@ -52,9 +52,9 @@ pub fn profile(ctx: &mut Context, message: &Message, args: Args) -> CommandResul
     };
 
     let twitter_name = match database::get_user_twitter(&user_id) {
-        Ok(tn) => {
-            let twitter_url = "https://twitter.com".to_string();
-            format!("[{twitter_username}]({twitter_url}/{twitter_username})", twitter_url = twitter_url, twitter_username = tn.to_string())
+        Ok(name) => {
+            let url = "https://twitter.com".to_string();
+            format!("[{username}]({url}/{username})", url = url, username = name.to_string())
         }
         Err(e) => {
             error!("Error while retrieving the Twitter username from the database: {}", e);
@@ -63,9 +63,9 @@ pub fn profile(ctx: &mut Context, message: &Message, args: Args) -> CommandResul
     };
 
     let steam_id = match database::get_user_steam(&user_id) {
-        Ok(si) => {
+        Ok(id) => {
             let steam_url = "https://steamcommunity.com/id".to_string();
-            format!("[{steam_id}]({steam_url}/{steam_id})", steam_id = si.to_string(), steam_url = steam_url,)
+            format!("[{steam_id}]({steam_url}/{steam_id})", steam_id = id.to_string(), steam_url = steam_url)
         }
         Err(e) => {
             error!("Error while retrieving the Steam ID from the database: {}", e);
