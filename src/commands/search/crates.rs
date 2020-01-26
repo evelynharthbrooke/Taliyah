@@ -1,7 +1,9 @@
-use reqwest::blocking::Client;
+use crate::utilities::format_int;
 
 use chrono::DateTime;
 use chrono::Utc;
+
+use reqwest::blocking::Client;
 
 use serde::Deserialize;
 
@@ -25,8 +27,8 @@ struct Crate {
     name: String,
     updated_at: DateTime<Utc>,
     versions: Vec<usize>,
-    keywords: Option<Vec<String>>,
-    categories: Option<Vec<String>>,
+    keywords: Vec<String>,
+    categories: Vec<String>,
     created_at: DateTime<Utc>,
     downloads: usize,
     recent_downloads: usize,
@@ -53,7 +55,7 @@ struct Version {
     license: String,
     crate_size: Option<usize>,
     published_by: Option<User>,
-    audit_actions: Option<Vec<AuditAction>>
+    audit_actions: Option<Vec<AuditAction>>,
 }
 
 #[derive(Deserialize, Debug)]
@@ -62,14 +64,14 @@ struct User {
     login: String,
     name: String,
     avatar: String,
-    url: String
+    url: String,
 }
 
 #[derive(Deserialize, Debug)]
 struct AuditAction {
     action: String,
     user: User,
-    time: DateTime<Utc>
+    time: DateTime<Utc>,
 }
 
 #[derive(Deserialize, Debug)]
@@ -77,7 +79,7 @@ struct Keyword {
     id: String,
     keyword: String,
     created_at: DateTime<Utc>,
-    crates_cnt: usize
+    crates_cnt: usize,
 }
 
 #[command]
@@ -106,48 +108,53 @@ pub fn crates(context: &mut Context, message: &Message, mut arguments: Args) -> 
 
     let crate_result: Response = response.json()?;
     let crate_name = crate_result.package.name;
-    
-    let crate_keywords = match crate_result.package.keywords.map(|h| h) {
-        Some(h) => match h.is_empty() {
-            true => "No keywords for this crate are available.".to_string(),
-            false => h.join(", ")
-        },
-        None => "No keywords for this crate are available.".to_string()
+    let crates_img = "https://raw.githubusercontent.com/rust-lang/crates.io/master/public/assets/Cargo-Logo-Small.png";
+    let crate_url = format!("https://crates.io/crates/{}", crate_name);
+
+    let crate_keywords = if crate_result.package.keywords.is_empty() {
+        "No keywords are available for this crate.".to_string()
+    } else {
+        crate_result.package.keywords.join(", ")
     };
 
     let crate_crated_at = crate_result.package.created_at.format("%B %e, %Y - %I:%M %p");
     let crate_last_updated = crate_result.package.updated_at.format("%B %e, %Y - %I:%M %p");
-    let crate_recent_downloads = crate_result.package.recent_downloads.to_string();
-    let crate_downloads = crate_result.package.downloads;
-    
+    let crate_latest_version = crate_result.package.newest_version;
+    let crate_recent_downloads = format_int(crate_result.package.recent_downloads);
+    let crate_downloads = format_int(crate_result.package.downloads);
+
     let crate_homepage = match crate_result.package.homepage {
         Some(homepage) => homepage.to_string(),
-        None => "No homepage is available for this crate.".to_string()
+        None => "No homepage is available for this crate.".to_string(),
     };
-    
+
     let crate_repository = match crate_result.package.repository {
         Some(repository) => repository.to_string(),
-        None => "No repository is available for this crate.".to_string()
+        None => "No repository is available for this crate.".to_string(),
     };
 
     message.channel_id.send_message(&context, |message| {
         message.embed(|embed| {
-            embed.title(format!("Crate details for {}", crate_name));
+            embed.author(|author| {
+                author.name(crate_name);
+                author.url(crate_url);
+                author.icon_url(crates_img)
+            });
             embed.description(format!(
                 "\
-                **Name**: {}\n\
                 **Homepage**: {}\n\
                 **Repository**: {}\n\
                 **Keywords**: {}\n\
+                **Latest version**: {}\n\
                 **Creation date**: {}\n\
                 **Last updated**: {}\n\
                 **Recent downloads**: {}\n\
-                **Total downloads**: {}\n", 
-                crate_name, crate_homepage, crate_repository, crate_keywords, crate_crated_at, 
-                crate_last_updated, crate_recent_downloads, crate_downloads
+                **Total downloads**: {}\n",
+                crate_homepage, crate_repository, crate_keywords, crate_latest_version, 
+                crate_crated_at, crate_last_updated, crate_recent_downloads, crate_downloads
             ))
         })
     })?;
 
-    return Ok(())
+    return Ok(());
 }
