@@ -16,7 +16,7 @@ use serenity::model::prelude::Message;
 #[derive(Debug, Deserialize)]
 pub struct Response {
     #[serde(rename = "crate")]
-    package: Crate,
+    krate: Crate,
     versions: Vec<Version>,
     keywords: Vec<Keyword>,
 }
@@ -98,37 +98,37 @@ pub fn crates(context: &mut Context, message: &Message, mut arguments: Args) -> 
         return Ok(());
     }
 
-    let crate_name = arguments.single::<String>()?.to_string();
+    let krate = arguments.single::<String>()?.to_string();
 
     let user_agent: &str = concat!(env!("CARGO_PKG_NAME"), "/", env!("CARGO_PKG_VERSION"));
     let client = Client::builder().user_agent(user_agent).build()?;
 
-    let request_url = format!("https://crates.io/api/v1/crates/{}", crate_name.trim());
+    let request_url = format!("https://crates.io/api/v1/crates/{}", krate);
     let response = client.get(&request_url).send()?;
+    let result: Response = response.json()?;
 
-    let crate_result: Response = response.json()?;
-    let crate_name = crate_result.package.name;
+    let crate_name = result.krate.name;
     let crates_img = "https://raw.githubusercontent.com/rust-lang/crates.io/master/public/assets/Cargo-Logo-Small.png";
     let crate_url = format!("https://crates.io/crates/{}", crate_name);
 
-    let crate_keywords = if crate_result.package.keywords.is_empty() {
+    let crate_keywords = if result.krate.keywords.is_empty() {
         "No keywords are available for this crate.".to_string()
     } else {
-        crate_result.package.keywords.join(", ")
+        result.krate.keywords.join(", ")
     };
 
-    let crate_crated_at = crate_result.package.created_at.format("%B %e, %Y - %I:%M %p");
-    let crate_last_updated = crate_result.package.updated_at.format("%B %e, %Y - %I:%M %p");
-    let crate_latest_version = crate_result.package.newest_version;
-    let crate_recent_downloads = format_int(crate_result.package.recent_downloads);
-    let crate_downloads = format_int(crate_result.package.downloads);
+    let crate_crated_at = result.krate.created_at.format("%B %e, %Y - %I:%M %p");
+    let crate_last_updated = result.krate.updated_at.format("%B %e, %Y - %I:%M %p");
+    let crate_latest_version = result.krate.newest_version;
+    let crate_recent_downloads = format_int(result.krate.recent_downloads);
+    let crate_downloads = format_int(result.krate.downloads);
 
-    let crate_homepage = match crate_result.package.homepage {
+    let crate_homepage = match result.krate.homepage {
         Some(homepage) => homepage.to_string(),
         None => "No homepage is available for this crate.".to_string(),
     };
 
-    let crate_repository = match crate_result.package.repository {
+    let crate_repository = match result.krate.repository {
         Some(repository) => repository.to_string(),
         None => "No repository is available for this crate.".to_string(),
     };
@@ -150,7 +150,7 @@ pub fn crates(context: &mut Context, message: &Message, mut arguments: Args) -> 
                 **Last updated**: {}\n\
                 **Recent downloads**: {}\n\
                 **Total downloads**: {}\n",
-                crate_homepage, crate_repository, crate_keywords, crate_latest_version, 
+                crate_homepage, crate_repository, crate_keywords, crate_latest_version,
                 crate_crated_at, crate_last_updated, crate_recent_downloads, crate_downloads
             ))
         })
