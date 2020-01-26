@@ -111,7 +111,7 @@ pub fn set(ctx: &mut Context, message: &Message, mut arguments: Args) -> Command
     match property.as_str() {
         "twitter" => {
             if value.is_empty() {
-                message.channel_id.say(&ctx.http, "You did not provide a Twitter username. Please provide one!")?;
+                message.channel_id.say(&ctx, "You did not provide a Twitter username. Please provide one!")?;
                 return Ok(());
             };
             let _ = connection.execute("UPDATE profile SET twitter = ?1 WHERE user_id = ?2;", &[&value, &user_id[..]]);
