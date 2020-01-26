@@ -1,7 +1,5 @@
 use crate::utilities::database::get_database;
 
-use log::error;
-
 use serenity::client::Context;
 use serenity::model::prelude::Message;
 
@@ -23,7 +21,7 @@ pub fn message(_ctx: Context, message: Message) {
     let user_tag = message.author.tag().to_string();
 
     if message.author.bot {
-        error!("Bot profiles are not supported, not creating database entry for bot user {}.", user_tag);
+        return;
     } else {
         let _ = database.execute("INSERT INTO profile (user_id, user_tag) values (?1, ?2)", &[&user_id, &user_tag]);
     }

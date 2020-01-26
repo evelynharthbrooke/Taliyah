@@ -3,7 +3,6 @@ use crate::utilities::database::get_database;
 
 use serenity::framework::standard::macros::command;
 use serenity::framework::standard::Args;
-use serenity::framework::standard::CommandError;
 use serenity::framework::standard::CommandResult;
 use serenity::model::prelude::Message;
 use serenity::prelude::Context;
@@ -23,16 +22,14 @@ use serenity::prelude::Context;
     "
 )]
 fn prefix(ctx: &mut Context, message: &Message) -> CommandResult {
-    message
-        .channel_id
-        .send_message(&ctx, move |m| {
-            m.embed(move |embed| {
-                embed.title("Error: Invalid / No Subcommand Entered!");
-                embed.description("Please use subcommand get or set to use this command.");
-                embed
-            })
+    message.channel_id.send_message(&ctx, move |m| {
+        m.embed(|e| {
+            e.title("Error: Invalid / No Subcommand Entered!");
+            e.description("Please use subcommand get or set to use this command.")
         })
-        .map_or_else(|e| Err(CommandError(e.to_string())), |_| Ok(()))
+    })?;
+
+    return Ok(());
 }
 
 #[command]
@@ -45,19 +42,16 @@ pub fn get(ctx: &mut Context, message: &Message) -> CommandResult {
     let guild = match message.guild(&ctx.cache) {
         Some(guild) => guild,
         None => {
-            return message
-                .channel_id
-                .say(&ctx.http, "Unable to get the command prefix, as the guild cannot be located.")
-                .map_or_else(|e| Err(CommandError(e.to_string())), |_| Ok(()))
+            message.channel_id.say(&ctx, "Unable to get the command prefix, as the guild cannot be located.")?;
+            return Ok(());
         }
     };
 
     let guild_name = &guild.read().name;
 
-    return message
-        .channel_id
-        .say(&ctx.http, format!("The currently set command prefix for {} is `{}`.", guild_name, prefix))
-        .map_or_else(|e| Err(CommandError(e.to_string())), |_| Ok(()));
+    message.channel_id.say(&ctx, format!("The currently set command prefix for {} is `{}`.", guild_name, prefix))?;
+
+    return Ok(());
 }
 
 #[command]
@@ -76,27 +70,23 @@ pub fn set(ctx: &mut Context, message: &Message, args: Args) -> CommandResult {
     let guild = match message.guild(&ctx.cache) {
         Some(guild) => guild,
         None => {
-            return message
-                .channel_id
-                .say(&ctx.http, "Unable to set command prefix, as the guild cannot be located.")
-                .map_or_else(|e| Err(CommandError(e.to_string())), |_| Ok(()))
+            message.channel_id.say(&ctx, "Unable to set command prefix, as the guild cannot be located.")?;
+            return Ok(());
         }
     };
 
-    let guild_id = guild.read().clone().id.as_u64().to_string();
-    let guild_name = guild.read().clone().name;
+    let guild_id = &guild.read().id.as_u64().to_string();
+    let guild_name = &guild.read().name;
 
     let _ = connection.execute(
         "INSERT OR REPLACE INTO guild_settings (guild_id, guild_name, prefix) values (?1, ?2, ?3)",
-        &[&guild_id, &guild_name, prefix],
+        &[&guild_id, &guild_name, &prefix.to_string()],
     );
 
-    return message
-        .channel_id
-        .say(&ctx.http, format!("The command prefix for {} has been set to `{}`.", guild_name, prefix))
-        .map_or_else(|e| Err(CommandError(e.to_string())), |_| Ok(()));
-}
+    message.channel_id.say(&ctx, format!("The command prefix for {} has been set to `{}`.", guild_name, prefix))?;
 
+    return Ok(());
+}
 
 #[command]
 #[only_in(guilds)]
@@ -109,17 +99,14 @@ pub fn clear(ctx: &mut Context, message: &Message) -> CommandResult {
     let guild = match message.guild(&ctx.cache) {
         Some(guild) => guild,
         None => {
-            return message
-                .channel_id
-                .say(&ctx.http, "Unable to clear the command prefix, as the guild cannot be located.")
-                .map_or_else(|e| Err(CommandError(e.to_string())), |_| Ok(()))
+            message.channel_id.say(&ctx, "Unable to clear the command prefix, as the guild cannot be located.")?;
+            return Ok(());
         }
     };
 
     let guild_name = &guild.read().name;
 
-    return message
-        .channel_id
-        .say(&ctx.http, format!("The command prefix for {} has been cleared.", guild_name))
-        .map_or_else(|e| Err(CommandError(e.to_string())), |_| Ok(()));
+    message.channel_id.say(&ctx, format!("The command prefix for {} has been cleared.", guild_name))?;
+
+    return Ok(());
 }

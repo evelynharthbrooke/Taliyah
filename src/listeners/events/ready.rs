@@ -17,7 +17,6 @@ pub fn ready(context: Context, ready: Ready) {
     // of the user logging into the Discord API, the number of guilds
     // the bot has connected to, as well as the gateway version currently
     // being used by the bot.
-
     info!("Successfully logged into Discord as the following user:");
     info!("Bot username: {}#{}", ready.user.name, ready.user.discriminator);
     info!("Bot user ID: {}", ready.user.id);

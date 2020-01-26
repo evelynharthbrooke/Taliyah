@@ -11,7 +11,7 @@ use std::time::Duration;
 use serenity::client::Context;
 use serenity::framework::standard::macros::command;
 use serenity::framework::standard::Args;
-use serenity::framework::standard::{CommandError, CommandResult};
+use serenity::framework::standard::CommandResult;
 use serenity::model::prelude::Message;
 
 use crate::spotify;
@@ -20,17 +20,17 @@ use crate::spotify;
 #[description("Displays information about a specified album on Spotify.")]
 fn album(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
     if args.rest().is_empty() {
-        return msg.channel_id.send_message(&ctx, move |m| {
-                m.embed(move |e| {
-                    e.title("Error: No album name provided.");
-                    e.description(
-                        "You did not provide an album name. Please enter one and \
+        msg.channel_id.send_message(&ctx, move |m| {
+            m.embed(move |e| {
+                e.title("Error: No album name provided.");
+                e.description(
+                    "You did not provide an album name. Please enter one and \
                         then try again.",
-                    );
-                    e
-                })
+                )
             })
-            .map_or_else(|e| Err(CommandError(e.to_string())), |_| Ok(()));
+        })?;
+
+        return Ok(());
     }
 
     let album_name = args.rest();
@@ -50,14 +50,14 @@ fn album(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
         "single" => "Single".to_owned(),
         "appears_on" => "Appears On".to_owned(),
         "compilation" => "Compilation".to_owned(),
-        &_ => album.album_type.as_str().to_owned()
+        &_ => album.album_type.as_str().to_owned(),
     };
 
     let mut album_markets = album.available_markets.len().to_string();
-    
+
     let album_genres = match album.genres.is_empty() {
         true => "No genres available.".to_string(),
-        false => album.genres.iter().map(|g| g).join(", ")
+        false => album.genres.iter().map(|g| g).join(", "),
     };
 
     // This will have to be updated as Spotify is launched
@@ -65,11 +65,9 @@ fn album(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
     if album_markets == "79" {
         album_markets.push_str(" (Worldwide)");
     }
-    
-    let album_artists = &album.artists.iter().map(|a| {
-        format!("[{}]({})", &a.name, &a.external_urls["spotify"])
-    }).join(", ");
-    
+
+    let album_artists = &album.artists.iter().map(|a| format!("[{}]({})", &a.name, &a.external_urls["spotify"])).join(", ");
+
     let album_date = NaiveDate::parse_from_str(&album.release_date, "%Y-%m-%d").map_or(album.release_date, move |d| {
         let formatted_string = d.format("%B %-e, %Y").to_string();
         format!("{}", formatted_string.trim())
@@ -77,7 +75,7 @@ fn album(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
 
     let album_copyright = match album.copyrights.is_empty() {
         true => album.label,
-        false => format!("{} ({})", album.copyrights.first().unwrap()["text"], album.label)
+        false => format!("{} ({})", album.copyrights.first().unwrap()["text"], album.label),
     };
 
     let album_tracks_total = album.tracks.total;
@@ -87,44 +85,41 @@ fn album(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
     }
 
     let album_tracks = album.tracks.items.iter().map(|track: &SimplifiedTrack| {
-        let name = &track.name;
-        let position = &track.track_number;
-        let external_link = &track.external_urls["spotify"];
-        let length = format_duration(Duration::from_millis(track.duration_ms as u64 / 1000 * 1000));
+            let name = &track.name;
+            let position = &track.track_number;
+            let external_link = &track.external_urls["spotify"];
+            let length = format_duration(Duration::from_millis(track.duration_ms as u64 / 1000 * 1000));
 
-        let explicit = match track.explicit {
-            true => "(explicit)".to_string(),
-            false => "".to_string()
-        };
+            let explicit = match track.explicit {
+                true => "(explicit)".to_string(),
+                false => "".to_string(),
+            };
 
-        return format!("**{}.** [{}]({}) — {} {}", position, name, external_link, length, explicit);
+            return format!("**{}.** [{}]({}) — {} {}", position, name, external_link, length, explicit);
     }).join("\n");
-    
+
     msg.channel_id.send_message(&ctx, move |m| {
-            m.embed(move |e| {
-                e.author(|a| {
-                    a.name(album_name);
-                    a.url(album_url);
-                    a.icon_url(album_image)
-                });
-                e.color(0x1DB954);
-                e.description(format!(
-                    "\
-                    **Album type**: {}\n\
-                    **Artist(s)**: {}\n\
-                    **Release date**: {}\n\
-                    **Genres**: {}\n\
-                    **Popularity**: {}\n\
-                    **Markets**: {}\n\
-                    **Track count**: {}\n\n\
-                    **Tracks**: \n{}\n\
-                    ",
-                    album_type, album_artists, album_date, album_genres, album_popularity, 
-                    album_markets, album_tracks_total, album_tracks
-                ));
-                e.footer(|f| {
-                    f.text(format!("{}", album_copyright))
-                })
-            })
-        }).map_or_else(|e| Err(CommandError(e.to_string())), |_| Ok(()))
+        m.embed(move |e| {
+            e.author(|a| {
+                a.name(album_name);
+                a.url(album_url);
+                a.icon_url(album_image)
+            });
+            e.color(0x1DB954);
+            e.description(format!(
+                "**Album type**: {}\n\
+                **Artist(s)**: {}\n\
+                **Release date**: {}\n\
+                **Genres**: {}\n\
+                **Popularity**: {}\n\
+                **Markets**: {}\n\
+                **Track count**: {}\n\n\
+                **Tracks**: \n{}\n",
+                album_type, album_artists, album_date, album_genres, album_popularity, album_markets, album_tracks_total, album_tracks
+            ));
+            e.footer(|f| f.text(format!("{}", album_copyright)))
+        })
+    })?;
+
+    return Ok(());
 }

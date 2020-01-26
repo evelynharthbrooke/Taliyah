@@ -5,7 +5,7 @@ use log::error;
 use serenity::client::Context;
 use serenity::framework::standard::macros::command;
 use serenity::framework::standard::Args;
-use serenity::framework::standard::{CommandError, CommandResult};
+use serenity::framework::standard::CommandResult;
 use serenity::model::prelude::Message;
 
 use std::env;
@@ -27,12 +27,7 @@ pub fn profile(ctx: &mut Context, message: &Message, args: Args) -> CommandResul
         if args.is_empty() {
             message.member(&ctx).ok_or("Could not find member.")?
         } else {
-            (*(cached_guild
-                .read()
-                .members_containing(args.rest(), false, true)
-                .first()
-                .ok_or("couldn't find member")?))
-            .clone()
+            (*(cached_guild.read().members_containing(args.rest(), false, true).first().ok_or("couldn't find member")?)).clone()
         }
     } else {
         guild_id.member(&ctx, message.mentions.first().ok_or("Failed to get user mentioned.")?)?
@@ -59,11 +54,7 @@ pub fn profile(ctx: &mut Context, message: &Message, args: Args) -> CommandResul
     let twitter_name = match database::get_user_twitter(&user_id) {
         Ok(tn) => {
             let twitter_url = "https://twitter.com".to_string();
-            format!(
-                "[{twitter_username}]({twitter_url}/{twitter_username})",
-                twitter_url = twitter_url,
-                twitter_username = tn.to_string()
-            )
+            format!("[{twitter_username}]({twitter_url}/{twitter_username})", twitter_url = twitter_url, twitter_username = tn.to_string())
         }
         Err(e) => {
             error!("Error while retrieving the Twitter username from the database: {}", e);
@@ -74,11 +65,7 @@ pub fn profile(ctx: &mut Context, message: &Message, args: Args) -> CommandResul
     let steam_id = match database::get_user_steam(&user_id) {
         Ok(si) => {
             let steam_url = "https://steamcommunity.com/id".to_string();
-            format!(
-                "[{steam_id}]({steam_url}/{steam_id})",
-                steam_id = si.to_string(),
-                steam_url = steam_url,
-            )
+            format!("[{steam_id}]({steam_url}/{steam_id})", steam_id = si.to_string(), steam_url = steam_url,)
         }
         Err(e) => {
             error!("Error while retrieving the Steam ID from the database: {}", e);
@@ -86,55 +73,49 @@ pub fn profile(ctx: &mut Context, message: &Message, args: Args) -> CommandResul
         }
     };
 
-    return message
-        .channel_id
-        .send_message(&ctx, |m| {
-            m.embed(|e| {
-                e.author(|a| {
-                    a.name(format!("{}'s profile", user_name));
-                    a.icon_url(&member.user.read().face())
-                });
-                e.color(0xff99cc);
-                e.description(format!(
-                    "\
+    message.channel_id.send_message(&ctx, |m| {
+        m.embed(|e| {
+            e.author(|a| {
+                a.name(format!("{}'s profile", user_name));
+                a.icon_url(&member.user.read().face())
+            });
+            e.color(0xff99cc);
+            e.description(format!(
+                "\
                     **Display name**: {}\n\
                     **Last.fm username**: {}\n\
                     **Twitter handle**: {}\n\
                     **Steam ID**: {}\n\
                     ",
-                    display_name, lastfm_name, twitter_name, steam_id
-                ))
-            })
+                display_name, lastfm_name, twitter_name, steam_id
+            ))
         })
-        .map_or_else(|e| Err(CommandError(e.to_string())), |_| Ok(()));
+    })?;
+
+    return Ok(());
 }
 
 #[command]
 #[only_in("guilds")]
-pub fn set(ctx: &mut Context, message: &Message, arguments: Args) -> CommandResult {
+pub fn set(ctx: &mut Context, message: &Message, mut arguments: Args) -> CommandResult {
     let connection = match database::get_database() {
         Ok(connection) => connection,
         Err(_) => return Ok(()),
     };
 
-    let property = &arguments.clone().single::<String>().unwrap();
-    let value = arguments.clone().advance().rest().to_string();
+    let property = arguments.single::<String>()?;
+    let value = arguments.rest();
 
     let user_id = message.author.id.to_string();
 
     match property.as_str() {
         "twitter" => {
             if value.is_empty() {
-                return message
-                    .channel_id
-                    .say(&ctx.http, "You did not provide a Twitter username. Please provide one!")
-                    .map_or_else(|e| Err(CommandError(e.to_string())), |_| Ok(()));
+                message.channel_id.say(&ctx.http, "You did not provide a Twitter username. Please provide one!")?;
+                return Ok(());
             };
-            let _ = connection.execute("UPDATE profile SET twitter = ?1 WHERE user_id = ?2;", &[&value, &&user_id]);
-            return message
-                .channel_id
-                .say(&ctx.http, format!("Your Twitter username has been set to `{}`.", &value))
-                .map_or_else(|e| Err(CommandError(e.to_string())), |_| Ok(()));
+            let _ = connection.execute("UPDATE profile SET twitter = ?1 WHERE user_id = ?2;", &[&value, &user_id[..]]);
+            message.channel_id.say(&ctx, format!("Your Twitter username has been set to `{}`.", &value))?;
         }
         "lastfm" => {
             let api_key: String = env::var("LASTFM_KEY").expect("No API key detected");
@@ -145,16 +126,14 @@ pub fn set(ctx: &mut Context, message: &Message, arguments: Args) -> CommandResu
                 Err(e) => match e {
                     Error::LastFMError(InvalidParameter(e)) => match e.message.as_str() {
                         "User not found" => {
-                            return message
-                                .channel_id
-                                .send_message(&ctx, |m| {
-                                    m.embed(|e| {
-                                        e.title("Error: Invalid username provided.");
-                                        e.description("You cannot use this as your profile's Last.fm username.");
-                                        e.color(0x00FF_0000)
-                                    })
+                            message.channel_id.send_message(&ctx, |m| {
+                                m.embed(|e| {
+                                    e.title("Error: Invalid username provided.");
+                                    e.description("You cannot use this as your profile's Last.fm username.");
+                                    e.color(0x00FF_0000)
                                 })
-                                .map_or_else(|e| Err(CommandError(e.to_string())), |_| Ok(()))
+                            })?;
+                            return Ok(());
                         }
                         _ => (),
                     },
@@ -163,49 +142,33 @@ pub fn set(ctx: &mut Context, message: &Message, arguments: Args) -> CommandResu
             };
 
             if value.is_empty() {
-                return message
-                    .channel_id
-                    .say(&ctx.http, "You did not provide your last.fm username. Please provide one!")
-                    .map_or_else(|e| Err(CommandError(e.to_string())), |_| Ok(()));
+                message.channel_id.say(&ctx, "You did not provide your last.fm username. Please provide one!")?;
+                return Ok(());
             };
-            let _ = connection.execute("UPDATE profile SET lastfm = ?1 WHERE user_id = ?2;", &[&value, &&user_id]);
-            return message
-                .channel_id
-                .say(&ctx.http, format!("Your lastfm username has been set to {}.", &value))
-                .map_or_else(|e| Err(CommandError(e.to_string())), |_| Ok(()));
+            let _ = connection.execute("UPDATE profile SET lastfm = ?1 WHERE user_id = ?2;", &[&value, &user_id[..]]);
+            message.channel_id.say(&ctx, format!("Your lastfm username has been set to {}.", &value))?;
         }
         "steam" => {
             if value.is_empty() {
-                return message
-                    .channel_id
-                    .say(&ctx.http, "You did not provide a Steam ID. Please provide one!")
-                    .map_or_else(|e| Err(CommandError(e.to_string())), |_| Ok(()));
+                message.channel_id.say(&ctx, "You did not provide a Steam ID. Please provide one!")?;
+                return Ok(());
             };
-            let _ = connection.execute("UPDATE profile SET steam = ?1 WHERE user_id = ?2;", &[&value, &&user_id]);
-            return message
-                .channel_id
-                .say(&ctx.http, format!("Your Steam ID has been set to `{}`.", &value))
-                .map_or_else(|e| Err(CommandError(e.to_string())), |_| Ok(()));
+            let _ = connection.execute("UPDATE profile SET steam = ?1 WHERE user_id = ?2;", &[&value, &user_id[..]]);
+            message.channel_id.say(&ctx, format!("Your Steam ID has been set to `{}`.", &value))?;
         }
         "name" => {
             if value.is_empty() {
-                return message
-                    .channel_id
-                    .say(&ctx.http, "You did not provide a name. Please provide one!")
-                    .map_or_else(|e| Err(CommandError(e.to_string())), |_| Ok(()));
+                message.channel_id.say(&ctx, "You did not provide a name. Please provide one!")?;
+                return Ok(());
             };
-            let _ = connection.execute("UPDATE profile SET display_name = ?1 WHERE user_id = ?2;", &[&value, &&user_id]);
+            let _ = connection.execute("UPDATE profile SET display_name = ?1 WHERE user_id = ?2;", &[&value, &user_id[..]]);
             let _ = connection.close().unwrap();
-            return message
-                .channel_id
-                .say(&ctx.http, format!("Your name has been set to {}.", &value))
-                .map_or_else(|e| Err(CommandError(e.to_string())), |_| Ok(()));
+            message.channel_id.say(&ctx, format!("Your name has been set to {}.", &value))?;
         }
         _ => {
-            return message
-                .channel_id
-                .say(&ctx.http, "That is not a valid profile property.")
-                .map_or_else(|e| Err(CommandError(e.to_string())), |_| Ok(()));
+            message.channel_id.say(&ctx, "That is not a valid profile property.")?;
         }
     }
+
+    return Ok(());
 }

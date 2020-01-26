@@ -16,7 +16,6 @@ use log::{error, warn};
 use serenity::client::Context;
 use serenity::framework::standard::macros::command;
 use serenity::framework::standard::Args;
-use serenity::framework::standard::CommandError;
 use serenity::framework::standard::CommandResult;
 use serenity::model::prelude::Message;
 
@@ -44,24 +43,20 @@ pub fn lastfm(ctx: &mut Context, message: &Message, mut args: Args) -> CommandRe
                 match args.single::<String>() {
                     Ok(a) => a.to_string(),
                     Err(_) => {
-                        return message
-                            .channel_id
-                            .send_message(&ctx, |m| {
-                                m.embed(|e| {
-                                    e.title("Error: No Last.fm username was found or provided.");
-                                    e.description(
-                                        "\
+                        message.channel_id.send_message(&ctx, |m| {
+                            m.embed(|e| {
+                                e.title("Error: No Last.fm username was found or provided.");
+                                e.description(
+                                    "\
                                         I could not find a Last.fm username pertaining to your user record, or \
                                         you did not provide a Last.fm username as an argument. Please set a username \
                                         via the profile command, or provide a Last.fm username as an argument.\
                                         ",
-                                    );
-                                    e.color(0x00FF_0000);
-                                    e
-                                });
-                                m
+                                );
+                                e.color(0x00FF_0000)
                             })
-                            .map_or_else(|e| Err(CommandError(e.to_string())), |_| Ok(()))
+                        })?;
+                        return Ok(());
                     }
                 }
             }
@@ -76,49 +71,41 @@ pub fn lastfm(ctx: &mut Context, message: &Message, mut args: Args) -> CommandRe
         Err(e) => match e {
             Error::LastFMError(InvalidParameter(e)) => match e.message.as_str() {
                 "User not found" => {
-                    return message
-                        .channel_id
-                        .send_message(&ctx, |m| {
-                            m.embed(|e| {
-                                e.title("Error: Invalid Last.fm username provided.");
-                                e.description("You have entered an invalid username. Please provide a valid one and then try again.");
-                                e.color(0x00FF_0000);
-                                e
-                            });
-                            m
+                    message.channel_id.send_message(&ctx, |m| {
+                        m.embed(|e| {
+                            e.title("Error: Invalid Last.fm username provided.");
+                            e.description("You have entered an invalid username. Please provide a valid one and then try again.");
+                            e.color(0x00FF_0000)
                         })
-                        .map_or_else(|e| Err(CommandError(e.to_string())), |_| Ok(()))
+                    })?;
+
+                    return Ok(());
                 }
                 _ => {
                     error!("Unknown Last.fm parameter error: {:#?}", e);
-                    return message
-                        .channel_id
-                        .send_message(&ctx, |m| {
-                            m.embed(|e| {
-                                e.title("Error: Invalid Last.fm parameter provided.");
-                                e.description("An invalid last.fm parameter was provided.");
-                                e.color(0x00FF_0000);
-                                e
-                            });
-                            m
+                    message.channel_id.send_message(&ctx, |m| {
+                        m.embed(|e| {
+                            e.title("Error: Invalid Last.fm parameter provided.");
+                            e.description("An invalid last.fm parameter was provided.");
+                            e.color(0x00FF_0000);
+                            e
                         })
-                        .map_or_else(|e| Err(CommandError(e.to_string())), |_| Ok(()));
+                    })?;
+
+                    return Ok(());
                 }
             },
             _ => {
                 error!("Unknown Last.fm error encountered: {:#?}", e);
-                return message
-                    .channel_id
-                    .send_message(&ctx, |m| {
-                        m.embed(|e| {
-                            e.title("Error: Unknown Last.fm Error Encountered.");
-                            e.description("An unknown Last.fm error has occured. Please try again later.");
-                            e.color(0x00FF_0000);
-                            e
-                        });
-                        m
+                message.channel_id.send_message(&ctx, |m| {
+                    m.embed(|e| {
+                        e.title("Error: Unknown Last.fm Error Encountered.");
+                        e.description("An unknown Last.fm error has occured. Please try again later.");
+                        e.color(0x00FF_0000)
                     })
-                    .map_or_else(|e| Err(CommandError(e.to_string())), |_| Ok(()));
+                })?;
+
+                return Ok(());
             }
         },
     };
@@ -198,16 +185,14 @@ pub fn lastfm(ctx: &mut Context, message: &Message, mut args: Args) -> CommandRe
         user_username, track_play_state, track.name, track.artist.name, track.album.name
     );
 
-    return message
-        .channel_id
-        .send_message(&ctx, |m| {
-            m.embed(|e| {
-                e.title(format!("{}'s Last.fm", user_username));
-                e.url(user_url);
-                e.thumbnail(track_art);
-                e.color(0x00d5_1007);
-                e.description(format!(
-                    "{}\n\n\
+    message.channel_id.send_message(&ctx, |m| {
+        m.embed(|e| {
+            e.title(format!("{}'s Last.fm", user_username));
+            e.url(user_url);
+            e.thumbnail(track_art);
+            e.color(0x00d5_1007);
+            e.description(format!(
+                "{}\n\n\
                 **__User information:__**\n\
                 **Display name**: {}\n\
                 **Country**: {}\n\
@@ -216,12 +201,11 @@ pub fn lastfm(ctx: &mut Context, message: &Message, mut args: Args) -> CommandRe
                 **Total track plays**: {}\n\n\
                 **__Recent tracks:__**\n\
                 {}",
-                    currently_playing, user_display_name, user_country, user_registered, loved_tracks, user_scrobbles, tracks
-                ));
-                e.footer(|f| f.text("Powered by the Last.fm API."));
-                e
-            });
-            m
+                currently_playing, user_display_name, user_country, user_registered, loved_tracks, user_scrobbles, tracks
+            ));
+            e.footer(|f| f.text("Powered by the Last.fm API."))
         })
-        .map_or_else(|e| Err(CommandError(e.to_string())), |_| Ok(()));
+    })?;
+
+    return Ok(());
 }

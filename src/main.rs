@@ -82,10 +82,10 @@ pub fn main() {
                     .dynamic_prefix(|_, message| {
                         let def_prefix: String = env::var("DISCORD_PREFIX").expect("Unable to get the bot prefix.");
                         if message.is_private() {
-                            return Some(def_prefix.clone().to_string());
+                            return Some(def_prefix.to_string());
                         }
                         if let Some(guild_id) = message.guild_id {
-                            let prefix = get_prefix(&guild_id).map_or_else(|_| def_prefix.clone().to_string(), |prefix| prefix);
+                            let prefix = get_prefix(&guild_id).map_or_else(|_| def_prefix.to_string(), |prefix| prefix);
                             return Some(prefix);
                         } else {
                             return Some(def_prefix.to_string());
