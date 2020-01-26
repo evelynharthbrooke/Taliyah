@@ -12,6 +12,7 @@ use commands::info::profile::*;
 use commands::info::user::*;
 use commands::music::lastfm::*;
 use commands::music::spotify::commands::spotify::*;
+use commands::search::crates::*;
 use commands::utils::help::*;
 use commands::utils::ping::*;
 use commands::utils::prefix::*;
@@ -51,6 +52,11 @@ struct Utilities;
 #[description = "Music-focused commands."]
 #[commands(lastfm, spotify)]
 struct Music;
+
+#[group]
+#[description = "Various commands related to searching for things."]
+#[commands(crates)]
+struct Search;
 
 pub fn main() {
     dotenv().expect("Unable to read / access the .env file!");
@@ -114,7 +120,8 @@ pub fn main() {
             .help(&HELP)
             .group(&INFORMATION_GROUP)
             .group(&UTILITIES_GROUP)
-            .group(&MUSIC_GROUP),
+            .group(&MUSIC_GROUP)
+            .group(&SEARCH_GROUP),
     );
 
     if let Err(err) = client.start() {
