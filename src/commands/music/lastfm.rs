@@ -118,27 +118,23 @@ pub fn lastfm(ctx: &mut Context, message: &Message, mut args: Args) -> CommandRe
     
     let user_info = client.user_info(&user).send().unwrap().user;
 
-    let country = match user_info.country.clone().unwrap().is_empty() {
-        true => "No country available.".to_owned(),
-        false => user_info.country.unwrap(),
-    };
-
     let display_name = match user_info.display_name.clone().unwrap().is_empty() {
         true => "No display name available.".to_string(),
         false => user_info.display_name.unwrap(),
     };
 
+    let country = user_info.country;
     let url = user_info.url;
 
     let username = match database::get_user_display_name(&message.author.id) {
-        Ok(dn) => {
+        Ok(database_name) => {
             let lastfm_name = match database::get_user_lastfm(&message.author.id) {
-                Ok(l) => l,
+                Ok(name) => name,
                 Err(_) => user_info.username.to_string(),
             };
 
             if lastfm_name == user {
-                dn.to_string()
+                database_name.to_string()
             } else {
                 user_info.username.to_string()
             }
