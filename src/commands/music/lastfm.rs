@@ -113,19 +113,19 @@ pub fn lastfm(ctx: &mut Context, message: &Message, mut args: Args) -> CommandRe
     let loved_tracks = client.loved_tracks(&user).send().unwrap().attrs.total;
     let user_info = client.user_info(&user).send().unwrap().user;
 
-    let user_country = match user_info.country.clone().unwrap().is_empty() {
+    let country = match user_info.country.clone().unwrap().is_empty() {
         true => "No country available.".to_owned(),
         false => user_info.country.unwrap(),
     };
 
-    let user_display_name = match user_info.display_name.clone().unwrap().is_empty() {
+    let display_name = match user_info.display_name.clone().unwrap().is_empty() {
         true => "No display name available.".to_string(),
         false => user_info.display_name.unwrap(),
     };
 
-    let user_url = user_info.url;
+    let url = user_info.url;
 
-    let user_username = match database::get_user_display_name(&message.author.id) {
+    let username = match database::get_user_display_name(&message.author.id) {
         Ok(dn) => {
             let lastfm_name = match database::get_user_lastfm(&message.author.id) {
                 Ok(l) => l,
@@ -141,14 +141,18 @@ pub fn lastfm(ctx: &mut Context, message: &Message, mut args: Args) -> CommandRe
         Err(_) => user_info.username.to_string(),
     };
 
-    let user_registered = NaiveDateTime::from_timestamp(user_info.registered.friendly_date, 0).format("%B %e, %Y @ %l:%M %P");
-    let user_scrobbles = utilities::format_int(user_info.total_tracks.parse::<usize>().unwrap());
+    let registered = NaiveDateTime::from_timestamp(user_info.registered.friendly_date, 0).format("%B %e, %Y @ %l:%M %P");
+    let scrobbles = utilities::format_int(user_info.total_tracks.parse::<usize>().unwrap());
 
     let track = recent_tracks.first().unwrap();
+    
+    let name = &track.name;
+    let artist = &track.artist.name;
+    let album = &track.album.name;
 
-    let sp_track_search_string = format!("track: {} artist: {}", track.name, track.artist.name);
+    let sp_track_search_string = format!("track: {} artist: {} album: {}", name, artist, album.replace("&", "%26"));
 
-    let sp_track_search = spotify().search_track(&sp_track_search_string[..], 1, 0, None);
+    let sp_track_search = spotify().search_track(sp_track_search_string.as_str(), 1, 0, None);
     let sp_track_result = &sp_track_search.unwrap();
     let sp_track = sp_track_result.tracks.items.first().unwrap();
     let track_art = &sp_track.album.images.first().unwrap().url;
@@ -157,40 +161,32 @@ pub fn lastfm(ctx: &mut Context, message: &Message, mut args: Args) -> CommandRe
 
     match recent_tracks.is_empty() {
         true => tracks = "No recent tracks available".to_owned(),
-        false => {
-            tracks = recent_tracks
-                .iter()
-                .map(|t: &Track| {
-                    let mut now_playing: String = "".to_owned();
-                    let track_name = &t.name.replace("**", "\x5c**");
-                    let track_artist = &t.artist.name;
+        false => tracks = recent_tracks.iter().map(|t: &Track| {
+            let mut now_playing: String = "".to_owned();
+            let track_name = &t.name.replace("**", "\x5c**");
+            let track_artist = &t.artist.name;
 
-                    match t.attrs.as_ref().is_none() {
-                        true => warn!("No track attributes associated with this track."),
-                        false => now_playing = "\x5c▶️".to_owned(),
-                    }
-
-                    format!("{} **{}** — {}", now_playing, track_name, track_artist)
-                })
-                .join("\n");
-        }
+            match t.attrs.as_ref().is_none() {
+                true => warn!("No track attributes associated with this track."),
+                false => now_playing = "\x5c▶️".to_owned(),
+            }
+            
+            format!("{} **{}** — {}", now_playing, track_name, track_artist)
+        }).join("\n")
     };
 
-    let track_play_state: String;
+    let play_state: String;
     match track.attrs.as_ref().is_none() {
-        true => track_play_state = "last listened to".to_owned(),
-        false => track_play_state = "is currently listening to".to_owned(),
+        true => play_state = "last listened to".to_owned(),
+        false => play_state = "is currently listening to".to_owned(),
     }
 
-    let currently_playing: String = format!(
-        "{} {} {} by {} on {}.",
-        user_username, track_play_state, track.name, track.artist.name, track.album.name
-    );
+    let currently_playing: String = format!("{} {} {} by {} on {}.", username, play_state, name, artist, album);
 
     message.channel_id.send_message(&ctx, |m| {
         m.embed(|e| {
-            e.title(format!("{}'s Last.fm", user_username));
-            e.url(user_url);
+            e.title(format!("{}'s Last.fm", username));
+            e.url(url);
             e.thumbnail(track_art);
             e.color(0x00d5_1007);
             e.description(format!(
@@ -203,7 +199,7 @@ pub fn lastfm(ctx: &mut Context, message: &Message, mut args: Args) -> CommandRe
                 **Total track plays**: {}\n\n\
                 **__Recent tracks:__**\n\
                 {}",
-                currently_playing, user_display_name, user_country, user_registered, loved_tracks, user_scrobbles, tracks
+                currently_playing, display_name, country, registered, loved_tracks, scrobbles, tracks
             ));
             e.footer(|f| f.text("Powered by the Last.fm API."))
         })
