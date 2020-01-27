@@ -110,14 +110,28 @@ pub fn weather(context: &mut Context, message: &Message, arguments: Args) -> Com
     let forecast = request.daily.data.iter().map(|d: &DailyData| {
         let day = NaiveDateTime::from_timestamp(d.time, 0).format("%A");
         let summary = &d.summary;
-        format!("**{}**: {}", day, summary)
+        let temp_high = &d.high.round();
+        let temp_high_f = temp_high * 1.8 + 32.0;
+        let temp_low = &d.low.round();
+        let temp_low_f = temp_low * 1.8 + 32.0;
+        format!(
+            "**{}**: {} ({} °C | {} °F, {} °C | {} °F)",
+            day,
+            summary,
+            temp_high,
+            temp_high_f.round(),
+            temp_low,
+            temp_low_f.round()
+        )
     }).join("\n");
 
     message.channel_id.send_message(&context, |message| {
         message.embed(|embed| {
-            embed.title(format!("Weather forecast for {}", address));
+            embed.author(|author| {
+                author.name(address);
+                author.icon_url(icon)
+            });
             embed.color(0x8cbed6);
-            embed.thumbnail(icon);
             embed.description(format!(
                 "{}\n\n\
                 **Current Condition**: {}\n\
