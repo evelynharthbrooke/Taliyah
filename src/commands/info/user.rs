@@ -74,8 +74,6 @@ pub fn user(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
                         root_activity.push_str(activity.as_str());
                         root_activity.push(')');
                     };
-
-
                 }
             };
 
