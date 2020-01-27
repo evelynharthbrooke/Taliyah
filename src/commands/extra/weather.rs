@@ -114,15 +114,7 @@ pub fn weather(context: &mut Context, message: &Message, arguments: Args) -> Com
         let temp_high_f = temp_high * 1.8 + 32.0;
         let temp_low = &d.low.round();
         let temp_low_f = temp_low * 1.8 + 32.0;
-        format!(
-            "**{}**: {} ({} °C | {} °F, {} °C | {} °F)",
-            day,
-            summary,
-            temp_high,
-            temp_high_f.round(),
-            temp_low,
-            temp_low_f.round()
-        )
+        format!("**{}**: {} ({} °C | {} °F, {} °C | {} °F)", day, summary, temp_high, temp_high_f.round(), temp_low, temp_low_f.round())
     }).join("\n");
 
     message.channel_id.send_message(&context, |message| {
