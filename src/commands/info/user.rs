@@ -85,29 +85,44 @@ pub fn user(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
                                 false => emoji.clone(),
                             };
 
-                            root_activity = format!("{}{}", emoji, name)
+                            root_activity = format!("({}{})", emoji, name)
                         } else {
                             root_activity = format!("({}{}**{}**)", emoji, activity_kind, activity_name)
                         }
                     } else {
                         root_activity.push('(');
-                        root_activity.push_str("");
                         
                         let activity = presence.activities.iter().map(|a: &Activity| {
-                            let activity_name = &a.name;
+                            let mut activity_name = &a.name;
+
+                            let emoji = match a.emoji.is_none() {
+                                true => "".to_owned(),
+                                false => {
+                                    let mut emoji: String = a.emoji.as_ref().unwrap().name.to_owned();
+                                    emoji.push_str(" ");
+                                    emoji
+                                },
+                            };
+                            
                             let activity_kind = match a.kind {
                                 ActivityType::Listening => "listening to ".to_owned(),
                                 ActivityType::Playing => {
                                     if activity_name == "Visual Studio Code" {
-                                        "developing in".to_owned()
+                                        "developing in ".to_owned()
                                     } else {
-                                        "playing".to_owned()
+                                        "playing ".to_owned()
                                     }
                                 },
                                 ActivityType::Streaming => "streaming ".to_owned(),
                                 _ => "".to_owned(),
                             };
-                            format!("{} **{}**", activity_kind, activity_name)
+
+                            if a.kind == ActivityType::Custom {
+                                let state = &a.state.as_ref().unwrap();
+                                activity_name = &state.to_owned();
+                            }
+
+                            format!("{}{}**{}**", emoji, activity_kind, activity_name)
                         }).join(" & ");
                         
                         root_activity.push_str(activity.as_str());
