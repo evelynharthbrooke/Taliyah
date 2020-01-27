@@ -212,7 +212,7 @@ dependencies = [
 [[package]]
 name = "command_attr"
 version = "0.1.7"
-source = "git+https://github.com/serenity-rs/serenity.git?branch=current#820d50ee4fbc72a41a2040f6ced240df7aaa6fa8"
+source = "git+https://github.com/KamranMackey/serenity.git?branch=current#e8be4356726a71717505a43da6b47484eecc50de"
 dependencies = [
  "proc-macro2 1.0.8",
  "quote 1.0.2",
@@ -936,7 +936,7 @@ dependencies = [
 [[package]]
 name = "libsqlite3-sys"
 version = "0.18.0"
-source = "git+https://github.com/KamranMackey/rusqlite#a0d1ca3e1b1d3318f7ae800fe77cb1c8fb2c619c"
+source = "git+https://github.com/KamranMackey/rusqlite#c3f83c281ad51548ea37d8e4e1f5406157174e06"
 dependencies = [
  "cc",
  "pkg-config",
@@ -1632,7 +1632,7 @@ dependencies = [
 [[package]]
 name = "rusqlite"
 version = "0.21.0"
-source = "git+https://github.com/KamranMackey/rusqlite#a0d1ca3e1b1d3318f7ae800fe77cb1c8fb2c619c"
+source = "git+https://github.com/KamranMackey/rusqlite#c3f83c281ad51548ea37d8e4e1f5406157174e06"
 dependencies = [
  "bitflags",
  "fallible-iterator",
@@ -1809,7 +1809,7 @@ dependencies = [
 [[package]]
 name = "serenity"
 version = "0.8.0"
-source = "git+https://github.com/serenity-rs/serenity.git?branch=current#820d50ee4fbc72a41a2040f6ced240df7aaa6fa8"
+source = "git+https://github.com/KamranMackey/serenity.git?branch=current#e8be4356726a71717505a43da6b47484eecc50de"
 dependencies = [
  "base64 0.11.0",
  "bitflags",

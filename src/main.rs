@@ -12,11 +12,11 @@ use commands::info::profile::*;
 use commands::info::user::*;
 use commands::music::lastfm::*;
 use commands::music::spotify::commands::spotify::*;
-use commands::search::crates::*;
-use commands::utils::help::*;
-use commands::utils::ping::*;
-use commands::utils::prefix::*;
-use commands::utils::version::*;
+use commands::search::krate::*;
+use commands::utilities::help::*;
+use commands::utilities::ping::*;
+use commands::utilities::prefix::*;
+use commands::utilities::version::*;
 
 use dotenv::dotenv;
 
@@ -55,7 +55,7 @@ struct Music;
 
 #[group]
 #[description = "Various commands related to searching for things."]
-#[commands(crates)]
+#[commands(krate)]
 struct Search;
 
 pub fn main() {
@@ -101,19 +101,17 @@ pub fn main() {
             })
             .on_dispatch_error(|ctx, msg, err| match err {
                 DispatchError::Ratelimited(secs) => {
-                    let _ = msg.channel_id.say(&ctx.http, &format!("Try this again in {} seconds", secs));
+                    let _ = msg.channel_id.say(&ctx, &format!("Try this again in {} seconds", secs));
                 }
                 DispatchError::OnlyForOwners => {
-                    let _ = msg.channel_id.say(&ctx.http, "This is only available for owners.");
+                    let _ = msg.channel_id.say(&ctx, "This is only available for owners.");
                 }
                 DispatchError::IgnoredBot => {}
                 _ => error!("Dispatch Error: {} failed: {:?}", msg.content, err),
             })
             .after(|ctx, msg, cmd_name, err| {
                 if let Err(why) = err {
-                    let _ = msg
-                        .channel_id
-                        .say(&ctx.http, "An error occured while running this command, please try again later.");
+                    let _ = msg.channel_id.say(&ctx, "An error occured while running this command, please try again later.");
                     error!("Command Error: {} triggered by {} has errored: {:#?}", cmd_name, msg.author.tag(), why);
                 }
             })

@@ -1,1 +1,1 @@
-pub mod crates;
+pub mod krate;

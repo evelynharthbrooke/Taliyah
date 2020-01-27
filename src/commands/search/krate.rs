@@ -62,7 +62,7 @@ struct Version {
 struct User {
     id: usize,
     login: String,
-    name: String,
+    name: Option<String>,
     avatar: String,
     url: String,
 }
@@ -85,8 +85,8 @@ struct Keyword {
 #[command]
 #[description = "Looks up a crate on crates.io and displays information about it."]
 #[usage = "<crate name>"]
-#[aliases("crates", "cratesio", "cio")]
-pub fn crates(context: &mut Context, message: &Message, mut arguments: Args) -> CommandResult {
+#[aliases("krate", "crates", "crate", "cratesio", "cio")]
+pub fn krate(context: &mut Context, message: &Message, mut arguments: Args) -> CommandResult {
     if arguments.rest().is_empty() {
         message.channel_id.send_message(&context, |m| {
             m.embed(|e| {
@@ -120,6 +120,7 @@ pub fn crates(context: &mut Context, message: &Message, mut arguments: Args) -> 
     let crate_crated_at = result.krate.created_at.format("%B %e, %Y - %I:%M %p");
     let crate_last_updated = result.krate.updated_at.format("%B %e, %Y - %I:%M %p");
     let crate_latest_version = result.krate.newest_version;
+    let crate_max_version = result.krate.max_version;
     let crate_recent_downloads = format_int(result.krate.recent_downloads);
     let crate_downloads = format_int(result.krate.downloads);
 
@@ -145,13 +146,14 @@ pub fn crates(context: &mut Context, message: &Message, mut arguments: Args) -> 
                 **Homepage**: {}\n\
                 **Repository**: {}\n\
                 **Keywords**: {}\n\
-                **Latest version**: {}\n\
+                **Latest version**: {} ({} max)\n\
                 **Creation date**: {}\n\
                 **Last updated**: {}\n\
                 **Recent downloads**: {}\n\
                 **Total downloads**: {}\n",
-                crate_homepage, crate_repository, crate_keywords, crate_latest_version,
-                crate_crated_at, crate_last_updated, crate_recent_downloads, crate_downloads
+                crate_homepage, crate_repository, crate_keywords, crate_latest_version, 
+                crate_max_version, crate_crated_at, crate_last_updated, crate_recent_downloads, 
+                crate_downloads
             ))
         })
     })?;

@@ -4,6 +4,7 @@ use serenity::client::Context;
 use serenity::framework::standard::macros::command;
 use serenity::framework::standard::Args;
 use serenity::framework::standard::{CommandError, CommandResult};
+use serenity::model::gateway::Activity;
 use serenity::model::gateway::ActivityType;
 use serenity::model::guild::Role;
 use serenity::model::prelude::Message;
@@ -25,12 +26,7 @@ pub fn user(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
         if args.is_empty() {
             msg.member(&ctx).ok_or("Could not find member.")?
         } else {
-            (*(cached_guild
-                .read()
-                .members_containing(args.rest(), false, true)
-                .first()
-                .ok_or("couldn't find member")?))
-            .clone()
+            (*(cached_guild.read().members_containing(args.rest(), false, true).first().ok_or("couldn't find member")?)).clone()
         }
     } else {
         guild_id.member(&ctx, msg.mentions.first().ok_or("Failed to get user mentioned.")?)?
@@ -39,11 +35,9 @@ pub fn user(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
     let user = member.user.read();
     let guild = cached_guild.read();
 
+    let mut root_activity: String = "".to_string();
     let status: String;
     let main_role: String;
-    let mut activity_kind = "".to_owned();
-    let mut activity_name = "no available activity".to_owned();
-    let mut activity_emoji = "".to_owned();
 
     match guild.presences.get(&user.id).is_none() {
         true => {
@@ -52,37 +46,75 @@ pub fn user(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
         }
         false => {
             let presence = guild.presences.get(&user.id).unwrap();
-            match presence.activity.is_none() {
-                true => info!("No activity could be detected. Omitting."),
+
+            match presence.activities.is_empty() {
+                true => info!("No activities could be found."),
                 false => {
-                    let activity = presence.activity.as_ref().ok_or("Cannot retrieve status")?;
-                    let emoji = match activity.emoji.is_none() {
-                        true => "".to_owned(),
-                        false => activity.emoji.as_ref().unwrap().name.to_owned(),
-                    };
+                    if presence.activities.len() == 1 {
+                        let activities = &presence.activities;
+                        let activity = activities.first().unwrap();
 
-                    activity_kind = match activity.kind {
-                        ActivityType::Listening => "listening to ".to_owned(),
-                        ActivityType::Playing => "playing ".to_owned(),
-                        ActivityType::Streaming => "streaming ".to_owned(),
-                        _ => "".to_owned(),
-                    };
+                        let activity_name = &activity.name;
 
-                    if activity.kind == ActivityType::Custom {
-                        activity_name = match activity.state.is_none() {
+                        let emoji = match activity.emoji.is_none() {
                             true => "".to_owned(),
-                            false => activity.state.as_ref().unwrap().to_owned(),
+                            false => activity.emoji.as_ref().unwrap().name.to_owned(),
                         };
-                        activity_emoji = match activity.emoji.is_none() {
-                            true => "".to_owned(),
-                            false => emoji,
+
+                        let activity_kind = match activity.kind {
+                            ActivityType::Listening => "listening to ".to_owned(),
+                            ActivityType::Playing => {
+                                if activity_name == "Visual Studio Code" {
+                                    "developing in ".to_owned()
+                                } else {
+                                    "playing ".to_owned()
+                                }
+                            },
+                            ActivityType::Streaming => "streaming ".to_owned(),
+                            _ => "".to_owned(),
                         };
-                        activity_emoji.push_str(" ");
+
+                        if activity.kind == ActivityType::Custom {
+                            let name = match activity.state.is_none() {
+                                true => "".to_owned(),
+                                false => activity.state.as_ref().unwrap().to_owned(),
+                            };
+
+                            let emoji = match activity.emoji.is_none() {
+                                true => "".to_owned(),
+                                false => emoji.clone(),
+                            };
+
+                            root_activity = format!("{}{}", emoji, name)
+                        } else {
+                            root_activity = format!("({}{}**{}**)", emoji, activity_kind, activity_name)
+                        }
                     } else {
-                        activity_name = activity.name.to_owned()
+                        root_activity.push('(');
+                        root_activity.push_str("");
+                        
+                        let activity = presence.activities.iter().map(|a: &Activity| {
+                            let activity_name = &a.name;
+                            let activity_kind = match a.kind {
+                                ActivityType::Listening => "listening to ".to_owned(),
+                                ActivityType::Playing => {
+                                    if activity_name == "Visual Studio Code" {
+                                        "developing in".to_owned()
+                                    } else {
+                                        "playing".to_owned()
+                                    }
+                                },
+                                ActivityType::Streaming => "streaming ".to_owned(),
+                                _ => "".to_owned(),
+                            };
+                            format!("{} **{}**", activity_kind, activity_name)
+                        }).join(" & ");
+                        
+                        root_activity.push_str(activity.as_str());
+                        root_activity.push(')');
                     }
                 }
-            }
+            };
 
             status = match presence.status {
                 OnlineStatus::Online => match user.bot {
@@ -105,8 +137,7 @@ pub fn user(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
         false => "User".to_owned(),
     };
 
-    let activity = format!("({}{}**{}**)", activity_kind, activity_emoji, activity_name);
-    let created = user.created_at().format("%B %e, %Y - %I:%M %p");
+    let created = user.created_at().format("%A, %B %e, %Y @ %I:%M %P");
     let tag = user.tag();
     let id = user.id;
     let color: Colour;
@@ -119,7 +150,7 @@ pub fn user(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
         }
         false => {
             color = member.colour(cache).unwrap();
-            color_hex = format!("#{}", color.hex());
+            color_hex = format!("#{}", color.hex().to_lowercase());
         }
     }
 
@@ -148,9 +179,9 @@ pub fn user(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
         }
     }
 
-    let nickname = member.nick.map_or("None".to_owned(), |nick| nick.clone());
+    let nickname = member.nick.map_or("No nickname has been set.".to_owned(), |nick| nick);
     let joined = member.joined_at.map_or("Unavailable".to_owned(), |d| {
-        let formatted_string = d.format("%B %e, %Y - %I:%M %p");
+        let formatted_string = d.format("%A, %B %e, %Y @ %I:%M %P");
         format!("{}", formatted_string)
     });
 
@@ -158,20 +189,20 @@ pub fn user(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
         .send_message(&ctx, move |m| {
             m.embed(move |e| {
                 e.author(|a| a.name(&user.name).icon_url(&user.face())).colour(color).description(format!(
-                    "**__General__**:\n\
-                        **Status**: {} {}\n\
-                        **Type**: {}\n\
-                        **Tag**: {}\n\
-                        **ID**: {}\n\
-                        **Creation Date**: {}\n\n\
-                        **__Guild-related Information__**:\n\
-                        **Join Date**: {}\n\
-                        **Nickname**: {}\n\
-                        **Display Color**: {}\n\
-                        **Main Role**: {}\n\
-                        **Roles ({})**: {}
-                        ",
-                    status, activity, account_type, tag, id, created, joined, nickname, color_hex, main_role, role_count, roles
+                    "\
+                    **__General__**:\n\
+                    **Status**: {} {}\n\
+                    **Type**: {}\n\
+                    **Tag**: {}\n\
+                    **ID**: {}\n\
+                    **Creation Date**: {}\n\n\
+                    **__Guild-related Information__**:\n\
+                    **Join Date**: {}\n\
+                    **Nickname**: {}\n\
+                    **Display Color**: {}\n\
+                    **Main Role**: {}\n\
+                    **Roles ({})**: {}",
+                    status, root_activity, account_type, tag, id, created, joined, nickname, color_hex, main_role, role_count, roles
                 ))
             })
         })
