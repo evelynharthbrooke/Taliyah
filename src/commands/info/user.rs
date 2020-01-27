@@ -50,27 +50,32 @@ pub fn user(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
             match p.activities.is_empty() {
                 true => info!("No activities could be found."),
                 false => {
-                    root_activity.push('(');
-
-                    let activity = p.activities.iter().filter(|a| a.kind != ActivityType::Custom).map(|activity: &Activity| {
-                        let activity_name = activity.name.as_str();
-                        let activity_kind = match activity.kind {
-                            ActivityType::Listening => "listening to".to_owned(),
-                            ActivityType::Playing => {
-                                if activity_name == "Visual Studio Code" {
-                                    "developing in".to_owned()
-                                } else {
-                                    "playing".to_owned()
+                    if p.activities.first().unwrap().kind == ActivityType::Custom {
+                        root_activity = "".to_string();
+                    } else {
+                        root_activity.push_str("(");
+                        let activity = p.activities.iter().filter(|a| a.kind != ActivityType::Custom).map(|activity: &Activity| {
+                            let activity_name = activity.name.as_str();
+                            let activity_kind = match activity.kind {
+                                ActivityType::Listening => "listening to".to_owned(),
+                                ActivityType::Playing => {
+                                    if activity_name == "Visual Studio Code" {
+                                        "developing in".to_owned()
+                                    } else {
+                                        "playing".to_owned()
+                                    }
                                 }
-                            }
-                            ActivityType::Streaming => "streaming on".to_owned(),
-                            _ => "".to_owned(),
-                        };
-                        format!("{} **{}**", activity_kind, activity_name)
-                    }).join(" & ");
+                                ActivityType::Streaming => "streaming on".to_owned(),
+                                _ => "".to_owned(),
+                            };
+                            format!("{} **{}**", activity_kind, activity_name)
+                        }).join(" & ");
+    
+                        root_activity.push_str(activity.as_str());
+                        root_activity.push(')');
+                    };
 
-                    root_activity.push_str(activity.as_str());
-                    root_activity.push(')');
+
                 }
             };
 
@@ -160,7 +165,8 @@ pub fn user(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
                     **Display Color**: {}\n\
                     **Main Role**: {}\n\
                     **Roles ({})**: {}",
-                    status, root_activity, account_type, tag, id, created, joined, nickname, color_hex, main_role, role_count, roles
+                    status, root_activity, account_type, tag, id, created, joined, 
+                    nickname, color_hex, main_role, role_count, roles
                 ))
             })
         })
