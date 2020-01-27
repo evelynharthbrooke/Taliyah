@@ -69,7 +69,7 @@ pub fn user(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
                                 } else {
                                     "playing ".to_owned()
                                 }
-                            },
+                            }
                             ActivityType::Streaming => "streaming ".to_owned(),
                             _ => "".to_owned(),
                         };
@@ -91,40 +91,30 @@ pub fn user(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
                         }
                     } else {
                         root_activity.push('(');
-                        
-                        let activity = presence.activities.iter().map(|a: &Activity| {
-                            let mut activity_name = &a.name;
 
-                            let emoji = match a.emoji.is_none() {
-                                true => "".to_owned(),
-                                false => {
-                                    let mut emoji: String = a.emoji.as_ref().unwrap().name.to_owned();
-                                    emoji.push_str(" ");
-                                    emoji
-                                },
-                            };
-                            
-                            let activity_kind = match a.kind {
-                                ActivityType::Listening => "listening to ".to_owned(),
-                                ActivityType::Playing => {
-                                    if activity_name == "Visual Studio Code" {
-                                        "developing in ".to_owned()
-                                    } else {
-                                        "playing ".to_owned()
+                        let activity = presence
+                            .activities
+                            .iter()
+                            .filter(|a| a.kind != ActivityType::Custom)
+                            .map(|activity: &Activity| {
+                                let activity_name = activity.name.as_str();
+                                let activity_kind = match activity.kind {
+                                    ActivityType::Listening => "listening to".to_owned(),
+                                    ActivityType::Playing => {
+                                        if activity_name == "Visual Studio Code" {
+                                            "developing in".to_owned()
+                                        } else {
+                                            "playing".to_owned()
+                                        }
                                     }
-                                },
-                                ActivityType::Streaming => "streaming ".to_owned(),
-                                _ => "".to_owned(),
-                            };
+                                    ActivityType::Streaming => "streaming on".to_owned(),
+                                    _ => "".to_owned(),
+                                };
 
-                            if a.kind == ActivityType::Custom {
-                                let state = &a.state.as_ref().unwrap();
-                                activity_name = &state.to_owned();
-                            }
+                                format!("{} **{}**", activity_kind, activity_name)
+                            })
+                            .join(" & ");
 
-                            format!("{}{}**{}**", emoji, activity_kind, activity_name)
-                        }).join(" & ");
-                        
                         root_activity.push_str(activity.as_str());
                         root_activity.push(')');
                     }
