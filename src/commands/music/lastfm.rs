@@ -151,9 +151,8 @@ pub fn lastfm(ctx: &mut Context, message: &Message, mut args: Args) -> CommandRe
     let artist = &track.artist.name;
     let album = &track.album.name;
 
-    let sp_track_search_string = format!("track: {} artist: {} album: {}", name, artist, album.replace("&", "%26"));
-
-    let sp_track_search = spotify().search_track(sp_track_search_string.as_str(), 1, 0, None);
+    let sp_search_string = format!("track: {} artist: {} album: {}", name, artist, album.replace("&", "%26"));
+    let sp_track_search = spotify().search_track(sp_search_string.as_str(), 1, 0, None);
     let sp_track_result = &sp_track_search.unwrap();
     let sp_track = sp_track_result.tracks.items.first().unwrap();
     let track_art = &sp_track.album.images.first().unwrap().url;
