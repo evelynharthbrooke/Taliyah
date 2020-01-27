@@ -159,23 +159,26 @@ pub fn lastfm(ctx: &mut Context, message: &Message, mut args: Args) -> CommandRe
 
     let tracks = match recent_tracks.is_empty() {
         true => "No recent tracks available".to_owned(),
-        false => recent_tracks.iter().map(|track: &Track| {
-            let mut now_playing: String = "".to_owned();
-            let track_name = &track.name.replace("**", "\x5c**");
-            let track_artist = &track.artist.name;
-            
-            match track.attrs.as_ref().is_none() {
-                true => warn!("No track attributes associated with this track."),
-                false => now_playing = "\x5c▶️".to_owned(),
-            }
+        false => recent_tracks
+            .iter()
+            .map(|track: &Track| {
+                let mut now_playing: String = "".to_owned();
+                let track_name = &track.name.replace("**", "\x5c**");
+                let track_artist = &track.artist.name;
 
-            format!("{} **{}** — {}", now_playing, track_name, track_artist)
-        }).join("\n")
+                match track.attrs.as_ref().is_none() {
+                    true => warn!("No track attributes associated with this track."),
+                    false => now_playing = "\x5c▶️".to_owned(),
+                }
+
+                format!("{} **{}** — {}", now_playing, track_name, track_artist)
+            })
+            .join("\n"),
     };
 
     let play_state = match track.attrs.as_ref().is_none() {
         true => "last listened to".to_owned(),
-        false => "is currently listening to".to_owned()
+        false => "is currently listening to".to_owned(),
     };
 
     let currently_playing: String = format!("{} {} {} by {} on {}.", username, play_state, name, artist, album);
