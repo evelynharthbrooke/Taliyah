@@ -96,7 +96,7 @@ pub fn user(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
         false => "User".to_owned(),
     };
 
-    let created = user.created_at().format("%A, %B %e, %Y @ %I:%M %P");
+    let created = user.created_at().format("%A, %B %e, %Y @ %l:%M %P");
     let tag = user.tag();
     let id = user.id;
     let color: Colour;
@@ -140,7 +140,7 @@ pub fn user(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
 
     let nickname = member.nick.map_or("No nickname has been set.".to_owned(), |nick| nick);
     let joined = member.joined_at.map_or("Unavailable".to_owned(), |d| {
-        let formatted_string = d.format("%A, %B %e, %Y @ %I:%M %P");
+        let formatted_string = d.format("%A, %B %e, %Y @ %l:%M %P");
         format!("{}", formatted_string)
     });
 
