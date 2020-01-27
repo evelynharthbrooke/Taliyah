@@ -141,7 +141,7 @@ pub fn lastfm(ctx: &mut Context, message: &Message, mut args: Args) -> CommandRe
         Err(_) => user_info.username.to_string(),
     };
 
-    let user_registered = NaiveDateTime::from_timestamp(user_info.registered.friendly_date, 0).format("%B %e, %Y - %l:%M %p");
+    let user_registered = NaiveDateTime::from_timestamp(user_info.registered.friendly_date, 0).format("%B %e, %Y @ %l:%M %P");
     let user_scrobbles = utilities::format_int(user_info.total_tracks.parse::<usize>().unwrap());
 
     let track = recent_tracks.first().unwrap();

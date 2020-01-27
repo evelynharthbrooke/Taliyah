@@ -7,6 +7,7 @@ use serenity::framework::standard::macros::command;
 use serenity::framework::standard::Args;
 use serenity::framework::standard::CommandResult;
 use serenity::model::prelude::Message;
+use serenity::utils::Colour;
 
 use std::env;
 
@@ -20,6 +21,7 @@ use rustfm::Client;
 #[sub_commands(set)]
 #[only_in("guilds")]
 pub fn profile(context: &mut Context, message: &Message, args: Args) -> CommandResult {
+    let color: Colour;
     let cache = &context.cache;
     let guild_id = message.guild_id.ok_or("Failed to get GuildID from Message.")?;
     let cached_guild = cache.read().guild(guild_id).ok_or("Unable to retrieve guild")?;
@@ -32,6 +34,12 @@ pub fn profile(context: &mut Context, message: &Message, args: Args) -> CommandR
     } else {
         guild_id.member(&context, message.mentions.first().ok_or("Failed to get user mentioned.")?)?
     };
+
+
+    match member.colour(cache).is_none() {
+        true => color = Colour::new(0xFFFFFF),
+        false => color = member.colour(cache).unwrap()
+    }
 
     let user_name = member.user.read().tag().to_string();
     let user_id = member.user.read().id;
@@ -79,7 +87,7 @@ pub fn profile(context: &mut Context, message: &Message, args: Args) -> CommandR
                 a.name(format!("{}'s profile", user_name));
                 a.icon_url(&member.user.read().face())
             });
-            e.color(0xff99cc);
+            e.color(color);
             e.description(format!(
                 "\
                     **Display name**: {}\n\
