@@ -110,7 +110,12 @@ pub fn lastfm(ctx: &mut Context, message: &Message, mut args: Args) -> CommandRe
         },
     };
 
-    let loved_tracks = client.loved_tracks(&user).send().unwrap().attrs.total;
+    let loved_tracks = if client.loved_tracks(&user).send().unwrap().attrs.total == "0" {
+        "No loved tracks...:(".to_string()
+    } else {
+        client.loved_tracks(&user).send().unwrap().attrs.total
+    };
+    
     let user_info = client.user_info(&user).send().unwrap().user;
 
     let country = match user_info.country.clone().unwrap().is_empty() {
