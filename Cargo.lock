@@ -212,7 +212,7 @@ dependencies = [
 [[package]]
 name = "command_attr"
 version = "0.1.7"
-source = "git+https://github.com/KamranMackey/serenity.git?branch=current#e8be4356726a71717505a43da6b47484eecc50de"
+source = "git+https://github.com/KamranMackey/serenity.git?branch=kamrans-fork#dd36cfc3af259d095dcd8f96aaa0049f6fcdc8f9"
 dependencies = [
  "proc-macro2 1.0.8",
  "quote 1.0.2",
@@ -1240,18 +1240,18 @@ checksum = "d4fd5641d01c8f18a23da7b6fe29298ff4b55afcccdf78973b24cf3175fee32e"
 
 [[package]]
 name = "pin-project"
-version = "0.4.7"
+version = "0.4.8"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "75fca1c4ff21f60ca2d37b80d72b63dab823a9d19d3cda3a81d18bc03f0ba8c5"
+checksum = "7804a463a8d9572f13453c516a5faea534a2403d7ced2f0c7e100eeff072772c"
 dependencies = [
  "pin-project-internal",
 ]
 
 [[package]]
 name = "pin-project-internal"
-version = "0.4.7"
+version = "0.4.8"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6544cd4e4ecace61075a6ec78074beeef98d58aa9a3d07d053d993b2946a90d6"
+checksum = "385322a45f2ecf3410c68d2a549a4a2685e8051d0f278e39743ff4e451cb9b3f"
 dependencies = [
  "proc-macro2 1.0.8",
  "quote 1.0.2",
@@ -1808,7 +1808,7 @@ dependencies = [
 [[package]]
 name = "serenity"
 version = "0.8.0"
-source = "git+https://github.com/KamranMackey/serenity.git?branch=current#e8be4356726a71717505a43da6b47484eecc50de"
+source = "git+https://github.com/KamranMackey/serenity.git?branch=kamrans-fork#dd36cfc3af259d095dcd8f96aaa0049f6fcdc8f9"
 dependencies = [
  "base64 0.11.0",
  "bitflags",
@@ -1976,9 +1976,9 @@ dependencies = [
 
 [[package]]
 name = "tokio"
-version = "0.2.10"
+version = "0.2.11"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c1fc73332507b971a5010664991a441b5ee0de92017f5a0e8b00fd684573045b"
+checksum = "8fdd17989496f49cdc57978c96f0c9fe5e4a58a8bddc6813c449a4624f6a030b"
 dependencies = [
  "bytes 0.5.4",
  "fnv",

@@ -24,6 +24,6 @@ pretty_env_logger = "0.3"
 reqwest = "0.10"
 rusqlite = { git = "https://github.com/jgallagher/rusqlite", features = ["bundled"] }
 rspotify = { git = "https://github.com/KamranMackey/rspotify" }
-serenity = { git = "https://github.com/KamranMackey/serenity.git", branch = "current" }
+serenity = { git = "https://github.com/KamranMackey/serenity.git", branch = "kamrans-fork" }
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"

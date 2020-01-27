@@ -29,10 +29,12 @@ pub fn ready(context: Context, ready: Ready) {
         false => info!("Ellie is running in release mode."),
     }
 
+    let guilds = ready.guilds.len();
+
     info!("Connected to version {} of the Discord gateway.", ready.version);
     info!("Connected to SQLite version {}.", get_sqlite_version());
-    info!("Connected to {} guild(s).", ready.guilds.len());
+    info!("Connected to {} guild(s).", guilds);
 
     // Set a basic presence. This will be improved later on.
-    context.set_presence(Some(Activity::playing("!help")), OnlineStatus::Online);
+    context.set_presence(Some(Activity::watching(format!("{} guilds", guilds).as_str())), OnlineStatus::Online);
 }

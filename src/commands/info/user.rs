@@ -60,7 +60,8 @@ pub fn user(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
                                 } else {
                                     "playing".to_owned()
                                 }
-                            }
+                            },
+                            ActivityType::Watching => "watching".to_owned(),
                             ActivityType::Streaming => "streaming on".to_owned(),
                             _ => "".to_owned(),
                         };
