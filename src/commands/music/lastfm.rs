@@ -162,13 +162,15 @@ pub fn lastfm(ctx: &mut Context, message: &Message, mut args: Args) -> CommandRe
                 .iter()
                 .map(|t: &Track| {
                     let mut now_playing: String = "".to_owned();
+                    let track_name = &t.name.replace("**", "\x5c**");
+                    let track_artist = &t.artist.name;
 
                     match t.attrs.as_ref().is_none() {
                         true => warn!("No track attributes associated with this track."),
                         false => now_playing = "\x5c▶️".to_owned(),
                     }
 
-                    format!("{} **{}** — {}", now_playing, t.name, t.artist.name)
+                    format!("{} **{}** — {}", now_playing, track_name, track_artist)
                 })
                 .join("\n");
         }
