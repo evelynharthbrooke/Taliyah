@@ -47,11 +47,9 @@ pub fn lastfm(ctx: &mut Context, message: &Message, mut args: Args) -> CommandRe
                             m.embed(|e| {
                                 e.title("Error: No Last.fm username was found or provided.");
                                 e.description(
-                                    "\
-                                        I could not find a Last.fm username pertaining to your user record, or \
-                                        you did not provide a Last.fm username as an argument. Please set a username \
-                                        via the profile command, or provide a Last.fm username as an argument.\
-                                        ",
+                                    "I could not find a Last.fm username pertaining to your user record, or \
+                                    you did not provide a Last.fm username as an argument. Please set a username \
+                                    via the profile command, or provide a Last.fm username as an argument.",
                                 );
                                 e.color(0x00FF_0000)
                             })
@@ -115,7 +113,7 @@ pub fn lastfm(ctx: &mut Context, message: &Message, mut args: Args) -> CommandRe
     } else {
         client.loved_tracks(&user).send().unwrap().attrs.total
     };
-    
+
     let user_info = client.user_info(&user).send().unwrap().user;
 
     let display_name = match user_info.display_name.clone().unwrap().is_empty() {
