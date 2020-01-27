@@ -145,7 +145,7 @@ pub fn lastfm(ctx: &mut Context, message: &Message, mut args: Args) -> CommandRe
     let scrobbles = utilities::format_int(user_info.total_tracks.parse::<usize>().unwrap());
 
     let track = recent_tracks.first().unwrap();
-    
+
     let name = &track.name;
     let artist = &track.artist.name;
     let album = &track.album.name;
@@ -157,29 +157,26 @@ pub fn lastfm(ctx: &mut Context, message: &Message, mut args: Args) -> CommandRe
     let sp_track = sp_track_result.tracks.items.first().unwrap();
     let track_art = &sp_track.album.images.first().unwrap().url;
 
-    let tracks: String;
-
-    match recent_tracks.is_empty() {
-        true => tracks = "No recent tracks available".to_owned(),
-        false => tracks = recent_tracks.iter().map(|t: &Track| {
+    let tracks = match recent_tracks.is_empty() {
+        true => "No recent tracks available".to_owned(),
+        false => recent_tracks.iter().map(|track: &Track| {
             let mut now_playing: String = "".to_owned();
-            let track_name = &t.name.replace("**", "\x5c**");
-            let track_artist = &t.artist.name;
-
-            match t.attrs.as_ref().is_none() {
+            let track_name = &track.name.replace("**", "\x5c**");
+            let track_artist = &track.artist.name;
+            
+            match track.attrs.as_ref().is_none() {
                 true => warn!("No track attributes associated with this track."),
                 false => now_playing = "\x5c▶️".to_owned(),
             }
-            
+
             format!("{} **{}** — {}", now_playing, track_name, track_artist)
         }).join("\n")
     };
 
-    let play_state: String;
-    match track.attrs.as_ref().is_none() {
-        true => play_state = "last listened to".to_owned(),
-        false => play_state = "is currently listening to".to_owned(),
-    }
+    let play_state = match track.attrs.as_ref().is_none() {
+        true => "last listened to".to_owned(),
+        false => "is currently listening to".to_owned()
+    };
 
     let currently_playing: String = format!("{} {} {} by {} on {}.", username, play_state, name, artist, album);
 
