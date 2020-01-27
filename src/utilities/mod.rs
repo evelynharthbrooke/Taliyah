@@ -1,5 +1,6 @@
 pub mod built_info;
 pub mod database;
+pub mod geo_utils;
 pub mod git_utils;
 
 pub fn format_int(i: usize) -> String {

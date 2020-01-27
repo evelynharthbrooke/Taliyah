@@ -7,6 +7,7 @@ mod commands;
 mod listeners;
 mod utilities;
 
+use commands::extra::weather::*;
 use commands::info::guild::*;
 use commands::info::profile::*;
 use commands::info::user::*;
@@ -37,6 +38,11 @@ use std::env;
 
 use utilities::database::create_database;
 use utilities::database::get_prefix;
+
+#[group]
+#[description = "Extra utility commands."]
+#[commands(weather)]
+struct Extra;
 
 #[group]
 #[description = "Various informational commands."]
@@ -116,6 +122,7 @@ pub fn main() {
                 }
             })
             .help(&HELP)
+            .group(&EXTRA_GROUP)
             .group(&INFORMATION_GROUP)
             .group(&UTILITIES_GROUP)
             .group(&MUSIC_GROUP)
