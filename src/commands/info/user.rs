@@ -45,83 +45,36 @@ pub fn user(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
             status = "No status available.".to_owned();
         }
         false => {
-            let presence = guild.presences.get(&user.id).unwrap();
+            let p = guild.presences.get(&user.id).unwrap();
 
-            match presence.activities.is_empty() {
+            match p.activities.is_empty() {
                 true => info!("No activities could be found."),
                 false => {
-                    if presence.activities.len() == 1 {
-                        let activities = &presence.activities;
-                        let activity = activities.first().unwrap();
+                    root_activity.push('(');
 
-                        let activity_name = &activity.name;
-
-                        let emoji = match activity.emoji.is_none() {
-                            true => "".to_owned(),
-                            false => activity.emoji.as_ref().unwrap().name.to_owned(),
-                        };
-
+                    let activity = p.activities.iter().filter(|a| a.kind != ActivityType::Custom).map(|activity: &Activity| {
+                        let activity_name = activity.name.as_str();
                         let activity_kind = match activity.kind {
-                            ActivityType::Listening => "listening to ".to_owned(),
+                            ActivityType::Listening => "listening to".to_owned(),
                             ActivityType::Playing => {
                                 if activity_name == "Visual Studio Code" {
-                                    "developing in ".to_owned()
+                                    "developing in".to_owned()
                                 } else {
-                                    "playing ".to_owned()
+                                    "playing".to_owned()
                                 }
                             }
-                            ActivityType::Streaming => "streaming ".to_owned(),
+                            ActivityType::Streaming => "streaming on".to_owned(),
                             _ => "".to_owned(),
                         };
+                        format!("{} **{}**", activity_kind, activity_name)
+                    }).join(" & ");
 
-                        if activity.kind == ActivityType::Custom {
-                            let name = match activity.state.is_none() {
-                                true => "".to_owned(),
-                                false => activity.state.as_ref().unwrap().to_owned(),
-                            };
-
-                            let emoji = match activity.emoji.is_none() {
-                                true => "".to_owned(),
-                                false => emoji.clone(),
-                            };
-
-                            root_activity = format!("({}{})", emoji, name)
-                        } else {
-                            root_activity = format!("({}{}**{}**)", emoji, activity_kind, activity_name)
-                        }
-                    } else {
-                        root_activity.push('(');
-
-                        let activity = presence
-                            .activities
-                            .iter()
-                            .filter(|a| a.kind != ActivityType::Custom)
-                            .map(|activity: &Activity| {
-                                let activity_name = activity.name.as_str();
-                                let activity_kind = match activity.kind {
-                                    ActivityType::Listening => "listening to".to_owned(),
-                                    ActivityType::Playing => {
-                                        if activity_name == "Visual Studio Code" {
-                                            "developing in".to_owned()
-                                        } else {
-                                            "playing".to_owned()
-                                        }
-                                    }
-                                    ActivityType::Streaming => "streaming on".to_owned(),
-                                    _ => "".to_owned(),
-                                };
-
-                                format!("{} **{}**", activity_kind, activity_name)
-                            })
-                            .join(" & ");
-
-                        root_activity.push_str(activity.as_str());
-                        root_activity.push(')');
-                    }
+                    root_activity.push_str(activity.as_str());
+                    root_activity.push(')');
                 }
             };
 
-            status = match presence.status {
+            status = match p.status {
                 OnlineStatus::Online => match user.bot {
                     true => "Available".to_owned(),
                     false => "Online".to_owned(),
