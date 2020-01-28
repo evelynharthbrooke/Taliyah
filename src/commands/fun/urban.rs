@@ -19,6 +19,8 @@ pub struct Definition {
     definition: String,
     example: String,
     word: String,
+    thumbs_up: usize,
+    thumbs_down: usize,
     permalink: String,
 }
 
@@ -61,6 +63,10 @@ pub fn urban(context: &mut Context, message: &Message, arguments: Args) -> Comma
     let definition = &response.definitions[0].definition;
     let example = &response.definitions[0].example;
     let permalink = &response.definitions[0].permalink;
+    let thumbs_up = &response.definitions[0].thumbs_up;
+    let thumbs_down = &response.definitions[0].thumbs_down;
+
+    let rating = format!("{} thumbs up, {} thumbs down", thumbs_up, thumbs_down);
 
     message.channel_id.send_message(&context, |message| {
         message.embed(|embed| {
@@ -69,7 +75,7 @@ pub fn urban(context: &mut Context, message: &Message, arguments: Args) -> Comma
                 author.url(permalink)
             });
             embed.color(0xEFFF00);
-            embed.description(format!("{}\n\n**Example**:\n{}", definition, example));
+            embed.description(format!("{}\n\n**Example**:\n{}\n\n**Rating**: {}", definition, example, rating));
             embed.footer(|footer| footer.text("Powered by the Urban Dictionary."))
         })
     })?;
@@ -89,6 +95,10 @@ pub fn randefine(context: &mut Context, message: &Message) -> CommandResult {
     let definition = &response.definitions[0].definition;
     let example = &response.definitions[0].example;
     let permalink = &response.definitions[0].permalink;
+    let thumbs_up = &response.definitions[0].thumbs_up;
+    let thumbs_down = &response.definitions[0].thumbs_down;
+
+    let rating = format!("{} thumbs up, {} thumbs down", thumbs_up, thumbs_down);
 
     message.channel_id.send_message(&context, |message| {
         message.embed(|embed| {
@@ -97,7 +107,7 @@ pub fn randefine(context: &mut Context, message: &Message) -> CommandResult {
                 author.url(permalink)
             });
             embed.color(0xEFFF00);
-            embed.description(format!("{}\n\n**Example**:\n{}", definition, example));
+            embed.description(format!("{}\n\n**Example**:\n{}\n\n**Rating**: {}", definition, example, rating));
             embed.footer(|footer| footer.text("Powered by the Urban Dictionary."))
         })
     })?;
