@@ -7,6 +7,7 @@ mod commands;
 mod listeners;
 mod utilities;
 
+use commands::fun::urban::*;
 use commands::extra::weather::*;
 use commands::info::guild::*;
 use commands::info::profile::*;
@@ -53,6 +54,11 @@ pub struct ShardManagerContainer;
 impl Key for ShardManagerContainer {
     type Value = Arc<ShardMutex<ShardManager>>;
 }
+
+#[group]
+#[description = "Fun commands."]
+#[commands(urban, randefine)]
+struct Fun;
 
 #[group]
 #[description = "Extra utility commands."]
@@ -141,6 +147,7 @@ pub fn main() {
                 }
             })
             .help(&HELP)
+            .group(&FUN_GROUP)
             .group(&EXTRA_GROUP)
             .group(&INFORMATION_GROUP)
             .group(&UTILITIES_GROUP)
