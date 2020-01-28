@@ -107,7 +107,7 @@ pub fn weather(context: &mut Context, message: &Message, arguments: Args) -> Com
     let wind_speed_km = request.currently.wind_speed.round() * 3.6;
     let uv_index = request.currently.uv_index;
 
-    let forecast = request.daily.data.iter().map(|d: &DailyData| {
+    let forecast = request.daily.data[0..5].iter().map(|d: &DailyData| {
         let day = NaiveDateTime::from_timestamp(d.time, 0).format("%A");
         let summary = &d.summary;
         let temp_high = &d.high.round();
@@ -134,7 +134,7 @@ pub fn weather(context: &mut Context, message: &Message, arguments: Args) -> Com
                 **Humidity**: {}%\n\
                 **Wind Speed**: {} m/s | {} km/h\n\
                 **UV Index**: {}\n\n\
-                **7 day forecast**:\n\
+                **5 day forecast**:\n\
                 {}",
                 summary,
                 condition,

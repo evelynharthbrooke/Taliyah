@@ -1,5 +1,5 @@
 use serenity::client::Context;
-use serenity::framework::standard::help_commands::with_embeds;
+use serenity::framework::standard::help_commands;
 use serenity::framework::standard::macros::help;
 use serenity::framework::standard::Args;
 use serenity::framework::standard::HelpOptions;
@@ -23,5 +23,5 @@ fn help(
     groups: &[&'static CommandGroup],
     owners: HashSet<UserId>,
 ) -> CommandResult {
-    with_embeds(ctx, msg, args, &opts, groups, owners)
+    help_commands::plain(ctx, msg, args, &opts, groups, owners)
 }

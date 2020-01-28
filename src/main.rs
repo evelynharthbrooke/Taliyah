@@ -15,6 +15,7 @@ use commands::music::lastfm::*;
 use commands::music::spotify::commands::spotify::*;
 use commands::search::krate::*;
 use commands::utilities::help::*;
+use commands::utilities::invite::*;
 use commands::utilities::ping::*;
 use commands::utilities::prefix::*;
 use commands::utilities::shutdown::*;
@@ -65,7 +66,7 @@ struct Information;
 
 #[group]
 #[description = "Ellie's selection of utility commands."]
-#[commands(ping, prefix, shutdown, version)]
+#[commands(invite, ping, prefix, shutdown, version)]
 struct Utilities;
 
 #[group]
