@@ -7,7 +7,6 @@ use serenity::model::prelude::Message;
 use serenity::model::Permissions;
 
 #[command]
-#[owners_only]
 #[description = "Generates an invite link for the bot."]
 pub fn invite(context: &mut Context, message: &Message) -> CommandResult {
     let cache = &context.cache.read();
