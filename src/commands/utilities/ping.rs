@@ -12,6 +12,7 @@ use chrono::Duration;
 #[description("Checks the overall message latency.")]
 #[usage("<blank>")]
 fn ping(context: &mut Context, message: &Message) -> CommandResult {
+    let initial_timestamp = message.timestamp.timestamp_millis();
     let mut msg = message.channel_id.send_message(&context, |message| message.content(":ping_pong: Pinging!"))?;
 
     let data = context.data.read();
@@ -42,7 +43,7 @@ fn ping(context: &mut Context, message: &Message) -> CommandResult {
         None => "No data available yet.".to_string(),
     };
 
-    let message_latency = msg.timestamp.timestamp_millis() - message.timestamp.timestamp_millis();
+    let message_latency = msg.timestamp.timestamp_millis() - initial_timestamp;
 
     let response = format!(
         "Pong! Succesfully retrieved the message and shard latencies. :ping_pong:\n\n\

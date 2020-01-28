@@ -82,10 +82,10 @@ struct Keyword {
     crates_cnt: usize,
 }
 
-#[command]
+#[command("crate")]
 #[description = "Looks up a crate on crates.io and displays information about it."]
 #[usage = "<crate name>"]
-#[aliases("krate", "crates", "crate", "cratesio", "cio")]
+#[aliases("crates", "cratesio", "cio")]
 pub fn krate(context: &mut Context, message: &Message, mut arguments: Args) -> CommandResult {
     if arguments.rest().is_empty() {
         message.channel_id.send_message(&context, |m| {

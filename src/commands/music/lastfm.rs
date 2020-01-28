@@ -147,13 +147,31 @@ pub fn lastfm(ctx: &mut Context, message: &Message, mut args: Args) -> CommandRe
 
     let name = &track.name;
     let artist = &track.artist.name;
-    let album = &track.album.name;
+    
+    let album = match track.album.name.as_str().is_empty() {
+        true => "".to_string(),
+        false => {
+            let mut album_string = " on ".to_string();
+            album_string.push_str(track.album.name.as_str());
+            album_string
+        }
+    };
 
     let sp_search_string = format!("track: {} artist: {} album: {}", name, artist, album.replace("&", "%26"));
     let sp_track_search = spotify().search_track(sp_search_string.as_str(), 1, 0, None);
     let sp_track_result = &sp_track_search.unwrap();
-    let sp_track = sp_track_result.tracks.items.first().unwrap();
-    let track_art = &sp_track.album.images.first().unwrap().url;
+
+    let track_art: &str;
+    
+    match sp_track_result.tracks.items.first() {
+        Some(track) => {
+            let image = track.album.images.first().unwrap();
+            let album_art = image.url.as_str();
+            track_art = album_art
+        },
+        None => track_art = track.images.get(3).unwrap().image_url.as_str()
+    };
+
 
     let tracks = match recent_tracks.is_empty() {
         true => "No recent tracks available".to_owned(),
@@ -179,7 +197,7 @@ pub fn lastfm(ctx: &mut Context, message: &Message, mut args: Args) -> CommandRe
         false => "is currently listening to".to_owned(),
     };
 
-    let currently_playing: String = format!("{} {} {} by {} on {}.", username, play_state, name, artist, album);
+    let currently_playing: String = format!("{} {} {} by {}{}.", username, play_state, name, artist, album);
 
     message.channel_id.send_message(&ctx, |m| {
         m.embed(|e| {
