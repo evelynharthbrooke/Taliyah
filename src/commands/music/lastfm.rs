@@ -37,21 +37,21 @@ pub fn lastfm(ctx: &mut Context, message: &Message, mut args: Args) -> CommandRe
         user = args.single::<String>().unwrap();
     } else {
         user = match database::get_user_lastfm(&message.author.id) {
-            Ok(l) => l,
+            Ok(user) => user,
             Err(e) => {
                 error!("Could not get Last.fm username in database: {}", e);
                 match args.single::<String>() {
-                    Ok(a) => a.to_string(),
+                    Ok(argument) => argument.to_string(),
                     Err(_) => {
-                        message.channel_id.send_message(&ctx, |m| {
-                            m.embed(|e| {
-                                e.title("Error: No Last.fm username was found or provided.");
-                                e.description(
+                        message.channel_id.send_message(&ctx, |message| {
+                            message.embed(|embed| {
+                                embed.title("Error: No Last.fm username was found or provided.");
+                                embed.description(
                                     "I could not find a Last.fm username pertaining to your user record, or \
                                     you did not provide a Last.fm username as an argument. Please set a username \
                                     via the profile command, or provide a Last.fm username as an argument.",
                                 );
-                                e.color(0x00FF_0000)
+                                embed.color(0x00FF_0000)
                             })
                         })?;
                         return Ok(());
@@ -65,28 +65,27 @@ pub fn lastfm(ctx: &mut Context, message: &Message, mut args: Args) -> CommandRe
     let mut client: Client = Client::new(&api_key);
 
     let recent_tracks = match client.recent_tracks(&user).with_limit(5).send() {
-        Ok(c) => c.tracks,
-        Err(e) => match e {
-            Error::LastFMError(InvalidParameter(e)) => match e.message.as_str() {
+        Ok(rt) => rt.tracks,
+        Err(error) => match error {
+            Error::LastFMError(InvalidParameter(error)) => match error.message.as_str() {
                 "User not found" => {
-                    message.channel_id.send_message(&ctx, |m| {
-                        m.embed(|e| {
-                            e.title("Error: Invalid Last.fm username provided.");
-                            e.description("You have entered an invalid username. Please provide a valid one and then try again.");
-                            e.color(0x00FF_0000)
+                    message.channel_id.send_message(&ctx, |message| {
+                        message.embed(|embed| {
+                            embed.title("Error: Invalid Last.fm username provided.");
+                            embed.description("Invalid username provided. Please provide a valid one and then try again.");
+                            embed.color(0x00FF_0000)
                         })
                     })?;
 
                     return Ok(());
                 }
                 _ => {
-                    error!("Unknown Last.fm parameter error: {:#?}", e);
-                    message.channel_id.send_message(&ctx, |m| {
-                        m.embed(|e| {
-                            e.title("Error: Invalid Last.fm parameter provided.");
-                            e.description("An invalid last.fm parameter was provided.");
-                            e.color(0x00FF_0000);
-                            e
+                    error!("Unknown Last.fm parameter error: {:#?}", error);
+                    message.channel_id.send_message(&ctx, |message| {
+                        message.embed(|embed| {
+                            embed.title("Error: Invalid Last.fm parameter provided.");
+                            embed.description("An invalid last.fm parameter was provided.");
+                            embed.color(0x00FF_0000)
                         })
                     })?;
 
@@ -94,12 +93,12 @@ pub fn lastfm(ctx: &mut Context, message: &Message, mut args: Args) -> CommandRe
                 }
             },
             _ => {
-                error!("Unknown Last.fm error encountered: {:#?}", e);
-                message.channel_id.send_message(&ctx, |m| {
-                    m.embed(|e| {
-                        e.title("Error: Unknown Last.fm Error Encountered.");
-                        e.description("An unknown Last.fm error has occured. Please try again later.");
-                        e.color(0x00FF_0000)
+                error!("Unknown Last.fm error encountered: {:#?}", error);
+                message.channel_id.send_message(&ctx, |message| {
+                    message.embed(|embed| {
+                        embed.title("Error: Unknown Last.fm Error Encountered.");
+                        embed.description("An unknown Last.fm error has occured. Please try again later.");
+                        embed.color(0x00FF_0000)
                     })
                 })?;
 
@@ -147,7 +146,7 @@ pub fn lastfm(ctx: &mut Context, message: &Message, mut args: Args) -> CommandRe
 
     let name = &track.name;
     let artist = &track.artist.name;
-    
+
     let album = match track.album.name.as_str().is_empty() {
         true => "".to_string(),
         false => {
@@ -162,16 +161,14 @@ pub fn lastfm(ctx: &mut Context, message: &Message, mut args: Args) -> CommandRe
     let sp_track_result = &sp_track_search.unwrap();
 
     let track_art: &str;
-    
     match sp_track_result.tracks.items.first() {
         Some(track) => {
             let image = track.album.images.first().unwrap();
             let album_art = image.url.as_str();
             track_art = album_art
-        },
-        None => track_art = track.images.get(3).unwrap().image_url.as_str()
+        }
+        None => track_art = track.images.get(3).unwrap().image_url.as_str(),
     };
-
 
     let tracks = match recent_tracks.is_empty() {
         true => "No recent tracks available".to_owned(),
