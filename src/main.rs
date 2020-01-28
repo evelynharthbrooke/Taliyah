@@ -17,6 +17,7 @@ use commands::search::krate::*;
 use commands::utilities::help::*;
 use commands::utilities::ping::*;
 use commands::utilities::prefix::*;
+use commands::utilities::shutdown::*;
 use commands::utilities::version::*;
 
 use dotenv::dotenv;
@@ -64,7 +65,7 @@ struct Information;
 
 #[group]
 #[description = "Ellie's selection of utility commands."]
-#[commands(ping, prefix, version)]
+#[commands(ping, prefix, shutdown, version)]
 struct Utilities;
 
 #[group]
