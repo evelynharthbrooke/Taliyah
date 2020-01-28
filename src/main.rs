@@ -7,8 +7,8 @@ mod commands;
 mod listeners;
 mod utilities;
 
-use commands::fun::urban::*;
 use commands::extra::weather::*;
+use commands::fun::urban::*;
 use commands::info::guild::*;
 use commands::info::profile::*;
 use commands::info::user::*;
@@ -31,8 +31,8 @@ use listeners::handler::Handler;
 use rspotify::spotify::client::Spotify;
 use rspotify::spotify::oauth2::SpotifyClientCredentials;
 
-use serenity::client::Client;
 use serenity::client::bridge::gateway::ShardManager;
+use serenity::client::Client;
 
 use serenity::framework::standard::macros::group;
 use serenity::framework::standard::DispatchError;
@@ -41,8 +41,8 @@ use serenity::framework::StandardFramework;
 use serenity::prelude::Mutex as ShardMutex;
 
 use std::collections::HashSet;
-use std::sync::Arc;
 use std::env;
+use std::sync::Arc;
 
 use typemap::Key;
 
@@ -56,14 +56,14 @@ impl Key for ShardManagerContainer {
 }
 
 #[group]
-#[description = "Fun commands."]
-#[commands(urban, randefine)]
-struct Fun;
-
-#[group]
 #[description = "Extra utility commands."]
 #[commands(weather)]
 struct Extra;
+
+#[group]
+#[description = "Fun commands."]
+#[commands(urban, randefine)]
+struct Fun;
 
 #[group]
 #[description = "Various informational commands."]
@@ -71,14 +71,14 @@ struct Extra;
 struct Information;
 
 #[group]
-#[description = "Ellie's selection of utility commands."]
-#[commands(invite, ping, prefix, shutdown, version)]
-struct Utilities;
-
-#[group]
 #[description = "Music-focused commands."]
 #[commands(lastfm, spotify)]
 struct Music;
+
+#[group]
+#[description = "Ellie's selection of utility commands."]
+#[commands(invite, ping, prefix, shutdown, version)]
+struct Utilities;
 
 #[group]
 #[description = "Various commands related to searching for things."]
@@ -96,7 +96,7 @@ pub fn main() {
         let mut data = client.data.write();
         data.insert::<ShardManagerContainer>(Arc::clone(&client.shard_manager));
     }
-    
+
     pretty_env_logger::init();
     let (owners, bot_id) = match client.cache_and_http.http.get_current_application_info() {
         Ok(info) => {
@@ -147,12 +147,12 @@ pub fn main() {
                 }
             })
             .help(&HELP)
-            .group(&FUN_GROUP)
             .group(&EXTRA_GROUP)
+            .group(&FUN_GROUP)
             .group(&INFORMATION_GROUP)
-            .group(&UTILITIES_GROUP)
             .group(&MUSIC_GROUP)
-            .group(&SEARCH_GROUP),
+            .group(&SEARCH_GROUP)
+            .group(&UTILITIES_GROUP),
     );
 
     if let Err(err) = client.start_autosharded() {
