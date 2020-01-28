@@ -1,18 +1,19 @@
 use crate::ShardManagerContainer;
 
+use chrono::offset::Utc;
+use chrono::Duration;
+
 use serenity::client::bridge::gateway::ShardId;
 use serenity::client::Context;
 use serenity::framework::standard::macros::command;
 use serenity::framework::standard::CommandResult;
 use serenity::model::prelude::Message;
 
-use chrono::Duration;
-
 #[command]
 #[description("Checks the overall message latency.")]
 #[usage("<blank>")]
 fn ping(context: &mut Context, message: &Message) -> CommandResult {
-    let initial_timestamp = message.timestamp.timestamp_millis();
+    let initial_timestamp = Utc::now().timestamp_millis();
     let mut msg = message.channel_id.send_message(&context, |message| message.content(":ping_pong: Pinging!"))?;
 
     let data = context.data.read();
@@ -61,5 +62,5 @@ fn ping(context: &mut Context, message: &Message) -> CommandResult {
         })
     })?;
 
-    return Ok(())
+    return Ok(());
 }

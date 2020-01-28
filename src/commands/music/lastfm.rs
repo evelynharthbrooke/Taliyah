@@ -148,15 +148,11 @@ pub fn lastfm(ctx: &mut Context, message: &Message, mut args: Args) -> CommandRe
     let artist = &track.artist.name;
 
     let album = match track.album.name.as_str().is_empty() {
-        true => "".to_string(),
-        false => {
-            let mut album_string = " on ".to_string();
-            album_string.push_str(track.album.name.as_str());
-            album_string
-        }
+        true => "",
+        false => track.album.name.as_str(),
     };
 
-    let sp_search_string = format!("track: {} artist: {} album: {}", name, artist, album.replace("&", "%26"));
+    let sp_search_string = format!("track:{} artist:{} album:{}", name, artist, album.replace("&", "%26"));
     let sp_track_search = spotify().search_track(sp_search_string.as_str(), 1, 0, None);
     let sp_track_result = &sp_track_search.unwrap();
 
@@ -194,7 +190,7 @@ pub fn lastfm(ctx: &mut Context, message: &Message, mut args: Args) -> CommandRe
         false => "is currently listening to".to_owned(),
     };
 
-    let currently_playing: String = format!("{} {} {} by {}{}.", username, play_state, name, artist, album);
+    let currently_playing: String = format!("{} {} {} by {} on {}.", username, play_state, name, artist, album);
 
     message.channel_id.send_message(&ctx, |m| {
         m.embed(|e| {
