@@ -29,15 +29,28 @@ use rspotify::spotify::client::Spotify;
 use rspotify::spotify::oauth2::SpotifyClientCredentials;
 
 use serenity::client::Client;
+use serenity::client::bridge::gateway::ShardManager;
+
 use serenity::framework::standard::macros::group;
 use serenity::framework::standard::DispatchError;
 use serenity::framework::StandardFramework;
 
+use serenity::prelude::Mutex as ShardMutex;
+
 use std::collections::HashSet;
+use std::sync::Arc;
 use std::env;
+
+use typemap::Key;
 
 use utilities::database::create_database;
 use utilities::database::get_prefix;
+
+pub struct ShardManagerContainer;
+
+impl Key for ShardManagerContainer {
+    type Value = Arc<ShardMutex<ShardManager>>;
+}
 
 #[group]
 #[description = "Extra utility commands."]
@@ -71,8 +84,12 @@ pub fn main() {
 
     let mut client = Client::new(&token, Handler).expect("Error creating client.");
 
+    {
+        let mut data = client.data.write();
+        data.insert::<ShardManagerContainer>(Arc::clone(&client.shard_manager));
+    }
+    
     pretty_env_logger::init();
-
     let (owners, bot_id) = match client.cache_and_http.http.get_current_application_info() {
         Ok(info) => {
             let mut owners = HashSet::new();
@@ -105,20 +122,20 @@ pub fn main() {
                     })
                     .on_mention(Some(bot_id))
             })
-            .on_dispatch_error(|ctx, msg, err| match err {
+            .on_dispatch_error(|context, message, err| match err {
                 DispatchError::Ratelimited(secs) => {
-                    let _ = msg.channel_id.say(&ctx, &format!("Try this again in {} seconds", secs));
+                    let _ = message.channel_id.say(&context, &format!("Try this again in {} seconds", secs));
                 }
                 DispatchError::OnlyForOwners => {
-                    let _ = msg.channel_id.say(&ctx, "This is only available for owners.");
+                    let _ = message.channel_id.say(&context, "This is only available for owners.");
                 }
                 DispatchError::IgnoredBot => {}
-                _ => error!("Dispatch Error: {} failed: {:?}", msg.content, err),
+                _ => error!("Dispatch Error: {} failed: {:?}", message.content, err),
             })
-            .after(|ctx, msg, cmd_name, err| {
+            .after(|context, message, command_name, err| {
                 if let Err(why) = err {
-                    let _ = msg.channel_id.say(&ctx, "An error occured while running this command, please try again later.");
-                    error!("Command Error: {} triggered by {} has errored: {:#?}", cmd_name, msg.author.tag(), why);
+                    let _ = message.channel_id.say(&context, "An error occured while running this command, please try again later.");
+                    error!("Command Error: {} triggered by {} has errored: {:#?}", command_name, message.author.tag(), why);
                 }
             })
             .help(&HELP)
@@ -129,7 +146,7 @@ pub fn main() {
             .group(&SEARCH_GROUP),
     );
 
-    if let Err(err) = client.start() {
+    if let Err(err) = client.start_autosharded() {
         error!("An error occurred while running the client: {:?}", err);
     }
 }
