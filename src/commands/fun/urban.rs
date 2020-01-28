@@ -102,5 +102,5 @@ pub fn randefine(context: &mut Context, message: &Message) -> CommandResult {
         })
     })?;
 
-    return Ok(())
+    return Ok(());
 }
