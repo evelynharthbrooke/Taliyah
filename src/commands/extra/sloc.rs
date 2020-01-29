@@ -57,7 +57,7 @@ pub fn sloc(context: &mut Context, message: &Message, mut arguments: Args) -> Co
 
     let mut language_string: String = String::new();
     
-    let title = format!("**Code statistics for repository `{}/{}`**:", repository_name, repository_owner);
+    let title = format!("**Code statistics for repository `{}/{}`**:", repository_owner, repository_name);
 
     language_string.push_str(title.as_str());
     language_string.push_str("\n\n");
