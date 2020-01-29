@@ -19,16 +19,16 @@ pub fn guild(ctx: &mut Context, msg: &Message) -> CommandResult {
     let guild = cached_guild.read();
     let guild_name = &guild.name;
     let guild_owner = guild.member(&ctx, guild.owner_id).unwrap().user.read().tag();
-    let guild_channels = guild.channels.iter().filter(|(_, c)| c.read().kind != Category).collect::<Vec<_>>().len();
-    let guild_channels_text = guild.channels.iter().filter(|(_, c)| c.read().kind == Text).collect::<Vec<_>>().len();
-    let guild_channels_voice = guild.channels.iter().filter(|(_, c)| c.read().kind == Voice).collect::<Vec<_>>().len();
+    let guild_channels = guild.channels.iter().filter(|(_, c)| c.read().kind != Category).count();
+    let guild_channels_text = guild.channels.iter().filter(|(_, c)| c.read().kind == Text).count();
+    let guild_channels_voice = guild.channels.iter().filter(|(_, c)| c.read().kind == Voice).count();
     let guild_creation_date = guild_id.created_at().format("%B %e, %Y @ %l:%M %P");
     let guild_emojis = guild.emojis.len();
-    let guild_emojis_animated = guild.emojis.iter().filter(|(_, e)| e.animated == true).collect::<Vec<_>>().len();
-    let guild_emojis_normal = guild.emojis.iter().filter(|(_, e)| e.animated == false).collect::<Vec<_>>().len();
+    let guild_emojis_animated = guild.emojis.iter().filter(|(_, e)| e.animated).count();
+    let guild_emojis_normal = guild.emojis.iter().filter(|(_, e)| !e.animated).count();
     let guild_presences = guild.presences.len();
     let guild_members = guild.member_count;
-    let guild_prefix = crate::utilities::database::get_prefix(&guild_id).unwrap().to_string();
+    let guild_prefix = crate::utilities::database::get_prefix(guild_id).unwrap();
     let guild_icon = guild.icon_url().unwrap();
 
     let guild_explicit_filter = match guild.explicit_content_filter.num() {
@@ -67,7 +67,7 @@ pub fn guild(ctx: &mut Context, msg: &Message) -> CommandResult {
     };
 
     let guild_roles = guild.roles.iter().filter(|&(_, r)| &r.id != guild_id.as_u64()).map(|(_, r)| &r.name).join(" / ");
-    let guild_role_count = guild.roles.iter().filter(|&(_, r)| &r.id != guild_id.as_u64()).collect::<Vec<_>>().len();
+    let guild_role_count = guild.roles.iter().filter(|&(_, r)| &r.id != guild_id.as_u64()).count();
 
     let guild_verification_level = match guild.verification_level.num() {
         0 => "None - Unrestricted.".to_owned(),
@@ -79,7 +79,8 @@ pub fn guild(ctx: &mut Context, msg: &Message) -> CommandResult {
     };
 
     let mut highest = None;
-    for (role_id, _) in &guild.roles {
+    
+    for role_id in guild.roles.keys() {
         if let Some(role) = guild.roles.get(&role_id) {
             if let Some((id, pos)) = highest {
                 if role.position < pos || (role.position == pos && role.id > id) {

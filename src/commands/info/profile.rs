@@ -35,34 +35,34 @@ pub fn profile(context: &mut Context, message: &Message, args: Args) -> CommandR
         guild_id.member(&context, message.mentions.first().ok_or("Failed to get user mentioned.")?)?
     };
 
-
-    match member.colour(cache).is_none() {
-        true => color = Colour::new(0xFFFFFF),
-        false => color = member.colour(cache).unwrap()
+    if member.colour(cache).is_none() {
+        color = Colour::new(0x00FF_FFFF)
+    } else {
+        color = member.colour(cache).unwrap()
     }
 
-    let user_name = member.user.read().tag().to_string();
+    let user_name = member.user.read().tag();
     let user_id = member.user.read().id;
-    let display_name = match database::get_user_display_name(&user_id) {
-        Ok(dn) => dn.to_string(),
+    let display_name = match database::get_user_display_name(user_id) {
+        Ok(display_name) => display_name,
         Err(e) => {
             error!("Error while retrieving the Display Name from the database: {}", e);
             "No display name set.".to_string()
         }
     };
 
-    let lastfm_name = match database::get_user_lastfm(&user_id) {
-        Ok(username) => username.to_string(),
+    let lastfm_name = match database::get_user_lastfm(user_id) {
+        Ok(username) => username,
         Err(e) => {
             error!("Error while retrieving Last.fm username from the database: {}", e);
             "No last.fm username set.".to_string()
         }
     };
 
-    let twitter_name = match database::get_user_twitter(&user_id) {
+    let twitter_name = match database::get_user_twitter(user_id) {
         Ok(name) => {
             let url = "https://twitter.com".to_string();
-            format!("[{username}]({url}/{username})", url = url, username = name.to_string())
+            format!("[{username}]({url}/{username})", url = url, username = name)
         }
         Err(e) => {
             error!("Error while retrieving the Twitter username from the database: {}", e);
@@ -70,10 +70,10 @@ pub fn profile(context: &mut Context, message: &Message, args: Args) -> CommandR
         }
     };
 
-    let steam_id = match database::get_user_steam(&user_id) {
+    let steam_id = match database::get_user_steam(user_id) {
         Ok(id) => {
             let steam_url = "https://steamcommunity.com/id".to_string();
-            format!("[{steam_id}]({steam_url}/{steam_id})", steam_id = id.to_string(), steam_url = steam_url)
+            format!("[{steam_id}]({steam_url}/{steam_id})", steam_id = id, steam_url = steam_url)
         }
         Err(e) => {
             error!("Error while retrieving the Steam ID from the database: {}", e);
@@ -100,7 +100,7 @@ pub fn profile(context: &mut Context, message: &Message, args: Args) -> CommandR
         })
     })?;
 
-    return Ok(());
+    Ok(())
 }
 
 #[command]
@@ -170,7 +170,7 @@ pub fn set(context: &mut Context, message: &Message, mut arguments: Args) -> Com
                 return Ok(());
             };
             let _ = connection.execute("UPDATE profile SET display_name = ?1 WHERE user_id = ?2;", &[&value, &user_id[..]]);
-            let _ = connection.close().unwrap();
+            connection.close().unwrap();
             message.channel_id.say(&context, format!("Your name has been set to {}.", &value))?;
         }
         _ => {
@@ -178,5 +178,5 @@ pub fn set(context: &mut Context, message: &Message, mut arguments: Args) -> Com
         }
     }
 
-    return Ok(());
+    Ok(())
 }

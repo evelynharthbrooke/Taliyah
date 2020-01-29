@@ -48,7 +48,7 @@ pub fn urban(context: &mut Context, message: &Message, arguments: Args) -> Comma
     let request = client.get("https://api.urbandictionary.com/v0/define").query(&[("term", term)]).send()?;
     let response: Response = request.json()?;
 
-    if response.definitions.len() == 0 {
+    if response.definitions.is_empty() {
         message.channel_id.send_message(&context, |message| {
             message.embed(|embed| {
                 embed.title(format!("Error: No definitions for `{}` found.", term));
@@ -74,13 +74,13 @@ pub fn urban(context: &mut Context, message: &Message, arguments: Args) -> Comma
                 author.name(word);
                 author.url(permalink)
             });
-            embed.color(0xEFFF00);
+            embed.color(0x00EF_FF00);
             embed.description(format!("{}\n\n**Example**:\n{}\n\n**Rating**: {}", definition, example, rating));
             embed.footer(|footer| footer.text("Powered by the Urban Dictionary."))
         })
     })?;
 
-    return Ok(());
+    Ok(())
 }
 
 #[command]
@@ -106,11 +106,11 @@ pub fn randefine(context: &mut Context, message: &Message) -> CommandResult {
                 author.name(word);
                 author.url(permalink)
             });
-            embed.color(0xEFFF00);
+            embed.color(0x00EF_FF00);
             embed.description(format!("{}\n\n**Example**:\n{}\n\n**Rating**: {}", definition, example, rating));
             embed.footer(|footer| footer.text("Powered by the Urban Dictionary."))
         })
     })?;
 
-    return Ok(());
+    Ok(())
 }

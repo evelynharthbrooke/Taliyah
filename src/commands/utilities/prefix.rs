@@ -29,7 +29,7 @@ fn prefix(ctx: &mut Context, message: &Message) -> CommandResult {
         })
     })?;
 
-    return Ok(());
+    Ok(())
 }
 
 #[command]
@@ -37,7 +37,7 @@ fn prefix(ctx: &mut Context, message: &Message) -> CommandResult {
 #[owners_only]
 #[description = "Retrieves the command prefix for the current server."]
 pub fn get(ctx: &mut Context, message: &Message) -> CommandResult {
-    let prefix = database::get_prefix(&message.guild_id.unwrap())?.to_string();
+    let prefix = database::get_prefix(message.guild_id.unwrap())?;
 
     let guild = match message.guild(&ctx.cache) {
         Some(guild) => guild,
@@ -51,7 +51,7 @@ pub fn get(ctx: &mut Context, message: &Message) -> CommandResult {
 
     message.channel_id.say(&ctx, format!("The currently set command prefix for {} is `{}`.", guild_name, prefix))?;
 
-    return Ok(());
+    Ok(())
 }
 
 #[command]
@@ -85,7 +85,7 @@ pub fn set(ctx: &mut Context, message: &Message, args: Args) -> CommandResult {
 
     message.channel_id.say(&ctx, format!("The command prefix for {} has been set to `{}`.", guild_name, prefix))?;
 
-    return Ok(());
+    Ok(())
 }
 
 #[command]
@@ -94,7 +94,9 @@ pub fn set(ctx: &mut Context, message: &Message, args: Args) -> CommandResult {
 #[aliases(clear, delete)]
 #[description = "Clears the current server's currently set command prefix."]
 pub fn clear(ctx: &mut Context, message: &Message) -> CommandResult {
-    let _ = database::clear_prefix(&message.guild_id.unwrap());
+    // Upon running the command, run the DELETE command on the database
+    // to remove the set prefix from it.
+    database::clear_prefix(message.guild_id.unwrap());
 
     let guild = match message.guild(&ctx.cache) {
         Some(guild) => guild,
@@ -108,5 +110,5 @@ pub fn clear(ctx: &mut Context, message: &Message) -> CommandResult {
 
     message.channel_id.say(&ctx, format!("The command prefix for {} has been cleared.", guild_name))?;
 
-    return Ok(());
+    Ok(())
 }

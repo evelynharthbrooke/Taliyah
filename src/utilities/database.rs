@@ -67,45 +67,45 @@ pub fn get_database() -> Result<Connection, Box<dyn Error>> {
 
 pub fn get_sqlite_version() -> String {
     let sqlite_version = rusqlite::version();
-    return sqlite_version.to_string();
+    sqlite_version.to_string()
 }
 
-pub fn get_user_display_name(user_id: &UserId) -> Result<String, Box<dyn Error>> {
+pub fn get_user_display_name(user_id: UserId) -> Result<String, Box<dyn Error>> {
     let connection = get_database()?;
     let mut statement = connection.prepare("SELECT display_name FROM profile WHERE user_id == ?1;")?;
     let mut rows = statement.query(&[&user_id.as_u64().to_string()])?;
     Ok(rows.next()?.ok_or("User not found in database")?.get(0)?)
 }
 
-pub fn get_user_twitter(user_id: &UserId) -> Result<String, Box<dyn Error>> {
+pub fn get_user_twitter(user_id: UserId) -> Result<String, Box<dyn Error>> {
     let connection = get_database()?;
     let mut statement = connection.prepare("SELECT twitter FROM profile where USER_ID == ?1;")?;
     let mut rows = statement.query(&[&user_id.as_u64().to_string()])?;
     Ok(rows.next()?.ok_or("User not found in database")?.get(0)?)
 }
 
-pub fn get_user_lastfm(user_id: &UserId) -> Result<String, Box<dyn Error>> {
+pub fn get_user_lastfm(user_id: UserId) -> Result<String, Box<dyn Error>> {
     let connection = get_database()?;
     let mut statement = connection.prepare("SELECT lastfm FROM profile WHERE user_id == ?1;")?;
     let mut rows = statement.query(&[&user_id.as_u64().to_string()])?;
     Ok(rows.next()?.ok_or("User not found in database")?.get(0)?)
 }
 
-pub fn get_user_steam(user_id: &UserId) -> Result<String, Box<dyn Error>> {
+pub fn get_user_steam(user_id: UserId) -> Result<String, Box<dyn Error>> {
     let connection = get_database()?;
     let mut statement = connection.prepare("SELECT steam FROM profile where USER_ID == ?1;")?;
     let mut rows = statement.query(&[&user_id.as_u64().to_string()])?;
     Ok(rows.next()?.ok_or("User not found in database")?.get(0)?)
 }
 
-pub fn get_prefix(guild_id: &GuildId) -> Result<String, Box<dyn Error>> {
+pub fn get_prefix(guild_id: GuildId) -> Result<String, Box<dyn Error>> {
     let connection = get_database()?;
     let mut statement = connection.prepare("SELECT prefix FROM guild_settings WHERE guild_id == ?1;")?;
     let mut rows = statement.query(&[&guild_id.as_u64().to_string()])?;
     Ok(rows.next()?.ok_or("Guild not found.")?.get(0)?)
 }
 
-pub fn clear_prefix(guild_id: &GuildId) {
+pub fn clear_prefix(guild_id: GuildId) {
     let connection = match get_database() {
         Ok(d) => d,
         Err(e) => return error!("An error occured while getting the database: {}", e),

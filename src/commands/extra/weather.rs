@@ -79,7 +79,7 @@ pub fn weather(context: &mut Context, message: &Message, arguments: Args) -> Com
 
     let location = arguments.rest().to_string();
     let user_agent: &str = concat!(env!("CARGO_PKG_NAME"), "/", env!("CARGO_PKG_VERSION"));
-    let api_key = env::var("DARKSKY").expect("Couldn't acccess the provided API key.").to_string();
+    let api_key = env::var("DARKSKY").expect("Couldn't acccess the provided API key.");
 
     let coordinates = get_coordinates(location)?;
     let coordinates_result = coordinates.results.first().unwrap();
@@ -123,7 +123,7 @@ pub fn weather(context: &mut Context, message: &Message, arguments: Args) -> Com
                 author.name(address);
                 author.icon_url(icon)
             });
-            embed.color(0x8cbed6);
+            embed.color(0x008c_bed6);
             embed.description(format!(
                 "{}\n\n\
                 **Current Condition**: {}\n\
@@ -155,5 +155,5 @@ pub fn weather(context: &mut Context, message: &Message, arguments: Args) -> Com
         })
     })?;
 
-    return Ok(());
+    Ok(())
 }

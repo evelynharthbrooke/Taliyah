@@ -62,5 +62,5 @@ fn ping(context: &mut Context, message: &Message) -> CommandResult {
         })
     })?;
 
-    return Ok(());
+    Ok(())
 }

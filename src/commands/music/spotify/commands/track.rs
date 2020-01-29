@@ -55,21 +55,23 @@ fn track(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
         }
     };
 
-    let track_explicit = match track.explicit {
-        true => "Yes.".to_owned(),
-        false => match track_label.as_str() {
+    let track_explicit = if track.explicit {
+        "Yes.".to_owned()
+    } else {
+        match track_label.as_str() {
             "Walt Disney Records" => "Of course not, it's Disney.".to_owned(),
             _ => "No.".to_owned(),
-        },
+        }
     };
 
     let track_popularity = &track.popularity;
     let track_position = &track.track_number;
     let track_disc = &track.disc_number;
 
-    let track_preview_url = match track.preview_url.is_none() {
-        true => "No preview available.".to_owned(),
-        false => format!("[click here]({})", track.preview_url.as_ref().unwrap()),
+    let track_preview_url = if track.preview_url.is_none() {
+        "No preview available.".to_owned()
+    } else {
+        format!("[click here]({})", track.preview_url.as_ref().unwrap())
     };
 
     let mut track_markets = track.available_markets.len().to_string();
@@ -85,9 +87,8 @@ fn track(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
     let track_image = &track_album.images.first().unwrap().url;
     let track_artists = &track.artists.iter().map(|a| format!("[{}]({})", &a.name, &a.external_urls["spotify"])).join(", ");
 
-    let track_date = NaiveDate::parse_from_str(&track_date, "%Y-%m-%d").map_or(track_date, move |d| {
-        let formatted_string = d.format("%B %-e, %Y").to_string();
-        format!("{}", formatted_string.trim())
+    let track_date = NaiveDate::parse_from_str(&track_date, "%Y-%m-%d").map_or(track_date, |d| {
+        d.format("%B %-e, %Y").to_string()
     });
 
     let track_analysis = spotify().audio_analysis(track_id).unwrap().track;
@@ -130,7 +131,7 @@ fn track(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
                 a.url(track_url);
                 a.icon_url(track_image)
             });
-            e.color(0x1DB954);
+            e.color(0x001D_B954);
             e.description(format!(
                 "
                 **Artist(s)**: {}\n\
@@ -147,15 +148,32 @@ fn track(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
                 **Tempo**: {} (confidence: {})\n\
                 **Time Signature**: {} (confidence: {})\n\n\
                 [Play {} on Spotify →]({})",
-                track_artists, track_album_name, track_album_url, track_disc, track_position,
-                track_popularity, track_explicit, track_date, track_preview_url, track_markets,
-                track_length, track_loudness, track_key, track_key_confidence, track_mode, 
-                track_mode_confidence, track_tempo, track_tempo_confidence, track_time_signature,
-                track_time_signature_confidence, track_name, track_url
+                track_artists,
+                track_album_name,
+                track_album_url,
+                track_disc,
+                track_position,
+                track_popularity,
+                track_explicit,
+                track_date,
+                track_preview_url,
+                track_markets,
+                track_length,
+                track_loudness,
+                track_key,
+                track_key_confidence,
+                track_mode,
+                track_mode_confidence,
+                track_tempo,
+                track_tempo_confidence,
+                track_time_signature,
+                track_time_signature_confidence,
+                track_name,
+                track_url
             ));
-            e.footer(|f| f.text(format!("{}", track_copyright)))
+            e.footer(|f| f.text(track_copyright))
         })
     })?;
 
-    return Ok(());
+    Ok(())
 }

@@ -37,53 +37,54 @@ pub fn user(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
 
     let mut activities: String = "".to_string();
     let status: String;
-    let main_role: String;
 
-    match guild.presences.get(&user.id).is_none() {
-        true => {
-            info!("No status for this user could be found.");
-            status = "No status available.".to_owned();
-        }
-        false => {
-            let p = guild.presences.get(&user.id).unwrap();
+    if guild.presences.get(&user.id).is_none() {
+        info!("No status for this user could be found.");
+        status = "No status available.".to_owned();
+    } else {
+        let p = guild.presences.get(&user.id).unwrap();
 
-            match p.activities.is_empty() {
-                true => info!("No activities could be found."),
-                false => {
-                    activities = p.activities.iter().filter(|a| a.kind != ActivityType::Custom).map(|activity: &Activity| {
-                        let activity_name = activity.name.as_str();
-                        let activity_kind = match activity.kind {
-                            ActivityType::Listening => "listening to".to_owned(),
-                            ActivityType::Playing => {
-                                if activity_name == "Visual Studio Code" {
-                                    "developing in".to_owned()
-                                } else {
-                                    "playing".to_owned()
-                                }
-                            },
-                            ActivityType::Watching => "watching".to_owned(),
-                            ActivityType::Streaming => "streaming on".to_owned(),
-                            _ => "".to_owned(),
-                        };
-                        format!("{} **{}**", activity_kind, activity_name)
-                    }).join(" & ");
+        if p.activities.is_empty() {
+            info!("No activities could be found.")
+        } else {
+            activities = p.activities.iter().filter(|a| a.kind != ActivityType::Custom).map(|activity: &Activity| {
+                let activity_name = activity.name.as_str();
+                let activity_kind = match activity.kind {
+                    ActivityType::Listening => "listening to".to_owned(),
+                    ActivityType::Playing => {
+                        if activity_name == "Visual Studio Code" {
+                            "developing in".to_owned()
+                        } else {
+                            "playing".to_owned()
+                        }
+                    }
+                    ActivityType::Watching => "watching".to_owned(),
+                    ActivityType::Streaming => "streaming on".to_owned(),
+                    _ => "".to_owned(),
+                };
+                format!("{} **{}**", activity_kind, activity_name)
+            }).join(" & ");
+        };
+
+        status = match p.status {
+            OnlineStatus::Online => {
+                if user.bot {
+                    "Available".to_owned()
+                } else {
+                    "Online".to_owned()
                 }
-            };
-
-            status = match p.status {
-                OnlineStatus::Online => match user.bot {
-                    true => "Available".to_owned(),
-                    false => "Online".to_owned(),
-                },
-                OnlineStatus::Idle => "Idle".to_owned(),
-                OnlineStatus::DoNotDisturb => "Do Not Disturb".to_owned(),
-                OnlineStatus::Invisible => "Invisible".to_owned(),
-                _ => match user.bot {
-                    true => "Unavailable".to_owned(),
-                    false => "Offline".to_owned(),
-                },
-            };
-        }
+            }
+            OnlineStatus::Idle => "Idle".to_owned(),
+            OnlineStatus::DoNotDisturb => "Do Not Disturb".to_owned(),
+            OnlineStatus::Invisible => "Invisible".to_owned(),
+            _ => {
+                if user.bot {
+                    "Unavailable".to_owned()
+                } else {
+                    "Offline".to_owned()
+                }
+            }
+        };
     };
 
     if activities.is_empty() {
@@ -92,10 +93,7 @@ pub fn user(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
         activities = format!("({})", activities);
     }
 
-    let account_type = match user.bot {
-        true => "Bot".to_owned(),
-        false => "User".to_owned(),
-    };
+    let account_type = if user.bot { "Bot".to_owned() } else { "User".to_owned() };
 
     let created = user.created_at().format("%A, %B %e, %Y @ %l:%M %P");
     let tag = user.tag();
@@ -103,41 +101,35 @@ pub fn user(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
     let color: Colour;
     let color_hex: String;
 
-    match member.colour(cache).is_none() {
-        true => {
-            color = Colour::new(0xFFFFFF);
-            color_hex = "No display color available.".to_owned()
-        }
-        false => {
-            color = member.colour(cache).unwrap();
-            color_hex = format!("#{}", color.hex().to_lowercase());
-        }
+    if member.colour(cache).is_none() {
+        color = Colour::new(0x00FF_FFFF);
+        color_hex = "No display color available.".to_owned()
+    } else {
+        color = member.colour(cache).unwrap();
+        color_hex = format!("#{}", color.hex().to_lowercase());
     }
 
     let mut roles: String = "".to_owned();
     let mut role_count = 0;
-    match member.roles(&cache).is_none() {
-        true => info!("No roles available for this user."),
-        false => {
-            roles = member.roles(&cache).unwrap().iter().map(|r: &Role| &r.name).join(" / ");
-            role_count = member.roles(&cache).unwrap().len();
-            if roles.is_empty() {
-                roles = "No roles available.".to_owned();
-            }
+
+    if member.roles(&cache).is_none() {
+        info!("No roles available for this user.")
+    } else {
+        roles = member.roles(&cache).unwrap().iter().map(|r: &Role| &r.name).join(" / ");
+        role_count = member.roles(&cache).unwrap().len();
+        if roles.is_empty() {
+            roles = "No roles available.".to_owned();
         }
     }
 
-    match member.highest_role_info(&cache).is_none() {
-        true => {
-            info!("Cannot get role information.");
-            main_role = "No main role available.".to_owned();
-        }
-        false => {
-            let hoist_role_id = member.highest_role_info(&cache).ok_or("cannot get role id")?.0;
-            let hoist_role = guild.roles.get(&hoist_role_id).ok_or("Cannot get role")?;
-            main_role = hoist_role.name.to_owned();
-        }
-    }
+    let main_role = if member.highest_role_info(&cache).is_none() {
+        info!("Cannot get role information.");
+        "No main role available.".to_owned()
+    } else {
+        let hoist_role_id = member.highest_role_info(&cache).ok_or("cannot get role id")?.0;
+        let hoist_role = guild.roles.get(&hoist_role_id).ok_or("Cannot get role")?;
+        hoist_role.name.to_owned()
+    };
 
     let nickname = member.nick.map_or("No nickname has been set.".to_owned(), |nick| nick);
     let joined = member.joined_at.map_or("Unavailable".to_owned(), |d| {
@@ -162,8 +154,7 @@ pub fn user(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
                     **Display Color**: {}\n\
                     **Main Role**: {}\n\
                     **Roles ({})**: {}",
-                    status, activities, account_type, tag, id, created, joined, 
-                    nickname, color_hex, main_role, role_count, roles
+                    status, activities, account_type, tag, id, created, joined, nickname, color_hex, main_role, role_count, roles
                 ))
             })
         })

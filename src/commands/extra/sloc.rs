@@ -30,7 +30,6 @@ pub struct Language {
 #[command("sloc")]
 #[description = "Fetches the source lines of code for a GitHub Repository. **Note**: Does not work with large repositories."]
 #[usage = "<username> <repository>"]
-#[min_args(2)]
 #[aliases("tokei")]
 pub fn sloc(context: &mut Context, message: &Message, mut arguments: Args) -> CommandResult {
     if arguments.is_empty() {
@@ -96,5 +95,5 @@ pub fn sloc(context: &mut Context, message: &Message, mut arguments: Args) -> Co
 
     msg.edit(&context, |message| message.content(language_string))?;
 
-    return Ok(());
+    Ok(())
 }

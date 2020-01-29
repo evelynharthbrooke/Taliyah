@@ -89,7 +89,7 @@ struct Search;
 pub fn main() {
     dotenv().expect("Unable to read / access the .env file!");
 
-    let token = env::var("DISCORD_TOKEN").expect("Unable to read the bot token.").to_string();
+    let token = env::var("DISCORD_TOKEN").expect("Unable to read the bot token.");
 
     let mut client = Client::new(&token, Handler).expect("Error creating client.");
 
@@ -120,13 +120,12 @@ pub fn main() {
                     .dynamic_prefix(|_, message| {
                         let def_prefix: String = env::var("DISCORD_PREFIX").expect("Unable to get the bot prefix.");
                         if message.is_private() {
-                            return Some(def_prefix.to_string());
+                            def_prefix.to_string();
                         }
                         if let Some(guild_id) = message.guild_id {
-                            let prefix = get_prefix(&guild_id).map_or_else(|_| def_prefix.to_string(), |prefix| prefix);
-                            return Some(prefix);
+                            Some(get_prefix(guild_id).map_or_else(|_| def_prefix.to_string(), |prefix| prefix))
                         } else {
-                            return Some(def_prefix.to_string());
+                            Some(def_prefix)
                         }
                     })
                     .on_mention(Some(bot_id))
@@ -163,5 +162,5 @@ pub fn main() {
 
 pub fn spotify() -> Spotify {
     let client_credential = SpotifyClientCredentials::default().build();
-    return Spotify::default().client_credentials_manager(client_credential).build();
+    Spotify::default().client_credentials_manager(client_credential).build()
 }

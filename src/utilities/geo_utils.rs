@@ -44,9 +44,9 @@ pub struct Location {
 /// Gets coordinates for a specified location using the Google Maps Geocoding API.
 pub fn get_coordinates(location: String) -> Result<Response, Error> {
     let user_agent: &str = concat!(env!("CARGO_PKG_NAME"), "/", env!("CARGO_PKG_VERSION"));
-    let api_key = env::var("GOOGLE_KEY").expect("Unable to read the provided Google API key.").to_string();
+    let api_key = env::var("GOOGLE_KEY").expect("Unable to read the provided Google API key.");
     let client = Client::builder().user_agent(user_agent).build()?;
     let url = "https://maps.googleapis.com/maps/api/geocode/json";
     let request: Response = client.get(url).query(&[("address", location), ("key", api_key)]).send()?.json()?;
-    return Ok(request);
+    Ok(request)
 }

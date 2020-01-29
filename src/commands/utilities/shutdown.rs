@@ -31,5 +31,5 @@ pub fn shutdown(context: &mut Context, message: &Message) -> CommandResult {
         std::process::exit(0);
     }
 
-    return Ok(());
+    Ok(())
 }

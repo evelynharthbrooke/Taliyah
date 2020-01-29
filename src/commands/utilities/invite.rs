@@ -29,5 +29,5 @@ pub fn invite(context: &mut Context, message: &Message) -> CommandResult {
         })
     })?;
 
-    return Ok(());
+    Ok(())
 }

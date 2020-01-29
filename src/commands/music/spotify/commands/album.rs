@@ -55,9 +55,10 @@ fn album(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
 
     let mut album_markets = album.available_markets.len().to_string();
 
-    let album_genres = match album.genres.is_empty() {
-        true => "No genres available.".to_string(),
-        false => album.genres.iter().map(|g| g).join(", "),
+    let album_genres = if album.genres.is_empty() {
+        "No genres available.".to_string()
+    } else {
+        album.genres.iter().map(|g| g).join(", ")
     };
 
     // This will have to be updated as Spotify is launched
@@ -69,13 +70,13 @@ fn album(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
     let album_artists = &album.artists.iter().map(|a| format!("[{}]({})", &a.name, &a.external_urls["spotify"])).join(", ");
 
     let album_date = NaiveDate::parse_from_str(&album.release_date, "%Y-%m-%d").map_or(album.release_date, move |d| {
-        let formatted_string = d.format("%B %-e, %Y").to_string();
-        format!("{}", formatted_string.trim())
+        d.format("%B %-e, %Y").to_string()
     });
 
-    let album_copyright = match album.copyrights.is_empty() {
-        true => album.label,
-        false => format!("{} ({})", album.copyrights.first().unwrap()["text"], album.label),
+    let album_copyright = if album.copyrights.is_empty() {
+        album.label
+    } else { 
+        format!("{} ({})", album.copyrights.first().unwrap()["text"], album.label)
     };
 
     let album_tracks_total = album.tracks.total;
@@ -90,9 +91,10 @@ fn album(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
             let external_link = &track.external_urls["spotify"];
             let length = format_duration(Duration::from_millis(track.duration_ms as u64 / 1000 * 1000));
 
-            let explicit = match track.explicit {
-                true => "(explicit)".to_string(),
-                false => "".to_string(),
+            let explicit = if track.explicit {
+                "(explicit)".to_string()
+            } else {
+                "".to_string()
             };
 
             return format!("**{}.** [{}]({}) — {} {}", position, name, external_link, length, explicit);
@@ -105,7 +107,7 @@ fn album(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
                 a.url(album_url);
                 a.icon_url(album_image)
             });
-            e.color(0x1DB954);
+            e.color(0x001D_B954);
             e.description(format!(
                 "**Album type**: {}\n\
                 **Artist(s)**: {}\n\
@@ -117,9 +119,9 @@ fn album(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
                 **Tracks**: \n{}\n",
                 album_type, album_artists, album_date, album_genres, album_popularity, album_markets, album_tracks_total, album_tracks
             ));
-            e.footer(|f| f.text(format!("{}", album_copyright)))
+            e.footer(|f| f.text(album_copyright))
         })
     })?;
 
-    return Ok(());
+    Ok(())
 }

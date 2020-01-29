@@ -21,12 +21,10 @@ pub fn ready(context: Context, ready: Ready) {
     info!("Bot username: {}#{}", ready.user.name, ready.user.discriminator);
     info!("Bot user ID: {}", ready.user.id);
 
-    match built_info::DEBUG {
-        true => info!(
-            "Ellie is running in debug mode. Note that performance might be \
-            degraded while running a debug build."
-        ),
-        false => info!("Ellie is running in release mode."),
+    if built_info::DEBUG {
+        info!("Ellie is running in debug mode.")
+    } else {
+        info!("Ellie is running in release mode.")
     }
 
     let guilds = ready.guilds.len();

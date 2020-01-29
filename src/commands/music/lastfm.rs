@@ -31,17 +31,15 @@ use std::env;
 #[aliases("fm", "lfm", "lastfm")]
 #[usage("<user> <limit>")]
 pub fn lastfm(ctx: &mut Context, message: &Message, mut args: Args) -> CommandResult {
-    let user: String;
-
-    if !args.rest().is_empty() {
-        user = args.single::<String>().unwrap();
+    let user = if !args.rest().is_empty() {
+        args.single::<String>().unwrap()
     } else {
-        user = match database::get_user_lastfm(&message.author.id) {
+        match database::get_user_lastfm(message.author.id) {
             Ok(user) => user,
             Err(e) => {
                 error!("Could not get Last.fm username in database: {}", e);
                 match args.single::<String>() {
-                    Ok(argument) => argument.to_string(),
+                    Ok(argument) => argument,
                     Err(_) => {
                         message.channel_id.send_message(&ctx, |message| {
                             message.embed(|embed| {
@@ -58,8 +56,8 @@ pub fn lastfm(ctx: &mut Context, message: &Message, mut args: Args) -> CommandRe
                     }
                 }
             }
-        };
-    }
+        }
+    };
 
     let api_key: String = env::var("LASTFM_KEY").expect("No API key detected");
     let mut client: Client = Client::new(&api_key);
@@ -115,26 +113,27 @@ pub fn lastfm(ctx: &mut Context, message: &Message, mut args: Args) -> CommandRe
 
     let user_info = client.user_info(&user).send().unwrap().user;
 
-    let display_name = match user_info.display_name.clone().unwrap().is_empty() {
-        true => "No display name available.".to_string(),
-        false => user_info.display_name.unwrap(),
+    let display_name = if user_info.display_name.clone().unwrap().is_empty() {
+         "No display name available.".to_string() 
+    } else { 
+        user_info.display_name.unwrap() 
     };
 
     let avatar = user_info.images[3].image_url.as_str();
     let country = user_info.country;
     let url = user_info.url;
 
-    let username = match database::get_user_display_name(&message.author.id) {
+    let username = match database::get_user_display_name(message.author.id) {
         Ok(database_name) => {
-            let lastfm_name = match database::get_user_lastfm(&message.author.id) {
+            let lastfm_name = match database::get_user_lastfm(message.author.id) {
                 Ok(name) => name,
                 Err(_) => user_info.username.to_string(),
             };
 
             if lastfm_name == user {
-                database_name.to_string()
+                database_name
             } else {
-                user_info.username.to_string()
+                user_info.username
             }
         }
         Err(_) => user_info.username.to_string(),
@@ -148,10 +147,7 @@ pub fn lastfm(ctx: &mut Context, message: &Message, mut args: Args) -> CommandRe
     let name = &track.name;
     let artist = &track.artist.name;
 
-    let album = match track.album.name.as_str().is_empty() {
-        true => "",
-        false => track.album.name.as_str(),
-    };
+    let album = if track.album.name.is_empty() { "" } else { track.album.name.as_str() };
 
     let sp_search_string = format!("track:{} artist:{} album:{}", name, artist, album.replace("&", "%26"));
     let sp_track_search = spotify().search_track(sp_search_string.as_str(), 1, 0, None);
@@ -167,28 +163,31 @@ pub fn lastfm(ctx: &mut Context, message: &Message, mut args: Args) -> CommandRe
         None => track_art = track.images.get(3).unwrap().image_url.as_str(),
     };
 
-    let tracks = match recent_tracks.is_empty() {
-        true => "No recent tracks available".to_owned(),
-        false => recent_tracks
+    let tracks = if recent_tracks.is_empty() {
+        "No recent tracks available".to_owned()
+    } else {
+        recent_tracks
             .iter()
             .map(|track: &Track| {
-                let mut now_playing: String = "".to_owned();
                 let track_name = &track.name.replace("**", "\x5c**");
                 let track_artist = &track.artist.name;
 
-                match track.attrs.as_ref().is_none() {
-                    true => warn!("No track attributes associated with this track."),
-                    false => now_playing = "\x5c▶️".to_owned(),
-                }
+                let now_playing = if track.attrs.as_ref().is_none() {
+                    warn!("No track attributes associated with this track.");
+                    "".to_owned()
+                } else {
+                    "\x5c▶️".to_owned()
+                };
 
                 format!("{} **{}** — {}", now_playing, track_name, track_artist)
             })
-            .join("\n"),
+            .join("\n")
     };
 
-    let play_state = match track.attrs.as_ref().is_none() {
-        true => "last listened to".to_owned(),
-        false => "is currently listening to".to_owned(),
+    let play_state = if track.attrs.as_ref().is_none() {
+        "last listened to".to_owned()
+    } else {
+        "is currently listening to".to_owned()
     };
 
     let currently_playing: String = format!("{} {} {} by {} on {}.", username, play_state, name, artist, album);
@@ -218,5 +217,5 @@ pub fn lastfm(ctx: &mut Context, message: &Message, mut args: Args) -> CommandRe
         })
     })?;
 
-    return Ok(());
+    Ok(())
 }

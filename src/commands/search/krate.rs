@@ -98,7 +98,7 @@ pub fn krate(context: &mut Context, message: &Message, mut arguments: Args) -> C
         return Ok(());
     }
 
-    let krate = arguments.single::<String>()?.to_string();
+    let krate = arguments.single::<String>()?;
 
     let user_agent: &str = concat!(env!("CARGO_PKG_NAME"), "/", env!("CARGO_PKG_VERSION"));
     let client = Client::builder().user_agent(user_agent).build()?;
@@ -125,12 +125,12 @@ pub fn krate(context: &mut Context, message: &Message, mut arguments: Args) -> C
     let crate_downloads = format_int(result.krate.downloads);
 
     let crate_homepage = match result.krate.homepage {
-        Some(homepage) => homepage.to_string(),
+        Some(homepage) => homepage,
         None => "No homepage is available for this crate.".to_string(),
     };
 
     let crate_repository = match result.krate.repository {
-        Some(repository) => repository.to_string(),
+        Some(repository) => repository,
         None => "No repository is available for this crate.".to_string(),
     };
 
@@ -158,5 +158,5 @@ pub fn krate(context: &mut Context, message: &Message, mut arguments: Args) -> C
         })
     })?;
 
-    return Ok(());
+    Ok(())
 }

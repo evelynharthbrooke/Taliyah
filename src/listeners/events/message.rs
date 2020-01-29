@@ -18,11 +18,9 @@ pub fn message(_ctx: Context, message: Message) {
     };
 
     let user_id = message.author.id.to_string();
-    let user_tag = message.author.tag().to_string();
+    let user_tag = message.author.tag();
 
-    if message.author.bot {
-        return;
-    } else {
+    if !message.author.bot {
         let _ = database.execute("INSERT INTO profile (user_id, user_tag) values (?1, ?2)", &[&user_id, &user_tag]);
     }
 }
