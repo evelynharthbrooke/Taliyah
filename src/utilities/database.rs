@@ -49,8 +49,8 @@ pub fn create_database() {
                 twitter TEXT,
                 lastfm TEXT,
                 steam TEXT,
-                xbox TEXT,
                 playstation TEXT
+                xbox TEXT,
             )",
             NO_PARAMS,
         ) {
@@ -100,16 +100,16 @@ pub fn get_user_steam(user_id: UserId) -> Result<String, Box<dyn Error>> {
     Ok(rows.next()?.ok_or("User not found in database")?.get(0)?)
 }
 
-pub fn get_user_playstation_id(user_id: UserId) -> Result<String, Box<dyn Error>> {
+pub fn get_user_xbox_id(user_id: UserId) -> Result<String, Box<dyn Error>> {
     let connection = get_database()?;
-    let mut statement = connection.prepare("SELECT playstation FROM profile where USER_ID == ?1;")?;
+    let mut statement = connection.prepare("SELECT xbox FROM profile where USER_ID == ?1;")?;
     let mut rows = statement.query(&[&user_id.as_u64().to_string()])?;
     Ok(rows.next()?.ok_or("User not found in database")?.get(0)?)
 }
 
-pub fn get_user_xbox_id(user_id: UserId) -> Result<String, Box<dyn Error>> {
+pub fn get_user_playstation_id(user_id: UserId) -> Result<String, Box<dyn Error>> {
     let connection = get_database()?;
-    let mut statement = connection.prepare("SELECT xbox FROM profile where USER_ID == ?1;")?;
+    let mut statement = connection.prepare("SELECT playstation FROM profile where USER_ID == ?1;")?;
     let mut rows = statement.query(&[&user_id.as_u64().to_string()])?;
     Ok(rows.next()?.ok_or("User not found in database")?.get(0)?)
 }
