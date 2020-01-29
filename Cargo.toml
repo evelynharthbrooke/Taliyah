@@ -1,8 +1,13 @@
 [package]
 name = "ellie"
-version = "0.4.1-alpha"
+version = "0.4.1"
 authors = ["Kamran Mackey <kamranm1200@gmail.com>"]
-publish = false
+description = "A Discord bot written in Rust with Serenity."
+homepage = "https://github.com/KamranMackey/Ellie"
+repository = "https://github.com/KamranMackey/Ellie.git"
+keywords = ["discord", "bot", "serenity"]
+license = "MIT"
+readme = "README.md"
 build = "build.rs"
 edition = "2018"
 
