@@ -50,7 +50,15 @@ pub fn user(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
             activities = p.activities.iter().filter(|a| a.kind != ActivityType::Custom).map(|activity: &Activity| {
                 let activity_name = activity.name.as_str();
                 let activity_kind = match activity.kind {
-                    ActivityType::Listening => "listening to".to_owned(),
+                    ActivityType::Listening => {
+                        if activity_name == "Spotify" {
+                            let song = activity.details.as_ref().unwrap();
+                            let artists = activity.state.as_ref().unwrap().replace(";", " & ");
+                            format!("listening to **{}** by **{}** on ", song, artists)
+                        } else {
+                            "listening to".to_owned()
+                        }
+                    },
                     ActivityType::Playing => {
                         if activity_name == "Visual Studio Code" {
                             "developing in".to_owned()
