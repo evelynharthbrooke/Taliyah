@@ -120,6 +120,7 @@ pub fn lastfm(ctx: &mut Context, message: &Message, mut args: Args) -> CommandRe
         false => user_info.display_name.unwrap(),
     };
 
+    let avatar = user_info.images[3].image_url.as_str();
     let country = user_info.country;
     let url = user_info.url;
 
@@ -192,13 +193,16 @@ pub fn lastfm(ctx: &mut Context, message: &Message, mut args: Args) -> CommandRe
 
     let currently_playing: String = format!("{} {} {} by {} on {}.", username, play_state, name, artist, album);
 
-    message.channel_id.send_message(&ctx, |m| {
-        m.embed(|e| {
-            e.title(format!("{}'s Last.fm", username));
-            e.url(url);
-            e.thumbnail(track_art);
-            e.color(0x00d5_1007);
-            e.description(format!(
+    message.channel_id.send_message(&ctx, |message| {
+        message.embed(|embed| {
+            embed.author(|author| {
+                author.name(username);
+                author.url(url);
+                author.icon_url(avatar)
+            });
+            embed.thumbnail(track_art);
+            embed.color(0x00d5_1007);
+            embed.description(format!(
                 "{}\n\n\
                 **__User information:__**\n\
                 **Display name**: {}\n\
@@ -210,7 +214,7 @@ pub fn lastfm(ctx: &mut Context, message: &Message, mut args: Args) -> CommandRe
                 {}",
                 currently_playing, display_name, country, registered, loved_tracks, scrobbles, tracks
             ));
-            e.footer(|f| f.text("Powered by the Last.fm API."))
+            embed.footer(|f| f.text("Powered by the Last.fm API."))
         })
     })?;
 
