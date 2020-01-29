@@ -47,7 +47,7 @@ pub fn sloc(context: &mut Context, message: &Message, mut arguments: Args) -> Co
     let repository_name = arguments.rest().to_string();
 
     let mut msg = message.channel_id.send_message(&context, |message| {
-        message.content(format!("Getting source lines of code for {}/{}, please wait...", repository_owner, repository_name))
+        message.content(format!("Getting statistics for `{}/{}`, please wait...", repository_owner, repository_name))
     })?;
 
     let user_agent: &str = concat!(env!("CARGO_PKG_NAME"), "/", env!("CARGO_PKG_VERSION"));
@@ -55,7 +55,14 @@ pub fn sloc(context: &mut Context, message: &Message, mut arguments: Args) -> Co
     let url = Url::parse(format!("https://tokei.now.sh/{}/{}", repository_owner, repository_name).as_str())?;
     let request: Response = client.get(url).send()?.json()?;
 
-    let mut languages = request.languages.iter().map(|language: &Language| {
+    let mut language_string: String = String::new();
+    
+    let title = format!("**Code statistics for repository `{}/{}`**:", repository_name, repository_owner);
+
+    language_string.push_str(title.as_str());
+    language_string.push_str("\n\n");
+
+    let languages = request.languages.iter().map(|language: &Language| {
         let name = language.name.as_str();
         let files = language.files;
         let lines = language.lines;
@@ -69,6 +76,9 @@ pub fn sloc(context: &mut Context, message: &Message, mut arguments: Args) -> Co
         )
     }).join("\n");
 
+    language_string.push_str(languages.as_str());
+    language_string.push_str("\n\n");
+
     let total_name = request.total.name;
     let total_lines = request.total.lines;
     let total_files = request.total.files;
@@ -77,13 +87,13 @@ pub fn sloc(context: &mut Context, message: &Message, mut arguments: Args) -> Co
     let total_blank_lines = request.total.blanks;
 
     let total = format!(
-        "\n**{}**: {} files, {} lines, {} code lines, {} comments, {} blank lines",
+        "**{}**: {} files, {} lines, {} code lines, {} comments, {} blank lines",
         total_name, total_files, total_lines, total_code_lines, total_comments, total_blank_lines
     );
 
-    languages.push_str(total.as_str());
+    language_string.push_str(total.as_str());
 
-    msg.edit(&context, |message| message.content(languages))?;
+    msg.edit(&context, |message| message.content(language_string))?;
 
     return Ok(());
 }
