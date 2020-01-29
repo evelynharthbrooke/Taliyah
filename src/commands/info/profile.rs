@@ -81,6 +81,22 @@ pub fn profile(context: &mut Context, message: &Message, args: Args) -> CommandR
         }
     };
 
+    let playstation_id = match database::get_user_playstation_id(user_id) {
+        Ok(id) => id,
+        Err(e) => {
+            error!("Error while retrieving the PlayStation ID from the database: {}", e);
+            "No PlayStation ID set.".to_string()
+        }
+    };
+
+    let xbox_id = match database::get_user_xbox_id(user_id) {
+        Ok(id) => id,
+        Err(e) => {
+            error!("Error while retrieving the Xbox user ID from the database: {}", e);
+            "No Xbox user ID set.".to_string()
+        }
+    };
+
     message.channel_id.send_message(&context, |m| {
         m.embed(|e| {
             e.author(|a| {
@@ -89,13 +105,14 @@ pub fn profile(context: &mut Context, message: &Message, args: Args) -> CommandR
             });
             e.color(color);
             e.description(format!(
-                "\
-                    **Display name**: {}\n\
-                    **Last.fm username**: {}\n\
-                    **Twitter handle**: {}\n\
-                    **Steam ID**: {}\n\
-                    ",
-                display_name, lastfm_name, twitter_name, steam_id
+                "**Display name**: {}\n\
+                **Last.fm username**: {}\n\
+                **Twitter handle**: {}\n\
+                **Steam ID**: {}\n\
+                **PlayStation ID**: {}\n\
+                **Xbox user ID**: {}\n\
+                ",
+                display_name, lastfm_name, twitter_name, steam_id, playstation_id, xbox_id
             ))
         })
     })?;
@@ -156,6 +173,22 @@ pub fn set(context: &mut Context, message: &Message, mut arguments: Args) -> Com
             let _ = connection.execute("UPDATE profile SET lastfm = ?1 WHERE user_id = ?2;", &[&value, &user_id[..]]);
             message.channel_id.say(&context, format!("Your lastfm username has been set to {}.", &value))?;
         }
+        "playstation" | "ps" => {
+            if value.is_empty() {
+                message.channel_id.say(&context, "You did not provide a PlayStation ID. Please provide one!")?;
+                return Ok(());
+            };
+            let _ = connection.execute("UPDATE profile SET playstation = ?1 WHERE user_id = ?2;", &[&value, &user_id[..]]);
+            message.channel_id.say(&context, format!("Your PlayStation ID has been set to `{}`.", &value))?;
+        }
+        "xbox" => {
+            if value.is_empty() {
+                message.channel_id.say(&context, "You did not provide an Xbox user ID. Please provide one!")?;
+                return Ok(());
+            };
+            let _ = connection.execute("UPDATE profile SET xbox = ?1 WHERE user_id = ?2;", &[&value, &user_id[..]]);
+            message.channel_id.say(&context, format!("Your Xbox user ID has been set to `{}`.", &value))?;
+        }
         "steam" => {
             if value.is_empty() {
                 message.channel_id.say(&context, "You did not provide a Steam ID. Please provide one!")?;
@@ -170,7 +203,6 @@ pub fn set(context: &mut Context, message: &Message, mut arguments: Args) -> Com
                 return Ok(());
             };
             let _ = connection.execute("UPDATE profile SET display_name = ?1 WHERE user_id = ?2;", &[&value, &user_id[..]]);
-            connection.close().unwrap();
             message.channel_id.say(&context, format!("Your name has been set to {}.", &value))?;
         }
         _ => {
