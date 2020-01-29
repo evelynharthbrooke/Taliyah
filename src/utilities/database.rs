@@ -49,8 +49,8 @@ pub fn create_database() {
                 twitter TEXT,
                 lastfm TEXT,
                 steam TEXT,
-                playstation TEXT
-                xbox TEXT,
+                playstation TEXT,
+                xbox TEXT
             )",
             NO_PARAMS,
         ) {
