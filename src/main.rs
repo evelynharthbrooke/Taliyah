@@ -7,6 +7,7 @@ mod commands;
 mod listeners;
 mod utilities;
 
+use commands::extra::sloc::*;
 use commands::extra::weather::*;
 use commands::fun::urban::*;
 use commands::info::guild::*;
@@ -57,7 +58,7 @@ impl Key for ShardManagerContainer {
 
 #[group]
 #[description = "Extra utility commands."]
-#[commands(weather)]
+#[commands(sloc, weather)]
 struct Extra;
 
 #[group]
