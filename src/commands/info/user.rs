@@ -35,33 +35,33 @@ pub fn user(context: &mut Context, message: &Message, args: Args) -> CommandResu
     let user = member.user.read();
     let guild = cached_guild.read();
 
-    let mut activities: String = "".to_string();
+    let mut activities: String = String::new();
     let mut active_status: String = String::new();
 
-    if guild.presences.get(&user.id).is_none() {
-        info!("No status for this user could be found.");
-        active_status.push_str("No status available.")
-    } else {
+    if !guild.presences.get(&user.id).is_none() {
         let p = guild.presences.get(&user.id).unwrap();
 
-        if p.activities.is_empty() {
-            info!("No activities could be found.")
-        } else {
+        if !p.activities.is_empty() {
             activities = p.activities.iter().filter(|a| a.kind != ActivityType::Custom).map(|activity: &Activity| {
-                let activity_name = activity.name.as_str();
+                let mut activity_name = activity.name.as_str();
                 let activity_kind = match activity.kind {
                     ActivityType::Listening => {
                         if activity_name == "Spotify" {
                             let song = activity.details.as_ref().unwrap();
                             let artists = activity.state.as_ref().unwrap().replace(";", " & ");
-                            format!("listening to **{}** by **{}** on", song, artists)
+                            let album = activity.assets.as_ref().unwrap().large_text.as_ref().unwrap();
+                            format!("listening to **{}** by **{}** on the album **{}** via", song, artists, album)
                         } else {
                             "listening to".to_owned()
                         }
                     },
                     ActivityType::Playing => {
                         if activity_name == "Visual Studio Code" {
-                            "developing in".to_owned()
+                            let file = activity.details.as_ref().unwrap().replace("Editing ", "");
+                            let project = activity.state.as_ref().unwrap().replace("Workspace: ", "");
+                            let app = activity.assets.as_ref().unwrap().small_text.as_ref().unwrap();
+                            activity_name = app;
+                            format!("is working on the file **{}** in the project **{}** with", file, project)
                         } else {
                             "playing".to_owned()
                         }
@@ -79,38 +79,29 @@ pub fn user(context: &mut Context, message: &Message, args: Args) -> CommandResu
         active_status.push_str(currently_status.as_str());
 
         let status = match p.status {
-            OnlineStatus::Online => {
-                if user.bot {
-                    "Available".to_owned()
-                } else {
-                    "Online".to_owned()
-                }
-            }
-            OnlineStatus::Idle => "Idle".to_owned(),
-            OnlineStatus::DoNotDisturb => "Do Not Disturb".to_owned(),
-            OnlineStatus::Invisible => "Invisible".to_owned(),
-            _ => {
-                if user.bot {
-                    "Unavailable".to_owned()
-                } else {
-                    "Offline".to_owned()
-                }
-            }
+            OnlineStatus::Online => "Online",
+            OnlineStatus::Idle => "Idle",
+            OnlineStatus::DoNotDisturb => "Do Not Disturb",
+            OnlineStatus::Invisible => "Invisible",
+            _ => "Offline"
         };
 
         if status != "Do Not Disturb" {
             active_status.push_str("**");
-            active_status.push_str(status.as_str());
+            active_status.push_str(status);
             active_status.push_str("**");
         } else {
             active_status.push_str("in **Do Not Disturb** mode");
         }
+
+        if activities.is_empty() {
+            active_status.push_str(".\n\n")
+        }
+
     };
 
-    if activities.is_empty() {
-        activities = "".to_string();
-    } else {
-        activities = format!(" and {}.", activities);
+    if !activities.is_empty() {
+        activities = format!(" and {}.\n\n", activities);
     }
 
     let account_type = if user.bot { "Bot".to_owned() } else { "User".to_owned() };
@@ -129,12 +120,10 @@ pub fn user(context: &mut Context, message: &Message, args: Args) -> CommandResu
         color_hex = format!("#{}", color.hex().to_lowercase());
     }
 
-    let mut roles: String = "".to_owned();
+    let mut roles = String::new();
     let mut role_count = 0;
-
-    if member.roles(&cache).is_none() {
-        info!("No roles available for this user.")
-    } else {
+    
+    if !member.roles(&cache).is_none() {
         roles = member.roles(&cache).unwrap().iter().map(|r: &Role| &r.name).join(" / ");
         role_count = member.roles(&cache).unwrap().len();
         if roles.is_empty() {
@@ -165,7 +154,7 @@ pub fn user(context: &mut Context, message: &Message, args: Args) -> CommandResu
             });
             embed.colour(color);
             embed.description(format!(
-                "{}{}\n\n\
+                "{}{}\
                 **__User Information__**:\n\
                 **Type**: {}\n\
                 **Tag**: {}\n\
