@@ -148,9 +148,9 @@ pub fn set(context: &mut Context, message: &Message, mut arguments: Args) -> Com
 
             match client.user_info(&value).send() {
                 Ok(_) => (),
-                Err(e) => match e {
-                    Error::LastFMError(InvalidParameter(e)) => match e.message.as_str() {
-                        "User not found" => {
+                Err(e) => {
+                    if let Error::LastFMError(InvalidParameter(e)) = e {
+                        if let "User not found" = e.message.as_str() {
                             message.channel_id.send_message(&context, |m| {
                                 m.embed(|e| {
                                     e.title("Error: Invalid username provided.");
@@ -158,13 +158,10 @@ pub fn set(context: &mut Context, message: &Message, mut arguments: Args) -> Com
                                     e.color(0x00FF_0000)
                                 })
                             })?;
-                            return Ok(());
                         }
-                        _ => (),
-                    },
-                    _ => (),
-                },
-            };
+                    }
+                }
+            }
 
             if value.is_empty() {
                 message.channel_id.say(&context, "You did not provide your last.fm username. Please provide one!")?;
