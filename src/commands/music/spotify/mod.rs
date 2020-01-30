@@ -20,18 +20,16 @@ use std::env;
 fn spotify(ctx: &mut Context, message: &Message) -> CommandResult {
     let prefix = env::var("DISCORD_PREFIX").unwrap();
 
-    message
-        .channel_id
-        .send_message(&ctx, move |m| {
-            m.embed(move |e| {
-                e.title("Error: Invalid / No Subcommand Entered!");
-                e.description(format!(
-                    "You did not enter a valid subcommand! Please check \
-                    `{}help spotify` for the command usage.",
-                    prefix
-                ));
-                e
-            })
+    message.channel_id.send_message(&ctx, |message| {
+        message.embed(|embed| {
+            embed.title("Error: Invalid / No Subcommand Entered!");
+            embed.description(format!(
+                "You did not enter a valid subcommand! Please check \
+                `{}help spotify` for the command usage.",
+                prefix
+            ))
         })
-        .map_or_else(|e| Err(CommandError(e.to_string())), |_| Ok(()))
+    })?;
+
+    Ok(())
 }

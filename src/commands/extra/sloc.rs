@@ -32,7 +32,6 @@ pub struct Language {
 #[usage = "<username> <repository>"]
 #[aliases("tokei")]
 pub fn sloc(context: &mut Context, message: &Message, mut arguments: Args) -> CommandResult {
-    
     if arguments.is_empty() {
         message.channel_id.send_message(&context, |m| {
             m.embed(|e| {
