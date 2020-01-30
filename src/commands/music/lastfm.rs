@@ -114,9 +114,9 @@ pub fn lastfm(ctx: &mut Context, message: &Message, mut args: Args) -> CommandRe
     let user_info = client.user_info(&user).send().unwrap().user;
 
     let display_name = if user_info.display_name.clone().unwrap().is_empty() {
-         "No display name available.".to_string() 
-    } else { 
-        user_info.display_name.unwrap() 
+        "No display name available.".to_string()
+    } else {
+        user_info.display_name.unwrap()
     };
 
     let avatar = user_info.images[3].image_url.as_str();
@@ -166,22 +166,19 @@ pub fn lastfm(ctx: &mut Context, message: &Message, mut args: Args) -> CommandRe
     let tracks = if recent_tracks.is_empty() {
         "No recent tracks available".to_owned()
     } else {
-        recent_tracks
-            .iter()
-            .map(|track: &Track| {
-                let track_name = &track.name.replace("**", "\x5c**");
-                let track_artist = &track.artist.name;
+        recent_tracks.iter().map(|track: &Track| {
+            let track_name = &track.name.replace("**", "\x5c**");
+            let track_artist = &track.artist.name;
 
-                let now_playing = if track.attrs.as_ref().is_none() {
-                    warn!("No track attributes associated with this track.");
-                    "".to_owned()
-                } else {
-                    "\x5c▶️".to_owned()
-                };
-
-                format!("{} **{}** — {}", now_playing, track_name, track_artist)
-            })
-            .join("\n")
+            let now_playing = if track.attrs.as_ref().is_none() {
+                warn!("No track attributes associated with this track.");
+                "".to_owned()
+            } else {
+                "\x5c▶️".to_owned()
+            };
+            
+            format!("{} **{}** — {}", now_playing, track_name, track_artist)
+        }).join("\n")
     };
 
     let play_state = if track.attrs.as_ref().is_none() {
@@ -190,7 +187,7 @@ pub fn lastfm(ctx: &mut Context, message: &Message, mut args: Args) -> CommandRe
         "is currently listening to".to_owned()
     };
 
-    let currently_playing: String = format!("{} {} {} by {} on {}.", username, play_state, name, artist, album);
+    let currently_playing: String = format!("{} {} **{}** by **{}** on **{}**.", username, play_state, name, artist, album);
 
     message.channel_id.send_message(&ctx, |message| {
         message.embed(|embed| {

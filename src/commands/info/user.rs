@@ -36,11 +36,11 @@ pub fn user(context: &mut Context, message: &Message, args: Args) -> CommandResu
     let guild = cached_guild.read();
 
     let mut activities: String = "".to_string();
-    let status: String;
+    let mut active_status: String = String::new();
 
     if guild.presences.get(&user.id).is_none() {
         info!("No status for this user could be found.");
-        status = "No status available.".to_owned();
+        active_status.push_str("No status available.")
     } else {
         let p = guild.presences.get(&user.id).unwrap();
 
@@ -73,8 +73,12 @@ pub fn user(context: &mut Context, message: &Message, args: Args) -> CommandResu
                 format!("{} **{}**", activity_kind, activity_name)
             }).join(" & ");
         };
+        
+        let currently_status: String = format!("{} is currently ", user.name);
+        
+        active_status.push_str(currently_status.as_str());
 
-        status = match p.status {
+        let status = match p.status {
             OnlineStatus::Online => {
                 if user.bot {
                     "Available".to_owned()
@@ -93,12 +97,20 @@ pub fn user(context: &mut Context, message: &Message, args: Args) -> CommandResu
                 }
             }
         };
+
+        if status != "Do Not Disturb" {
+            active_status.push_str("**");
+            active_status.push_str(status.as_str());
+            active_status.push_str("**");
+        } else {
+            active_status.push_str("in **Do Not Disturb** mode");
+        }
     };
 
     if activities.is_empty() {
         activities = "".to_string();
     } else {
-        activities = format!("({})", activities);
+        activities = format!(" and {}.", activities);
     }
 
     let account_type = if user.bot { "Bot".to_owned() } else { "User".to_owned() };
@@ -153,8 +165,8 @@ pub fn user(context: &mut Context, message: &Message, args: Args) -> CommandResu
             });
             embed.colour(color);
             embed.description(format!(
-                "**__General__**:\n\
-                **Status**: {} {}\n\
+                "{}{}\n\n\
+                **__User Information__**:\n\
                 **Type**: {}\n\
                 **Tag**: {}\n\
                 **ID**: {}\n\
@@ -165,7 +177,8 @@ pub fn user(context: &mut Context, message: &Message, args: Args) -> CommandResu
                 **Display Color**: {}\n\
                 **Main Role**: {}\n\
                 **Roles ({})**: {}",
-                status, activities, account_type, tag, id, created, joined, nickname, color_hex, main_role, role_count, roles
+                active_status, activities, account_type, tag, id, created, joined, 
+                nickname, color_hex, main_role, role_count, roles
             ))
         })
     })?;
