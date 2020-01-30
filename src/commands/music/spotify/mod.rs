@@ -3,7 +3,7 @@ pub mod track;
 
 use serenity::client::Context;
 use serenity::framework::standard::macros::command;
-use serenity::framework::standard::{CommandError, CommandResult};
+use serenity::framework::standard::CommandResult;
 use serenity::model::prelude::Message;
 
 use crate::commands::music::spotify::album::*;
