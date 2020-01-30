@@ -2,7 +2,7 @@ use itertools::Itertools;
 
 use serenity::client::Context;
 use serenity::framework::standard::macros::command;
-use serenity::framework::standard::{CommandError, CommandResult};
+use serenity::framework::standard::CommandResult;
 use serenity::model::channel::ChannelType::{Category, Text, Voice};
 use serenity::model::prelude::Message;
 
@@ -11,14 +11,14 @@ use serenity::model::prelude::Message;
 #[usage = "<blank>"]
 #[aliases("guild", "guildinfo", "ginfo", "g")]
 #[only_in("guilds")]
-pub fn guild(ctx: &mut Context, msg: &Message) -> CommandResult {
-    let cache = &ctx.cache;
-    let guild_id = msg.guild_id.unwrap();
+pub fn guild(context: &mut Context, message: &Message) -> CommandResult {
+    let cache = &context.cache;
+    let guild_id = message.guild_id.unwrap();
     let cached_guild = cache.read().guild(guild_id).unwrap();
     
     let guild = cached_guild.read();
     let guild_name = &guild.name;
-    let guild_owner = guild.member(&ctx, guild.owner_id).unwrap().user.read().tag();
+    let guild_owner = guild.member(&context, guild.owner_id).unwrap().user.read().tag();
     let guild_channels = guild.channels.iter().filter(|(_, c)| c.read().kind != Category).count();
     let guild_channels_text = guild.channels.iter().filter(|(_, c)| c.read().kind == Text).count();
     let guild_channels_voice = guild.channels.iter().filter(|(_, c)| c.read().kind == Voice).count();
@@ -96,35 +96,38 @@ pub fn guild(ctx: &mut Context, msg: &Message) -> CommandResult {
     let highest_role_name = &highest_role.name;
     let highest_role_color = highest_role.colour;
 
-    msg.channel_id
-        .send_message(&ctx, move |m| {
-            m.embed(move |e| {
-                e.author(|a| a.name(&guild_name).icon_url(guild_icon));
-                e.colour(highest_role_color);
-                e.description(format!("
-                    **Name**: {}\n\
-                    **Owner**: {}\n\
-                    **Prefix**: `{}`\n\
-                    **Members**: {}\n\
-                    **Members Online**: {}\n\
-                    **Channels**: {} ({} text, {} voice)\n\
-                    **Emojis**: {} ({} animated, {} static)\n\
-                    **Region**: {}\n\
-                    **Creation Date**: {}\n\
-                    **Verification Level**: {}\n\
-                    **Explicit Content Filter**: {}\n\
-                    **Nitro Boosts**: {}\n\
-                    **Nitro Boost Level**: {}\n\
-                    **Highest Role**: {}\n\
-                    **Roles ({})**: {}\n",
-                    guild_name, guild_owner, guild_prefix, guild_members, guild_presences, guild_channels,
-                    guild_channels_text, guild_channels_voice, guild_emojis, guild_emojis_animated, 
-                    guild_emojis_normal, guild_region, guild_creation_date, guild_verification_level, 
-                    guild_explicit_filter, guild_boosts, guild_boost_tier, highest_role_name, 
-                    guild_role_count, guild_roles
-                ));
-                e.footer(|f| f.text(format!("The ID belonging to {} is {}.", guild_name, guild_id)))
-            })
+    message.channel_id.send_message(&context, |message| {
+        message.embed(|embed| {
+            embed.author(|author| {
+                author.name(&guild_name);
+                author.icon_url(guild_icon)
+            });
+            embed.colour(highest_role_color);
+            embed.description(format!(
+                "**Name**: {}\n\
+                **Owner**: {}\n\
+                **Prefix**: `{}`\n\
+                **Members**: {}\n\
+                **Members Online**: {}\n\
+                **Channels**: {} ({} text, {} voice)\n\
+                **Emojis**: {} ({} animated, {} static)\n\
+                **Region**: {}\n\
+                **Creation Date**: {}\n\
+                **Verification Level**: {}\n\
+                **Explicit Content Filter**: {}\n\
+                **Nitro Boosts**: {}\n\
+                **Nitro Boost Level**: {}\n\
+                **Highest Role**: {}\n\
+                **Roles ({})**: {}\n",
+                guild_name, guild_owner, guild_prefix, guild_members, guild_presences, guild_channels,
+                guild_channels_text, guild_channels_voice, guild_emojis, guild_emojis_animated,
+                guild_emojis_normal, guild_region, guild_creation_date, guild_verification_level,
+                guild_explicit_filter, guild_boosts, guild_boost_tier, highest_role_name,
+                guild_role_count, guild_roles
+            ));
+            embed.footer(|footer| footer.text(format!("The ID belonging to {} is {}.", guild_name, guild_id)))
         })
-        .map_or_else(|e| Err(CommandError(e.to_string())), |_| Ok(()))
+    })?;
+
+    Ok(())
 }

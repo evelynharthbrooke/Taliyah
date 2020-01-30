@@ -3,7 +3,7 @@ use itertools::Itertools;
 use serenity::client::Context;
 use serenity::framework::standard::macros::command;
 use serenity::framework::standard::Args;
-use serenity::framework::standard::{CommandError, CommandResult};
+use serenity::framework::standard::CommandResult;
 use serenity::model::gateway::Activity;
 use serenity::model::gateway::ActivityType;
 use serenity::model::guild::Role;
@@ -18,18 +18,18 @@ use log::info;
 #[usage = "<user> or <blank>"]
 #[aliases("user", "userinfo", "uinfo", "u")]
 #[only_in("guilds")]
-pub fn user(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
-    let cache = &ctx.cache;
-    let guild_id = msg.guild_id.ok_or("Failed to get GuildID from Message.")?;
+pub fn user(context: &mut Context, message: &Message, args: Args) -> CommandResult {
+    let cache = &context.cache;
+    let guild_id = message.guild_id.ok_or("Failed to get GuildID from Message.")?;
     let cached_guild = cache.read().guild(guild_id).ok_or("Unable to retrieve guild")?;
-    let member = if msg.mentions.is_empty() {
+    let member = if message.mentions.is_empty() {
         if args.is_empty() {
-            msg.member(&ctx).ok_or("Could not find member.")?
+            message.member(&context).ok_or("Could not find member.")?
         } else {
             (*(cached_guild.read().members_containing(args.rest(), false, true).first().ok_or("couldn't find member")?)).clone()
         }
     } else {
-        guild_id.member(&ctx, msg.mentions.first().ok_or("Failed to get user mentioned.")?)?
+        guild_id.member(&context, message.mentions.first().ok_or("Failed to get user mentioned.")?)?
     };
 
     let user = member.user.read();
@@ -145,26 +145,30 @@ pub fn user(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
         format!("{}", formatted_string)
     });
 
-    msg.channel_id
-        .send_message(&ctx, move |m| {
-            m.embed(move |e| {
-                e.author(|a| a.name(&user.name).icon_url(&user.face())).colour(color).description(format!(
-                    "\
-                    **__General__**:\n\
-                    **Status**: {} {}\n\
-                    **Type**: {}\n\
-                    **Tag**: {}\n\
-                    **ID**: {}\n\
-                    **Creation Date**: {}\n\n\
-                    **__Guild-related Information__**:\n\
-                    **Join Date**: {}\n\
-                    **Nickname**: {}\n\
-                    **Display Color**: {}\n\
-                    **Main Role**: {}\n\
-                    **Roles ({})**: {}",
-                    status, activities, account_type, tag, id, created, joined, nickname, color_hex, main_role, role_count, roles
-                ))
-            })
+    message.channel_id.send_message(&context, |message| {
+        message.embed(|embed| {
+            embed.author(|author| {
+                author.name(&user.name);
+                author.icon_url(&user.face())
+            });
+            embed.colour(color);
+            embed.description(format!(
+                "**__General__**:\n\
+                **Status**: {} {}\n\
+                **Type**: {}\n\
+                **Tag**: {}\n\
+                **ID**: {}\n\
+                **Creation Date**: {}\n\n\
+                **__Guild-related Information__**:\n\
+                **Join Date**: {}\n\
+                **Nickname**: {}\n\
+                **Display Color**: {}\n\
+                **Main Role**: {}\n\
+                **Roles ({})**: {}",
+                status, activities, account_type, tag, id, created, joined, nickname, color_hex, main_role, role_count, roles
+            ))
         })
-        .map_or_else(|e| Err(CommandError(e.to_string())), |_| Ok(()))
+    })?;
+    
+    Ok(())
 }
