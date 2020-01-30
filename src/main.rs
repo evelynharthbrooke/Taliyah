@@ -14,7 +14,7 @@ use commands::info::guild::*;
 use commands::info::profile::*;
 use commands::info::user::*;
 use commands::music::lastfm::*;
-use commands::music::spotify::commands::spotify::*;
+use commands::music::spotify::*;
 use commands::search::krate::*;
 use commands::utilities::help::*;
 use commands::utilities::invite::*;

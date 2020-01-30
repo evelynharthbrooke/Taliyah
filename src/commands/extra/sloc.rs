@@ -32,6 +32,7 @@ pub struct Language {
 #[usage = "<username> <repository>"]
 #[aliases("tokei")]
 pub fn sloc(context: &mut Context, message: &Message, mut arguments: Args) -> CommandResult {
+    
     if arguments.is_empty() {
         message.channel_id.send_message(&context, |m| {
             m.embed(|e| {
@@ -44,7 +45,7 @@ pub fn sloc(context: &mut Context, message: &Message, mut arguments: Args) -> Co
     }
 
     let repository_owner = arguments.single::<String>()?;
-    let repository_name = arguments.rest().to_string();
+    let repository_name = arguments.single::<String>()?;
 
     let mut msg = message.channel_id.send_message(&context, |message| {
         message.content(format!("Getting statistics for `{}/{}`, please wait...", repository_owner, repository_name))

@@ -54,7 +54,7 @@ pub fn user(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
                         if activity_name == "Spotify" {
                             let song = activity.details.as_ref().unwrap();
                             let artists = activity.state.as_ref().unwrap().replace(";", " & ");
-                            format!("listening to **{}** by **{}** on ", song, artists)
+                            format!("listening to **{}** by **{}** on", song, artists)
                         } else {
                             "listening to".to_owned()
                         }
