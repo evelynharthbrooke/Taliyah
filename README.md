@@ -9,6 +9,7 @@ A feature-packed bot for Discord servers, written in Rust with Serenity and othe
 [![Invite Ellie][invite-badge]][invite-link]
 [![License][license-badge]][license-link]
 [![Dependency Status][dependency-badge]][dependency-link]
+[![GitHub Actions Build Status][github-actions-badge]][github-actions-link]
 
 Welcome to the offiical repository for Ellie, a bot for Discord written using TypeScript and Node.js. This is my first
 my first attempt at creating a proper Discord bot, and if any issues occur, please file them on either GitLab or GitHub
@@ -220,3 +221,6 @@ SOFTWARE.
 
 [license-link]: https://github.com/KamranMackey/Ellie/blob/rust_rewrite/LICENSE.txt
 [license-badge]: https://img.shields.io/github/license/KamranMackey/Ellie.svg?color=ff1f46&style=flat-square
+
+[github-actions-link]: https://github.com/KamranMackey/Ellie/actions?query=workflow%3A%22Check+Project%22
+[github-actions-badge]: https://github.com/KamranMackey/Ellie/workflows/Check%20Project/badge.svg
