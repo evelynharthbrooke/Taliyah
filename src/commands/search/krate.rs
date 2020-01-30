@@ -107,29 +107,29 @@ pub fn krate(context: &mut Context, message: &Message, mut arguments: Args) -> C
     let response = client.get(&request_url).send()?;
     let result: Response = response.json()?;
 
-    let crate_name = result.krate.name;
-    let crates_img = "https://raw.githubusercontent.com/rust-lang/crates.io/master/public/assets/Cargo-Logo-Small.png";
-    let crate_url = format!("https://crates.io/crates/{}", crate_name);
+    let name = result.krate.name;
+    let image = "https://raw.githubusercontent.com/rust-lang/crates.io/master/public/assets/Cargo-Logo-Small.png";
+    let url = format!("https://crates.io/crates/{}", name);
 
-    let crate_keywords = if result.krate.keywords.is_empty() {
+    let keywords = if result.krate.keywords.is_empty() {
         "No keywords are available for this crate.".to_string()
     } else {
         result.krate.keywords.join(", ")
     };
 
-    let crate_crated_at = result.krate.created_at.format("%B %e, %Y - %I:%M %p");
-    let crate_last_updated = result.krate.updated_at.format("%B %e, %Y - %I:%M %p");
-    let crate_latest_version = result.krate.newest_version;
-    let crate_max_version = result.krate.max_version;
-    let crate_recent_downloads = format_int(result.krate.recent_downloads);
-    let crate_downloads = format_int(result.krate.downloads);
+    let created_at = result.krate.created_at.format("%B %e, %Y - %I:%M %p");
+    let last_updated = result.krate.updated_at.format("%B %e, %Y - %I:%M %p");
+    let latest_version = result.krate.newest_version;
+    let max_version = result.krate.max_version;
+    let recent_downloads = format_int(result.krate.recent_downloads);
+    let downloads = format_int(result.krate.downloads);
 
-    let crate_homepage = match result.krate.homepage {
+    let homepage = match result.krate.homepage {
         Some(homepage) => homepage,
         None => "No homepage is available for this crate.".to_string(),
     };
 
-    let crate_repository = match result.krate.repository {
+    let repository = match result.krate.repository {
         Some(repository) => repository,
         None => "No repository is available for this crate.".to_string(),
     };
@@ -137,9 +137,9 @@ pub fn krate(context: &mut Context, message: &Message, mut arguments: Args) -> C
     message.channel_id.send_message(&context, |message| {
         message.embed(|embed| {
             embed.author(|author| {
-                author.name(crate_name);
-                author.url(crate_url);
-                author.icon_url(crates_img)
+                author.name(name);
+                author.url(url);
+                author.icon_url(image)
             });
             embed.description(format!(
                 "\
@@ -151,9 +151,7 @@ pub fn krate(context: &mut Context, message: &Message, mut arguments: Args) -> C
                 **Last updated**: {}\n\
                 **Recent downloads**: {}\n\
                 **Total downloads**: {}\n",
-                crate_homepage, crate_repository, crate_keywords, crate_latest_version, 
-                crate_max_version, crate_crated_at, crate_last_updated, crate_recent_downloads, 
-                crate_downloads
+                homepage, repository, keywords, latest_version, max_version, created_at, last_updated, recent_downloads, downloads
             ))
         })
     })?;

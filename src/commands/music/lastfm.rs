@@ -166,19 +166,22 @@ pub fn lastfm(ctx: &mut Context, message: &Message, mut args: Args) -> CommandRe
     let tracks = if recent_tracks.is_empty() {
         "No recent tracks available".to_owned()
     } else {
-        recent_tracks.iter().map(|track: &Track| {
-            let track_name = &track.name.replace("**", "\x5c**");
-            let track_artist = &track.artist.name;
+        recent_tracks
+            .iter()
+            .map(|track: &Track| {
+                let track_name = &track.name.replace("**", "\x5c**");
+                let track_artist = &track.artist.name;
 
-            let now_playing = if track.attrs.as_ref().is_none() {
-                warn!("No track attributes associated with this track.");
-                "".to_owned()
-            } else {
-                "\x5c▶️".to_owned()
-            };
-            
-            format!("{} **{}** — {}", now_playing, track_name, track_artist)
-        }).join("\n")
+                let now_playing = if track.attrs.as_ref().is_none() {
+                    warn!("No track attributes associated with this track.");
+                    "".to_owned()
+                } else {
+                    "\x5c▶️".to_owned()
+                };
+
+                format!("{} **{}** — {}", now_playing, track_name, track_artist)
+            })
+            .join("\n")
     };
 
     let play_state = if track.attrs.as_ref().is_none() {

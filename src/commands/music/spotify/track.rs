@@ -87,9 +87,7 @@ fn track(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
     let track_image = &track_album.images.first().unwrap().url;
     let track_artists = &track.artists.iter().map(|a| format!("[{}]({})", &a.name, &a.external_urls["spotify"])).join(", ");
 
-    let track_date = NaiveDate::parse_from_str(&track_date, "%Y-%m-%d").map_or(track_date, |d| {
-        d.format("%B %-e, %Y").to_string()
-    });
+    let track_date = NaiveDate::parse_from_str(&track_date, "%Y-%m-%d").map_or(track_date, |d| d.format("%B %-e, %Y").to_string());
 
     let track_analysis = spotify().audio_analysis(track_id).unwrap().track;
 

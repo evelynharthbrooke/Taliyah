@@ -15,7 +15,7 @@ pub fn guild(context: &mut Context, message: &Message) -> CommandResult {
     let cache = &context.cache;
     let guild_id = message.guild_id.unwrap();
     let cached_guild = cache.read().guild(guild_id).unwrap();
-    
+
     let guild = cached_guild.read();
     let guild_name = &guild.name;
     let guild_owner = guild.member(&context, guild.owner_id).unwrap().user.read().tag();
@@ -39,47 +39,47 @@ pub fn guild(context: &mut Context, message: &Message) -> CommandResult {
     };
 
     let guild_region = match guild.region.as_str() {
-        "brazil" => "Brazil".to_owned(),
-        "europe" => "Europe".to_owned(),
-        "eu-central" => "Central Europe".to_owned(),
-        "eu-west" => "Western Europe".to_owned(),
-        "hongkong" => "Hong Kong".to_owned(),
-        "india" => "India".to_owned(),
-        "japan" => "Japan".to_owned(),
-        "russia" => "Russia".to_owned(),
-        "singapore" => "Singapore".to_owned(),
-        "southafrica" => "South Africa".to_owned(),
-        "sydney" => "Sydney, Australia".to_owned(),
-        "us-central" => "Central United States".to_owned(),
-        "us-east" => "Eastern United States".to_owned(),
-        "us-south" => "Southern United States".to_owned(),
-        "us-west" => "Western United States".to_owned(),
-        &_ => guild.region.to_owned(),
+        "brazil" => "Brazil",
+        "europe" => "Europe",
+        "eu-central" => "Central Europe",
+        "eu-west" => "Western Europe",
+        "hongkong" => "Hong Kong",
+        "india" => "India",
+        "japan" => "Japan",
+        "russia" => "Russia",
+        "singapore" => "Singapore",
+        "southafrica" => "South Africa",
+        "sydney" => "Sydney, Australia",
+        "us-central" => "Central United States",
+        "us-east" => "Eastern United States",
+        "us-south" => "Southern United States",
+        "us-west" => "Western United States",
+        &_ => guild.region.as_str(),
     };
 
     let guild_boosts = guild.premium_subscription_count;
     let guild_boost_tier = match guild.premium_tier.num() {
-        0 => "No current tier (not boosted)".to_owned(),
-        1 => "Level 1 (2+ boosts)".to_owned(),
-        2 => "Level 2 (15+ boosts)".to_owned(),
-        3 => "Level 3 (30+ boosts)".to_owned(),
-        _ => "Unrecognized boost tier.".to_owned()
+        0 => "No current tier (not boosted)",
+        1 => "Level 1 (2+ boosts)",
+        2 => "Level 2 (15+ boosts)",
+        3 => "Level 3 (30+ boosts)",
+        _ => "Unrecognized boost tier.",
     };
 
     let guild_roles = guild.roles.iter().filter(|&(_, r)| &r.id != guild_id.as_u64()).map(|(_, r)| &r.name).join(" / ");
     let guild_role_count = guild.roles.iter().filter(|&(_, r)| &r.id != guild_id.as_u64()).count();
 
     let guild_verification_level = match guild.verification_level.num() {
-        0 => "None - Unrestricted.".to_owned(),
-        1 => "Low - Must have a verified email.".to_owned(),
-        2 => "Medium - Registered on Discord for 5+ minutes.".to_owned(),
-        3 => "(╯°□°）╯︵ ┻━┻ - In the server for 10+ minutes.".to_owned(),
-        4 => "┻━┻ ﾐヽ(ಠ益ಠ)ノ彡┻━┻) - Must have a verified phone number.".to_owned(),
-        _ => "Unrecognized verification level.".to_owned()
+        0 => "None - Unrestricted.",
+        1 => "Low - Must have a verified email.",
+        2 => "Medium - Registered on Discord for 5+ minutes.",
+        3 => "(╯°□°）╯︵ ┻━┻ - In the server for 10+ minutes.",
+        4 => "┻━┻ ﾐヽ(ಠ益ಠ)ノ彡┻━┻) - Must have a verified phone number.",
+        _ => "Unrecognized verification level.",
     };
 
     let mut highest = None;
-    
+
     for role_id in guild.roles.keys() {
         if let Some(role) = guild.roles.get(&role_id) {
             if let Some((id, pos)) = highest {
@@ -119,11 +119,26 @@ pub fn guild(context: &mut Context, message: &Message) -> CommandResult {
                 **Nitro Boost Level**: {}\n\
                 **Highest Role**: {}\n\
                 **Roles ({})**: {}\n",
-                guild_name, guild_owner, guild_prefix, guild_members, guild_presences, guild_channels,
-                guild_channels_text, guild_channels_voice, guild_emojis, guild_emojis_animated,
-                guild_emojis_normal, guild_region, guild_creation_date, guild_verification_level,
-                guild_explicit_filter, guild_boosts, guild_boost_tier, highest_role_name,
-                guild_role_count, guild_roles
+                guild_name,
+                guild_owner,
+                guild_prefix,
+                guild_members,
+                guild_presences,
+                guild_channels,
+                guild_channels_text,
+                guild_channels_voice,
+                guild_emojis,
+                guild_emojis_animated,
+                guild_emojis_normal,
+                guild_region,
+                guild_creation_date,
+                guild_verification_level,
+                guild_explicit_filter,
+                guild_boosts,
+                guild_boost_tier,
+                highest_role_name,
+                guild_role_count,
+                guild_roles
             ));
             embed.footer(|footer| footer.text(format!("The ID belonging to {} is {}.", guild_name, guild_id)))
         })

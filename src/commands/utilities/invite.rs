@@ -10,7 +10,7 @@ use serenity::model::Permissions;
 #[description = "Generates an invite link for the bot."]
 pub fn invite(context: &mut Context, message: &Message) -> CommandResult {
     let cache = &context.cache.read();
-    
+
     let invite_url = match cache.user.invite_url(&context, Permissions::empty()) {
         Ok(invite) => invite,
         Err(e) => {

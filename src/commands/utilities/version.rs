@@ -42,8 +42,7 @@ pub fn version(context: &mut Context, message: &Message) -> CommandResult {
                 **Build host**: {}\n\
                 **Build target**: {}\n\
                 **Rust runtime**: {}",
-                version, git_version, branch, revision, codename, 
-                build_date, build_host, build_target, rust_runtime
+                version, git_version, branch, revision, codename, build_date, build_host, build_target, rust_runtime
             ))
         })
     })?;

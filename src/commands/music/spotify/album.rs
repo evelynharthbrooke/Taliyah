@@ -69,13 +69,11 @@ fn album(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
 
     let album_artists = &album.artists.iter().map(|a| format!("[{}]({})", &a.name, &a.external_urls["spotify"])).join(", ");
 
-    let album_date = NaiveDate::parse_from_str(&album.release_date, "%Y-%m-%d").map_or(album.release_date, move |d| {
-        d.format("%B %-e, %Y").to_string()
-    });
+    let album_date = NaiveDate::parse_from_str(&album.release_date, "%Y-%m-%d").map_or(album.release_date, move |d| d.format("%B %-e, %Y").to_string());
 
     let album_copyright = if album.copyrights.is_empty() {
         album.label
-    } else { 
+    } else {
         format!("{} ({})", album.copyrights.first().unwrap()["text"], album.label)
     };
 
@@ -85,20 +83,21 @@ fn album(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
         album_type = "Extended Play (EP)".to_string()
     }
 
-    let album_tracks = album.tracks.items.iter().map(|track: &SimplifiedTrack| {
+    let album_tracks = album
+        .tracks
+        .items
+        .iter()
+        .map(|track: &SimplifiedTrack| {
             let name = &track.name;
             let position = &track.track_number;
             let external_link = &track.external_urls["spotify"];
             let length = format_duration(Duration::from_millis(track.duration_ms as u64 / 1000 * 1000));
 
-            let explicit = if track.explicit {
-                "(explicit)".to_string()
-            } else {
-                "".to_string()
-            };
+            let explicit = if track.explicit { "(explicit)".to_string() } else { "".to_string() };
 
             return format!("**{}.** [{}]({}) — {} {}", position, name, external_link, length, explicit);
-    }).join("\n");
+        })
+        .join("\n");
 
     msg.channel_id.send_message(&ctx, move |m| {
         m.embed(move |e| {

@@ -20,7 +20,7 @@ fn ping(context: &mut Context, message: &Message) -> CommandResult {
     let end = Utc::now();
     let end_timestamp = end.timestamp();
     let end_timestamp_subsecs = end.timestamp_subsec_millis() as i64;
-    
+
     let api_latency = ((end_timestamp - start_timestamp) * 1000) + (end_timestamp_subsecs - start_timestamp_subsecs);
 
     let data = context.data.read();

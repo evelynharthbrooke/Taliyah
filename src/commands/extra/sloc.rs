@@ -56,25 +56,29 @@ pub fn sloc(context: &mut Context, message: &Message, mut arguments: Args) -> Co
     let request: Response = client.get(url).send()?.json()?;
 
     let mut language_string: String = String::new();
-    
+
     let title = format!("**Code statistics for repository `{}/{}`**:", repository_owner, repository_name);
 
     language_string.push_str(title.as_str());
     language_string.push_str("\n\n");
 
-    let languages = request.languages.iter().map(|language: &Language| {
-        let name = language.name.as_str();
-        let files = language.files;
-        let lines = language.lines;
-        let code = language.code;
-        let comments = language.comments;
-        let blank_lines = language.blanks;
+    let languages = request
+        .languages
+        .iter()
+        .map(|language: &Language| {
+            let name = language.name.as_str();
+            let files = language.files;
+            let lines = language.lines;
+            let code = language.code;
+            let comments = language.comments;
+            let blank_lines = language.blanks;
 
-        format!(
-            "**{}**: {} files, {} total lines, {} code lines, {} comments, {} blank lines",
-            name, files, lines, code, comments, blank_lines
-        )
-    }).join("\n");
+            format!(
+                "**{}**: {} files, {} total lines, {} code lines, {} comments, {} blank lines",
+                name, files, lines, code, comments, blank_lines
+            )
+        })
+        .join("\n");
 
     language_string.push_str(languages.as_str());
     language_string.push_str("\n\n");

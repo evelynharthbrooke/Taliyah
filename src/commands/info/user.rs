@@ -42,40 +42,45 @@ pub fn user(context: &mut Context, message: &Message, args: Args) -> CommandResu
         let p = guild.presences.get(&user.id).unwrap();
 
         if !p.activities.is_empty() {
-            activities = p.activities.iter().filter(|a| a.kind != ActivityType::Custom).map(|activity: &Activity| {
-                let mut activity_name = activity.name.as_str();
-                let activity_kind = match activity.kind {
-                    ActivityType::Listening => {
-                        if activity_name == "Spotify" {
-                            let song = activity.details.as_ref().unwrap();
-                            let artists = activity.state.as_ref().unwrap().replace(";", " & ");
-                            let album = activity.assets.as_ref().unwrap().large_text.as_ref().unwrap();
-                            format!("listening to **{}** by **{}** on the album **{}** via", song, artists, album)
-                        } else {
-                            "listening to".to_owned()
+            activities = p
+                .activities
+                .iter()
+                .filter(|a| a.kind != ActivityType::Custom)
+                .map(|activity: &Activity| {
+                    let mut activity_name = activity.name.as_str();
+                    let activity_kind = match activity.kind {
+                        ActivityType::Listening => {
+                            if activity_name == "Spotify" {
+                                let song = activity.details.as_ref().unwrap();
+                                let artists = activity.state.as_ref().unwrap().replace(";", " & ");
+                                let album = activity.assets.as_ref().unwrap().large_text.as_ref().unwrap();
+                                format!("listening to **{}** by **{}** on the album **{}** via", song, artists, album)
+                            } else {
+                                "listening to".to_owned()
+                            }
                         }
-                    },
-                    ActivityType::Playing => {
-                        if activity_name == "Visual Studio Code" {
-                            let file = activity.details.as_ref().unwrap().replace("Editing ", "");
-                            let project = activity.state.as_ref().unwrap().replace("Workspace: ", "");
-                            let app = activity.assets.as_ref().unwrap().small_text.as_ref().unwrap();
-                            activity_name = app;
-                            format!("is working on the file **{}** in the project **{}** with", file, project)
-                        } else {
-                            "playing".to_owned()
+                        ActivityType::Playing => {
+                            if activity_name == "Visual Studio Code" {
+                                let file = activity.details.as_ref().unwrap().replace("Editing ", "");
+                                let project = activity.state.as_ref().unwrap().replace("Workspace: ", "");
+                                let app = activity.assets.as_ref().unwrap().small_text.as_ref().unwrap();
+                                activity_name = app;
+                                format!("working on the file **{}** in the project **{}** with", file, project)
+                            } else {
+                                "playing".to_owned()
+                            }
                         }
-                    }
-                    ActivityType::Watching => "watching".to_owned(),
-                    ActivityType::Streaming => "streaming on".to_owned(),
-                    _ => "".to_owned(),
-                };
-                format!("{} **{}**", activity_kind, activity_name)
-            }).join(" & ");
+                        ActivityType::Watching => "watching".to_owned(),
+                        ActivityType::Streaming => "streaming on".to_owned(),
+                        _ => "".to_owned(),
+                    };
+                    format!("{} **{}**", activity_kind, activity_name)
+                })
+                .join(" and ");
         };
-        
+
         let currently_status: String = format!("{} is currently ", user.name);
-        
+
         active_status.push_str(currently_status.as_str());
 
         let status = match p.status {
@@ -83,7 +88,7 @@ pub fn user(context: &mut Context, message: &Message, args: Args) -> CommandResu
             OnlineStatus::Idle => "Idle",
             OnlineStatus::DoNotDisturb => "Do Not Disturb",
             OnlineStatus::Invisible => "Invisible",
-            _ => "Offline"
+            _ => "Offline",
         };
 
         if status != "Do Not Disturb" {
@@ -97,32 +102,31 @@ pub fn user(context: &mut Context, message: &Message, args: Args) -> CommandResu
         if activities.is_empty() {
             active_status.push_str(".\n\n")
         }
-
     };
 
     if !activities.is_empty() {
-        activities = format!(" and {}.\n\n", activities);
+        activities = format!("; {}.\n\n", activities);
     }
 
-    let account_type = if user.bot { "Bot".to_owned() } else { "User".to_owned() };
+    let account_type = if user.bot { "Bot" } else { "User" };
 
     let created = user.created_at().format("%A, %B %e, %Y @ %l:%M %P");
     let tag = user.tag();
     let id = user.id;
     let color: Colour;
-    let color_hex: String;
+    let hex: String;
 
     if member.colour(cache).is_none() {
         color = Colour::new(0x00FF_FFFF);
-        color_hex = "No display color available.".to_owned()
+        hex = "No display color available.".to_owned()
     } else {
         color = member.colour(cache).unwrap();
-        color_hex = format!("#{}", color.hex().to_lowercase());
+        hex = format!("#{}", color.hex().to_lowercase());
     }
 
     let mut roles = String::new();
     let mut role_count = 0;
-    
+
     if !member.roles(&cache).is_none() {
         roles = member.roles(&cache).unwrap().iter().map(|r: &Role| &r.name).join(" / ");
         role_count = member.roles(&cache).unwrap().len();
@@ -166,11 +170,10 @@ pub fn user(context: &mut Context, message: &Message, args: Args) -> CommandResu
                 **Display Color**: {}\n\
                 **Main Role**: {}\n\
                 **Roles ({})**: {}",
-                active_status, activities, account_type, tag, id, created, joined, 
-                nickname, color_hex, main_role, role_count, roles
+                active_status, activities, account_type, tag, id, created, joined, nickname, hex, main_role, role_count, roles
             ))
         })
     })?;
-    
+
     Ok(())
 }

@@ -107,15 +107,26 @@ pub fn weather(context: &mut Context, message: &Message, arguments: Args) -> Com
     let wind_speed_km = request.currently.wind_speed.round() * 3.6;
     let uv_index = request.currently.uv_index;
 
-    let forecast = request.daily.data[0..5].iter().map(|d: &DailyData| {
-        let day = NaiveDateTime::from_timestamp(d.time, 0).format("%A");
-        let summary = &d.summary;
-        let temp_high = &d.high.round();
-        let temp_high_f = temp_high * 1.8 + 32.0;
-        let temp_low = &d.low.round();
-        let temp_low_f = temp_low * 1.8 + 32.0;
-        format!("**{}**: {} ({} °C | {} °F, {} °C | {} °F)", day, summary, temp_high, temp_high_f.round(), temp_low, temp_low_f.round())
-    }).join("\n");
+    let forecast = request.daily.data[0..5]
+        .iter()
+        .map(|d: &DailyData| {
+            let day = NaiveDateTime::from_timestamp(d.time, 0).format("%A");
+            let summary = &d.summary;
+            let temp_high = &d.high.round();
+            let temp_high_f = temp_high * 1.8 + 32.0;
+            let temp_low = &d.low.round();
+            let temp_low_f = temp_low * 1.8 + 32.0;
+            format!(
+                "**{}**: {} ({} °C | {} °F, {} °C | {} °F)",
+                day,
+                summary,
+                temp_high,
+                temp_high_f.round(),
+                temp_low,
+                temp_low_f.round()
+            )
+        })
+        .join("\n");
 
     message.channel_id.send_message(&context, |message| {
         message.embed(|embed| {
