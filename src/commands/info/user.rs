@@ -8,7 +8,7 @@ use serenity::framework::standard::macros::command;
 use serenity::framework::standard::Args;
 use serenity::framework::standard::CommandResult;
 use serenity::model::gateway::Activity;
-use serenity::model::gateway::ActivityType;
+use serenity::model::gateway::ActivityType::{Listening, Playing, Watching, Streaming, Custom};
 use serenity::model::guild::Role;
 use serenity::model::prelude::Message;
 use serenity::model::user::OnlineStatus;
@@ -45,54 +45,48 @@ pub fn user(context: &mut Context, message: &Message, args: Args) -> CommandResu
     let mut activities: String = String::new();
     let mut active_status: String = String::new();
 
-    if !guild.presences.get(&user.id).is_none() {
+    if !guild.presences.get(&user.id).is_none() || guild.presences.get(&user.id).is_none() {
         let presence = guild.presences.get(&user.id).unwrap();
 
-        if !presence.activities.is_empty() {
-            activities = presence
-                .activities
-                .iter()
-                .filter(|activity| activity.kind != ActivityType::Custom)
-                .map(|activity: &Activity| {
-                    let mut activity_name = activity.name.as_str();
-                    let activity_kind = match activity.kind {
-                        ActivityType::Listening => {
-                            if activity_name == "Spotify" {
-                                let song = activity.details.as_ref().unwrap();
-                                let artist = activity.state.as_ref().unwrap().replace(";", " & ");
-                                let album = activity.assets.as_ref().unwrap().large_text.as_ref().unwrap();
-                                let search_str = format!("track:{} artist:{} album:{}", song, artist.replace("&", "AND"), album.replace("&", "%26"));
-                                let track_seearch = spotify().search_track(search_str.as_str(), 1, 0, None);
-                                let track_result = &track_seearch.unwrap();
-                                let results = &track_result.tracks.items;
-                                let track = results.first().unwrap();
-                                let image = track.album.images.first().unwrap();
-                                let album_art = image.url.as_str();
-                                track_art.push_str(album_art);
-                                format!("listening to **{}** by **{}** on the album **{}** via", song, artist, album)
-                            } else {
-                                "listening to".to_owned()
-                            }
+        activities = presence.activities.iter().filter(|a| a.kind != Custom).map(|a: &Activity| {
+                let mut activity_name = a.name.as_str();
+                let activity_kind = match a.kind {
+                    Listening => {
+                        if activity_name == "Spotify" {
+                            let song = a.details.as_ref().unwrap();
+                            let artist = a.state.as_ref().unwrap().replace(";", " & ");
+                            let album = a.assets.as_ref().unwrap().large_text.as_ref().unwrap();
+                            let string = format!("track:{} artist:{} album:{}", song, artist.replace("&", "AND"), album.replace("&", "%26"));
+                            let track_search = spotify().search_track(string.as_str(), 1, 0, None);
+                            let track_result = &track_search.unwrap();
+                            let results = &track_result.tracks.items;
+                            let track = results.first().unwrap();
+                            let image = track.album.images.first().unwrap();
+                            let album_art = image.url.as_str();
+                            track_art.push_str(album_art);
+                            format!("listening to **{}** by **{}** on the album **{}** via", song, artist, album)
+                        } else {
+                            "listening to".to_owned()
                         }
-                        ActivityType::Playing => {
-                            if activity_name == "Visual Studio Code" {
-                                let file = activity.details.as_ref().unwrap().replace("Editing ", "");
-                                let project = activity.state.as_ref().unwrap().replace("Workspace: ", "");
-                                let app = activity.assets.as_ref().unwrap().small_text.as_ref().unwrap();
-                                activity_name = app;
-                                format!("working on the file **{}** in the project **{}** with", file, project)
-                            } else {
-                                "playing".to_owned()
-                            }
+                    }
+                    Playing => {
+                        if activity_name == "Visual Studio Code" {
+                            let file = a.details.as_ref().unwrap().replace("Editing ", "");
+                            let project = a.state.as_ref().unwrap().replace("Workspace: ", "");
+                            let app = a.assets.as_ref().unwrap().small_text.as_ref().unwrap();
+                            activity_name = app;
+                            format!("working on the file **{}** in the project **{}** with", file, project)
+                        } else {
+                            "playing".to_owned()
                         }
-                        ActivityType::Watching => "watching".to_owned(),
-                        ActivityType::Streaming => "streaming on".to_owned(),
-                        _ => "".to_owned(),
-                    };
-                    format!("{} **{}**", activity_kind, activity_name)
-                })
-                .join(" and ");
-        };
+                    }
+                    Watching => "watching".to_owned(),
+                    Streaming => "streaming on".to_owned(),
+                    _ => "".to_owned(),
+                };
+                format!("{} **{}**", activity_kind, activity_name)
+            })
+            .join(" and ");
 
         let currently_status: String = format!("{} is currently ", user.name);
 
