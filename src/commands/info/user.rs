@@ -45,7 +45,7 @@ pub fn user(context: &mut Context, message: &Message, args: Args) -> CommandResu
     let mut activities: String = String::new();
     let mut active_status: String = String::new();
 
-    if !guild.presences.get(&user.id).is_none() || guild.presences.get(&user.id).is_none() {
+    if !guild.presences.get(&user.id).is_none() && !guild.presences.get(&user.id).is_none() {
         let presence = guild.presences.get(&user.id).unwrap();
 
         activities = presence
@@ -58,26 +58,34 @@ pub fn user(context: &mut Context, message: &Message, args: Args) -> CommandResu
                     ActivityType::Listening => {
                         if activity_name == "Spotify" {
                             let song = activity.details.as_ref().unwrap();
-                            let artist = activity.state.as_ref().unwrap().replace(";", " & ");
+                            let artist = activity.state.as_ref().unwrap();
                             let album = activity.assets.as_ref().unwrap().large_text.as_ref().unwrap();
 
                             let sp_search_string = format!(
                                 "track: {track} artist: {artists} album: {album}",
                                 track = song,
-                                artists = artist.replace("&", "AND"),
+                                artists = artist,
                                 album = album.replace("&", "%26")
                             );
+
+                            let replacer = artist.replace(";", ",");
+                            let rfind = artist.rfind(";").unwrap_or(0);
+                            let (left, right) = replacer.split_at(rfind);
+                            
+                            let artists = format!("{} {}", left, right.replace(",", "and"));
 
                             let sp_track_search = spotify().search_track(sp_search_string.as_str(), 1, 0, None);
                             let sp_track_result = &sp_track_search.unwrap();
                             let results = &sp_track_result.tracks.items;
-                            let track = results.first().unwrap();
-                            let image = track.album.images.first().unwrap();
-                            let album_art = image.url.as_str();
 
-                            track_art.push_str(album_art);
+                            if !results.first().is_none() {
+                                let track = results.first().unwrap();
+                                let image = track.album.images.first().unwrap();
+                                let album_art = image.url.as_str();
+                                track_art.push_str(album_art);
+                            }
 
-                            format!("listening to **{}** by **{}** on the album **{}** via", song, artist, album)
+                            format!("listening to **{}** by **{}** on the album **{}** via", song, artists, album)
                         } else {
                             "listening to".to_owned()
                         }
