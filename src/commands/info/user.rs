@@ -28,11 +28,10 @@ pub fn user(context: &mut Context, message: &Message, args: Args) -> CommandResu
         if args.is_empty() {
             message.member(&context).ok_or("Could not find member.")?
         } else {
-            let id = match parse_user(&args.rest(), message.guild_id.as_ref(), Some(&context)) {
-                Some(i) => i,
-                None => return Ok(())
-            };
-            guild_id.member(&context, id)?
+            match parse_user(&args.rest(), Some(&guild_id), Some(&context)) {
+                Some(i) => guild_id.member(&context, i)?,
+                None => return Ok(()),
+            }
         }
     } else {
         guild_id.member(&context, message.mentions.first().ok_or("Failed to get user mentioned.")?)?

@@ -29,11 +29,10 @@ pub fn profile(context: &mut Context, message: &Message, args: Args) -> CommandR
         if args.is_empty() {
             message.member(&context).ok_or("Could not find member.")?
         } else {
-            let id = match parse_user(&args.rest(), Some(&guild_id), Some(&context)) {
-                Some(i) => i,
+            match parse_user(&args.rest(), Some(&guild_id), Some(&context)) {
+                Some(i) => guild_id.member(&context, i)?,
                 None => return Ok(()),
-            };
-            guild_id.member(&context, id)?
+            }
         }
     } else {
         guild_id.member(&context, message.mentions.first().ok_or("Failed to get user mentioned.")?)?
