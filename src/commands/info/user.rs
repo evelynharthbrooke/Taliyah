@@ -61,10 +61,10 @@ pub fn user(context: &mut Context, message: &Message, args: Args) -> CommandResu
                                 let song = activity.details.as_ref().unwrap();
                                 let artist = activity.state.as_ref().unwrap().replace(";", " & ");
                                 let album = activity.assets.as_ref().unwrap().large_text.as_ref().unwrap();
-                                let sp_search_string = format!("track:{} artist:{} album:{}", song, artist.replace("&", "AND"), album.replace("&", "%26"));
-                                let sp_track_search = spotify().search_track(sp_search_string.as_str(), 1, 0, None);
-                                let sp_track_result = &sp_track_search.unwrap();
-                                let results = &sp_track_result.tracks.items;
+                                let search_str = format!("track:{} artist:{} album:{}", song, artist.replace("&", "AND"), album.replace("&", "%26"));
+                                let track_seearch = spotify().search_track(search_str.as_str(), 1, 0, None);
+                                let track_result = &track_seearch.unwrap();
+                                let results = &track_result.tracks.items;
                                 let track = results.first().unwrap();
                                 let image = track.album.images.first().unwrap();
                                 let album_art = image.url.as_str();
