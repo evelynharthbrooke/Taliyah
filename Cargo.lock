@@ -392,7 +392,6 @@ dependencies = [
  "lastfm-rs",
  "log",
  "pretty_env_logger",
- "regex",
  "reqwest",
  "rspotify",
  "rusqlite",

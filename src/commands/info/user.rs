@@ -58,31 +58,27 @@ pub fn user(context: &mut Context, message: &Message, args: Args) -> CommandResu
                     ActivityType::Listening => {
                         if activity_name == "Spotify" {
                             let song = activity.details.as_ref().unwrap();
-                            let artist = activity.state.as_ref().unwrap();
+                            let mut artists = activity.state.as_ref().unwrap().to_string();
                             let album = activity.assets.as_ref().unwrap().large_text.as_ref().unwrap();
-
-                            let sp_search_string = format!(
-                                "track: {track} artist: {artists} album: {album}",
-                                track = song,
-                                artists = artist,
-                                album = album.replace("&", "%26")
-                            );
-
-                            let replacer = artist.replace(";", ",");
-                            let rfind = artist.rfind(";").unwrap_or(0);
-                            let (left, right) = replacer.split_at(rfind);
-                            
-                            let artists = format!("{} {}", left, right.replace(",", "and"));
-
+                            let sp_search_string = format!("track:{} artist:{} album:{}", song, artists, album.replace("&", "%26"));
                             let sp_track_search = spotify().search_track(sp_search_string.as_str(), 1, 0, None);
                             let sp_track_result = &sp_track_search.unwrap();
-                            let results = &sp_track_result.tracks.items;
+                            let sp_results = &sp_track_result.tracks.items;
 
-                            if !results.first().is_none() {
-                                let track = results.first().unwrap();
+                            if artists.contains(';') {
+                                let replacer = artists.replace(";", ",");
+                                let rfind = artists.rfind(';').unwrap();
+                                let (left, right) = replacer.split_at(rfind);
+                                artists = format!("{} {}", left, right.replace(",", "and"));
+                            }
+
+                            if sp_results.first().is_none() {
+                                track_art.push_str("")
+                            } else {
+                                let track = sp_results.first().unwrap();
                                 let image = track.album.images.first().unwrap();
                                 let album_art = image.url.as_str();
-                                track_art.push_str(album_art);
+                                track_art.push_str(album_art)
                             }
 
                             format!("listening to **{}** by **{}** on the album **{}** via", song, artists, album)
@@ -135,7 +131,7 @@ pub fn user(context: &mut Context, message: &Message, args: Args) -> CommandResu
     };
 
     if !activities.is_empty() {
-        activities = format!("; {}.\n\n", activities);
+        activities = format!(", {}.\n\n", activities);
     }
 
     let account_type = if user.bot { "Bot" } else { "User" };
