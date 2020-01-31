@@ -2,8 +2,6 @@ use chrono::Utc;
 
 use graphql_client::{GraphQLQuery, Response};
 
-use log::info;
-
 use reqwest::blocking::Client;
 
 use serenity::client::Context;

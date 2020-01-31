@@ -4,8 +4,6 @@ use graphql_client::{GraphQLQuery, Response};
 
 use itertools::Itertools;
 
-use log::info;
-
 use reqwest::blocking::Client;
 
 use serenity::client::Context;
