@@ -21,7 +21,6 @@ pub fn format_int(integer: usize) -> String {
 }
 
 pub fn parse_user(name: &str, guild_id: Option<&GuildId>, context: Option<&Context>) -> Option<UserId> {
-
     if let Some(x) = parse_username(&name) {
         return Some(UserId(x));
     } else if guild_id.is_none() || context.is_none() {
