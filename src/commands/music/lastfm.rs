@@ -11,7 +11,7 @@ use crate::utilities::database;
 
 use itertools::Itertools;
 
-use log::{error, warn};
+use log::error;
 
 use serenity::client::Context;
 use serenity::framework::standard::macros::command;
@@ -200,12 +200,7 @@ pub fn lastfm(ctx: &mut Context, message: &Message, mut args: Args) -> CommandRe
                 let track_name = &track.name.replace("**", "\x5c**");
                 let track_artist = &track.artist.name;
 
-                let now_playing = if track.attrs.as_ref().is_none() {
-                    warn!("No track attributes associated with this track.");
-                    "".to_owned()
-                } else {
-                    "\x5c▶️".to_owned()
-                };
+                let now_playing = if track.attrs.as_ref().is_none() { "".to_owned() } else { "\x5c▶️".to_owned() };
 
                 format!("{} **{}** — {}", now_playing, track_name, track_artist)
             })
