@@ -46,6 +46,7 @@ pub fn create_database() {
                 user_id TEXT PRIMARY KEY NOT NULL,
                 user_tag TEXT NOT NULL,
                 display_name TEXT,
+                twitch TEXT,
                 twitter TEXT,
                 lastfm TEXT,
                 steam TEXT,
@@ -75,6 +76,13 @@ pub fn get_sqlite_version() -> String {
 pub fn get_user_display_name(user_id: UserId) -> Result<String, Box<dyn Error>> {
     let connection = get_database()?;
     let mut statement = connection.prepare("SELECT display_name FROM profile WHERE user_id == ?1;")?;
+    let mut rows = statement.query(&[&user_id.as_u64().to_string()])?;
+    Ok(rows.next()?.ok_or("User not found in database")?.get(0)?)
+}
+
+pub fn get_user_twitch(user_id: UserId) -> Result<String, Box<dyn Error>> {
+    let connection = get_database()?;
+    let mut statement = connection.prepare("SELECT twitch FROM profile where USER_ID == ?1;")?;
     let mut rows = statement.query(&[&user_id.as_u64().to_string()])?;
     Ok(rows.next()?.ok_or("User not found in database")?.get(0)?)
 }

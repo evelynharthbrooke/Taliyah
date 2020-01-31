@@ -1,4 +1,5 @@
 use crate::utilities::database;
+use crate::utilities::parse_user;
 
 use log::error;
 
@@ -24,12 +25,15 @@ pub fn profile(context: &mut Context, message: &Message, args: Args) -> CommandR
     let color: Colour;
     let cache = &context.cache;
     let guild_id = message.guild_id.ok_or("Failed to get GuildID from Message.")?;
-    let cached_guild = cache.read().guild(guild_id).ok_or("Unable to retrieve guild")?;
     let member = if message.mentions.is_empty() {
         if args.is_empty() {
             message.member(&context).ok_or("Could not find member.")?
         } else {
-            (*(cached_guild.read().members_containing(args.rest(), false, true).first().ok_or("couldn't find member")?)).clone()
+            let id = match parse_user(&args.rest(), Some(&guild_id), Some(&context)) {
+                Some(i) => i,
+                None => return Ok(()),
+            };
+            guild_id.member(&context, id)?
         }
     } else {
         guild_id.member(&context, message.mentions.first().ok_or("Failed to get user mentioned.")?)?
@@ -56,6 +60,17 @@ pub fn profile(context: &mut Context, message: &Message, args: Args) -> CommandR
         Err(e) => {
             error!("Error while retrieving Last.fm username from the database: {}", e);
             "No last.fm username set.".to_string()
+        }
+    };
+
+    let twitch_name = match database::get_user_twitch(user_id) {
+        Ok(name) => {
+            let url = "https://twitch.tv".to_string();
+            format!("[{username}]({url}/{username})", url = url, username = name)
+        }
+        Err(e) => {
+            error!("Error while retrieving the Twitch username from the database: {}", e);
+            "No Twitch username set.".to_string()
         }
     };
 
@@ -107,12 +122,13 @@ pub fn profile(context: &mut Context, message: &Message, args: Args) -> CommandR
             e.description(format!(
                 "**Display name**: {}\n\
                 **Last.fm username**: {}\n\
+                **Twitch username**: {}\n\
                 **Twitter handle**: {}\n\
                 **Steam ID**: {}\n\
                 **PlayStation ID**: {}\n\
                 **Xbox user ID**: {}\n\
                 ",
-                display_name, lastfm_name, twitter_name, steam_id, playstation_id, xbox_id
+                display_name, lastfm_name, twitch_name, twitter_name, steam_id, playstation_id, xbox_id
             ))
         })
     })?;
@@ -134,6 +150,14 @@ pub fn set(context: &mut Context, message: &Message, mut arguments: Args) -> Com
     let user_id = message.author.id.to_string();
 
     match property.as_str() {
+        "twitch" => {
+            if value.is_empty() {
+                message.channel_id.say(&context, "You did not provide a Twitch username. Please provide one!")?;
+                return Ok(());
+            };
+            let _ = connection.execute("UPDATE profile SET twitch = ?1 WHERE user_id = ?2;", &[&value, &user_id[..]]);
+            message.channel_id.say(&context, format!("Your twitch username has been set to `{}`.", &value))?;
+        }
         "twitter" => {
             if value.is_empty() {
                 message.channel_id.say(&context, "You did not provide a Twitter username. Please provide one!")?;
