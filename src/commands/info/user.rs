@@ -1,3 +1,4 @@
+use crate::spotify;
 use crate::utilities::parse_user;
 
 use itertools::Itertools;
@@ -40,26 +41,35 @@ pub fn user(context: &mut Context, message: &Message, args: Args) -> CommandResu
     let user = member.user.read();
     let guild = cached_guild.read();
 
+    let mut track_art: String = String::new();
     let mut activities: String = String::new();
     let mut active_status: String = String::new();
 
     if !guild.presences.get(&user.id).is_none() {
-        let p = guild.presences.get(&user.id).unwrap();
+        let presence = guild.presences.get(&user.id).unwrap();
 
-        if !p.activities.is_empty() {
-            activities = p
+        if !presence.activities.is_empty() {
+            activities = presence
                 .activities
                 .iter()
-                .filter(|a| a.kind != ActivityType::Custom)
+                .filter(|activity| activity.kind != ActivityType::Custom)
                 .map(|activity: &Activity| {
                     let mut activity_name = activity.name.as_str();
                     let activity_kind = match activity.kind {
                         ActivityType::Listening => {
                             if activity_name == "Spotify" {
                                 let song = activity.details.as_ref().unwrap();
-                                let artists = activity.state.as_ref().unwrap().replace(";", " & ");
+                                let artist = activity.state.as_ref().unwrap().replace(";", " & ");
                                 let album = activity.assets.as_ref().unwrap().large_text.as_ref().unwrap();
-                                format!("listening to **{}** by **{}** on the album **{}** via", song, artists, album)
+                                let sp_search_string = format!("track:{} artist:{} album:{}", song, artist.replace("&", "AND"), album.replace("&", "%26"));
+                                let sp_track_search = spotify().search_track(sp_search_string.as_str(), 1, 0, None);
+                                let sp_track_result = &sp_track_search.unwrap();
+                                let results = &sp_track_result.tracks.items;
+                                let track = results.first().unwrap();
+                                let image = track.album.images.first().unwrap();
+                                let album_art = image.url.as_str();
+                                track_art.push_str(album_art);
+                                format!("listening to **{}** by **{}** on the album **{}** via", song, artist, album)
                             } else {
                                 "listening to".to_owned()
                             }
@@ -88,7 +98,7 @@ pub fn user(context: &mut Context, message: &Message, args: Args) -> CommandResu
 
         active_status.push_str(currently_status.as_str());
 
-        let status = match p.status {
+        let status = match presence.status {
             OnlineStatus::Online => "Online",
             OnlineStatus::Idle => "Idle",
             OnlineStatus::DoNotDisturb => "Do Not Disturb",
@@ -161,6 +171,7 @@ pub fn user(context: &mut Context, message: &Message, args: Args) -> CommandResu
                 author.name(&user.name);
                 author.icon_url(&user.face())
             });
+            embed.thumbnail(track_art);
             embed.colour(color);
             embed.description(format!(
                 "{}{}\

@@ -77,8 +77,7 @@ pub fn user(context: &mut Context, message: &Message, args: Args) -> CommandResu
         "No status available."
     } else {
         let status = user.status.as_ref().unwrap();
-        let message = status.message.as_ref().unwrap().as_str();
-        message
+        status.message.as_ref().unwrap().as_str()
     };
 
     message.channel_id.send_message(&context, |message| {
