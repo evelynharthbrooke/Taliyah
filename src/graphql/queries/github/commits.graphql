@@ -1,10 +1,10 @@
-query CommitsQuery($owner: String!, $name: String!, $branch: String!, $commits: Int!) {
+query Commits($owner: String!, $name: String!, $branch: String!, $commits: Int!) {
   repository(owner: $owner, name: $name) {
     url
     ref(qualifiedName: $branch) {
       name
       target {
-        __typename
+        __typename # no idea why this needs to exist, but oh well
         ... on Commit {
           history(first: $commits) {
             totalCount

@@ -1,4 +1,4 @@
-query UserQuery($username: String!) {
+query User($username: String!) {
   user(login: $username) {
     login
     name

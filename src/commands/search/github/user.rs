@@ -18,10 +18,10 @@ type URI = String;
 #[derive(GraphQLQuery)]
 #[graphql(
     schema_path = "src/graphql/schemas/github.graphql",
-    query_path = "src/graphql/queries/github/UserQuery.graphql",
+    query_path = "src/graphql/queries/github/user.graphql",
     response_derives = "Debug"
 )]
-struct UserQuery;
+struct User;
 
 #[command]
 #[description("Displays information about a specified user on GitHub.")]
@@ -40,10 +40,10 @@ pub fn user(context: &mut Context, message: &Message, args: Args) -> CommandResu
     let token: String = std::env::var("GITHUB_KEY").expect("No API key detected");
     let client = Client::builder().user_agent(user_agent).build()?;
     let endpoint = "https://api.github.com/graphql";
-    let query = UserQuery::build_query(user_query::Variables { username: args.rest().to_string() });
+    let query = User::build_query(user::Variables { username: args.rest().to_string() });
 
-    let response: Response<user_query::ResponseData> = client.post(endpoint).bearer_auth(token).json(&query).send()?.json()?;
-    let response_data: user_query::ResponseData = response.data.expect("missing response data");
+    let response: Response<user::ResponseData> = client.post(endpoint).bearer_auth(token).json(&query).send()?.json()?;
+    let response_data: user::ResponseData = response.data.expect("missing response data");
 
     let user = response_data.user.unwrap();
     let username = user.login;
