@@ -56,8 +56,8 @@ pub fn user(context: &mut Context, message: &Message, args: Args) -> CommandResu
                             let song = a.details.as_ref().unwrap();
                             let artist = a.state.as_ref().unwrap().replace(";", " & ");
                             let album = a.assets.as_ref().unwrap().large_text.as_ref().unwrap();
-                            let string = format!("track:{} artist:{} album:{}", song, artist.replace("&", "AND"), album.replace("&", "%26"));
-                            let track_search = spotify().search_track(string.as_str(), 1, 0, None);
+                            let str_ = format!("track:{} artist:{} album:{}", song, artist.replace("&", "AND"), album.replace("&", "%26"));
+                            let track_search = spotify().search_track(str_.as_str(), 1, 0, None);
                             let track_result = &track_search.unwrap();
                             let results = &track_result.tracks.items;
                             let track = results.first().unwrap();
