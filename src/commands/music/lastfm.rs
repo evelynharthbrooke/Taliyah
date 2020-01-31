@@ -21,6 +21,7 @@ use serenity::model::prelude::Message;
 
 use rustfm::error::Error;
 use rustfm::error::LastFMErrorResponse::InvalidParameter;
+use rustfm::error::LastFMErrorResponse::OperationFailed;
 use rustfm::user::recent_tracks::Track;
 use rustfm::Client;
 
@@ -65,6 +66,34 @@ pub fn lastfm(ctx: &mut Context, message: &Message, mut args: Args) -> CommandRe
     let recent_tracks = match client.recent_tracks(&user).with_limit(5).send() {
         Ok(rt) => rt.tracks,
         Err(error) => match error {
+            Error::LastFMError(OperationFailed(error)) => match error.message.as_str() {
+                "Operation failed - Most likely the backend service failed. Please try again." => {
+                    message.channel_id.send_message(&ctx, |message| {
+                        message.embed(|embed| {
+                            embed.title("Error: Last.fm is currently offline.");
+                            embed.description(
+                                "
+                                Last.fm is currently offline and unavailable for use. \
+                                Please try again later.
+                                ",
+                            );
+                            embed.color(0x00FF_0000)
+                        })
+                    })?;
+                    return Ok(());
+                }
+                _ => {
+                    error!("Last.fm operation failed: {:#?}", error);
+                    message.channel_id.send_message(&ctx, |message| {
+                        message.embed(|embed| {
+                            embed.title("Error: Unknown Last.fm operation error.");
+                            embed.description("An unknown Last.fm operation error was encountered. Please try again later.");
+                            embed.color(0x00FF_0000)
+                        })
+                    })?;
+                    return Ok(());
+                }
+            },
             Error::LastFMError(InvalidParameter(error)) => match error.message.as_str() {
                 "User not found" => {
                     message.channel_id.send_message(&ctx, |message| {
@@ -74,7 +103,6 @@ pub fn lastfm(ctx: &mut Context, message: &Message, mut args: Args) -> CommandRe
                             embed.color(0x00FF_0000)
                         })
                     })?;
-
                     return Ok(());
                 }
                 _ => {

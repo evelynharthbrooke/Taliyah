@@ -1,0 +1,25 @@
+query UserQuery($username: String!) {
+  user(login: $username) {
+    login
+    name
+    bio
+    location
+    company
+    createdAt
+    url
+    websiteUrl
+    avatarUrl
+    status {
+      message
+    }
+    repositories {
+      totalCount
+    }
+    following {
+      totalCount
+    }
+    followers {
+      totalCount
+    }
+  }
+}

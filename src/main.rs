@@ -10,11 +10,13 @@ mod utilities;
 use commands::extra::sloc::*;
 use commands::extra::weather::*;
 use commands::fun::urban::*;
+use commands::info::changelog::*;
 use commands::info::guild::*;
 use commands::info::profile::*;
 use commands::info::user::*;
 use commands::music::lastfm::*;
 use commands::music::spotify::*;
+use commands::search::github::*;
 use commands::search::krate::*;
 use commands::utilities::help::*;
 use commands::utilities::invite::*;
@@ -68,7 +70,7 @@ struct Fun;
 
 #[group]
 #[description = "Various informational commands."]
-#[commands(user, guild, profile)]
+#[commands(changelog, guild, profile, user)]
 struct Information;
 
 #[group]
@@ -83,7 +85,7 @@ struct Utilities;
 
 #[group]
 #[description = "Various commands related to searching for things."]
-#[commands(krate)]
+#[commands(github, krate)]
 struct Search;
 
 pub fn main() {

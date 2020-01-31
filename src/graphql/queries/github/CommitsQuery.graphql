@@ -1,0 +1,23 @@
+query CommitsQuery($owner: String!, $name: String!, $branch: String!, $commits: Int!) {
+  repository(owner: $owner, name: $name) {
+    url
+    ref(qualifiedName: $branch) {
+      name
+      target {
+        __typename
+        ... on Commit {
+          history(first: $commits) {
+            totalCount
+            edges {
+              node {
+                messageHeadline
+                oid
+                url
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
