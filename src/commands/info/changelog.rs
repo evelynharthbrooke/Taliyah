@@ -33,7 +33,7 @@ pub fn changelog(context: &mut Context, message: &Message) -> CommandResult {
     let query = Commits::build_query(commits::Variables {
         owner: "KamranMackey".to_string(),
         name: "Ellie".to_string(),
-        branch: "master".to_string()
+        branch: "master".to_string(),
     });
 
     let response: Response<commits::ResponseData> = client.post(endpoint).bearer_auth(token).json(&query).send()?.json()?;
@@ -48,16 +48,20 @@ pub fn changelog(context: &mut Context, message: &Message) -> CommandResult {
         Commit(c) => {
             let history = &c.history;
             let edges = history.edges.as_ref();
-            edges.unwrap().iter().map(|commit| {
-                let commit = commit.as_ref().unwrap();
-                let node = &commit.node.as_ref().unwrap();
-                let title = &node.message_headline;
-                let url = &node.url[0..52];
-                let sha = &node.oid[0..7];
-                format!("[`{}`]({}) {}", sha, url, title)
-            }).join("\n") 
-        },
-        _ => "".to_string()
+            edges
+                .unwrap()
+                .iter()
+                .map(|commit| {
+                    let commit = commit.as_ref().unwrap();
+                    let node = &commit.node.as_ref().unwrap();
+                    let title = &node.message_headline;
+                    let url = &node.url[0..52];
+                    let sha = &node.oid[0..7];
+                    format!("[`{}`]({}) {}", sha, url, title)
+                })
+                .join("\n")
+        }
+        _ => "".to_string(),
     };
 
     message.channel_id.send_message(&context, |message| {
@@ -66,7 +70,7 @@ pub fn changelog(context: &mut Context, message: &Message) -> CommandResult {
             embed.url(format!("{}/commits/{}", url, branch));
             embed.description(commits);
             embed.footer(|footer| footer.text("Powered by the GitHub GraphQL API."))
-        }) 
+        })
     })?;
 
     Ok(())
