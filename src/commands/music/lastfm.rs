@@ -5,9 +5,9 @@
 
 use chrono::NaiveDateTime;
 
-use crate::spotify;
 use crate::utilities;
 use crate::utilities::database;
+use crate::utilities::get_album_artwork;
 
 use itertools::Itertools;
 
@@ -174,22 +174,8 @@ pub fn lastfm(ctx: &mut Context, message: &Message, mut args: Args) -> CommandRe
 
     let name = &track.name;
     let artist = &track.artist.name;
-
-    let album = if track.album.name.is_empty() { "" } else { track.album.name.as_str() };
-
-    let sp_search_string = format!("track:{} artist:{} album:{}", name, artist, album.replace("&", "%26"));
-    let sp_track_search = spotify().search_track(sp_search_string.as_str(), 1, 0, None);
-    let sp_track_result = &sp_track_search.unwrap();
-
-    let track_art: &str;
-    match sp_track_result.tracks.items.first() {
-        Some(track) => {
-            let image = track.album.images.first().unwrap();
-            let album_art = image.url.as_str();
-            track_art = album_art
-        }
-        None => track_art = track.images.get(3).unwrap().image_url.as_str(),
-    };
+    let album = if track.album.name.is_empty() { "".to_string() } else { track.album.name.to_string() };
+    let artwork = get_album_artwork(artist, name, &album);
 
     let tracks = if recent_tracks.is_empty() {
         "No recent tracks available".to_owned()
@@ -222,7 +208,7 @@ pub fn lastfm(ctx: &mut Context, message: &Message, mut args: Args) -> CommandRe
                 author.url(url);
                 author.icon_url(avatar)
             });
-            embed.thumbnail(track_art);
+            embed.thumbnail(artwork);
             embed.color(0x00d5_1007);
             embed.description(format!(
                 "{}\n\n\

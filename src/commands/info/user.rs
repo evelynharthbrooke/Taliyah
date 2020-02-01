@@ -1,4 +1,3 @@
-use crate::utilities::get_album_artwork;
 use crate::utilities::parse_user;
 
 use itertools::Itertools;
@@ -71,7 +70,11 @@ pub fn user(context: &mut Context, message: &Message, args: Args) -> CommandResu
                                 artist_string.push_str(&format_string);
                             }
 
-                            track_art = get_album_artwork(artists, song, album);
+                            let artwork_id = activity.assets.as_ref().unwrap().large_image.as_ref().unwrap();
+                            let artwork_id_replacer = artwork_id.replace("spotify:", "");
+                            let artwork_url = format!("https://i.scdn.co/image/{}", artwork_id_replacer);
+
+                            track_art = artwork_url;
 
                             format!("listening to **{}** on **{}** by **{}** on", song, album, artist_string)
                         } else {
