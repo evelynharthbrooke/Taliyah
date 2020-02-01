@@ -65,10 +65,10 @@ pub fn user(context: &mut Context, message: &Message, args: Args) -> CommandResu
 
                             if artists.contains(';') {
                                 let replacer = artist_string.replace(";", ",");
+                                let commas = replacer.matches(", ").count();
                                 let rfind = artist_string.rfind(';').unwrap();
                                 let (left, right) = replacer.split_at(rfind);
                                 let format_string: String;
-                                let commas: usize = replacer.matches(", ").count();
 
                                 if commas >= 2 {
                                     format_string = format!("{}{}", left, right.replace(",", ", &"));
@@ -131,12 +131,10 @@ pub fn user(context: &mut Context, message: &Message, args: Args) -> CommandResu
 
         if activities.is_empty() {
             active_status.push_str(".\n\n")
+        } else {
+            activities = format!(", {}.\n\n", activities);
         }
     };
-
-    if !activities.is_empty() {
-        activities = format!(", {}.\n\n", activities);
-    }
 
     let account_type = if user.bot { "Bot" } else { "User" };
 

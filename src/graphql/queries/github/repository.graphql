@@ -1,0 +1,34 @@
+query Repository($owner: String!, $name: String!) {
+  repository(owner: $owner, name: $name) {
+    description
+    homepageUrl
+    nameWithOwner
+    createdAt
+    updatedAt
+    forkCount
+    diskUsage
+    url
+    stargazers {
+      totalCount
+    }
+    codeOfConduct {
+      name
+      url
+    }
+    owner {
+      __typename
+      avatarUrl
+      login
+      url
+    }
+    primaryLanguage {
+      color
+      name
+    }
+    licenseInfo {
+      name
+      spdxId
+      url
+    }
+  }
+}

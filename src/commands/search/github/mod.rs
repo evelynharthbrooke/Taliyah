@@ -1,6 +1,8 @@
 pub mod user;
+pub mod repository;
 
 use crate::commands::search::github::user::*;
+use crate::commands::search::github::repository::*;
 
 use serenity::client::Context;
 use serenity::framework::standard::macros::command;
@@ -9,7 +11,7 @@ use serenity::model::prelude::Message;
 
 #[command]
 #[description("Gets a variety of information from the GitHub API.")]
-#[sub_commands(user)]
+#[sub_commands(user, repository)]
 fn github(ctx: &mut Context, message: &Message) -> CommandResult {
     message.channel_id.send_message(&ctx, |message| {
         message.embed(|embed| {

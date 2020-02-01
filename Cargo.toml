@@ -25,6 +25,7 @@ built = { git = "https://github.com/KamranMackey/built" }
 
 [dependencies]
 built = { git = "https://github.com/KamranMackey/built" }
+byte-unit = "3.0"
 chrono = "0.4"
 dotenv = "0.15"
 failure = "0.1"
