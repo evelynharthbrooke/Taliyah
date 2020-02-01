@@ -68,7 +68,7 @@ pub fn user(context: &mut Context, message: &Message, args: Args) -> CommandResu
                                 let rfind = artist_string.rfind(';').unwrap();
                                 let (left, right) = replacer.split_at(rfind);
                                 let format_string: String;
-                                let commas: usize = replacer.matches(", ").collect::<Vec<&str>>().len();
+                                let commas: usize = replacer.matches(", ").count();
 
                                 if commas >= 2 {
                                     format_string = format!("{}{}", left, right.replace(",", ", &"));
