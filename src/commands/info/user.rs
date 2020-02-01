@@ -56,12 +56,13 @@ pub fn user(context: &mut Context, message: &Message, args: Args) -> CommandResu
                 let activity_kind = match activity.kind {
                     ActivityType::Listening => {
                         if activity_name == "Spotify" {
+                            let assets = activity.assets.as_ref().unwrap();
                             let song = activity.details.as_ref().unwrap();
                             let artists = activity.state.as_ref().unwrap();
-                            let mut artist_string = artists.to_string();
-
-                            let assets = activity.assets.as_ref().unwrap();
                             let album = assets.large_text.as_ref().unwrap();
+                            let uri = activity.sync_id.as_ref().unwrap();
+                            let url = format!("https://open.spotify.com/track/{}", uri);
+                            let mut artist_string = artists.to_string();
 
                             if artists.contains(';') {
                                 let replacer = artist_string.replace(";", ",");
@@ -84,7 +85,7 @@ pub fn user(context: &mut Context, message: &Message, args: Args) -> CommandResu
 
                             track_art = artwork_url;
 
-                            format!("listening to **{}** on **{}** by **{}** on", song, album, artist_string)
+                            format!("listening to **[{}]({})** on **{}** by **{}** on", song, url, album, artist_string)
                         } else {
                             "listening to".to_owned()
                         }

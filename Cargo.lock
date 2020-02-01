@@ -221,7 +221,7 @@ dependencies = [
 [[package]]
 name = "command_attr"
 version = "0.1.7"
-source = "git+https://github.com/KamranMackey/serenity.git?branch=kamrans-fork#dd36cfc3af259d095dcd8f96aaa0049f6fcdc8f9"
+source = "git+https://github.com/KamranMackey/serenity.git?branch=kamrans-fork#58e5f671cf3455bb50765fa654a84d82f31d8e67"
 dependencies = [
  "proc-macro2 1.0.8",
  "quote 1.0.2",
@@ -1703,7 +1703,7 @@ dependencies = [
 [[package]]
 name = "serenity"
 version = "0.8.0"
-source = "git+https://github.com/KamranMackey/serenity.git?branch=kamrans-fork#dd36cfc3af259d095dcd8f96aaa0049f6fcdc8f9"
+source = "git+https://github.com/KamranMackey/serenity.git?branch=kamrans-fork#58e5f671cf3455bb50765fa654a84d82f31d8e67"
 dependencies = [
  "base64 0.11.0",
  "bitflags",
