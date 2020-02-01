@@ -27,7 +27,7 @@ pub fn format_int(integer: usize) -> String {
 /// Retrieves album artwork for a specified song via the Spotify
 /// Web API. If it is unable to find any artwork, it will return an
 /// empty string.
-pub fn get_album_artwork(artist: &String, track: &String, album: &String) -> String {
+pub fn get_album_artwork(artist: &str, track: &str, album: &str) -> String {
     let sp_search_string = format!("artist:{} track:{} album:{}", artist, track, album);
     let sp_search_string_encoded = utf8_percent_encode(&sp_search_string, AlphaNumSet).to_string();
     let sp_track_search = spotify().search_track(&sp_search_string_encoded, 1, 0, None);
