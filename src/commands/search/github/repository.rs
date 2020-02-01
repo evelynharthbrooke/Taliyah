@@ -65,14 +65,15 @@ pub fn repository(context: &mut Context, message: &Message, mut arguments: Args)
     let created = repository.created_at.format("%A, %B %e, %Y @ %l:%M %P");
     let updated = repository.updated_at.format("%A, %B %e, %Y @ %l:%M %P");
 
-    let website = match repository.homepage_url {
-        Some(url) => format!("[Click here]({})", url),
-        None => "No website is available.".to_string(),
+    let website = if !repository.homepage_url.as_ref().unwrap().is_empty() {
+        format!("[Click here]({})", repository.homepage_url.as_ref().unwrap())
+    } else {
+        "No website is available.".to_string()
     };
 
     let disk_usage = match repository.disk_usage {
-        Some(du) => {
-            let bytes_in_kb = byte_unit::n_kb_bytes!(du as u128);
+        Some(usage) => {
+            let bytes_in_kb = byte_unit::n_kb_bytes!(usage as u128);
             let bytes = Byte::from_bytes(bytes_in_kb);
             let friendly_bytes = bytes.get_appropriate_unit(false);
             friendly_bytes.format(2)
@@ -102,7 +103,7 @@ pub fn repository(context: &mut Context, message: &Message, mut arguments: Args)
     let code_of_conduct = match repository.code_of_conduct {
         Some(conduct) => {
             if conduct.url.is_none() {
-                format!("{}", conduct.name)
+                conduct.name
             } else {
                 format!("[{}]({})", conduct.name, conduct.url.unwrap())
             }
@@ -116,7 +117,7 @@ pub fn repository(context: &mut Context, message: &Message, mut arguments: Args)
 
     let license = match repository.license_info {
         Some(license) => {
-            if license.name == "Other".to_string() {
+            if license.name == "Other" {
                 license.name
             } else {
                 format!("[{}]({})", license.name, license.url.unwrap())

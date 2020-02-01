@@ -1,8 +1,8 @@
-pub mod user;
 pub mod repository;
+pub mod user;
 
-use crate::commands::search::github::user::*;
 use crate::commands::search::github::repository::*;
+use crate::commands::search::github::user::*;
 
 use serenity::client::Context;
 use serenity::framework::standard::macros::command;

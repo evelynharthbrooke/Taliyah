@@ -68,13 +68,12 @@ pub fn user(context: &mut Context, message: &Message, args: Args) -> CommandResu
                                 let commas = replacer.matches(", ").count();
                                 let rfind = artist_string.rfind(';').unwrap();
                                 let (left, right) = replacer.split_at(rfind);
-                                let format_string: String;
 
-                                if commas >= 2 {
-                                    format_string = format!("{}{}", left, right.replace(",", ", &"));
+                                let format_string = if commas >= 2 {
+                                    format!("{}{}", left, right.replace(",", ", &"))
                                 } else {
-                                    format_string = format!("{} {}", left, right.replace(",", "&"));
-                                }
+                                    format!("{} {}", left, right.replace(",", "&"))
+                                };
 
                                 artist_string.clear();
                                 artist_string.push_str(&format_string);
