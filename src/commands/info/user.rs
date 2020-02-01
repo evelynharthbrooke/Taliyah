@@ -59,20 +59,29 @@ pub fn user(context: &mut Context, message: &Message, args: Args) -> CommandResu
                             let song = activity.details.as_ref().unwrap();
                             let artists = activity.state.as_ref().unwrap();
                             let mut artist_string = artists.to_string();
-                            let album = activity.assets.as_ref().unwrap().large_text.as_ref().unwrap();
+
+                            let assets = activity.assets.as_ref().unwrap();
+                            let album = assets.large_text.as_ref().unwrap();
 
                             if artists.contains(';') {
                                 let replacer = artist_string.replace(";", ",");
                                 let rfind = artist_string.rfind(';').unwrap();
                                 let (left, right) = replacer.split_at(rfind);
-                                let format_string = format!("{} {}", left, right.replace(",", "and"));
+                                let format_string: String;
+                                let commas: usize = replacer.matches(", ").collect::<Vec<&str>>().len();
+
+                                if commas >= 2 {
+                                    format_string = format!("{}{}", left, right.replace(",", ", &"));
+                                } else {
+                                    format_string = format!("{} {}", left, right.replace(",", "&"));
+                                }
+
                                 artist_string.clear();
                                 artist_string.push_str(&format_string);
                             }
 
-                            let artwork_id = activity.assets.as_ref().unwrap().large_image.as_ref().unwrap();
-                            let artwork_id_replacer = artwork_id.replace("spotify:", "");
-                            let artwork_url = format!("https://i.scdn.co/image/{}", artwork_id_replacer);
+                            let artwork = assets.large_image.as_ref().unwrap().replace("spotify:", "");
+                            let artwork_url = format!("https://i.scdn.co/image/{}", artwork);
 
                             track_art = artwork_url;
 
