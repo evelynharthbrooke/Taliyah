@@ -1,4 +1,4 @@
-query Commits($owner: String!, $name: String!, $branch: String!, $commits: Int!) {
+query Commits($owner: String!, $name: String!, $branch: String!) {
   repository(owner: $owner, name: $name) {
     url
     ref(qualifiedName: $branch) {
@@ -6,7 +6,7 @@ query Commits($owner: String!, $name: String!, $branch: String!, $commits: Int!)
       target {
         __typename # no idea why this needs to exist, but oh well
         ... on Commit {
-          history(first: $commits) {
+          history(first: 10) { # only fetch the first 10 commits in the history.
             totalCount
             edges {
               node {

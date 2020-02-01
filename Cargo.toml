@@ -36,6 +36,7 @@ lastfm-rs = { git = "https://github.com/KamranMackey/lastfm-rs" }
 log = "0.4"
 pretty_env_logger = "0.4"
 reqwest = "0.10"
+percent-encoding = "2.1"
 rusqlite = { git = "https://github.com/jgallagher/rusqlite", features = ["bundled"] }
 rspotify = { git = "https://github.com/KamranMackey/rspotify" }
 serenity = { git = "https://github.com/KamranMackey/serenity.git", branch = "kamrans-fork" }

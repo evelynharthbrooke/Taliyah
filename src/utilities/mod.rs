@@ -3,6 +3,10 @@ pub mod database;
 pub mod geo_utils;
 pub mod git_utils;
 
+use crate::spotify;
+
+use percent_encoding::{utf8_percent_encode, NON_ALPHANUMERIC as AlphaNumSet};
+
 use serenity::model::prelude::{GuildId, UserId};
 use serenity::prelude::Context;
 use serenity::utils::parse_username;
@@ -18,6 +22,22 @@ pub fn format_int(integer: usize) -> String {
         string.insert(0, val);
     }
     string
+}
+
+pub fn get_album_artwork(artist: &String, track: &String, album: &String) -> String {
+    let sp_search_string = format!("artist:{} track:{} album:{}", artist, track, album);
+    let sp_search_string_encoded = utf8_percent_encode(&sp_search_string, AlphaNumSet).to_string();
+    let sp_track_search = spotify().search_track(&sp_search_string_encoded, 1, 0, None);
+    let sp_track_result = &sp_track_search.unwrap();
+    let sp_results = &sp_track_result.tracks.items;
+    if sp_results.first().is_none() {
+        "".to_string()
+    } else {
+        let track = sp_results.first().unwrap();
+        let image = track.album.images.first().unwrap();
+        let album_art = image.url.as_str();
+        album_art.to_string()
+    }
 }
 
 pub fn parse_user(name: &str, guild_id: Option<&GuildId>, context: Option<&Context>) -> Option<UserId> {
