@@ -99,18 +99,26 @@ fn credits(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
     let access_token = config_json.access_token;
     let spclient_url = format!("https://spclient.wg.spotify.com/track-credits-view/v0/track/{}/credits", track_id);
     let credits_request: Credits = client.get(&spclient_url).bearer_auth(access_token).send()?.json()?;
-    let credits = credits_request.role_credits.iter().map(|role: &Role| {
-        let name = &role.role_title;
-        let artists = role.artists.iter().map(|artist: &Artist| {
-            let name = &artist.name;
-            let uri = &artist.uri;
-            let artist_id = uri.replace("spotify:artist:", "");
-            let artist_url = format!("https://open.spotify.com/artist/{}", artist_id);
-            format!("[{}]({})", name, artist_url)
-        }).join("\n");
-            
-        format!("**{}**:\n{}", name, artists)
-    }).join("\n\n");
+    let credits = credits_request
+        .role_credits
+        .iter()
+        .map(|role: &Role| {
+            let name = &role.role_title;
+            let artists = role
+                .artists
+                .iter()
+                .map(|artist: &Artist| {
+                    let name = &artist.name;
+                    let uri = &artist.uri;
+                    let artist_id = uri.replace("spotify:artist:", "");
+                    let artist_url = format!("https://open.spotify.com/artist/{}", artist_id);
+                    format!("[{}]({})", name, artist_url)
+                })
+                .join("\n");
+
+            format!("**{}**:\n{}", name, artists)
+        })
+        .join("\n\n");
 
     let credit_source = credits_request.source.value;
 
@@ -121,7 +129,7 @@ fn credits(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
             embed.thumbnail(track_image);
             embed.url(track_url);
             embed.description(credits);
-            embed.footer(|footer| footer.text(format!("Credits provided by {}.", credit_source)))
+            embed.footer(|footer| footer.text(format!("Credits provided by {} | Powered by the Spotify API.", credit_source)))
         })
     })?;
 
