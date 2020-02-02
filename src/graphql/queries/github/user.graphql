@@ -12,6 +12,9 @@ query User($username: String!) {
     status {
       message
     }
+    starredRepositories {
+      totalCount
+    }
     repositories {
       totalCount
     }

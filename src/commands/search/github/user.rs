@@ -52,6 +52,7 @@ pub fn user(context: &mut Context, message: &Message, args: Args) -> CommandResu
     let created_at = user.created_at.format("%A, %B %e, %Y @ %l:%M %P");
     let following = user.following.total_count;
     let followers = user.followers.total_count;
+    let starred = user.starred_repositories.total_count;
     let repositories = user.repositories.total_count;
     let real_name = if user.name.as_ref().unwrap().is_empty() { username } else { user.name.unwrap() };
 
@@ -94,11 +95,12 @@ pub fn user(context: &mut Context, message: &Message, args: Args) -> CommandResu
                 **Status**: {}\n\
                 **Joined GitHub**: {}\n\
                 **Repositories**: {}\n\
+                **Repositories starred**: {}\n\
                 **Location**: {}\n\
                 **Following**: {}\n\
                 **Followers**: {}\n\
                 ",
-                biography, status, created_at, repositories, location, following, followers,
+                biography, status, created_at, repositories, starred, location, following, followers,
             ));
             embed.footer(|footer| footer.text("Powered by the GitHub GraphQL API."))
         })

@@ -1,4 +1,6 @@
+use crate::commands::search::github::repository::repository::RepositoryRepositoryDefaultBranchRefTargetOn::Commit;
 use crate::utilities::color_utils;
+use crate::utilities::format_int;
 
 use byte_unit::Byte;
 
@@ -57,13 +59,21 @@ pub fn repository(context: &mut Context, message: &Message, mut arguments: Args)
     let resp: Response<repository::ResponseData> = client.post(endpoint).bearer_auth(token).json(&query).send()?.json()?;
     let resp_data: repository::ResponseData = resp.data.expect("missing response data");
 
+    println!("{:#?}", resp_data);
+
     let repository = resp_data.repository.unwrap();
     let name = repository.name_with_owner;
     let url = repository.url;
-    let stars = repository.stargazers.total_count;
-    let forks = repository.fork_count;
+    let stars = format_int(repository.stargazers.total_count as usize);
+    let forks = format_int(repository.fork_count as usize);
     let created = repository.created_at.format("%A, %B %e, %Y @ %l:%M %P");
     let updated = repository.updated_at.format("%A, %B %e, %Y @ %l:%M %P");
+    let default_branch = repository.default_branch_ref.as_ref().unwrap();
+    let default_branch_name = &default_branch.name;
+    let default_branch_commits = match &default_branch.target.on {
+        Commit(c) => format_int(c.history.total_count as usize),
+        _ => "".to_string(),
+    };
 
     let website = if !repository.homepage_url.as_ref().unwrap().is_empty() {
         format!("[Click here]({})", repository.homepage_url.as_ref().unwrap())
@@ -137,14 +147,17 @@ pub fn repository(context: &mut Context, message: &Message, mut arguments: Args)
                 **Owner**: [{}]({})\n\
                 **License**: {}\n\
                 **Language**: {}\n\
+                **Commits**: {} ({})\n\
                 **Website**: {}\n\
                 **Code of Conduct**: {}\n\
                 **Created on**: {}\n\
                 **Last updated**: {}\n\
                 **Disk usage**: {}\n\
-                **Star Count**: {}\n\
-                **Fork Count**: {}\n",
-                description, owner, owner_url, license, language, website, code_of_conduct, created, updated, disk_usage, stars, forks
+                **Star count**: {}\n\
+                **Fork count**: {}\n",
+                description, owner, owner_url, license, language, default_branch_commits, 
+                default_branch_name, website, code_of_conduct, created, updated, disk_usage, 
+                stars, forks
             ));
             embed.footer(|footer| footer.text("Powered by the GitHub GraphQL API."))
         })

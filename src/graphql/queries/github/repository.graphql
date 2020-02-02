@@ -15,6 +15,17 @@ query Repository($owner: String!, $name: String!) {
       name
       url
     }
+    defaultBranchRef {
+      name
+      target {
+        __typename
+        ... on Commit {
+          history(first: 10) {
+            totalCount
+          }
+        }
+      }
+    }
     owner {
       __typename
       avatarUrl
