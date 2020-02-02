@@ -1,4 +1,5 @@
 pub mod album;
+pub mod credits;
 pub mod track;
 
 use serenity::client::Context;
@@ -7,6 +8,7 @@ use serenity::framework::standard::CommandResult;
 use serenity::model::prelude::Message;
 
 use crate::commands::music::spotify::album::*;
+use crate::commands::music::spotify::credits::*;
 use crate::commands::music::spotify::track::*;
 
 use std::env;
@@ -16,7 +18,7 @@ use std::env;
     "Gets a variety of information from the Spotify API, such as \
     artist information, album information, song information, and more."
 )]
-#[sub_commands(album, track)]
+#[sub_commands(album, track, credits)]
 fn spotify(ctx: &mut Context, message: &Message) -> CommandResult {
     let prefix = env::var("DISCORD_PREFIX").unwrap();
 

@@ -34,6 +34,8 @@ struct Repository;
 #[command]
 #[description("Displays information about a specified GitHub repository")]
 #[aliases("repo", "repository")]
+#[min_args(2)]
+#[max_args(2)]
 pub fn repository(context: &mut Context, message: &Message, mut arguments: Args) -> CommandResult {
     if arguments.is_empty() {
         message.channel_id.send_message(&context, move |m| {
@@ -58,8 +60,6 @@ pub fn repository(context: &mut Context, message: &Message, mut arguments: Args)
 
     let resp: Response<repository::ResponseData> = client.post(endpoint).bearer_auth(token).json(&query).send()?.json()?;
     let resp_data: repository::ResponseData = resp.data.expect("missing response data");
-
-    println!("{:#?}", resp_data);
 
     let repository = resp_data.repository.unwrap();
     let name = repository.name_with_owner;
