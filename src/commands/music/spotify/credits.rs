@@ -51,12 +51,12 @@ pub struct Source {
 
 #[command]
 #[description("Displays credits for a specific track on Spotify.")]
-fn credits(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
+fn credits(context: &mut Context, message: &Message, args: Args) -> CommandResult {
     if args.rest().is_empty() {
-        msg.channel_id.send_message(&ctx, move |m| {
-            m.embed(move |e| {
-                e.title("Error: No track name provided.");
-                e.description(
+        message.channel_id.send_message(&context, |message| {
+            message.embed(|embed| {
+                embed.title("Error: No track name provided.");
+                embed.description(
                     "You did not provide a track name. Please enter one and \
                         then try again.",
                 )
@@ -72,6 +72,7 @@ fn credits(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
     let track = track_result.first().unwrap();
     let track_name = &track.name;
     let track_url = &track.external_urls["spotify"];
+    let track_artist = &track.artists.first().unwrap().name;
     let track_image = &track.album.images.first().unwrap().url;
     let track_id = &track.id.as_ref().unwrap();
 
@@ -103,7 +104,13 @@ fn credits(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
         .role_credits
         .iter()
         .map(|role: &Role| {
-            let name = &role.role_title;
+            let name = match role.role_title.as_str() {
+                "Performers" => "Performed by",
+                "Writers" => "Written by",
+                "Producers" => "Produced by",
+                _ => "Unknown credit title",
+            };
+
             let artists = role
                 .artists
                 .iter()
@@ -122,9 +129,9 @@ fn credits(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
 
     let credit_source = credits_request.source.value;
 
-    msg.channel_id.send_message(&ctx, |message| {
+    message.channel_id.send_message(&context, |message| {
         message.embed(|embed| {
-            embed.title(format!("Credits for {}", track_name));
+            embed.title(format!("Credits for {} by {}", track_name, track_artist));
             embed.color(0x001D_B954);
             embed.thumbnail(track_image);
             embed.url(track_url);
