@@ -8,8 +8,8 @@ use serenity::client::Context;
 use serenity::framework::standard::macros::command;
 use serenity::framework::standard::Args;
 use serenity::framework::standard::CommandResult;
-use serenity::model::prelude::Message;
 use serenity::model::gateway::Activity;
+use serenity::model::prelude::Message;
 
 #[command]
 #[description = "Shows yours or another user's Spotify status."]
@@ -50,12 +50,19 @@ pub fn status(context: &mut Context, message: &Message, args: Args) -> CommandRe
                 let uri = activity.sync_id.as_ref().unwrap();
                 let url = format!("https://open.spotify.com/track/{}", uri);
                 let mut artist_string = artists.to_string();
-                
+
                 let timestamp_start = activity.timestamps.as_ref().unwrap().start.unwrap() as i64 / 1000;
                 let timestamp_end = activity.timestamps.as_ref().unwrap().end.unwrap() as i64 / 1000;
                 let start = DateTime::<Utc>::from_utc(NaiveDateTime::from_timestamp(timestamp_start, 0), Utc).timestamp();
                 let end = DateTime::<Utc>::from_utc(NaiveDateTime::from_timestamp(timestamp_end, 0), Utc).timestamp();
-                let length = NaiveDateTime::from_timestamp(end - start, 0).format("%-M minutes, %-S seconds");
+
+                let length = if end - start < 60 {
+                    NaiveDateTime::from_timestamp(end - start, 0).format("%-S seconds")
+                } else if end - start > 3600 { // this might be a redundant check...but might as well have it
+                    NaiveDateTime::from_timestamp(end - start, 0).format("%-H hours, %-M minutes, %-S seconds")
+                } else {
+                    NaiveDateTime::from_timestamp(end - start, 0).format("%-M minutes, %-S seconds")
+                };
 
                 if artists.contains(';') {
                     let replacer = artist_string.replace(";", ",");
