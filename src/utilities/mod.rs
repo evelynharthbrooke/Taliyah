@@ -6,11 +6,28 @@ pub mod git_utils;
 
 use crate::spotify;
 
+use itertools::Itertools;
+
+use kuchiki;
+use kuchiki::traits::*;
+
 use percent_encoding::{utf8_percent_encode, NON_ALPHANUMERIC as AlphaNumSet};
+
+use reqwest::blocking::Client;
+use reqwest::Error;
+
+use serde::{Deserialize, Serialize};
+use serde_json;
 
 use serenity::model::prelude::{GuildId, UserId};
 use serenity::prelude::Context;
 use serenity::utils::parse_username;
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct Config {
+    #[serde(rename = "accessToken")]
+    pub access_token: String,
+}
 
 pub fn format_int(integer: usize) -> String {
     let mut string = String::new();
@@ -42,6 +59,38 @@ pub fn get_album_artwork(artist: &str, track: &str, album: &str) -> String {
         }
         None => "".to_string(),
     }
+}
+
+/// Gets an anonymous access token from the Spotify Web Player.
+///
+/// This uses a user agent string that will spoof the Spotify Web Player
+/// into giving us an access token without giving off any weird signals
+/// at Spotify's API backend. All Spotify knows is that the API is receiving
+/// an access token from the Web Player on each request.
+///
+/// This access token, when retrieved, is used to access certain API
+/// endpoints from Spotify's backend that isn't publicly available to
+/// the normal Spotify Web API, such as the Credits API used by Spotify's
+/// mobile and desktop clients.
+pub fn get_spotify_token() -> Result<String, Error> {
+    let user_agent_chunk_1 = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko)";
+    let user_agent_chunk_2 = "Chrome/81.0.4041.0 Safari/537.36 Edg/81.0.410.0";
+    let user_agent = &[user_agent_chunk_1, user_agent_chunk_2].join(" ");
+
+    let spotify_open_url = "https://open.spotify.com";
+    let client = Client::builder().user_agent(user_agent).build()?;
+    let request = client.get(spotify_open_url).send()?.text()?;
+    let html = kuchiki::parse_html().one(request);
+
+    let config = html.select("#config").unwrap().map(|c| {
+        let as_node = c.as_node();
+        let text_node = as_node.first_child().unwrap();
+        let text = text_node.as_text().unwrap().borrow();
+        text.clone()
+    }).join("");
+
+    let config_json: Config = serde_json::from_str(config.replace("\n", "").trim()).unwrap();
+    Ok(config_json.access_token)
 }
 
 pub fn parse_user(name: &str, guild_id: Option<&GuildId>, context: Option<&Context>) -> Option<UserId> {

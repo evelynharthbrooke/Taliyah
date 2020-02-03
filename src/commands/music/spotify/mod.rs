@@ -11,25 +11,21 @@ use crate::commands::music::spotify::album::*;
 use crate::commands::music::spotify::credits::*;
 use crate::commands::music::spotify::track::*;
 
-use std::env;
-
 #[command]
 #[description(
-    "Gets a variety of information from the Spotify API, such as \
-    artist information, album information, song information, and more."
+    "\
+    Gets a variety of information from the Spotify API.\n\n\
+    Available sub-commands:\n\
+    `album <name>`: Retrieves information on a Spotify album.\n\
+    `credits <track>`: Retrieves the credits for a specified Spotify track.\n\
+    `track <name>`: Retrieves information on a specified Spotify track.\n"
 )]
-#[sub_commands(album, track, credits)]
+#[sub_commands(album, credits, track)]
 fn spotify(ctx: &mut Context, message: &Message) -> CommandResult {
-    let prefix = env::var("DISCORD_PREFIX").unwrap();
-
     message.channel_id.send_message(&ctx, |message| {
         message.embed(|embed| {
-            embed.title("Error: Invalid / No Subcommand Entered!");
-            embed.description(format!(
-                "You did not enter a valid subcommand! Please check \
-                `{}help spotify` for the command usage.",
-                prefix
-            ))
+            embed.title("Error: Invalid / No subcommand provided.");
+            embed.description(format!("No valid subcommand provided. Please check the help command for help details.",))
         })
     })?;
 
