@@ -75,10 +75,15 @@ pub fn repository(context: &mut Context, message: &Message, mut arguments: Args)
         _ => "".to_string(),
     };
 
-    let website = if !repository.homepage_url.as_ref().unwrap().is_empty() {
-        format!("[Click here]({})", repository.homepage_url.as_ref().unwrap())
-    } else {
-        "No website is available.".to_string()
+    let website = match repository.homepage_url {
+        Some(url) => {
+            if url.is_empty() {
+                "No website available.".to_string()
+            } else {
+                format!("[Click here]({})", url)
+            }
+        }
+        None => "No website available.".to_string(),
     };
 
     let disk_usage = match repository.disk_usage {
@@ -155,9 +160,7 @@ pub fn repository(context: &mut Context, message: &Message, mut arguments: Args)
                 **Disk usage**: {}\n\
                 **Star count**: {}\n\
                 **Fork count**: {}\n",
-                description, owner, owner_url, license, language, default_branch_commits, 
-                default_branch_name, website, code_of_conduct, created, updated, disk_usage, 
-                stars, forks
+                description, owner, owner_url, license, language, default_branch_commits, default_branch_name, website, code_of_conduct, created, updated, disk_usage, stars, forks
             ));
             embed.footer(|footer| footer.text("Powered by the GitHub GraphQL API."))
         })
