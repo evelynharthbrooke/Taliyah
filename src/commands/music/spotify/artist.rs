@@ -37,7 +37,7 @@ struct ArtistInsights {
     monthly_listeners: usize,
     monthly_listeners_delta: isize,
     follower_count: usize,
-    // following_count: usize, // not sure why this is exposed as part of artist insights
+    following_count: usize, // Artists can't follow anyone, so I'm unsure why this value exists.
     playlists: Playlists,
 }
 
