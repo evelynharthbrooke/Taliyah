@@ -18,9 +18,9 @@ use serenity::model::prelude::Message;
 
 #[derive(Deserialize, Debug)]
 struct Artist {
-    bio: String,
+    bio: Option<String>,
     #[serde(rename = "headerImages")]
-    header_images: Vec<HeaderImage>,
+    header_images: Option<Vec<HeaderImage>>,
     #[serde(rename = "artistInsights")]
     artist_insights: ArtistInsights,
 }
@@ -75,6 +75,7 @@ fn artist(context: &mut Context, message: &Message, args: Args) -> CommandResult
                 )
             })
         })?;
+
         return Ok(());
     }
 
@@ -89,9 +90,8 @@ fn artist(context: &mut Context, message: &Message, args: Args) -> CommandResult
     let user_agent = &[user_agent_chunk_1, user_agent_chunk_2].join(" ");
     let client = Client::builder().user_agent(user_agent).build()?;
     let access_token = get_spotify_token().unwrap();
-    let access_token_str = access_token.as_str();
     let artists_url = format!("https://spclient.wg.spotify.com/open-backend-2/v1/artists/{}", artist.id);
-    let artists_request: Artist = client.get(&artists_url).bearer_auth(access_token_str).send()?.json()?;
+    let artists_request: Artist = client.get(&artists_url).bearer_auth(access_token).send()?.json()?;
 
     let artist_name = &artist.name;
     let artist_url = &artist.external_urls["spotify"];
