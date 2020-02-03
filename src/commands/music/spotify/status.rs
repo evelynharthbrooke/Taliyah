@@ -47,8 +47,8 @@ pub fn status(context: &mut Context, message: &Message, args: Args) -> CommandRe
                 let song = activity.details.as_ref().unwrap();
                 let artists = activity.state.as_ref().unwrap();
                 let album = assets.large_text.as_ref().unwrap();
-                let uri = activity.sync_id.as_ref().unwrap();
-                let url = format!("https://open.spotify.com/track/{}", uri);
+                let id = activity.sync_id.as_ref().unwrap();
+                let url = format!("https://open.spotify.com/track/{}", id);
                 let mut artist_string = artists.to_string();
 
                 let timestamp_start = activity.timestamps.as_ref().unwrap().start.unwrap() as i64 / 1000;
@@ -96,7 +96,7 @@ pub fn status(context: &mut Context, message: &Message, args: Args) -> CommandRe
                         embed.field("Artists", artist_string, true);
                         embed.field("Album", album, true);
                         embed.field("Song length", length, false);
-                        embed.footer(|footer| footer.text(format!("Track ID: {} | Powered by the Spotify API.", uri)))
+                        embed.footer(|footer| footer.text(format!("Track ID: {} | Powered by the Spotify API.", id)))
                     })
                 })?
             } else {
