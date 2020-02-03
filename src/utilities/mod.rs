@@ -8,7 +8,6 @@ use crate::spotify;
 
 use itertools::Itertools;
 
-use kuchiki;
 use kuchiki::traits::*;
 
 use percent_encoding::{utf8_percent_encode, NON_ALPHANUMERIC as AlphaNumSet};
@@ -17,7 +16,6 @@ use reqwest::blocking::Client;
 use reqwest::Error;
 
 use serde::{Deserialize, Serialize};
-use serde_json;
 
 use serenity::model::prelude::{GuildId, UserId};
 use serenity::prelude::Context;

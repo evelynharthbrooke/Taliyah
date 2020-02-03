@@ -100,7 +100,12 @@ fn artist(context: &mut Context, message: &Message, args: Args) -> CommandResult
     let artist_id = &artist.id;
     let artist_followers = format_int(artists_request.artist_insights.follower_count);
     let artist_listeners = format_int(artists_request.artist_insights.monthly_listeners);
-    let artist_position = format_int(artists_request.artist_insights.global_chart_position);
+    let chart_position = artists_request.artist_insights.global_chart_position;
+    let artist_position = if chart_position < 1 {
+        format!("{} is not on the chart.", artist_name)
+    } else {
+        format!("#{}", format_int(chart_position))
+    };
 
     message.channel_id.send_message(&context, |message| {
         message.embed(|embed| {
@@ -110,12 +115,12 @@ fn artist(context: &mut Context, message: &Message, args: Args) -> CommandResult
             embed.thumbnail(artist_image);
             embed.description(format!(
                 "\
-                **Global chart position**: #{}\n\
                 **Monthly listeners**: {}\n\
                 **Followers**: {}\n\
+                **Chart position**: {}\n\
                 **Genres**: {}\n\
                 ",
-                artist_position, artist_listeners, artist_followers, artist_genres
+                artist_listeners, artist_followers, artist_position, artist_genres
             ));
             embed.footer(|footer| footer.text(format!("Spotify ID: {} | Powered by the Spotify API.", artist_id)))
         })
