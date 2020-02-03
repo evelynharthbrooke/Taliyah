@@ -39,8 +39,8 @@ pub fn status(context: &mut Context, message: &Message, args: Args) -> CommandRe
         if presence.activity.is_none() {
             message.channel_id.say(&context, format!("**{}** does not have an activity active.", &user.name))?
         } else {
-            if !presence.activities.iter().filter(|a| a.name == "Spotify").collect::<Vec<&Activity>>().is_empty() {
-                let activities = presence.activities.iter().filter(|a| a.name == "Spotify").collect::<Vec<&Activity>>();
+            let activities = presence.activities.iter().filter(|a| a.name == "Spotify").collect::<Vec<&Activity>>();
+            if !activities.is_empty() {
                 let activity = activities.first().unwrap();
 
                 let assets = activity.assets.as_ref().unwrap();
