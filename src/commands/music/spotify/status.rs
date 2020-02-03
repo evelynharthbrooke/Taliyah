@@ -58,7 +58,8 @@ pub fn status(context: &mut Context, message: &Message, args: Args) -> CommandRe
 
                 let length = if end - start < 60 {
                     NaiveDateTime::from_timestamp(end - start, 0).format("%-S seconds")
-                } else if end - start > 3600 { // this might be a redundant check...but might as well have it
+                } else if end - start > 3600 {
+                    // this might be a redundant check...but might as well have it
                     NaiveDateTime::from_timestamp(end - start, 0).format("%-H hours, %-M minutes, %-S seconds")
                 } else {
                     NaiveDateTime::from_timestamp(end - start, 0).format("%-M minutes, %-S seconds")
@@ -94,7 +95,8 @@ pub fn status(context: &mut Context, message: &Message, args: Args) -> CommandRe
                         embed.field("Song", format!("[{}]({})", song, url), false);
                         embed.field("Artists", artist_string, true);
                         embed.field("Album", album, true);
-                        embed.field("Song length", length, false)
+                        embed.field("Song length", length, false);
+                        embed.footer(|footer| footer.text(format!("Track ID: {} | Powered by the Spotify API.", uri)))
                     })
                 })?
             } else {
