@@ -82,12 +82,16 @@ pub fn get_spotify_token() -> Result<String, Error> {
     let request = client.get(spotify_open_url).send()?.text()?;
     let html = kuchiki::parse_html().one(request);
 
-    let config = html.select("#config").unwrap().map(|c| {
-        let as_node = c.as_node();
-        let text_node = as_node.first_child().unwrap();
-        let text = text_node.as_text().unwrap().borrow();
-        text.clone()
-    }).join("");
+    let config = html
+        .select("#config")
+        .unwrap()
+        .map(|c| {
+            let as_node = c.as_node();
+            let text_node = as_node.first_child().unwrap();
+            let text = text_node.as_text().unwrap().borrow();
+            text.clone()
+        })
+        .join("");
 
     let config_json: Config = serde_json::from_str(config.replace("\n", "").trim()).unwrap();
     Ok(config_json.access_token)
