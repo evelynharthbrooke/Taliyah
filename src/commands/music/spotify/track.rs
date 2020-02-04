@@ -1,10 +1,12 @@
+use crate::spotify;
+
 use chrono::prelude::*;
 
 use humantime::format_duration;
 
 use itertools::Itertools;
 
-use std::time::Duration;
+use percent_encoding::{utf8_percent_encode, NON_ALPHANUMERIC};
 
 use serenity::client::Context;
 use serenity::framework::standard::macros::command;
@@ -12,7 +14,7 @@ use serenity::framework::standard::Args;
 use serenity::framework::standard::CommandResult;
 use serenity::model::prelude::Message;
 
-use crate::spotify;
+use std::time::Duration;
 
 #[command]
 #[description("Displays information about a specified track on Spotify.")]
@@ -31,7 +33,8 @@ fn track(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
     }
 
     let track_name = args.rest();
-    let track_search = spotify().search_track(&track_name, 1, 0, None);
+    let track_name_encoded = utf8_percent_encode(&track_name, NON_ALPHANUMERIC).to_string();
+    let track_search = spotify().search_track(&track_name_encoded, 1, 0, None);
     let track_result = &track_search.unwrap().tracks.items;
 
     let track = track_result.first().unwrap();
