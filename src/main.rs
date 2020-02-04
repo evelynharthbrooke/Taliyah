@@ -23,6 +23,7 @@ use commands::utilities::invite::*;
 use commands::utilities::ping::*;
 use commands::utilities::prefix::*;
 use commands::utilities::shutdown::*;
+use commands::utilities::source::*;
 use commands::utilities::version::*;
 
 use dotenv::dotenv;
@@ -80,7 +81,7 @@ struct Music;
 
 #[group]
 #[description = "Ellie's selection of utility commands."]
-#[commands(invite, ping, prefix, shutdown, version)]
+#[commands(invite, ping, prefix, shutdown, source, version)]
 struct Utilities;
 
 #[group]
