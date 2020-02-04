@@ -31,7 +31,7 @@ fn spotify(ctx: &mut Context, message: &Message) -> CommandResult {
     message.channel_id.send_message(&ctx, |message| {
         message.embed(|embed| {
             embed.title("Error: Invalid / No subcommand provided.");
-            embed.description(format!("No valid subcommand provided. Please check the help command for help details.",))
+            embed.description("No valid subcommand provided. Please check the help command for help details.")
         })
     })?;
 
