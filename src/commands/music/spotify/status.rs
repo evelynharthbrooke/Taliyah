@@ -46,6 +46,7 @@ pub fn status(context: &mut Context, message: &Message, args: Args) -> CommandRe
                 let song = activity.details.as_ref().unwrap();
                 let album = assets.large_text.as_ref().unwrap();
                 let mut artists = activity.state.as_ref().unwrap().to_string();
+                let logo = "https://upload.wikimedia.org/wikipedia/commons/7/71/Spotify.png";
                 let id = activity.sync_id.as_ref().unwrap();
                 let url = format!("https://open.spotify.com/track/{}", id);
 
@@ -85,7 +86,7 @@ pub fn status(context: &mut Context, message: &Message, args: Args) -> CommandRe
                 message.channel_id.send_message(&context, |message| {
                     message.embed(|embed| {
                         embed.author(|author| {
-                            author.icon_url("https://upload.wikimedia.org/wikipedia/commons/7/71/Spotify.png");
+                            author.icon_url(logo);
                             author.name(format!("Spotify status for {}", &user.name))
                         });
                         embed.colour(0x001D_B954);

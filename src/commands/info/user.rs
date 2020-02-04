@@ -156,7 +156,7 @@ pub fn user(context: &mut Context, message: &Message, args: Args) -> CommandResu
     let mut role_count = 0;
 
     if !member.roles(&cache).is_none() {
-        roles = member.roles(&cache).unwrap().iter().map(|r: &Role| &r.name).join(" / ");
+        roles = member.roles(&cache).unwrap().iter().map(|r: &Role| format!("<@&{}>", &r.id.as_u64())).join(" / ");
         role_count = member.roles(&cache).unwrap().len();
         if roles.is_empty() {
             roles = "No roles available.".to_owned();
@@ -168,8 +168,8 @@ pub fn user(context: &mut Context, message: &Message, args: Args) -> CommandResu
         "No main role available.".to_owned()
     } else {
         let hoist_role_id = member.highest_role_info(&cache).ok_or("cannot get role id")?.0;
-        let hoist_role = guild.roles.get(&hoist_role_id).ok_or("Cannot get role")?;
-        hoist_role.name.to_owned()
+        let hoist_role = guild.roles.get(&hoist_role_id).ok_or("Cannot get role")?.id.as_u64();
+        format!("<@&{}>", hoist_role)
     };
 
     let nickname = member.nick.map_or("No nickname has been set.".to_owned(), |nick| nick);
@@ -190,6 +190,7 @@ pub fn user(context: &mut Context, message: &Message, args: Args) -> CommandResu
                 "{}{}\
                 **__User Information__**:\n\
                 **Type**: {}\n\
+                **Profile**: <@{}>\n\
                 **Tag**: {}\n\
                 **ID**: {}\n\
                 **Creation Date**: {}\n\n\
@@ -199,7 +200,7 @@ pub fn user(context: &mut Context, message: &Message, args: Args) -> CommandResu
                 **Display Color**: {}\n\
                 **Main Role**: {}\n\
                 **Roles ({})**: {}",
-                active_status, activities, account_type, tag, id, created, joined, nickname, hex, main_role, role_count, roles
+                active_status, activities, account_type, id, tag, id, created, joined, nickname, hex, main_role, role_count, roles
             ))
         })
     })?;
