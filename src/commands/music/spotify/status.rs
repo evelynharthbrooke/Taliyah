@@ -94,7 +94,7 @@ pub fn status(context: &mut Context, message: &Message, args: Args) -> CommandRe
                         embed.field("Artists", artists, true);
                         embed.field("Album", album, true);
                         embed.field("Song length", length, false);
-                        embed.footer(|footer| footer.text(format!("Track ID: {} | Powered by the Spotify API.", id)))
+                        embed.footer(|footer| footer.text(format!("Track ID: {}", id)))
                     })
                 })?
             } else {
