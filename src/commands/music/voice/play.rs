@@ -13,8 +13,7 @@ fn play(context: &mut Context, message: &Message, mut args: Args) -> CommandResu
     let url = match args.single::<String>() {
         Ok(url) => url,
         Err(_) => {
-            message.channel_id.say(&context.http, "Must provide a URL to a video or audio")?;
-
+            message.channel_id.say(&context, "You did not provide a song URL! Please provide one.")?;
             return Ok(());
         }
     };
