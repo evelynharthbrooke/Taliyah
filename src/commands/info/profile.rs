@@ -37,7 +37,11 @@ pub fn profile(context: &mut Context, message: &Message, args: Args) -> CommandR
         guild_id.member(&context, message.mentions.first().ok_or("Failed to get user mentioned.")?)?
     };
 
-    let color = if member.colour(cache).is_none() { Colour::new(0x00FF_FFFF) } else { member.colour(cache).unwrap() };
+    let color = if member.colour(cache).is_none() {
+        Colour::new(0x00FF_FFFF)
+    } else {
+        member.colour(cache).unwrap()
+    };
 
     let user_name = member.user.read().tag();
     let user_id = member.user.read().id;
