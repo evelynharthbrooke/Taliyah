@@ -95,7 +95,13 @@ fn artist(context: &mut Context, message: &Message, args: Args) -> CommandResult
 
     let artist_name = &artist.name;
     let artist_url = &artist.external_urls["spotify"];
-    let artist_genres = &artist.genres.iter().map(|genre| genre).join(", ");
+
+    let artist_genres = if !&artist.genres.is_empty() {
+        artist.genres.iter().map(|genre| genre).join(", ")
+    } else {
+        format!("No genres are available for {}.", artist_name)
+    };
+
     let artist_image = &artist.images.first().unwrap().url;
     let artist_id = &artist.id;
     let artist_followers = format_int(artists_request.artist_insights.follower_count);
