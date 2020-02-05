@@ -39,7 +39,7 @@ reqwest = "0.10"
 percent-encoding = "2.1"
 rusqlite = { git = "https://github.com/jgallagher/rusqlite", features = ["bundled"] }
 rspotify = { git = "https://github.com/KamranMackey/rspotify" }
-serenity = { git = "https://github.com/KamranMackey/serenity.git", branch = "kamrans-fork" }
+serenity = { git = "https://github.com/KamranMackey/serenity.git", branch = "kamrans-fork", features = ["voice"] }
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 typemap = "0.3"

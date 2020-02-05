@@ -16,6 +16,9 @@ use commands::info::profile::*;
 use commands::info::user::*;
 use commands::music::lastfm::*;
 use commands::music::spotify::*;
+use commands::music::voice::join::*;
+use commands::music::voice::leave::*;
+use commands::music::voice::play::*;
 use commands::search::github::*;
 use commands::search::krate::*;
 use commands::utilities::help::*;
@@ -28,35 +31,41 @@ use commands::utilities::version::*;
 
 use dotenv::dotenv;
 
-use log::error;
-
 use listeners::handler::Handler;
+
+use log::error;
 
 use rspotify::spotify::client::Spotify;
 use rspotify::spotify::oauth2::SpotifyClientCredentials;
 
 use serenity::client::bridge::gateway::ShardManager;
+use serenity::client::bridge::voice::ClientVoiceManager;
 use serenity::client::Client;
 
 use serenity::framework::standard::macros::group;
 use serenity::framework::standard::DispatchError;
 use serenity::framework::StandardFramework;
 
-use serenity::prelude::Mutex as ShardMutex;
+use serenity::prelude::Mutex;
+use serenity::prelude::TypeMapKey;
 
 use std::collections::HashSet;
 use std::env;
 use std::sync::Arc;
 
-use typemap::Key;
-
 use utilities::database::create_database;
 use utilities::database::get_prefix;
 
+pub struct VoiceManager;
+
+impl TypeMapKey for VoiceManager {
+    type Value = Arc<Mutex<ClientVoiceManager>>;
+}
+
 pub struct ShardManagerContainer;
 
-impl Key for ShardManagerContainer {
-    type Value = Arc<ShardMutex<ShardManager>>;
+impl TypeMapKey for ShardManagerContainer {
+    type Value = Arc<Mutex<ShardManager>>;
 }
 
 #[group]
@@ -80,6 +89,11 @@ struct Information;
 struct Music;
 
 #[group]
+#[description = "Ellie's voice command suite."]
+#[commands(join, leave, play)]
+struct Voice;
+
+#[group]
 #[description = "Ellie's selection of utility commands."]
 #[commands(invite, ping, prefix, shutdown, source, version)]
 struct Utilities;
@@ -99,6 +113,7 @@ pub fn main() {
     {
         let mut data = client.data.write();
         data.insert::<ShardManagerContainer>(Arc::clone(&client.shard_manager));
+        data.insert::<VoiceManager>(Arc::clone(&client.voice_manager));
     }
 
     pretty_env_logger::init();
@@ -155,6 +170,7 @@ pub fn main() {
             .group(&INFORMATION_GROUP)
             .group(&MUSIC_GROUP)
             .group(&SEARCH_GROUP)
+            .group(&VOICE_GROUP)
             .group(&UTILITIES_GROUP),
     );
 
