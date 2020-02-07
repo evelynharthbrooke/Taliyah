@@ -8,6 +8,7 @@ use serenity::framework::standard::Args;
 use serenity::framework::standard::CommandResult;
 use serenity::model::gateway::Activity;
 use serenity::model::gateway::ActivityType;
+use serenity::model::gateway::ClientStatus;
 use serenity::model::guild::Role;
 use serenity::model::prelude::Message;
 use serenity::model::user::OnlineStatus;
@@ -121,12 +122,40 @@ pub fn user(context: &mut Context, message: &Message, args: Args) -> CommandResu
             _ => "Offline",
         };
 
+        let client_status = match &presence.client_status {
+            Some(status) => {
+                if !status.desktop.is_none() && status.mobile.is_none() && status.web.is_none() {
+                    "Desktop"
+                } else if !status.mobile.is_none() && status.desktop.is_none() && status.web.is_none() {
+                    "Mobile"
+                } else if !status.web.is_none() && status.desktop.is_none() && status.mobile.is_none() {
+                    "Web"
+                } else if !status.desktop.is_none() && !status.mobile.is_none() && status.web.is_none() {
+                    "Desktop and Mobile"
+                } else if !status.desktop.is_none() && !status.mobile.is_none() && !status.web.is_none() {
+                    "Desktop, Mobile, and Web"
+                } else if !status.mobile.is_none() && !status.web.is_none() && status.desktop.is_none() {
+                    "Mobile and Web"
+                } else {
+                    "Desktop and Web"
+                }
+            }
+            None => "",
+        };
+
         if status != "Do Not Disturb" {
             active_status.push_str("**");
             active_status.push_str(status);
             active_status.push_str("**");
         } else {
             active_status.push_str("in **Do Not Disturb** mode");
+        }
+
+        if !client_status.is_empty() {
+            active_status.push_str(" on ");
+            active_status.push_str("**");
+            active_status.push_str(client_status);
+            active_status.push_str("**")
         }
 
         if activities.is_empty() {

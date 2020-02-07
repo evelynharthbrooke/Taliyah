@@ -9,14 +9,11 @@ use serenity::voice;
 #[command]
 #[description = "Begins playback of audio in a voice channel."]
 #[only_in(guilds)]
-fn play(context: &mut Context, message: &Message, mut args: Args) -> CommandResult {
-    let url = match args.single::<String>() {
-        Ok(url) => url,
-        Err(_) => {
-            message.channel_id.say(&context, "You did not provide a song URL! Please provide one.")?;
-            return Ok(());
-        }
-    };
+fn play(context: &mut Context, message: &Message, args: Args) -> CommandResult {
+    if args.rest().is_empty() {
+        message.channel_id.say(&context, "You did not provide a song to search for!")?;
+        return Ok(());
+    }
 
     let guild_id = match context.cache.read().guild_channel(message.channel_id) {
         Some(channel) => channel.read().guild_id,
@@ -30,7 +27,7 @@ fn play(context: &mut Context, message: &Message, mut args: Args) -> CommandResu
     let mut manager = manager_lock.lock();
 
     if let Some(handler) = manager.get_mut(guild_id) {
-        let source = match voice::ytdl(&url) {
+        let source = match voice::ytdl_search(args.rest()) {
             Ok(source) => source,
             Err(why) => {
                 println!("Error starting source: {:?}", why);
@@ -59,7 +56,7 @@ fn play(context: &mut Context, message: &Message, mut args: Args) -> CommandResu
         if manager.join(guild_id, channel).is_some() {
             message.channel_id.say(&context, format!("Joined the voice channel **{}**, beginning playback.", name))?;
             let handler = manager.get_mut(guild_id).unwrap();
-            let source = match voice::ytdl(&url) {
+            let source = match voice::ytdl_search(args.rest()) {
                 Ok(source) => source,
                 Err(why) => {
                     println!("Error starting source: {:?}", why);
