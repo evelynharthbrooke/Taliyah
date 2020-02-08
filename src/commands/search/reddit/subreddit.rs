@@ -24,10 +24,10 @@ pub struct Response {
 
 #[derive(Debug, Deserialize)]
 pub struct ForbiddenResponse {
-    reason: String,                     // The reason for the 403 Forbidden error.
-    message: String,                    // The status message.
-    quarantine_message: Option<String>, // The reasoning behind the subreddit quarantine, if available.
-    error: u64,                         // The status code of the response.
+    pub reason: String,                     // The reason for the 403 Forbidden error.
+    pub message: String,                    // The status message.
+    pub quarantine_message: Option<String>, // The reasoning behind the subreddit quarantine, if available.
+    pub error: u64,                         // The status code of the response.
 }
 
 #[derive(Debug, Deserialize)]

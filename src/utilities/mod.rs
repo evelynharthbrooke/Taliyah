@@ -61,7 +61,7 @@ pub fn get_album_artwork(artist: &str, track: &str, album: &str) -> String {
 
 /// Takes a string as input and formats it to convert various
 /// ASCII codes / HTML shorthands to their proper text forms.
-/// 
+///
 /// This will be gradually updated to add new replacers when
 /// necessary.
 pub fn format_string(string: String) -> String {
