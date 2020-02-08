@@ -29,6 +29,10 @@ jobs:
       - name: Checkout sources
         uses: actions/checkout@v2
       
+      # Required for serenity voice
+      - name: Install opus dependency
+      - run: brew install opus
+
       - name: Install Nightly toolchain
         uses: actions-rs/toolchain@v1
         with:
