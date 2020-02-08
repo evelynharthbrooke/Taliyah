@@ -170,5 +170,5 @@ pub fn user(context: &mut Context, message: &Message, mut arguments: Args) -> Co
         })
     })?;
 
-    return Ok(());
+    Ok(())
 }
