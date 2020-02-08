@@ -1,6 +1,8 @@
 pub mod subreddit;
+pub mod user;
 
 use crate::commands::search::reddit::subreddit::*;
+use crate::commands::search::reddit::user::*;
 
 use serenity::client::Context;
 use serenity::framework::standard::macros::command;
@@ -10,7 +12,7 @@ use serenity::model::prelude::Message;
 #[command]
 #[description("Gets a variety of information from the Reddit API.")]
 #[aliases("r")]
-#[sub_commands(subreddit)]
+#[sub_commands(subreddit, user)]
 fn reddit(ctx: &mut Context, message: &Message) -> CommandResult {
     message.channel_id.send_message(&ctx, |message| {
         message.embed(|embed| {
