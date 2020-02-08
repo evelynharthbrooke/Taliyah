@@ -24,6 +24,7 @@ fn play(context: &mut Context, message: &Message, args: Args) -> CommandResult {
     };
 
     let manager_lock = context.data.read().get::<VoiceManager>().cloned().expect("Expected VoiceManager in ShareMap.");
+
     let mut manager = manager_lock.lock();
 
     if let Some(handler) = manager.get_mut(guild_id) {

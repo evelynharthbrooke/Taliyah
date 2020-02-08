@@ -8,7 +8,6 @@ use serenity::framework::standard::Args;
 use serenity::framework::standard::CommandResult;
 use serenity::model::gateway::Activity;
 use serenity::model::gateway::ActivityType;
-use serenity::model::gateway::ClientStatus;
 use serenity::model::guild::Role;
 use serenity::model::prelude::Message;
 use serenity::model::user::OnlineStatus;
@@ -202,10 +201,7 @@ pub fn user(context: &mut Context, message: &Message, args: Args) -> CommandResu
     };
 
     let nickname = member.nick.map_or("No nickname has been set.".to_owned(), |nick| nick);
-    let joined = member.joined_at.map_or("Unavailable".to_owned(), |d| {
-        let formatted_string = d.format("%A, %B %e, %Y @ %l:%M %P");
-        format!("{}", formatted_string)
-    });
+    let joined = member.joined_at.unwrap().format("%A, %B %e, %Y @ %l:%M %P");
 
     message.channel_id.send_message(&context, |message| {
         message.embed(|embed| {

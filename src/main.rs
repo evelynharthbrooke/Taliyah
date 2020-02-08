@@ -13,6 +13,7 @@ use commands::fun::urban::*;
 use commands::info::changelog::*;
 use commands::info::guild::*;
 use commands::info::profile::*;
+use commands::info::role::*;
 use commands::info::user::*;
 use commands::music::lastfm::*;
 use commands::music::spotify::*;
@@ -21,6 +22,7 @@ use commands::music::voice::leave::*;
 use commands::music::voice::play::*;
 use commands::search::github::*;
 use commands::search::krate::*;
+use commands::search::reddit::*;
 use commands::utilities::help::*;
 use commands::utilities::invite::*;
 use commands::utilities::ping::*;
@@ -80,7 +82,7 @@ struct Fun;
 
 #[group]
 #[description = "Various informational commands."]
-#[commands(changelog, guild, profile, user)]
+#[commands(changelog, guild, profile, role, user)]
 struct Information;
 
 #[group]
@@ -100,7 +102,7 @@ struct Utilities;
 
 #[group]
 #[description = "Various commands related to searching for things."]
-#[commands(github, krate)]
+#[commands(github, krate, reddit)]
 struct Search;
 
 pub fn main() {
