@@ -58,7 +58,7 @@ impl SubredditData {
 }
 
 #[command("subreddit")]
-#[description = "Looks up a crate on crates.io and displays information about it."]
+#[description = "Gets information about a Reddit subreddit."]
 #[usage = "<subreddit name>"]
 #[aliases("sr", "subreddit", "srinfo")]
 pub fn subreddit(context: &mut Context, message: &Message, mut arguments: Args) -> CommandResult {

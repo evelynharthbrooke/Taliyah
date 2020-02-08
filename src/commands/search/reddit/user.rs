@@ -85,7 +85,7 @@ pub struct TrophyData {
 }
 
 #[command("user")]
-#[description = "Looks up a crate on crates.io and displays information about it."]
+#[description = "Gets information about a user on Reddit."]
 #[usage = "<user>"]
 #[aliases("uinfo", "user")]
 pub fn user(context: &mut Context, message: &Message, mut arguments: Args) -> CommandResult {
