@@ -87,7 +87,7 @@ pub fn subreddit(context: &mut Context, message: &Message, mut arguments: Args) 
             let response: ForbiddenResponse = response.json()?;
             let reason = response.reason;
 
-            if reason == "quarantined".to_string() {
+            if reason == "quarantined" {
                 let quarantined = response.quarantine_message.unwrap();
                 message.channel_id.send_message(&context, |message| {
                     message.embed(|embed| {
