@@ -7,6 +7,7 @@ use serenity::model::prelude::Message;
 #[command]
 #[aliases(roleinfo)]
 #[description("Displays information about a server role.")]
+#[only_in(guilds)]
 pub fn role(context: &mut Context, message: &Message, arguments: Args) -> CommandResult {
     let cache = &context.cache;
     let guild_id = message.guild_id.ok_or("Failed to get GuildID from Message.")?;

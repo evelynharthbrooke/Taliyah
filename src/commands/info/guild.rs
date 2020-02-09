@@ -19,15 +19,20 @@ pub fn guild(context: &mut Context, message: &Message) -> CommandResult {
     let guild = cached_guild.read();
     let guild_name = &guild.name;
     let guild_owner = guild.member(&context, guild.owner_id).unwrap().user.read().tag();
-    let guild_channels = guild.channels.iter().filter(|(_, c)| c.read().kind != Category).count();
+    let guild_channels = guild.channels.len();
+    let guild_channels_category = guild.channels.iter().filter(|(_, c)| c.read().kind == Category).count();
     let guild_channels_text = guild.channels.iter().filter(|(_, c)| c.read().kind == Text).count();
     let guild_channels_voice = guild.channels.iter().filter(|(_, c)| c.read().kind == Voice).count();
     let guild_creation_date = guild_id.created_at().format("%B %e, %Y @ %l:%M %P");
     let guild_emojis = guild.emojis.len();
     let guild_emojis_animated = guild.emojis.iter().filter(|(_, e)| e.animated).count();
     let guild_emojis_normal = guild.emojis.iter().filter(|(_, e)| !e.animated).count();
+    let guild_members = guild.members.len();
+    let guild_members_users = guild.members.iter().filter(|(u, _)| !u.to_user(&context).unwrap().bot).count();
+    let guild_members_bots = guild.members.iter().filter(|(u, _)| u.to_user(&context).unwrap().bot).count();
     let guild_presences = guild.presences.len();
-    let guild_members = guild.member_count;
+    let guild_presences_users = guild.presences.iter().filter(|(u, _)| !u.to_user(&context).unwrap().bot).count();
+    let guild_presences_bots = guild.presences.iter().filter(|(u, _)| u.to_user(&context).unwrap().bot).count();
     let guild_prefix = crate::utilities::database::get_prefix(guild_id).unwrap();
     let guild_icon = guild.icon_url().unwrap();
 
@@ -78,6 +83,12 @@ pub fn guild(context: &mut Context, message: &Message) -> CommandResult {
         _ => "Unrecognized verification level.",
     };
 
+    let guild_mfa_level = match guild.mfa_level.num() {
+        0 => "Multi-factor authentication not required.",
+        1 => "Multi-Factor authentication required.",
+        _ => "Unrecognized multi-factor authentication level.",
+    };
+
     let mut highest = None;
 
     for role_id in guild.roles.keys() {
@@ -106,13 +117,13 @@ pub fn guild(context: &mut Context, message: &Message) -> CommandResult {
             embed.description(format!(
                 "**Name**: {}\n\
                 **Owner**: {}\n\
-                **Prefix**: `{}`\n\
-                **Members**: {}\n\
-                **Members Online**: {}\n\
-                **Channels**: {} ({} text, {} voice)\n\
+                **Online Members**: {} ({} bots, {} users)\n\
+                **Total Members**: {} ({} bots, {} users)\n\
+                **Channels**: {} ({} categories, {} text, {} voice)\n\
                 **Emojis**: {} ({} animated, {} static)\n\
                 **Region**: {}\n\
                 **Creation Date**: {}\n\
+                **MFA Level**: {}\n\
                 **Verification Level**: {}\n\
                 **Explicit Content Filter**: {}\n\
                 **Nitro Boosts**: {}\n\
@@ -121,10 +132,14 @@ pub fn guild(context: &mut Context, message: &Message) -> CommandResult {
                 **Roles ({})**: {}\n",
                 guild_name,
                 guild_owner,
-                guild_prefix,
-                guild_members,
                 guild_presences,
+                guild_presences_bots,
+                guild_presences_users,
+                guild_members,
+                guild_members_bots,
+                guild_members_users,
                 guild_channels,
+                guild_channels_category,
                 guild_channels_text,
                 guild_channels_voice,
                 guild_emojis,
@@ -132,6 +147,7 @@ pub fn guild(context: &mut Context, message: &Message) -> CommandResult {
                 guild_emojis_normal,
                 guild_region,
                 guild_creation_date,
+                guild_mfa_level,
                 guild_verification_level,
                 guild_explicit_filter,
                 guild_boosts,
@@ -140,7 +156,14 @@ pub fn guild(context: &mut Context, message: &Message) -> CommandResult {
                 guild_role_count,
                 guild_roles
             ));
-            embed.footer(|footer| footer.text(format!("The ID belonging to {} is {}.", guild_name, guild_id)))
+            embed.footer(|footer| {
+                footer.text(format!(
+                    "{name} guild ID: {id} | {name} prefix: {prefix}",
+                    name = guild_name,
+                    id = guild_id,
+                    prefix = guild_prefix
+                ))
+            })
         })
     })?;
 

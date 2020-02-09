@@ -11,6 +11,7 @@ use commands::extra::sloc::*;
 use commands::extra::weather::*;
 use commands::fun::urban::*;
 use commands::info::changelog::*;
+use commands::info::channel::*;
 use commands::info::guild::*;
 use commands::info::profile::*;
 use commands::info::role::*;
@@ -82,7 +83,7 @@ struct Fun;
 
 #[group]
 #[description = "Various informational commands."]
-#[commands(changelog, guild, profile, role, user)]
+#[commands(changelog, channel, guild, profile, role, user)]
 struct Information;
 
 #[group]
