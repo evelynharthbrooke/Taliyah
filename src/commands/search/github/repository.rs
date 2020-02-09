@@ -62,20 +62,20 @@ pub fn repository(context: &mut Context, message: &Message, mut arguments: Args)
     let resp_data: repository::ResponseData = resp.data.expect("missing response data");
 
     let repository = resp_data.repository.unwrap();
-    let name = repository.name_with_owner;
-    let url = repository.url;
-    let stars = format_int(repository.stargazers.total_count as usize);
-    let forks = format_int(repository.fork_count as usize);
-    let created = repository.created_at.format("%A, %B %e, %Y @ %l:%M %P");
-    let updated = repository.updated_at.format("%A, %B %e, %Y @ %l:%M %P");
-    let default_branch = repository.default_branch_ref.as_ref().unwrap();
-    let default_branch_name = &default_branch.name;
-    let default_branch_commits = match &default_branch.target.on {
+    let repository_name = repository.name_with_owner;
+    let repository_url = repository.url;
+    let repository_stars = format_int(repository.stargazers.total_count as usize);
+    let repository_forks = format_int(repository.fork_count as usize);
+    let repository_creation_date = repository.created_at.format("%A, %B %e, %Y @ %l:%M %P");
+    let repository_modified_date = repository.updated_at.format("%A, %B %e, %Y @ %l:%M %P");
+    let repository_default_branch = repository.default_branch_ref.as_ref().unwrap();
+    let repository_default_branch_name = &repository_default_branch.name;
+    let repository_default_branch_commits = match &repository_default_branch.target.on {
         Commit(c) => format_int(c.history.total_count as usize),
         _ => "".to_string(),
     };
 
-    let website = match repository.homepage_url {
+    let repository_website = match repository.homepage_url {
         Some(url) => {
             if url.is_empty() {
                 "No website available.".to_string()
@@ -86,7 +86,7 @@ pub fn repository(context: &mut Context, message: &Message, mut arguments: Args)
         None => "No website available.".to_string(),
     };
 
-    let disk_usage = match repository.disk_usage {
+    let repository_disk_usage = match repository.disk_usage {
         Some(usage) => {
             let bytes_in_kb = byte_unit::n_kb_bytes!(usage as u128);
             let bytes = Byte::from_bytes(bytes_in_kb);
@@ -96,12 +96,12 @@ pub fn repository(context: &mut Context, message: &Message, mut arguments: Args)
         None => "No disk usage data is available.".to_string(),
     };
 
-    let description = match repository.description {
+    let repository_description = match repository.description {
         Some(description) => format!("{}\n\n", description),
         None => "".to_string(),
     };
 
-    let language = match repository.primary_language {
+    let repository_language = match repository.primary_language {
         Some(language) => {
             let code: &str = language.color.as_ref().unwrap();
 
@@ -115,7 +115,7 @@ pub fn repository(context: &mut Context, message: &Message, mut arguments: Args)
         None => "No language is available.".to_string(),
     };
 
-    let code_of_conduct = match repository.code_of_conduct {
+    let repository_code_of_conduct = match repository.code_of_conduct {
         Some(conduct) => {
             if conduct.url.is_none() {
                 conduct.name
@@ -126,11 +126,11 @@ pub fn repository(context: &mut Context, message: &Message, mut arguments: Args)
         None => "No code of conduct is available.".to_string(),
     };
 
-    let owner = repository.owner.login;
-    let owner_url = repository.owner.url;
-    let owner_avatar = repository.owner.avatar_url;
+    let repository_owner = repository.owner.login;
+    let repository_owner_url = repository.owner.url;
+    let repository_owner_avatar = repository.owner.avatar_url;
 
-    let license = match repository.license_info {
+    let repository_license = match repository.license_info {
         Some(license) => {
             if license.name == "Other" {
                 license.name
@@ -143,9 +143,9 @@ pub fn repository(context: &mut Context, message: &Message, mut arguments: Args)
 
     message.channel_id.send_message(&context, |message| {
         message.embed(|embed| {
-            embed.title(name);
-            embed.url(url);
-            embed.thumbnail(owner_avatar);
+            embed.title(repository_name);
+            embed.url(repository_url);
+            embed.thumbnail(repository_owner_avatar);
             embed.color(color);
             embed.description(format!(
                 "{}\
@@ -160,7 +160,20 @@ pub fn repository(context: &mut Context, message: &Message, mut arguments: Args)
                 **Disk usage**: {}\n\
                 **Star count**: {}\n\
                 **Fork count**: {}\n",
-                description, owner, owner_url, license, language, default_branch_commits, default_branch_name, website, code_of_conduct, created, updated, disk_usage, stars, forks
+                repository_description,
+                repository_owner,
+                repository_owner_url,
+                repository_license,
+                repository_language,
+                repository_default_branch_commits,
+                repository_default_branch_name,
+                repository_website,
+                repository_code_of_conduct,
+                repository_creation_date,
+                repository_modified_date,
+                repository_disk_usage,
+                repository_stars,
+                repository_forks
             ));
             embed.footer(|footer| footer.text("Powered by the GitHub GraphQL API."))
         })
