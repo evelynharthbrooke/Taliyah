@@ -16,6 +16,7 @@ use crate::commands::music::spotify::status::*;
 use crate::commands::music::spotify::track::*;
 
 #[command]
+#[aliases("sp")]
 #[description(
     "\
     Gets a variety of information from the Spotify API.\n\n\

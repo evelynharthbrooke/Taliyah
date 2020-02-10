@@ -91,6 +91,7 @@ fn album(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
             let name = &track.name;
             let position = &track.track_number;
             let external_link = &track.external_urls["spotify"];
+
             let length = format_duration(Duration::from_millis(track.duration_ms as u64 / 1000 * 1000));
 
             let explicit = if track.explicit { "(explicit)".to_string() } else { "".to_string() };
