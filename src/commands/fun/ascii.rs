@@ -29,7 +29,7 @@ pub fn ascii(context: &mut Context, message: &Message, arguments: Args) -> Comma
             })
         })?;
         return Ok(());
-    } else if arguments.rest().contains("​") {
+    } else if arguments.rest().contains("\u{200B}") {
         message.channel_id.send_message(&context, |m| {
             m.embed(|e| {
                 e.title("Error: Zero Width Space Sent");
