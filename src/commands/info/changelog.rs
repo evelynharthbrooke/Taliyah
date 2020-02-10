@@ -42,6 +42,7 @@ pub fn changelog(context: &mut Context, message: &Message) -> CommandResult {
 
     let repository = response_data.repository.unwrap();
     let target_on = &repository.ref_.as_ref().unwrap().target.on;
+    let name = repository.name;
     let url = repository.url;
     let branch = &repository.ref_.as_ref().unwrap().name;
     let commits = match target_on {
@@ -66,7 +67,7 @@ pub fn changelog(context: &mut Context, message: &Message) -> CommandResult {
 
     message.channel_id.send_message(&context, |message| {
         message.embed(|embed| {
-            embed.title(format!("Recent commits on {}", branch));
+            embed.title(format!("Recent commits to {} on `{}`", name, branch));
             embed.url(format!("{}/commits/{}", url, branch));
             embed.description(commits);
             embed.footer(|footer| footer.text("Powered by the GitHub GraphQL API."))

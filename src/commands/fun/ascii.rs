@@ -21,26 +21,26 @@ use serenity::model::prelude::Message;
 /// such as iOS and Android phones.
 pub fn ascii(context: &mut Context, message: &Message, arguments: Args) -> CommandResult {
     if arguments.rest().is_empty() {
-        message.channel_id.send_message(&context, |m| {
-            m.embed(|e| {
-                e.title("Error: No string provided.");
-                e.description(
+        message.channel_id.send_message(&context, |message| {
+            message.embed(|embed| {
+                embed.title("Error: No string provided.");
+                embed.description(
                     "You didn't provide a string to convert to ASCII. Please provide one.\n\
                     For more details, please view the help documentation.",
                 );
-                e.color(0x00FF_0000)
+                embed.color(0x00FF_0000)
             })
         })?;
         return Ok(());
     } else if arguments.rest().contains("\u{200B}") {
-        message.channel_id.send_message(&context, |m| {
-            m.embed(|e| {
-                e.title("Error: Zero width space detected.");
-                e.description(
+        message.channel_id.send_message(&context, |message| {
+            message.embed(|embed| {
+                embed.title("Error: Zero width space detected.");
+                embed.description(
                     "A zero width space was detected in your message's content. This \
                     is not allowed. Please send a string without a zero width space included.",
                 );
-                e.color(0x00FF_0000)
+                embed.color(0x00FF_0000)
             })
         })?;
         return Ok(());

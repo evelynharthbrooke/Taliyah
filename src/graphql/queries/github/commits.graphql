@@ -1,5 +1,6 @@
 query Commits($owner: String!, $name: String!, $branch: String!) {
   repository(owner: $owner, name: $name) {
+    name
     url
     ref(qualifiedName: $branch) {
       name
