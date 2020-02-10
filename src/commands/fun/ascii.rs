@@ -24,7 +24,10 @@ pub fn ascii(context: &mut Context, message: &Message, arguments: Args) -> Comma
         message.channel_id.send_message(&context, |m| {
             m.embed(|e| {
                 e.title("Error: No string provided.");
-                e.description("You didn't provide a string to convert to ASCII. Please provide one.");
+                e.description(
+                    "You didn't provide a string to convert to ASCII. Please provide one.\n\
+                    For more details, please view the help documentation.",
+                );
                 e.color(0x00FF_0000)
             })
         })?;
@@ -32,8 +35,11 @@ pub fn ascii(context: &mut Context, message: &Message, arguments: Args) -> Comma
     } else if arguments.rest().contains("\u{200B}") {
         message.channel_id.send_message(&context, |m| {
             m.embed(|e| {
-                e.title("Error: Zero Width Space Sent");
-                e.description("You sent a zero width space. That is not allowed. Please use a proper string!");
+                e.title("Error: Zero width space detected.");
+                e.description(
+                    "A zero width space was detected in your message's content. This \
+                    is not allowed. Please send a string without a zero width space included.",
+                );
                 e.color(0x00FF_0000)
             })
         })?;
