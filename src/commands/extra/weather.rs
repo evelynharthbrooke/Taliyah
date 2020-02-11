@@ -1,8 +1,11 @@
+use crate::utilities::database::get_user_location;
 use crate::utilities::geo_utils::get_coordinates;
 
 use chrono::prelude::*;
 
 use itertools::Itertools;
+
+use log::error;
 
 use reqwest::blocking::Client;
 use reqwest::Url;
@@ -10,9 +13,11 @@ use reqwest::Url;
 use serde::Deserialize;
 
 use serenity::client::Context;
+
 use serenity::framework::standard::macros::command;
 use serenity::framework::standard::Args;
 use serenity::framework::standard::CommandResult;
+
 use serenity::model::prelude::Message;
 
 use std::env;
@@ -66,18 +71,33 @@ struct DailyData {
 #[usage = "<location>"]
 #[aliases("weather", "forecast")]
 pub fn weather(context: &mut Context, message: &Message, arguments: Args) -> CommandResult {
-    if arguments.rest().is_empty() {
-        message.channel_id.send_message(&context, |m| {
-            m.embed(|e| {
-                e.title("Error: Invalid location name provided.");
-                e.description("You have provided an invalid location. Please try again.");
-                e.color(0x00FF_0000)
-            })
-        })?;
-        return Ok(());
-    }
+    let location = if !arguments.rest().is_empty() {
+        arguments.rest().to_string()
+    } else {
+        match get_user_location(message.author.id) {
+            Ok(user) => user,
+            Err(e) => {
+                error!("Could not get user's location in database: {}", e);
+                if arguments.rest().is_empty() {
+                    message.channel_id.send_message(&context, |message| {
+                        message.embed(|embed| {
+                            embed.title("Error: No location name provided.");
+                            embed.description(
+                                "I could not find a location pertaining to your user record in my database, or \
+                                    you did not provide a location to get weather information for. Please set a \
+                                    location via the profile command, or provide a location as an argument.",
+                            );
+                            embed.color(0x00FF_0000)
+                        })
+                    })?;
+                    return Ok(());
+                } else {
+                    arguments.rest().to_string()
+                }
+            }
+        }
+    };
 
-    let location = arguments.rest().to_string();
     let user_agent: &str = concat!(env!("CARGO_PKG_NAME"), "/", env!("CARGO_PKG_VERSION"));
     let api_key = env::var("DARKSKY").expect("Couldn't acccess the provided API key.");
 
@@ -98,8 +118,8 @@ pub fn weather(context: &mut Context, message: &Message, arguments: Args) -> Com
     let temperature = request.currently.temperature.trunc().round();
     let temperature_f = temperature * 1.8 + 32.0;
     let temperature_high = request.daily.data.first().unwrap().high.round();
-    let temperature_high_f = temperature_high * 1.8 + 32.0;
     let temperature_low = request.daily.data.first().unwrap().low.round();
+    let temperature_high_f = temperature_high * 1.8 + 32.0;
     let temperature_low_f = temperature_low * 1.8 + 32.0;
     let humidity = request.currently.humidity * 100.0;
     let visibility = request.currently.visibility.round();

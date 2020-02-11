@@ -46,6 +46,7 @@ pub fn create_database() {
                 user_id TEXT PRIMARY KEY NOT NULL,
                 user_tag TEXT NOT NULL,
                 display_name TEXT,
+                location TEXT,
                 twitch TEXT,
                 twitter TEXT,
                 lastfm TEXT,
@@ -90,6 +91,13 @@ pub fn get_user_twitch(user_id: UserId) -> Result<String, Box<dyn Error>> {
 pub fn get_user_twitter(user_id: UserId) -> Result<String, Box<dyn Error>> {
     let connection = get_database()?;
     let mut statement = connection.prepare("SELECT twitter FROM profile where USER_ID == ?1;")?;
+    let mut rows = statement.query(&[&user_id.as_u64().to_string()])?;
+    Ok(rows.next()?.ok_or("User not found in database")?.get(0)?)
+}
+
+pub fn get_user_location(user_id: UserId) -> Result<String, Box<dyn Error>> {
+    let connection = get_database()?;
+    let mut statement = connection.prepare("SELECT location FROM profile WHERE user_id == ?1;")?;
     let mut rows = statement.query(&[&user_id.as_u64().to_string()])?;
     Ok(rows.next()?.ok_or("User not found in database")?.get(0)?)
 }

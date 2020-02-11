@@ -45,6 +45,15 @@ pub fn profile(context: &mut Context, message: &Message, args: Args) -> CommandR
 
     let user_name = member.user.read().tag();
     let user_id = member.user.read().id;
+
+    let location = match database::get_user_location(user_id) {
+        Ok(location) => location,
+        Err(e) => {
+            error!("Error while retrieving the user's location from the database: {}", e);
+            "No location set.".to_string()
+        }
+    };
+
     let display_name = match database::get_user_display_name(user_id) {
         Ok(display_name) => display_name,
         Err(e) => {
@@ -118,7 +127,10 @@ pub fn profile(context: &mut Context, message: &Message, args: Args) -> CommandR
             });
             e.color(color);
             e.description(format!(
-                "**Display name**: {}\n\
+                "**__General details:__**\n\
+                **Display name**: {}\n\
+                **Location:** {}\n\n\
+                **__Social channels:__**:\n\
                 **Last.fm username**: {}\n\
                 **Twitch username**: {}\n\
                 **Twitter handle**: {}\n\
@@ -126,7 +138,7 @@ pub fn profile(context: &mut Context, message: &Message, args: Args) -> CommandR
                 **PlayStation ID**: {}\n\
                 **Xbox user ID**: {}\n\
                 ",
-                display_name, lastfm_name, twitch_name, twitter_name, steam_id, playstation_id, xbox_id
+                display_name, location, lastfm_name, twitch_name, twitter_name, steam_id, playstation_id, xbox_id
             ))
         })
     })?;
@@ -148,6 +160,14 @@ pub fn set(context: &mut Context, message: &Message, mut arguments: Args) -> Com
     let user_id = message.author.id.to_string();
 
     match property.as_str() {
+        "location" => {
+            if value.is_empty() {
+                message.channel_id.say(&context, "You did not provide a location. Please provide one!")?;
+                return Ok(());
+            };
+            let _ = connection.execute("UPDATE profile SET location = ?1 WHERE user_id = ?2;", &[&value, &user_id[..]]);
+            message.channel_id.say(&context, format!("Your location has been set to `{}`.", &value))?;
+        }
         "twitch" => {
             if value.is_empty() {
                 message.channel_id.say(&context, "You did not provide a Twitch username. Please provide one!")?;
