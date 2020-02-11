@@ -159,6 +159,34 @@ pub fn main() {
                 DispatchError::OnlyForOwners => {
                     let _ = message.channel_id.say(&context, "This is only available for owners.");
                 }
+                DispatchError::TooManyArguments { max, given } => {
+                    let _ = message.channel_id.send_message(&context, |error_message| {
+                        error_message.embed(|embed| {
+                            embed.title("Too many arguments provided.");
+                            embed.description(format!(
+                                "You provided too many arguments for this command. Minimum \
+                                arguments were {} argument(s), you provided {} argument(s) \
+                                instead. Please provide the right amount of arguments. For \
+                                more information, please view the respective command's help \
+                                documentation, if available.", max, given
+                            ))
+                        })
+                    });
+                }
+                DispatchError::NotEnoughArguments { min, given } => {
+                    let _ = message.channel_id.send_message(&context, |error_message| {
+                        error_message.embed(|embed| {
+                            embed.title("Error: Not enough arguments provided.");
+                            embed.description(format!(
+                                "You didn't provide enough arguments for this command. Minimum \
+                                arguments were {} argument(s), you provided {} argument(s) instead. \
+                                Please provide the right amount of arguments. For more information, \
+                                please view the respective command's help documentation, if \
+                                available.", min, given
+                            ))
+                        })
+                    });
+                }
                 DispatchError::IgnoredBot => {}
                 _ => error!("Dispatch Error: {} failed: {:?}", message.content, err),
             })
