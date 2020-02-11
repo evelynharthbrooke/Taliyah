@@ -13,8 +13,8 @@ use serenity::model::prelude::Message;
 #[description("Gets a variety of information from the Reddit API.")]
 #[aliases("r")]
 #[sub_commands(subreddit, user)]
-fn reddit(ctx: &mut Context, message: &Message) -> CommandResult {
-    message.channel_id.send_message(&ctx, |message| {
+fn reddit(context: &mut Context, message: &Message) -> CommandResult {
+    message.channel_id.send_message(&context, |message| {
         message.embed(|embed| {
             embed.title("Error: Invalid / No Subcommand Entered!");
             embed.description(

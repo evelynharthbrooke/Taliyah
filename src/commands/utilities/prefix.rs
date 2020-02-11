@@ -21,8 +21,8 @@ use serenity::prelude::Context;
     command prefix back to the default value in the bot's configuration file.\
     "
 )]
-fn prefix(ctx: &mut Context, message: &Message) -> CommandResult {
-    message.channel_id.send_message(&ctx, move |message| {
+fn prefix(context: &mut Context, message: &Message) -> CommandResult {
+    message.channel_id.send_message(&context, move |message| {
         message.embed(|embed| {
             embed.title("Error: Invalid / No Subcommand Entered!");
             embed.color(0x00FF_0000);
@@ -37,20 +37,20 @@ fn prefix(ctx: &mut Context, message: &Message) -> CommandResult {
 #[only_in(guilds)]
 #[owners_only]
 #[description = "Retrieves the command prefix for the current server."]
-pub fn get(ctx: &mut Context, message: &Message) -> CommandResult {
+pub fn get(context: &mut Context, message: &Message) -> CommandResult {
     let prefix = database::get_prefix(message.guild_id.unwrap())?;
 
-    let guild = match message.guild(&ctx.cache) {
+    let guild = match message.guild(&context.cache) {
         Some(guild) => guild,
         None => {
-            message.channel_id.say(&ctx, "Unable to get the command prefix, as the guild cannot be located.")?;
+            message.channel_id.say(&context, "Unable to get the command prefix, as the guild cannot be located.")?;
             return Ok(());
         }
     };
 
     let guild_name = &guild.read().name;
 
-    message.channel_id.say(&ctx, format!("The currently set command prefix for {} is `{}`.", guild_name, prefix))?;
+    message.channel_id.say(&context, format!("The current prefix for **{}** is `{}`.", guild_name, prefix))?;
 
     Ok(())
 }
@@ -60,18 +60,18 @@ pub fn get(ctx: &mut Context, message: &Message) -> CommandResult {
 #[owners_only]
 #[num_args(1)]
 #[description = "Sets the command prefix for the current server."]
-pub fn set(ctx: &mut Context, message: &Message, args: Args) -> CommandResult {
+pub fn set(context: &mut Context, message: &Message, arguments: Args) -> CommandResult {
     let connection = match get_database() {
         Ok(connection) => connection,
         Err(_) => return Ok(()),
     };
 
-    let prefix = args.current().unwrap_or(";");
+    let prefix = arguments.current().unwrap_or(";");
 
-    let guild = match message.guild(&ctx.cache) {
+    let guild = match message.guild(&context.cache) {
         Some(guild) => guild,
         None => {
-            message.channel_id.say(&ctx, "Unable to set command prefix, as the guild cannot be located.")?;
+            message.channel_id.say(&context, "Unable to set command prefix, as the guild cannot be located.")?;
             return Ok(());
         }
     };
@@ -84,7 +84,7 @@ pub fn set(ctx: &mut Context, message: &Message, args: Args) -> CommandResult {
         &[&guild_id, &guild_name, &prefix.to_string()],
     );
 
-    message.channel_id.say(&ctx, format!("The command prefix for {} has been set to `{}`.", guild_name, prefix))?;
+    message.channel_id.say(&context, format!("The prefix for **{}** has been set to `{}`.", guild_name, prefix))?;
 
     Ok(())
 }
@@ -109,7 +109,7 @@ pub fn clear(ctx: &mut Context, message: &Message) -> CommandResult {
 
     let guild_name = &guild.read().name;
 
-    message.channel_id.say(&ctx, format!("The command prefix for {} has been cleared.", guild_name))?;
+    message.channel_id.say(&ctx, format!("The prefix for **{}** has been cleared.", guild_name))?;
 
     Ok(())
 }

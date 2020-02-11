@@ -18,9 +18,9 @@ use std::time::Duration;
 
 #[command]
 #[description("Displays information about a specified track on Spotify.")]
-fn track(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
+fn track(context: &mut Context, message: &Message, args: Args) -> CommandResult {
     if args.rest().is_empty() {
-        msg.channel_id.send_message(&ctx, |embed| {
+        message.channel_id.send_message(&context, |embed| {
             embed.embed(|embed| {
                 embed.title("Error: No track name provided.");
                 embed.color(0x00FF_0000);
@@ -46,7 +46,9 @@ fn track(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
     let track_album_name = &track_album.name;
     let track_album_url = &track_album.external_urls["spotify"];
     let track_label = track_album.clone().label;
-    let track_date = track_album.release_date;
+    let mut track_date = track_album.release_date;
+
+    track_date = NaiveDate::parse_from_str(&track_date, "%Y-%m-%d").map_or(track_date, |d| d.format("%B %-e, %Y").to_string());
 
     let track_copyright = match &track_album.copyrights.is_empty() {
         true => track_album.label,
@@ -88,8 +90,6 @@ fn track(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
     let track_image = &track_album.images.first().unwrap().url;
     let track_artists = &track.artists.iter().map(|a| format!("[{}]({})", &a.name, &a.external_urls["spotify"])).join(", ");
 
-    let track_date = NaiveDate::parse_from_str(&track_date, "%Y-%m-%d").map_or(track_date, |d| d.format("%B %-e, %Y").to_string());
-
     let track_analysis = spotify().audio_analysis(track_id).unwrap().track;
 
     let track_key = match track_analysis.key {
@@ -123,15 +123,15 @@ fn track(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
     let track_time_signature = track_analysis.time_signature;
     let track_time_signature_confidence = track_analysis.time_signature_confidence;
 
-    msg.channel_id.send_message(&ctx, move |m| {
-        m.embed(move |e| {
-            e.author(|a| {
-                a.name(track_name);
-                a.url(track_url);
-                a.icon_url(track_image)
+    message.channel_id.send_message(&context, |message| {
+        message.embed(|embed| {
+            embed.author(|author| {
+                author.name(track_name);
+                author.url(track_url);
+                author.icon_url(track_image)
             });
-            e.color(0x001D_B954);
-            e.description(format!(
+            embed.color(0x001D_B954);
+            embed.description(format!(
                 "
                 **Artist(s)**: {}\n\
                 **Album**: [{}]({}) (disc {}, track {})\n\
@@ -170,7 +170,7 @@ fn track(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
                 track_name,
                 track_url
             ));
-            e.footer(|f| f.text(track_copyright))
+            embed.footer(|footer| footer.text(track_copyright))
         })
     })?;
 
