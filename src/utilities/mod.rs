@@ -3,6 +3,7 @@ pub mod color_utils;
 pub mod database;
 pub mod geo_utils;
 pub mod git_utils;
+pub mod parsing_utils;
 
 use crate::spotify;
 
@@ -16,10 +17,6 @@ use reqwest::blocking::Client;
 use reqwest::Error;
 
 use serde::{Deserialize, Serialize};
-
-use serenity::model::prelude::{GuildId, UserId};
-use serenity::prelude::Context;
-use serenity::utils::parse_username;
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Config {
@@ -102,38 +99,4 @@ pub fn get_spotify_token() -> Result<String, Error> {
 
     let config_json: Config = serde_json::from_str(config.replace("\n", "").trim()).unwrap();
     Ok(config_json.access_token)
-}
-
-pub fn parse_user(name: &str, guild_id: Option<&GuildId>, context: Option<&Context>) -> Option<UserId> {
-    if let Some(x) = parse_username(&name) {
-        return Some(UserId(x));
-    } else if guild_id.is_none() || context.is_none() {
-        return None;
-    }
-
-    let guild_id = guild_id.unwrap();
-    let context = context.unwrap();
-
-    let cached_guild = match guild_id.to_guild_cached(&context) {
-        Some(guild) => guild,
-        None => return None,
-    };
-
-    let guild = cached_guild.read();
-
-    if let Ok(id) = name.parse::<u64>() {
-        if let Ok(m) = guild.member(context, id) {
-            return Some(m.user.read().id);
-        }
-    }
-
-    if let Some(m) = guild.member_named(name) {
-        return Some(m.user.read().id);
-    } else if let Some(m) = guild.members_starting_with(name, false, true).get(0) {
-        return Some(m.user.read().id);
-    } else if let Some(m) = guild.members_containing(name, false, true).get(0) {
-        return Some(m.user.read().id);
-    }
-
-    None
 }

@@ -1,4 +1,4 @@
-use crate::utilities::parse_user;
+use crate::utilities::parsing_utils::parse_user;
 
 use chrono::DateTime;
 use chrono::NaiveDateTime;

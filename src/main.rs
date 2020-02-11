@@ -168,7 +168,8 @@ pub fn main() {
                                 arguments were {} argument(s), you provided {} argument(s) \
                                 instead. Please provide the right amount of arguments. For \
                                 more information, please view the respective command's help \
-                                documentation, if available.", max, given
+                                documentation, if available.",
+                                max, given
                             ))
                         })
                     });
@@ -182,7 +183,8 @@ pub fn main() {
                                 arguments were {} argument(s), you provided {} argument(s) instead. \
                                 Please provide the right amount of arguments. For more information, \
                                 please view the respective command's help documentation, if \
-                                available.", min, given
+                                available.",
+                                min, given
                             ))
                         })
                     });
