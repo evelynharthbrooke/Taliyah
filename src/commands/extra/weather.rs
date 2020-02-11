@@ -84,8 +84,8 @@ pub fn weather(context: &mut Context, message: &Message, arguments: Args) -> Com
                             embed.title("Error: No location name provided.");
                             embed.description(
                                 "I could not find a location pertaining to your user record in my database, or \
-                                    you did not provide a location to get weather information for. Please set a \
-                                    location via the profile command, or provide a location as an argument.",
+                                you did not provide a location to get weather information for. Please set a \
+                                location via the profile command, or provide a location as an argument.",
                             );
                             embed.color(0x00FF_0000)
                         })
