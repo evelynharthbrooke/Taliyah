@@ -38,10 +38,10 @@ struct Repository;
 #[max_args(2)]
 pub fn repository(context: &mut Context, message: &Message, mut arguments: Args) -> CommandResult {
     if arguments.is_empty() {
-        message.channel_id.send_message(&context, move |m| {
-            m.embed(move |e| {
-                e.title("Error: No repository details provided.");
-                e.description("You did not provide any repository details. Please provide them and then try again.")
+        message.channel_id.send_message(&context, |message| {
+            message.embed(|embed| {
+                embed.title("Error: No repository details provided.");
+                embed.description("You did not provide any repository details. Please provide them and then try again.")
             })
         })?;
         return Ok(());
@@ -61,7 +61,22 @@ pub fn repository(context: &mut Context, message: &Message, mut arguments: Args)
     let resp: Response<repository::ResponseData> = client.post(endpoint).bearer_auth(token).json(&query).send()?.json()?;
     let resp_data: repository::ResponseData = resp.data.expect("missing response data");
 
-    let repository = resp_data.repository.unwrap();
+    let repository = match resp_data.repository {
+        Some(repository) => repository,
+        None => {
+            message.channel_id.send_message(&context, |message| {
+                message.embed(|embed| {
+                    embed.title("Error: Repository Not Found.");
+                    embed.description(
+                        "I was unable to find a repository matching the terms you were looking for. \
+                        Please try searching for a different repository.",
+                    )
+                })
+            })?;
+            return Ok(());
+        }
+    };
+
     let repository_name = repository.name_with_owner;
     let repository_url = repository.url;
     let repository_stars = format_int(repository.stargazers.total_count as usize);

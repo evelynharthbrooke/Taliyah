@@ -67,12 +67,8 @@ fn artist(context: &mut Context, message: &Message, args: Args) -> CommandResult
         message.channel_id.send_message(&context, |message| {
             message.embed(|embed| {
                 embed.title("Error: No artist name provided.");
-                embed.description(
-                    "\
-                    You did not provide a artist name. Please enter one and \
-                    then try again.\
-                    ",
-                )
+                embed.color(0x00FF_0000);
+                embed.description("You did not provide a artist name. Please enter one and then try again.")
             })
         })?;
 
@@ -115,10 +111,10 @@ fn artist(context: &mut Context, message: &Message, args: Args) -> CommandResult
 
     message.channel_id.send_message(&context, |message| {
         message.embed(|embed| {
-            embed.color(0x001D_B954);
             embed.title(artist_name);
             embed.url(artist_url);
             embed.thumbnail(artist_image);
+            embed.color(0x001D_B954);
             embed.description(format!(
                 "\
                 **Monthly listeners**: {}\n\

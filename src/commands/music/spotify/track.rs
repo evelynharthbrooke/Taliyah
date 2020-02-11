@@ -20,13 +20,11 @@ use std::time::Duration;
 #[description("Displays information about a specified track on Spotify.")]
 fn track(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
     if args.rest().is_empty() {
-        msg.channel_id.send_message(&ctx, move |m| {
-            m.embed(move |e| {
-                e.title("Error: No track name provided.");
-                e.description(
-                    "You did not provide a track name. Please enter one and \
-                        then try again.",
-                )
+        msg.channel_id.send_message(&ctx, |embed| {
+            embed.embed(|embed| {
+                embed.title("Error: No track name provided.");
+                embed.color(0x00FF_0000);
+                embed.description("You did not provide a track name. Please enter one and then try again.")
             })
         })?;
         return Ok(());

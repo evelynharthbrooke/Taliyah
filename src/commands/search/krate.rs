@@ -88,11 +88,11 @@ struct Keyword {
 #[aliases("crates", "cratesio", "cio")]
 pub fn krate(context: &mut Context, message: &Message, mut arguments: Args) -> CommandResult {
     if arguments.rest().is_empty() {
-        message.channel_id.send_message(&context, |m| {
-            m.embed(|e| {
-                e.title("Error: Invalid crate name provided.");
-                e.description("You have provided an invalid crate name. Please try again.");
-                e.color(0x00FF_0000)
+        message.channel_id.send_message(&context, |message| {
+            message.embed(|embed| {
+                embed.title("Error: Invalid crate name provided.");
+                embed.color(0x00FF_0000);
+                embed.description("You have provided an invalid crate name. Please try again.")
             })
         })?;
         return Ok(());

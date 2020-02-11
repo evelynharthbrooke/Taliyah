@@ -20,13 +20,11 @@ use crate::spotify;
 #[description("Displays information about a specified album on Spotify.")]
 fn album(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
     if args.rest().is_empty() {
-        msg.channel_id.send_message(&ctx, move |m| {
-            m.embed(move |e| {
-                e.title("Error: No album name provided.");
-                e.description(
-                    "You did not provide an album name. Please enter one and \
-                        then try again.",
-                )
+        msg.channel_id.send_message(&ctx, |message| {
+            message.embed(|embed| {
+                embed.title("Error: No album name provided.");
+                embed.color(0x00FF_0000);
+                embed.description("You did not provide an album name. Please enter one and then try again.")
             })
         })?;
 
@@ -69,7 +67,7 @@ fn album(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
 
     let album_artists = &album.artists.iter().map(|a| format!("[{}]({})", &a.name, &a.external_urls["spotify"])).join(", ");
 
-    let album_date = NaiveDate::parse_from_str(&album.release_date, "%Y-%m-%d").map_or(album.release_date, move |d| d.format("%B %-e, %Y").to_string());
+    let album_date = NaiveDate::parse_from_str(&album.release_date, "%Y-%m-%d").map_or(album.release_date, |d| d.format("%B %-e, %Y").to_string());
 
     let album_copyright = if album.copyrights.is_empty() {
         album.label
@@ -91,24 +89,21 @@ fn album(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
             let name = &track.name;
             let position = &track.track_number;
             let external_link = &track.external_urls["spotify"];
-
             let length = format_duration(Duration::from_millis(track.duration_ms as u64 / 1000 * 1000));
-
             let explicit = if track.explicit { "(explicit)".to_string() } else { "".to_string() };
-
             return format!("**{}.** [{}]({}) — {} {}", position, name, external_link, length, explicit);
         })
         .join("\n");
 
-    msg.channel_id.send_message(&ctx, move |m| {
-        m.embed(move |e| {
-            e.author(|a| {
-                a.name(album_name);
-                a.url(album_url);
-                a.icon_url(album_image)
+    msg.channel_id.send_message(&ctx, |message| {
+        message.embed(|embed| {
+            embed.author(|author| {
+                author.name(album_name);
+                author.url(album_url);
+                author.icon_url(album_image)
             });
-            e.color(0x001D_B954);
-            e.description(format!(
+            embed.color(0x001D_B954);
+            embed.description(format!(
                 "**Album type**: {}\n\
                 **Artist(s)**: {}\n\
                 **Release date**: {}\n\
@@ -119,7 +114,7 @@ fn album(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
                 **Tracks**: \n{}\n",
                 album_type, album_artists, album_date, album_genres, album_popularity, album_markets, album_tracks_total, album_tracks
             ));
-            e.footer(|f| f.text(album_copyright))
+            embed.footer(|footer| footer.text(album_copyright))
         })
     })?;
 

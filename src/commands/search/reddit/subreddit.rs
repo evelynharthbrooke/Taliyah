@@ -63,11 +63,11 @@ impl SubredditData {
 #[aliases("sr", "subreddit", "srinfo")]
 pub fn subreddit(context: &mut Context, message: &Message, mut arguments: Args) -> CommandResult {
     if arguments.rest().is_empty() {
-        message.channel_id.send_message(&context, |m| {
-            m.embed(|e| {
-                e.title("Error: Invalid subreddit name provided.");
-                e.description("You have provided an invalid subreddit name. Please try again.");
-                e.color(0x00FF_0000)
+        message.channel_id.send_message(&context, |message| {
+            message.embed(|embed| {
+                embed.title("Error: Invalid subreddit name provided.");
+                embed.description("You have provided an invalid subreddit name. Please try again.");
+                embed.color(0x00FF_0000)
             })
         })?;
         return Ok(());

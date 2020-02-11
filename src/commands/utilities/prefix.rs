@@ -22,10 +22,11 @@ use serenity::prelude::Context;
     "
 )]
 fn prefix(ctx: &mut Context, message: &Message) -> CommandResult {
-    message.channel_id.send_message(&ctx, move |m| {
-        m.embed(|e| {
-            e.title("Error: Invalid / No Subcommand Entered!");
-            e.description("Please use subcommand get or set to use this command.")
+    message.channel_id.send_message(&ctx, move |message| {
+        message.embed(|embed| {
+            embed.title("Error: Invalid / No Subcommand Entered!");
+            embed.color(0x00FF_0000);
+            embed.description("Please use subcommand get or set to use this command.")
         })
     })?;
 
