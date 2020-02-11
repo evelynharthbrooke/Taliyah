@@ -4,23 +4,20 @@
 > the following README text is entirely invalid. It's only here for posterity sake.
 > Updated release notes will be added later on.
 
-A feature-packed bot for Discord servers, written in Rust with Serenity and other libraries.
+A feature-packed bot for Discord servers, written in Rust with Serenity and various other libraries.
 
 [![Invite Ellie][invite-badge]][invite-link]
 [![License][license-badge]][license-link]
 [![Dependency Status][dependency-badge]][dependency-link]
 [![GitHub Actions Build Status][github-actions-badge]][github-actions-link]
 
-Welcome to the offiical repository for Ellie, a bot for Discord written using TypeScript and Node.js. This is my first
-my first attempt at creating a proper Discord bot, and if any issues occur, please file them on either GitLab or GitHub
-and I will make sure that I take a look at them as soon as I can.
+Welcome to the official GitHub / GitLab repository for Ellie, a bot for the Discord chat platform written
+in Rust with Serenity and various other libraries. This bot is still a WIP, but it has a pretty good
+subset of commands available for use in servers.
 
-Ellie uses the [Discord.js](https://github.com/discordjs/discord.js) library for basic interaction with the Discord
-API, as well as the fantastic and well-made Discord Akairo library, for easy integration of commands, listeners and
-other stuff. You can check out said library by visitng the link [here](https://github.com/1Computer1/discord-akairo).
-
-**NOTE:** Ellie does not yet properly support music. I know music is an essential part of a Discord bot, and I plan
-on implementing voice support in a later update.
+> Past this point is the old Ellie README, made available for posterity reasons. The below sections
+> were written when Ellie was written with Node.js and TypeScript, and this no longer applies. Be
+> patient while a new README with re-written installation instructions is written.
 
 ## Installation
 

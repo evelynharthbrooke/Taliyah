@@ -1,5 +1,8 @@
 {
   "default": true,
+  "line-length": {
+      "line_length": 100
+  },
   "no-duplicate-heading": {
     "allow_different_nesting": true
   }
