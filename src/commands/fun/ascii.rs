@@ -55,7 +55,11 @@ pub fn ascii(context: &mut Context, message: &Message, arguments: Args) -> Comma
     let font_in_text = text.split_whitespace().next().unwrap_or("");
     let fonts_request = client.get(font_url).send()?.text()?;
 
-    let request = if fonts_request.split_whitespace().any(|x| x == font_in_text) {
+    // when checking for fonts, make sure we do an additional check for both the font
+    // in question & that there is a space. this will not work with zero width spaces
+    // due to the check we already have in place, and any spaces that are inserted 
+    // without any additional characters are already trimmed or removed by Discord.
+    let request = if fonts_request.split_whitespace().any(|x| x == font_in_text) && text.contains("\u{0020}") {
         // i don't know why this required a type annotation...but anyway
         // this took me way longer than was necessary to figure out.
         let font_name: &str = &text[0..font_in_text.chars().count()];
