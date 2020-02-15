@@ -1,5 +1,6 @@
 use crate::spotify;
 use crate::utilities::get_spotify_token;
+use crate::utilities::string_utils::capitalize_first;
 
 use itertools::Itertools;
 
@@ -38,6 +39,7 @@ pub struct Role {
 pub struct Artist {
     uri: String,
     name: String,
+    subroles: Vec<String>,
 }
 
 #[derive(Deserialize, Debug)]
@@ -74,15 +76,13 @@ fn credits(context: &mut Context, message: &Message, args: Args) -> CommandResul
     let track_id = &track.id.as_ref().unwrap();
 
     let user_agent_chunk_1 = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko)";
-    let user_agent_chunk_2 = "Chrome/81.0.4041.0 Safari/537.36 Edg/81.0.410.0";
+    let user_agent_chunk_2 = "Chrome/82.0.4051.0 Safari/537.36 Edg/82.0.425.0";
     let user_agent = &[user_agent_chunk_1, user_agent_chunk_2].join(" ");
     let client = Client::builder().user_agent(user_agent).build()?;
 
     let access_token = get_spotify_token().unwrap();
     let spclient_url = format!("https://spclient.wg.spotify.com/track-credits-view/v0/track/{}/credits", track_id);
     let credits_request: Credits = client.get(&spclient_url).bearer_auth(&access_token).send()?.json()?;
-    let credits_request_text = client.get(&spclient_url).bearer_auth(&access_token).send()?.text()?;
-    dbg!(credits_request_text);
     let credits = credits_request
         .role_credits
         .iter()
@@ -101,8 +101,9 @@ fn credits(context: &mut Context, message: &Message, args: Args) -> CommandResul
                     let name = &artist.name;
                     let uri = &artist.uri;
                     let artist_id = uri.replace("spotify:artist:", "");
+                    let subroles = &artist.subroles.iter().map(|s| capitalize_first(s)).join(", ");
                     let artist_url = format!("https://open.spotify.com/artist/{}", artist_id);
-                    format!("[{}]({})", name, artist_url)
+                    format!("[{}]({}) ({})", name, artist_url, subroles)
                 })
                 .join("\n");
 

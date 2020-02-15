@@ -75,6 +75,8 @@ fn artist(context: &mut Context, message: &Message, args: Args) -> CommandResult
         return Ok(());
     }
 
+    message.channel_id.broadcast_typing(&context)?;
+
     let artist_name = args.rest();
     let artist_name_encoded = utf8_percent_encode(&artist_name, NON_ALPHANUMERIC).to_string();
     let artist_search = spotify().search_artist(&artist_name_encoded, 1, 0, None);
@@ -82,7 +84,7 @@ fn artist(context: &mut Context, message: &Message, args: Args) -> CommandResult
     let artist = artist_result.first().unwrap();
 
     let user_agent_chunk_1 = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko)";
-    let user_agent_chunk_2 = "Chrome/81.0.4041.0 Safari/537.36 Edg/81.0.410.0";
+    let user_agent_chunk_2 = "Chrome/82.0.4051.0 Safari/537.36 Edg/82.0.425.0";
     let user_agent = &[user_agent_chunk_1, user_agent_chunk_2].join(" ");
     let client = Client::builder().user_agent(user_agent).build()?;
     let access_token = get_spotify_token().unwrap();

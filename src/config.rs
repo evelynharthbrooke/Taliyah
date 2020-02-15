@@ -1,7 +1,22 @@
 //! Provides functions for accessing configuration values.
 //! These are loaded from a toml file on first request during runtime.
+//!
+//! To add more configuration options:
+//!
+//!  - Add field to `Config`
+//!
+//!  - Add an accessor function with the same name as the field
+//!    Copy an existing one like `bot_codename()` to make life easier
+//!
+//!  - Add field to `test::generate_expected_config()` and set to `None`
+//!
+//!  - Add another call to `test::check_field()` in `test::getters()`
+//!    referencing the field
+//!
+//!  - Add a line containing the field name in "config.toml.sample"
 use lazy_static::lazy_static;
 use serde::Deserialize;
+use std::env;
 use std::fs;
 use std::path::Path;
 
@@ -14,53 +29,78 @@ macro_rules! config_str_convert {
 }
 
 /// Try to get `bot_codename` from loaded config
+#[allow(dead_code)]
 pub fn bot_codename() -> Option<&'static str> {
     config_str_convert!(bot_codename)
 }
 
 /// Try to get `client_id` from loaded config
+#[allow(dead_code)]
 pub fn client_id() -> Option<&'static str> {
     config_str_convert!(client_id)
 }
 
 /// Try to get `client_secret` from loaded config
+#[allow(dead_code)]
 pub fn client_secret() -> Option<&'static str> {
     config_str_convert!(client_secret)
 }
 
 /// Try to get `darksky` from loaded config
+#[allow(dead_code)]
 pub fn darksky() -> Option<&'static str> {
     config_str_convert!(darksky)
 }
 
 /// Try to get `discord_token` from loaded config
+#[allow(dead_code)]
 pub fn discord_token() -> Option<&'static str> {
     config_str_convert!(discord_token)
 }
 
 /// Try to get `discord_prefix` from loaded config
+#[allow(dead_code)]
 pub fn discord_prefix() -> Option<&'static str> {
     config_str_convert!(discord_prefix)
 }
 
 /// Try to get `github_key` from loaded config
+#[allow(dead_code)]
 pub fn github_key() -> Option<&'static str> {
     config_str_convert!(github_key)
 }
 
 /// Try to get `google_key` from loaded config
+#[allow(dead_code)]
 pub fn google_key() -> Option<&'static str> {
     config_str_convert!(google_key)
 }
 
 /// Try to get `lastfm_key` from loaded config
+#[allow(dead_code)]
 pub fn lastfm_key() -> Option<&'static str> {
     config_str_convert!(lastfm_key)
 }
 
 /// Try to get `rust_log` from loaded config
+#[allow(dead_code)]
+pub fn tmdb_key() -> Option<&'static str> {
+    config_str_convert!(tmdb_key)
+}
+
+/// Try to get `rust_log` from loaded config
+#[allow(dead_code)]
 pub fn rust_log() -> Option<&'static str> {
     config_str_convert!(rust_log)
+}
+
+/// Preload cofing and load neccessary config variables into the
+/// application environment.
+pub fn init() {
+    // When specified in config file, set log level
+    if let Some(level) = rust_log() {
+        env::set_var("RUST_LOG", level);
+    }
 }
 
 lazy_static! {
@@ -78,21 +118,18 @@ struct Config {
     github_key: Option<String>,
     google_key: Option<String>,
     lastfm_key: Option<String>,
+    tmdb_key: Option<String>,
     rust_log: Option<String>,
 }
 
 impl Config {
-    fn load_from_file<P: AsRef<std::path::Path>>(path: P) -> Config {
+    fn load_from_file<P: AsRef<Path>>(path: P) -> Config {
         let error_msg = "Unable to read config.toml";
         let data = fs::read_to_string(path).expect(error_msg);
         let mut config: Config = toml::from_str(&data).expect(error_msg);
 
         if config.bot_codename.is_none() {
             config.bot_codename = Some("Ellie".to_owned());
-        }
-        // When specified in config file, set log level
-        if let Some(level) = &config.rust_log {
-            std::env::set_var("RUST_LOG", &level);
         }
 
         config
@@ -114,6 +151,7 @@ mod test {
         discord_prefix = "TestPrefix"
         github_key = "TestGitHubKey"
         # google_key
+        # tmdb_key
         lastfm_key = "TestLastFmKey"
     "#;
 
@@ -128,6 +166,7 @@ mod test {
             github_key: Some("TestGitHubKey".to_owned()),
             google_key: None,
             lastfm_key: Some("TestLastFmKey".to_owned()),
+            tmdb_key: None,
             rust_log: None,
         }
     }
@@ -180,6 +219,7 @@ mod test {
         check_field(expected_config.github_key, github_key());
         check_field(expected_config.google_key, google_key());
         check_field(expected_config.lastfm_key, lastfm_key());
+        check_field(expected_config.tmdb_key, tmdb_key());
         check_field(expected_config.rust_log, rust_log());
 
         remove_test_file(CONFIG_FILE);
