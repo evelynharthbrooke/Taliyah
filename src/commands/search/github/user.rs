@@ -37,7 +37,7 @@ pub fn user(context: &mut Context, message: &Message, args: Args) -> CommandResu
     }
 
     let user_agent: &str = concat!(env!("CARGO_PKG_NAME"), "/", env!("CARGO_PKG_VERSION"));
-    let token: String = std::env::var("GITHUB_KEY").expect("No API key detected");
+    let token = crate::config::github_key().expect("No API key detected");
     let client = Client::builder().user_agent(user_agent).build()?;
     let endpoint = "https://api.github.com/graphql";
     let query = User::build_query(user::Variables { username: args.rest().to_string() });

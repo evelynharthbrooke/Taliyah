@@ -22,7 +22,7 @@ pub fn version(context: &mut Context, message: &Message) -> CommandResult {
     let git_version = built_info::GIT_VERSION.map_or_else(|| "Unknown git version".to_owned(), |v| format!(" (git {})", v));
     let name = context.cache.read().user.name.to_string();
     let version = built_info::PKG_VERSION;
-    let codename = env::var("BOT_CODENAME").unwrap();
+    let codename = crate::config::bot_codename().unwrap();
     let branch = show_branch(&repo);
     let revision = show_head_rev(&repo);
     let build_host = built_info::HOST;

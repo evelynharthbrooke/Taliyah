@@ -4,6 +4,7 @@
 //! a powerful set of features, while remaining quick to respond.
 
 mod commands;
+mod config;
 mod listeners;
 mod utilities;
 
@@ -34,8 +35,6 @@ use commands::utilities::shutdown::*;
 use commands::utilities::source::*;
 use commands::utilities::version::*;
 
-use dotenv::dotenv;
-
 use listeners::handler::Handler;
 
 use log::error;
@@ -55,7 +54,6 @@ use serenity::prelude::Mutex;
 use serenity::prelude::TypeMapKey;
 
 use std::collections::HashSet;
-use std::env;
 use std::sync::Arc;
 
 use utilities::database::create_database;
@@ -109,9 +107,9 @@ struct Utilities;
 struct Search;
 
 pub fn main() {
-    dotenv().expect("Unable to read / access the .env file!");
+    config::init();
 
-    let token = env::var("DISCORD_TOKEN").expect("Unable to read the bot token.");
+    let token = config::discord_token().expect("Unable to read the bot token.");
 
     let mut client = Client::new(&token, Handler).expect("Error creating client.");
 
@@ -144,7 +142,7 @@ pub fn main() {
                     .on_mention(Some(bot_id))
                     .owners(owners)
                     .dynamic_prefix(|_, message| {
-                        let default: String = env::var("DISCORD_PREFIX").expect("Unable to get the bot prefix.");
+                        let default = config::discord_prefix().expect("Unable to get the bot prefix.").to_owned();
                         if message.is_private() {
                             default.to_string();
                         }

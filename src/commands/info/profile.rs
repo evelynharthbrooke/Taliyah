@@ -10,8 +10,6 @@ use serenity::framework::standard::CommandResult;
 use serenity::model::prelude::Message;
 use serenity::utils::Colour;
 
-use std::env;
-
 use rustfm::error::Error;
 use rustfm::error::LastFMErrorResponse::InvalidParameter;
 use rustfm::Client;
@@ -185,7 +183,7 @@ pub fn set(context: &mut Context, message: &Message, mut arguments: Args) -> Com
             message.channel_id.say(&context, format!("Your Twitter username has been set to `{}`.", &value))?;
         }
         "lastfm" => {
-            let api_key: String = env::var("LASTFM_KEY").expect("No API key detected");
+            let api_key = crate::config::lastfm_key().expect("No API key detected");
             let mut client: Client = Client::new(&api_key);
 
             match client.user_info(&value).send() {

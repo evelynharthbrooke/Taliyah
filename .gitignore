@@ -1,4 +1,3 @@
 /target
-.env
-/images
 *.sqlite3
+*config.toml

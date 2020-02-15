@@ -423,12 +423,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "dotenv"
-version = "0.15.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "77c90badedccf4105eca100756a0b1289e191f6fcbdadd3cee1d2f614f97da8f"
-
-[[package]]
 name = "dtoa"
 version = "0.4.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -456,7 +450,6 @@ dependencies = [
  "built",
  "byte-unit",
  "chrono",
- "dotenv 0.15.0",
  "git2",
  "graphql_client",
  "humantime 2.0.0",
@@ -464,6 +457,7 @@ dependencies = [
  "itertools",
  "kuchiki",
  "lastfm-rs",
+ "lazy_static",
  "log",
  "percent-encoding",
  "pretty_env_logger",
@@ -473,6 +467,7 @@ dependencies = [
  "serde",
  "serde_json",
  "serenity",
+ "toml",
 ]
 
 [[package]]
@@ -1935,7 +1930,7 @@ dependencies = [
  "base64 0.11.0",
  "chrono",
  "derive_builder",
- "dotenv 0.13.0",
+ "dotenv",
  "env_logger",
  "failure",
  "itertools",

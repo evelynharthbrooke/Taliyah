@@ -99,7 +99,7 @@ pub fn weather(context: &mut Context, message: &Message, arguments: Args) -> Com
     };
 
     let user_agent: &str = concat!(env!("CARGO_PKG_NAME"), "/", env!("CARGO_PKG_VERSION"));
-    let api_key = env::var("DARKSKY").expect("Couldn't acccess the provided API key.");
+    let api_key = crate::config::darksky().expect("Couldn't acccess the provided API key.");
 
     let coordinates = get_coordinates(location)?;
     let coordinates_result = coordinates.results.first().unwrap();

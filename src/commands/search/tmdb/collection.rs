@@ -56,7 +56,7 @@ pub fn collection(context: &mut Context, message: &Message, arguments: Args) -> 
 
     let collection: String = arguments.rest().to_string();
 
-    let api_key = std::env::var("TMDB_KEY").expect("Could not find API key for The Movie Database...");
+    let api_key = crate::config::tmdb_key().expect("Could not find API key for The Movie Database...").to_owned();
     let user_agent: &str = concat!(env!("CARGO_PKG_NAME"), ", v", env!("CARGO_PKG_VERSION"));
     let client = Client::builder().user_agent(user_agent).redirect(Policy::none()).build()?;
 

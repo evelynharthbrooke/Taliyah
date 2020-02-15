@@ -25,8 +25,6 @@ use rustfm::error::LastFMErrorResponse::OperationFailed;
 use rustfm::user::recent_tracks::Track;
 use rustfm::Client;
 
-use std::env;
-
 #[command]
 #[description("Retrieves various Last.fm user stats.")]
 #[aliases("fm", "lfm", "lastfm")]
@@ -60,7 +58,7 @@ pub fn lastfm(ctx: &mut Context, message: &Message, mut args: Args) -> CommandRe
         }
     };
 
-    let api_key: String = env::var("LASTFM_KEY").expect("No API key detected");
+    let api_key = crate::config::lastfm_key().expect("No API key detected");
     let mut client: Client = Client::new(&api_key);
 
     let recent_tracks = match client.recent_tracks(&user).with_limit(5).send() {

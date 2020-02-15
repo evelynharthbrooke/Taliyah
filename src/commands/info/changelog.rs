@@ -26,7 +26,7 @@ struct Commits;
 #[description("Displays the most recent commits for the bot.")]
 pub fn changelog(context: &mut Context, message: &Message) -> CommandResult {
     let user_agent: &str = concat!(env!("CARGO_PKG_NAME"), "/", env!("CARGO_PKG_VERSION"));
-    let token: String = std::env::var("GITHUB_KEY").expect("No API key detected");
+    let token: String = crate::config::github_key().expect("No API key detected").to_string();
     let client = Client::builder().user_agent(user_agent).build()?;
     let endpoint = "https://api.github.com/graphql";
 
