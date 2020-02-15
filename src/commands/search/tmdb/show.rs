@@ -221,15 +221,15 @@ pub fn show(context: &mut Context, message: &Message, arguments: Args) -> Comman
 
         match show_cast.len() | show_crew.len() {
             5 | 8 | 11 | 14 | 17 | 20 | 23 => {
-                // Iterate through each element of the show cast and crew, removing the 
+                // Iterate through each element of the show cast and crew, removing the
                 // last element. This is done because Discord's embeds are really finicky
                 // when there are less than 3 embed fields and more than 1 on each row.
                 //
                 // Honestly, I'm surprised Discord hasn't fixed that bug by now, but
                 // for now, let's do a really hacky thing where we remove the last
-                // element of the crew and cast vectors and later push it to the 
-                // show_cast_fields vec separately. This helps the embed look better 
-                // on desktop. This however does not affect Discord mobile, because 
+                // element of the crew and cast vectors and later push it to the
+                // show_cast_fields vec separately. This helps the embed look better
+                // on desktop. This however does not affect Discord mobile, because
                 // all fields are non-inline by default with no way to change it.
                 for member in &show_cast[0..show_cast.len() - 1] {
                     show_cast_fields.push((&member.name, &member.character, true));
