@@ -130,6 +130,35 @@ pub struct ExternalId {
     pub id: Option<i64>,
 }
 
+#[derive(Debug, Deserialize)]
+pub struct Credits {
+    pub cast: Vec<CastMember>,
+    pub crew: Vec<CrewMember>,
+    pub id: i64,
+}
+
+#[derive(Debug, Deserialize)]
+pub struct CastMember {
+    pub character: String,
+    pub credit_id: String,
+    pub id: i64,
+    pub name: String,
+    pub gender: i64,
+    pub profile_path: Option<String>,
+    pub order: i64,
+}
+
+#[derive(Debug, Deserialize)]
+pub struct CrewMember {
+    pub credit_id: String,
+    pub department: String,
+    pub id: i64,
+    pub name: String,
+    pub gender: Option<i64>,
+    pub job: String,
+    pub profile_path: Option<String>,
+}
+
 #[command]
 #[aliases("show", "series")]
 #[description("Gets detailed information about a TV series from The Movie Database.")]
@@ -154,7 +183,8 @@ pub fn show(context: &mut Context, message: &Message, arguments: Args) -> Comman
     let client = Client::builder().user_agent(user_agent).redirect(Policy::none()).build()?;
 
     let search_endpoint = "https://api.themoviedb.org/3/search/tv";
-    let search_response = client.get(search_endpoint).query(&[("api_key", &api_key), ("query", &show)]);
+    let search_query = ("query", &show.replace("--cast", ""));
+    let search_response = client.get(search_endpoint).query(&[("api_key", &api_key), search_query]);
     let search_result: SearchResponse = search_response.send()?.json()?;
     let search_results = search_result.results;
 
@@ -170,11 +200,77 @@ pub fn show(context: &mut Context, message: &Message, arguments: Args) -> Comman
     }
 
     let show_id = search_results.first().unwrap().id;
+
     let show_endpoint = format!("https://api.themoviedb.org/3/tv/{}", show_id);
     let show_sub_requests = ("append_to_response", &"external_ids".to_string());
     let show_response = client.get(&show_endpoint).query(&[("api_key", &api_key), show_sub_requests]).send()?;
-
     let show_result: Show = show_response.json()?;
+    let show_poster_path = show_result.poster_path.unwrap();
+    let show_poster = format!("https://image.tmdb.org/t/p/original/{}", &show_poster_path.replace("/", ""));
+
+    if show.contains("--cast") {
+        let credits_endpoint = format!("https://api.themoviedb.org/3/tv/{}/credits", show_id);
+        let credits_response = client.get(&credits_endpoint).query(&[("api_key", &api_key)]).send()?;
+        let credits_result: Credits = credits_response.json()?;
+
+        let show_name = show_result.name;
+        let show_cast = credits_result.cast;
+        let show_crew = credits_result.crew;
+        let mut show_cast_fields = Vec::with_capacity(show_cast.len());
+        let mut show_crew_fields = Vec::with_capacity(show_crew.len());
+
+        match show_cast.len() | show_crew.len() {
+            5 | 8 | 11 | 14 | 17 | 20 | 23 => {
+                // Iterate through each element of the show cast and crew, removing the 
+                // last element. This is done because Discord's embeds are really finicky
+                // when there are less than 3 embed fields and more than 1 on each row.
+                //
+                // Honestly, I'm surprised Discord hasn't fixed that bug by now, but
+                // for now, let's do a really hacky thing where we remove the last
+                // element of the crew and cast vectors and later push it to the 
+                // show_cast_fields vec separately. This helps the embed look better 
+                // on desktop. This however does not affect Discord mobile, because 
+                // all fields are non-inline by default with no way to change it.
+                for member in &show_cast[0..show_cast.len() - 1] {
+                    show_cast_fields.push((&member.name, &member.character, true));
+                }
+
+                for member in &show_crew[0..show_cast.len() - 1] {
+                    show_crew_fields.push((&member.name, &member.job, true));
+                }
+
+                let last_cast_member = show_cast.last().unwrap();
+                show_cast_fields.push((&last_cast_member.name, &last_cast_member.character, false));
+                let last_crew_member = show_crew.last().unwrap();
+                show_crew_fields.push((&last_crew_member.name, &last_crew_member.job, false));
+            }
+            _ => {
+                for member in &show_cast {
+                    show_cast_fields.push((&member.name, &member.character, true));
+                }
+
+                for member in &show_crew {
+                    show_crew_fields.push((&member.name, &member.job, true));
+                }
+            }
+        }
+
+        message.channel_id.send_message(&context, |message| {
+            message.embed(|embed| {
+                embed.title(format!("Credits for {}", show_name));
+                embed.color(0x0001_d277);
+                embed.thumbnail(show_poster);
+                embed.fields(show_cast_fields);
+                if !show_crew_fields.is_empty() {
+                    embed.fields(show_crew_fields);
+                }
+                embed.footer(|footer| footer.text("Powered by the The Movie Database API."));
+                embed.timestamp(&Utc::now())
+            })
+        })?;
+
+        return Ok(());
+    }
 
     let show_title = show_result.name;
     let show_id = show_result.id;
@@ -185,6 +281,13 @@ pub fn show(context: &mut Context, message: &Message, arguments: Args) -> Comman
     let show_runtime = format_duration(Duration::from_secs(show_average_runtime as u64 * 60)).to_string();
     let show_overview = show_result.overview;
     let show_popularity = show_result.popularity.to_string();
+    let show_production_status = if show_result.in_production { "In Production" } else { "Finished Production" };
+    let show_networks = show_result.networks.iter().map(|network| &network.name).join("\n");
+    let show_seasons = show_result.number_of_seasons.to_string();
+    let show_episodes = show_result.number_of_episodes.to_string();
+    let show_imdb_id = show_result.external_ids.imdb_id.unwrap();
+    let show_imdb_url = format!("https://www.imdb.com/title/{}", show_imdb_id);
+    let show_external_links = format!("[IMDb]({})", show_imdb_url);
     let show_genres = show_result.genres.iter().map(|genre| &genre.name).join("\n");
     let show_language = Language::from_639_1(&show_result.original_language).unwrap().to_name().to_string();
     let show_languages = show_result.languages.iter().map(|l| Language::from_639_1(&l).unwrap().to_name().to_string()).join("\n");
@@ -199,16 +302,6 @@ pub fn show(context: &mut Context, message: &Message, arguments: Args) -> Comman
     } else {
         show_result.studios.iter().map(|s| &s.name).join("\n")
     };
-
-    let show_poster_url = show_result.poster_path.unwrap();
-    let show_poster = format!("https://image.tmdb.org/t/p/original/{}", &show_poster_url.replace("/", ""));
-    let show_production_status = if show_result.in_production { "In Production" } else { "Finished Production" };
-    let show_networks = show_result.networks.iter().map(|network| &network.name).join("\n");
-    let show_seasons = show_result.number_of_seasons.to_string();
-    let show_episodes = show_result.number_of_episodes.to_string();
-    let show_imdb_id = show_result.external_ids.imdb_id.unwrap();
-    let show_imdb_url = format!("https://www.imdb.com/title/{}", show_imdb_id);
-    let show_external_links = format!("[IMDb]({})", show_imdb_url);
 
     message.channel_id.send_message(&context, |message| {
         message.embed(|embed| {

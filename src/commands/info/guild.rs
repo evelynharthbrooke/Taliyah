@@ -38,7 +38,7 @@ pub fn guild(context: &mut Context, message: &Message) -> CommandResult {
 
     let guild_explicit_filter = match guild.explicit_content_filter.num() {
         0 => "Disabled".to_owned(),
-        1 => "No role".to_owned(),
+        1 => "Media scanned from members w/o a role.".to_owned(),
         2 => "Everyone".to_owned(),
         _ => "Unrecognized filter setting.".to_owned(),
     };
