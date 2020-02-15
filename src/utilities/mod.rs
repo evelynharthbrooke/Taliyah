@@ -65,6 +65,11 @@ pub fn format_string(string: String) -> String {
     string.replace("&amp;", "&").replace("&quot;", "\"")
 }
 
+/// Calculates the average sum of an array of i64's.
+pub fn calculate_average_sum(ints: &[i64]) -> f64 {
+    ints.iter().sum::<i64>() as f64 / ints.len() as f64
+}
+
 /// Gets an anonymous access token from the Spotify Web Player.
 ///
 /// This uses a user agent string that will spoof the Spotify Web Player
