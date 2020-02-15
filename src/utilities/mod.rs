@@ -4,6 +4,7 @@ pub mod database;
 pub mod geo_utils;
 pub mod git_utils;
 pub mod parsing_utils;
+pub mod string_utils;
 
 use crate::spotify;
 
@@ -83,7 +84,7 @@ pub fn calculate_average_sum(ints: &[i64]) -> f64 {
 /// mobile and desktop clients.
 pub fn get_spotify_token() -> Result<String, Error> {
     let user_agent_chunk_1 = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko)";
-    let user_agent_chunk_2 = "Chrome/81.0.4041.0 Safari/537.36 Edg/81.0.410.0";
+    let user_agent_chunk_2 = "Chrome/82.0.4051.0 Safari/537.36 Edg/82.0.425.0";
     let user_agent = &[user_agent_chunk_1, user_agent_chunk_2].join(" ");
 
     let spotify_open_url = "https://open.spotify.com";
