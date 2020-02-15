@@ -458,6 +458,7 @@ dependencies = [
  "itertools",
  "kuchiki",
  "lastfm-rs",
+ "lazy_static",
  "log",
  "percent-encoding",
  "pretty_env_logger",
@@ -467,6 +468,7 @@ dependencies = [
  "serde",
  "serde_json",
  "serenity",
+ "toml",
  "typemap",
  "youtube_dl",
 ]

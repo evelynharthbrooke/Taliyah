@@ -4,6 +4,7 @@
 //! a powerful set of features, while remaining quick to respond.
 
 mod commands;
+mod config;
 mod listeners;
 mod utilities;
 
