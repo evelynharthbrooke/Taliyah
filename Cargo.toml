@@ -26,10 +26,10 @@ built = { git = "https://github.com/KamranMackey/built" }
 byte-unit = "3.0"
 chrono = "0.4"
 dotenv = "0.15"
-failure = "0.1"
 git2 = "0.11"
 graphql_client = "0.8"
 humantime = "2.0"
+isolang = "1.0" 
 itertools = "0.8"
 kuchiki = "0.8"
 lastfm-rs = { git = "https://github.com/KamranMackey/lastfm-rs" }
@@ -44,5 +44,3 @@ serenity = { git = "https://github.com/KamranMackey/serenity.git", branch = "kam
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 toml = "0.5"
-typemap = "0.3"
-youtube_dl = "0.4.0"

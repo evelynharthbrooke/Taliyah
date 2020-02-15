@@ -80,7 +80,9 @@ fn credits(context: &mut Context, message: &Message, args: Args) -> CommandResul
 
     let access_token = get_spotify_token().unwrap();
     let spclient_url = format!("https://spclient.wg.spotify.com/track-credits-view/v0/track/{}/credits", track_id);
-    let credits_request: Credits = client.get(&spclient_url).bearer_auth(access_token).send()?.json()?;
+    let credits_request: Credits = client.get(&spclient_url).bearer_auth(&access_token).send()?.json()?;
+    let credits_request_text = client.get(&spclient_url).bearer_auth(&access_token).send()?.text()?;
+    dbg!(credits_request_text);
     let credits = credits_request
         .role_credits
         .iter()

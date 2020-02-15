@@ -26,6 +26,7 @@ use commands::music::voice::play::*;
 use commands::search::github::*;
 use commands::search::krate::*;
 use commands::search::reddit::*;
+use commands::search::tmdb::*;
 use commands::utilities::help::*;
 use commands::utilities::invite::*;
 use commands::utilities::ping::*;
@@ -105,7 +106,7 @@ struct Utilities;
 
 #[group]
 #[description = "Various commands related to searching for things."]
-#[commands(github, krate, reddit)]
+#[commands(github, krate, reddit, tmdb)]
 struct Search;
 
 pub fn main() {
@@ -122,6 +123,7 @@ pub fn main() {
     }
 
     pretty_env_logger::init();
+
     let (owners, bot_id) = match client.cache_and_http.http.get_current_application_info() {
         Ok(info) => {
             let mut owners = HashSet::new();
@@ -135,30 +137,47 @@ pub fn main() {
 
     client.with_framework(
         StandardFramework::new()
-            .configure(|c| {
-                c.with_whitespace(true)
+            .configure(|configuration| {
+                configuration
+                    .with_whitespace(true)
                     .ignore_webhooks(false)
                     .case_insensitivity(true)
+                    .on_mention(Some(bot_id))
                     .owners(owners)
                     .dynamic_prefix(|_, message| {
-                        let def_prefix: String = env::var("DISCORD_PREFIX").expect("Unable to get the bot prefix.");
+                        let default: String = env::var("DISCORD_PREFIX").expect("Unable to get the bot prefix.");
                         if message.is_private() {
-                            def_prefix.to_string();
+                            default.to_string();
                         }
                         if let Some(guild_id) = message.guild_id {
-                            Some(get_prefix(guild_id).map_or_else(|_| def_prefix.to_string(), |prefix| prefix))
+                            Some(get_prefix(guild_id).map_or_else(|_| default.to_string(), |prefix| prefix))
                         } else {
-                            Some(def_prefix)
+                            Some(default)
                         }
                     })
-                    .on_mention(Some(bot_id))
+            })
+            .prefix_only(|context, message| {
+                let _ = message.channel_id.send_message(&context, |message| {
+                    message.content(
+                        "Hello! I noticed that you provided my prefix but didn't send a \
+                        command. If you would like to get help on how to use my functionality, \
+                        please run the help command.",
+                    )
+                });
             })
             .on_dispatch_error(|context, message, err| match err {
                 DispatchError::Ratelimited(secs) => {
-                    let _ = message.channel_id.say(&context, &format!("Try this again in {} seconds", secs));
+                    let _ = message.channel_id.say(
+                        &context,
+                        format!(
+                            "Sorry, it looks like you are being rate limited! Please try this \
+                            again in {} second(s).",
+                            secs
+                        ),
+                    );
                 }
                 DispatchError::OnlyForOwners => {
-                    let _ = message.channel_id.say(&context, "This is only available for owners.");
+                    let _ = message.channel_id.say(&context, "This command is only available for bot owners.");
                 }
                 DispatchError::TooManyArguments { max, given } => {
                     let _ = message.channel_id.send_message(&context, |error_message| {

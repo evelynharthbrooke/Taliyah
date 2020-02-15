@@ -9,7 +9,7 @@ use serenity::model::prelude::Message;
 #[command]
 #[description = "Shows various information about the current guild."]
 #[usage = "<blank>"]
-#[aliases("guild", "guildinfo", "ginfo", "g")]
+#[aliases("guild", "guildinfo", "ginfo", "g", "server", "serverinfo", "serverstats", "sinfo")]
 #[only_in("guilds")]
 pub fn guild(context: &mut Context, message: &Message) -> CommandResult {
     let cache = &context.cache;
