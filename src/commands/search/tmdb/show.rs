@@ -228,9 +228,10 @@ pub fn show(context: &mut Context, message: &Message, arguments: Args) -> Comman
                 // Honestly, I'm surprised Discord hasn't fixed that bug by now, but
                 // for now, let's do a really hacky thing where we remove the last
                 // element of the crew and cast vectors and later push it to the
-                // show_cast_fields vec separately. This helps the embed look better
-                // on desktop. This however does not affect Discord mobile, because
-                // all fields are non-inline by default with no way to change it.
+                // show cast and crew vector fields separately. This helps the 
+                // embed look better on desktop. This however does not affect 
+                // Discord mobile, because all fields are non-inline by default 
+                // with no way to change it.
                 for member in &show_cast[0..show_cast.len() - 1] {
                     show_cast_fields.push((&member.name, &member.character, true));
                 }
