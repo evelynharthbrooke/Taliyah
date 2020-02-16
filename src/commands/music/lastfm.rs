@@ -5,25 +5,29 @@
 
 use chrono::NaiveDateTime;
 
-use crate::utilities;
-use crate::utilities::database;
-use crate::utilities::get_album_artwork;
+use crate::{
+    utilities,
+    utilities::{database, get_album_artwork},
+};
 
 use itertools::Itertools;
 
 use log::error;
 
-use serenity::client::Context;
-use serenity::framework::standard::macros::command;
-use serenity::framework::standard::Args;
-use serenity::framework::standard::CommandResult;
-use serenity::model::prelude::Message;
+use serenity::{
+    client::Context,
+    framework::standard::{macros::command, Args, CommandResult},
+    model::prelude::Message,
+};
 
-use rustfm::error::Error;
-use rustfm::error::LastFMErrorResponse::InvalidParameter;
-use rustfm::error::LastFMErrorResponse::OperationFailed;
-use rustfm::user::recent_tracks::Track;
-use rustfm::Client;
+use rustfm::{
+    error::{
+        Error,
+        LastFMErrorResponse::{InvalidParameter, OperationFailed},
+    },
+    user::recent_tracks::Track,
+    Client,
+};
 
 #[command]
 #[description("Retrieves various Last.fm user stats.")]
