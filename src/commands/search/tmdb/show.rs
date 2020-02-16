@@ -253,7 +253,7 @@ pub fn show(context: &mut Context, message: &Message, arguments: Args) -> Comman
                 show_crew_fields.push((&last_crew_member.name, &last_crew_member.job, false));
             }
             // If the length of the show crew or cast does not match any of the known
-            // embed field amounts we match against, proceed to push each cast / crew 
+            // embed field amounts we match against, proceed to push each cast / crew
             // member normally, making all of the fields inline.
             _ => {
                 for member in &show_cast {
