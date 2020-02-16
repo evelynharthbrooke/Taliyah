@@ -75,7 +75,7 @@ pub fn urban(context: &mut Context, message: &Message, arguments: Args) -> Comma
                 author.url(permalink)
             });
             embed.color(0x00EF_FF00);
-            embed.description(format!("{}\n\n**Example**:\n{}\n\n**Rating**: {}", definition, example, rating));
+            embed.description(format!("*{}*\n\n{}\n\n**Rating**: {}", definition, example, rating));
             embed.footer(|footer| footer.text("Powered by the Urban Dictionary."))
         })
     })?;
@@ -107,7 +107,7 @@ pub fn randefine(context: &mut Context, message: &Message) -> CommandResult {
                 author.url(permalink)
             });
             embed.color(0x00EF_FF00);
-            embed.description(format!("{}\n\n**Example**:\n{}\n\n**Rating**: {}", definition, example, rating));
+            embed.description(format!("*{}*\n\n{}\n\n**Rating**: {}", definition, example, rating));
             embed.footer(|footer| footer.text("Powered by the Urban Dictionary."))
         })
     })?;

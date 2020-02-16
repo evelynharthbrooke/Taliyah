@@ -246,7 +246,7 @@ dependencies = [
 [[package]]
 name = "command_attr"
 version = "0.1.7"
-source = "git+https://github.com/KamranMackey/serenity.git?branch=kamrans-fork#55a25a384a28def82940c03961fd434bfef59009"
+source = "git+https://github.com/KamranMackey/serenity.git?branch=kamrans-fork#b51bd60250d6c4fdb8cb50273b62af2f43996254"
 dependencies = [
  "proc-macro2 1.0.8",
  "quote 1.0.2",
@@ -2112,7 +2112,7 @@ dependencies = [
 [[package]]
 name = "serenity"
 version = "0.8.0"
-source = "git+https://github.com/KamranMackey/serenity.git?branch=kamrans-fork#55a25a384a28def82940c03961fd434bfef59009"
+source = "git+https://github.com/KamranMackey/serenity.git?branch=kamrans-fork#b51bd60250d6c4fdb8cb50273b62af2f43996254"
 dependencies = [
  "audiopus",
  "base64 0.11.0",

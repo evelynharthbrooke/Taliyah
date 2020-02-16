@@ -91,10 +91,10 @@ pub fn status(context: &mut Context, message: &Message, args: Args) -> CommandRe
                         });
                         embed.colour(0x001D_B954);
                         embed.thumbnail(artwork_url);
-                        embed.field("Song", format!("[{}]({})", song, url), false);
+                        embed.field("Song", format!("[{}]({})", song, url), true);
                         embed.field("Artists", artists, true);
-                        embed.field("Album", album, true);
-                        embed.field("Song length", length, false);
+                        embed.field("Album", album, false);
+                        embed.field("Song length", length, true);
                         embed.footer(|footer| footer.text(format!("Track ID: {}", id)))
                     })
                 })?

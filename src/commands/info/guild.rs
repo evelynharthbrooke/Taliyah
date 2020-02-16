@@ -14,11 +14,14 @@ use serenity::model::prelude::Message;
 pub fn guild(context: &mut Context, message: &Message) -> CommandResult {
     let cache = &context.cache;
     let guild_id = message.guild_id.unwrap();
+    let guild_id_u64 = guild_id.as_u64();
     let cached_guild = cache.read().guild(guild_id).unwrap();
 
     let guild = cached_guild.read();
     let guild_name = &guild.name;
     let guild_owner = guild.member(&context, guild.owner_id).unwrap().user.read().tag();
+    let guild_system_channel = guild.system_channel_id.unwrap();
+    let guild_system_channel_id = guild_system_channel.as_u64();
     let guild_channels = guild.channels.len();
     let guild_channels_category = guild.channels.iter().filter(|(_, c)| c.read().kind == Category).count();
     let guild_channels_text = guild.channels.iter().filter(|(_, c)| c.read().kind == Text).count();
@@ -71,8 +74,9 @@ pub fn guild(context: &mut Context, message: &Message) -> CommandResult {
         _ => "Unrecognized boost tier.",
     };
 
-    let guild_roles = guild.roles.iter().filter(|&(_, r)| &r.id != guild_id.as_u64()).map(|(_, r)| &r.name).join(" / ");
-    let guild_role_count = guild.roles.iter().filter(|&(_, r)| &r.id != guild_id.as_u64()).count();
+    let guild_roles_sorted = guild.roles.iter().sorted_by_key(|&(_, r)| -r.position);
+    let guild_roles_map = guild_roles_sorted.filter(|&(_, r)| &r.id != guild_id_u64).map(|(_, r)| &r.name).join(" / ");
+    let guild_role_count = guild.roles.iter().filter(|&(_, r)| &r.id != guild_id_u64).count();
 
     let guild_verification_level = match guild.verification_level.num() {
         0 => "None - Unrestricted.",
@@ -117,6 +121,7 @@ pub fn guild(context: &mut Context, message: &Message) -> CommandResult {
             embed.description(format!(
                 "**Name**: {}\n\
                 **Owner**: {}\n\
+                **System Channel**: <#{}>\n\
                 **Online Members**: {} ({} bots, {} users)\n\
                 **Total Members**: {} ({} bots, {} users)\n\
                 **Channels**: {} ({} categories, {} text, {} voice)\n\
@@ -132,6 +137,7 @@ pub fn guild(context: &mut Context, message: &Message) -> CommandResult {
                 **Roles ({})**: {}\n",
                 guild_name,
                 guild_owner,
+                guild_system_channel_id,
                 guild_presences,
                 guild_presences_bots,
                 guild_presences_users,
@@ -154,11 +160,11 @@ pub fn guild(context: &mut Context, message: &Message) -> CommandResult {
                 guild_boost_tier,
                 highest_role_name,
                 guild_role_count,
-                guild_roles
+                guild_roles_map
             ));
             embed.footer(|footer| {
                 footer.text(format!(
-                    "{name} guild ID: {id} | {name} prefix: {prefix}",
+                    "{name} server ID: {id} | {name} command prefix: {prefix}",
                     name = guild_name,
                     id = guild_id,
                     prefix = guild_prefix
