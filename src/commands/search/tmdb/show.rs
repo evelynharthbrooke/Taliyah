@@ -220,18 +220,25 @@ pub fn show(context: &mut Context, message: &Message, arguments: Args) -> Comman
         let mut show_crew_fields = Vec::with_capacity(show_crew.len());
 
         match show_cast.len() | show_crew.len() {
+            // Match the amount of fields known to break the formatting of the
+            // Discord embed on desktop, making the embed look a tad bit better
+            // instead of having the 2nd field break its alignment due to a bug
+            // that exists in the Discord desktop and web client's embed parsing
+            // code. This issue does not exist on Discord's mobile apps, due to
+            // the inline property being completely ignored, due to the way the
+            // embeds were designed to look and work on Discord's suite of mobile
+            // applications.
+            //
+            // Quite frankly, I'm honestly surprised that Discord has not yet been
+            // able to figure out a fix to this embed parsing issue. Hopefully at
+            // some point, they'll look into fixing this issue so that way this check
+            // doesn't have to be made.
+            //
+            // Anyways, this matcher allows us to iterate through each element of
+            // the show cast and crew, removing the last inlined field and disabling
+            // its inline property, and re-inserting it into the show cast and crew
+            // field vectors.
             5 | 8 | 11 | 14 | 17 | 20 | 23 => {
-                // Iterate through each element of the show cast and crew, removing the
-                // last element. This is done because Discord's embeds are really finicky
-                // when there are less than 3 embed fields and more than 1 on each row.
-                //
-                // Honestly, I'm surprised Discord hasn't fixed that bug by now, but
-                // for now, let's do a really hacky thing where we remove the last
-                // element of the crew and cast vectors and later push it to the
-                // show cast and crew vector fields separately. This helps the
-                // embed look better on desktop. This however does not affect
-                // Discord mobile, because all fields are non-inline by default
-                // with no way to change it.
                 for member in &show_cast[0..show_cast.len() - 1] {
                     show_cast_fields.push((&member.name, &member.character, true));
                 }
@@ -245,6 +252,9 @@ pub fn show(context: &mut Context, message: &Message, arguments: Args) -> Comman
                 let last_crew_member = show_crew.last().unwrap();
                 show_crew_fields.push((&last_crew_member.name, &last_crew_member.job, false));
             }
+            // If the length of the show crew or cast does not match any of the known
+            // embed values, proceed to push each member normally, inline fields and
+            // all.
             _ => {
                 for member in &show_cast {
                     show_cast_fields.push((&member.name, &member.character, true));
