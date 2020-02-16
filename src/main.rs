@@ -6,6 +6,7 @@
 mod commands;
 mod config;
 mod listeners;
+mod tests;
 mod utilities;
 
 use commands::extra::sloc::*;
