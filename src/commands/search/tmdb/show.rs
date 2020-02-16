@@ -112,7 +112,7 @@ pub struct Season {
     pub episode_count: i64,
     pub id: i64,
     pub name: String,
-    pub overview: String,
+    pub overview: Option<String>,
     pub poster_path: Option<String>,
     pub season_number: i64,
 }
@@ -183,7 +183,7 @@ pub fn show(context: &mut Context, message: &Message, arguments: Args) -> Comman
     let client = Client::builder().user_agent(user_agent).redirect(Policy::none()).build()?;
 
     let search_endpoint = "https://api.themoviedb.org/3/search/tv";
-    let search_query = ("query", &show.replace("--cast", ""));
+    let search_query = ("query", &show.replace(" --cast", "").replace(" -c", ""));
     let search_response = client.get(search_endpoint).query(&[("api_key", &api_key), search_query]);
     let search_result: SearchResponse = search_response.send()?.json()?;
     let search_results = search_result.results;
@@ -208,7 +208,7 @@ pub fn show(context: &mut Context, message: &Message, arguments: Args) -> Comman
     let show_poster_path = show_result.poster_path.unwrap();
     let show_poster = format!("https://image.tmdb.org/t/p/original/{}", &show_poster_path.replace("/", ""));
 
-    if show.contains("--cast") {
+    if show.contains(" --cast") || show.contains(" -c") {
         let credits_endpoint = format!("https://api.themoviedb.org/3/tv/{}/credits", show_id);
         let credits_response = client.get(&credits_endpoint).query(&[("api_key", &api_key)]).send()?;
         let credits_result: Credits = credits_response.json()?;
@@ -258,13 +258,15 @@ pub fn show(context: &mut Context, message: &Message, arguments: Args) -> Comman
 
         message.channel_id.send_message(&context, |message| {
             message.embed(|embed| {
-                embed.title(format!("Credits for {}", show_name));
+                embed.title(format!("Cast & Crew — {}", show_name));
                 embed.color(0x0001_d277);
                 embed.thumbnail(show_poster);
                 embed.fields(show_cast_fields);
+
                 if !show_crew_fields.is_empty() {
                     embed.fields(show_crew_fields);
                 }
+
                 embed.footer(|footer| footer.text("Powered by the The Movie Database API."));
                 embed.timestamp(&Utc::now())
             })
@@ -324,7 +326,7 @@ pub fn show(context: &mut Context, message: &Message, arguments: Args) -> Comman
                 ("User Score", format!("{}/100 ({} votes)", show_user_score, show_user_score_count), true),
                 ("Episodes", show_episodes, true),
                 ("Seasons", show_seasons, true),
-                ("Networks", show_networks, true),
+                ("Networks / Services", show_networks, true),
                 ("Studios", show_studios, true),
                 ("Genres", show_genres, true),
                 ("Production Status", show_production_status.to_string(), true),

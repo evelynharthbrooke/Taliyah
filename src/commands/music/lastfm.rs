@@ -181,12 +181,12 @@ pub fn lastfm(ctx: &mut Context, message: &Message, mut args: Args) -> CommandRe
         recent_tracks
             .iter()
             .map(|track: &Track| {
+                let track_status = if track.attrs.as_ref().is_none() { "".to_owned() } else { "\x5c▶️".to_owned() };
                 let track_name = &track.name.replace("**", "\x5c**");
+                let track_url = &track.url;
                 let track_artist = &track.artist.name;
 
-                let now_playing = if track.attrs.as_ref().is_none() { "".to_owned() } else { "\x5c▶️".to_owned() };
-
-                format!("{} **{}** — {}", now_playing, track_name, track_artist)
+                format!("{} **[{}]({})** — {}", track_status, track_name, track_url, track_artist)
             })
             .join("\n")
     };

@@ -34,6 +34,7 @@ struct Repository;
 #[command]
 #[description("Displays information about a specified GitHub repository")]
 #[aliases("repo", "repository")]
+#[delimiters("/", " ")]
 #[min_args(2)]
 #[max_args(2)]
 pub fn repository(context: &mut Context, message: &Message, mut arguments: Args) -> CommandResult {

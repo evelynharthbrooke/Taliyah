@@ -38,7 +38,6 @@ pub fn role(context: &mut Context, message: &Message, arguments: Args) -> Comman
     let position = role.position;
     let id = role.id;
     let permissions = role.permissions;
-    dbg!(permissions);
     let created = id.created_at().format("%A, %B %e, %Y @ %l:%M %P");
 
     message.channel_id.send_message(&context, |message| {

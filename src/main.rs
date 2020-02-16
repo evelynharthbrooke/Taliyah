@@ -232,6 +232,10 @@ pub fn main() {
 }
 
 pub fn spotify() -> Spotify {
-    let client_credential = SpotifyClientCredentials::default().build();
+    let client_credential = SpotifyClientCredentials::default()
+        .client_id(config::client_id().unwrap())
+        .client_secret(config::client_secret().unwrap())
+        .build();
+
     Spotify::default().client_credentials_manager(client_credential).build()
 }

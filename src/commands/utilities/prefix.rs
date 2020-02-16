@@ -10,34 +10,16 @@ use serenity::prelude::Context;
 #[command]
 #[only_in(guilds)]
 #[owners_only(true)]
-#[sub_commands(get, set, clear)]
-#[description(
-    "\
-    Retrieves, sets, or clears the command prefix for the current guild.\n\n\
-    Sub-commands:\n\
-    `get`: Retrieves the currently set command prefix for the guild.\n\
-    `set`: Sets the guild's command prefix.\n\
-    `clear`: Clears the guild's currently set command prefix. This will reset the \
-    command prefix back to the default value in the bot's configuration file.\
-    "
-)]
+#[sub_commands(set, clear)]
+/// Retrieves the current server prefix if available. However, there
+/// are several sub commands available that allow clearing and setting
+/// the server prefix. The available sub-commands are listed below.
+/// 
+/// *Sub-commands*:
+/// `set`: Sets the current server prefix to the one provided by the user.
+/// `clear`: Clears the current server prefix and resets it back to the
+/// default.
 fn prefix(context: &mut Context, message: &Message) -> CommandResult {
-    message.channel_id.send_message(&context, move |message| {
-        message.embed(|embed| {
-            embed.title("Error: Invalid / No Subcommand Entered!");
-            embed.color(0x00FF_0000);
-            embed.description("Please use subcommand get or set to use this command.")
-        })
-    })?;
-
-    Ok(())
-}
-
-#[command]
-#[only_in(guilds)]
-#[owners_only]
-#[description = "Retrieves the command prefix for the current server."]
-pub fn get(context: &mut Context, message: &Message) -> CommandResult {
     let prefix = database::get_prefix(message.guild_id.unwrap())?;
 
     let guild = match message.guild(&context.cache) {
