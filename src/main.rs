@@ -12,6 +12,7 @@ mod utilities;
 use commands::extra::sloc::*;
 use commands::extra::weather::*;
 use commands::fun::ascii::*;
+use commands::fun::printerfacts::*;
 use commands::fun::urban::*;
 use commands::info::changelog::*;
 use commands::info::channel::*;
@@ -79,7 +80,7 @@ struct Extra;
 
 #[group]
 #[description = "Fun commands."]
-#[commands(ascii, urban, randefine)]
+#[commands(ascii, printerfacts, urban, randefine)]
 struct Fun;
 
 #[group]
