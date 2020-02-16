@@ -14,7 +14,7 @@ use serenity::prelude::Context;
 /// Retrieves the current server prefix if available. However, there
 /// are several sub commands available that allow clearing and setting
 /// the server prefix. The available sub-commands are listed below.
-/// 
+///
 /// *Sub-commands*:
 /// `set`: Sets the current server prefix to the one provided by the user.
 /// `clear`: Clears the current server prefix and resets it back to the
