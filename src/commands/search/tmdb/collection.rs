@@ -37,6 +37,11 @@ pub struct SimplifiedMovie {
     pub title: String,           // The title of the movie.
 }
 
+#[derive(Deserialize, Debug)]
+pub struct Movie {
+    pub status: String,
+}
+
 #[command]
 #[aliases("collection")]
 #[description("Gets detailed information about a collection from The Movie Database.")]
@@ -90,7 +95,24 @@ pub fn collection(context: &mut Context, message: &Message, arguments: Args) -> 
     let mut collection_fields = Vec::with_capacity(collection_parts.len());
 
     for part in &collection_parts {
-        collection_fields.push((format!("{} — released {}", part.title, &part.release_date.format("%B %-e, %Y")), &part.overview, false))
+        // This probably isn't the best implementation for getting a collection 
+        // movie's release date, because everytime a collection entry is processed,
+        // its gonna make a request to The Movie Database, using additional requests
+        // in the process. While the TMDb API doesn't have rate limits, this might 
+        // become a bit network I/O intensive if there are a lot of movies in a given 
+        // collection.
+        let part_id = part.id;
+        let movie_endpoint = format!("https://api.themoviedb.org/3/movie/{}", part_id);
+        let movie_response = client.get(&movie_endpoint).query(&[("api_key", &api_key)]).send()?;
+        let movie_result: Movie = movie_response.json()?;
+        let movie_status = movie_result.status;
+
+        let release_status = match movie_status.as_str() {
+            "Planned" | "In Production" | "Post Production" => "releasing on",
+            _ => "released",
+        };
+
+        collection_fields.push((format!("{} — {} {}", part.title, release_status, &part.release_date.format("%B %-e, %Y")), &part.overview, false))
     }
 
     message.channel_id.send_message(&context, |message| {
