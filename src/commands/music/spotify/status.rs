@@ -95,7 +95,7 @@ pub fn status(context: &mut Context, message: &Message, args: Args) -> CommandRe
                             ("Song", format!("[{}]({})", song, url), false),
                             ("Artists", artists, false),
                             ("Album", album.to_string(), false),
-                            ("Duration", length.to_string(), false)
+                            ("Duration", length.to_string(), false),
                         ]);
                         embed.footer(|footer| footer.text(format!("Track ID: {}", id)))
                     })
