@@ -1,4 +1,3 @@
-pub mod built_info;
 pub mod color_utils;
 pub mod database;
 pub mod geo_utils;

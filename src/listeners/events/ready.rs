@@ -1,4 +1,3 @@
-use crate::utilities::built_info;
 use crate::utilities::database::get_sqlite_version;
 
 use serenity::client::Context;
@@ -13,19 +12,17 @@ use log::info;
 /// initializing, such as setting the bot's presence, and
 /// doing any logging, as necessary.
 pub fn ready(context: Context, ready: Ready) {
+    let owner = context.http.get_current_application_info().unwrap().owner;
+
     // Log a basic bit of information, like the username and ID
     // of the user logging into the Discord API, the number of guilds
     // the bot has connected to, as well as the gateway version currently
     // being used by the bot.
     info!("Successfully logged into Discord as the following user:");
-    info!("Bot username: {}#{}", ready.user.name, ready.user.discriminator);
+    info!("Bot username: {}", ready.user.tag());
     info!("Bot user ID: {}", ready.user.id);
-
-    if built_info::DEBUG {
-        info!("Ellie is running in debug mode.")
-    } else {
-        info!("Ellie is running in release mode.")
-    }
+    info!("Bot owner: {}", owner.tag());
+    info!("Bot owner ID: {}", owner.id);
 
     let guilds = ready.guilds.len();
 

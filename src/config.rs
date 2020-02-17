@@ -104,7 +104,7 @@ pub fn init() {
 }
 
 lazy_static! {
-    static ref CONFIG: Config = Config::load_from_file(CONFIG_FILE);
+    pub static ref CONFIG: Config = Config::load_from_file(CONFIG_FILE);
 }
 
 #[derive(Deserialize, Debug, PartialEq)]

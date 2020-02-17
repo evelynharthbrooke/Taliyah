@@ -1,3 +1,4 @@
+pub mod about;
 pub mod changelog;
 pub mod channel;
 pub mod guild;

@@ -14,6 +14,7 @@ use commands::extra::weather::*;
 use commands::fun::ascii::*;
 use commands::fun::printerfacts::*;
 use commands::fun::urban::*;
+use commands::info::about::*;
 use commands::info::changelog::*;
 use commands::info::channel::*;
 use commands::info::guild::*;
@@ -35,7 +36,6 @@ use commands::utilities::ping::*;
 use commands::utilities::prefix::*;
 use commands::utilities::shutdown::*;
 use commands::utilities::source::*;
-use commands::utilities::version::*;
 
 use listeners::handler::Handler;
 
@@ -85,7 +85,7 @@ struct Fun;
 
 #[group]
 #[description = "Various informational commands."]
-#[commands(changelog, channel, guild, profile, role, user)]
+#[commands(about, changelog, channel, guild, profile, role, user)]
 struct Information;
 
 #[group]
@@ -100,7 +100,7 @@ struct Voice;
 
 #[group]
 #[description = "Ellie's selection of utility commands."]
-#[commands(invite, ping, prefix, shutdown, source, version)]
+#[commands(invite, ping, prefix, shutdown, source)]
 struct Utilities;
 
 #[group]
