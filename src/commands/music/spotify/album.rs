@@ -18,9 +18,9 @@ use crate::spotify;
 
 #[command]
 #[description("Displays information about a specified album on Spotify.")]
-fn album(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
+fn album(context: &mut Context, message: &Message, args: Args) -> CommandResult {
     if args.rest().is_empty() {
-        msg.channel_id.send_message(&ctx, |message| {
+        message.channel_id.send_message(&context, |message| {
             message.embed(|embed| {
                 embed.title("Error: No album name provided.");
                 embed.color(0x00FF_0000);
@@ -84,9 +84,18 @@ fn album(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
         album_type = "Extended Play (EP)".to_string()
     }
 
-    let album_tracks = album
-        .tracks
-        .items
+    let album_track_items = &album.tracks.items;
+
+    let mut album_length: u32 = 0;
+
+    // Iterate through an album's tracks, adding each track's
+    // length in milliseconds to the album_length variable, in 
+    // order to get the total length of the album.
+    for item in album_track_items {
+        album_length += item.duration_ms;
+    }
+
+    let album_tracks = album_track_items
         .iter()
         .map(|track: &SimplifiedTrack| {
             let name = &track.name;
@@ -98,7 +107,7 @@ fn album(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
         })
         .join("\n");
 
-    msg.channel_id.send_message(&ctx, |message| {
+    message.channel_id.send_message(&context, |message| {
         message.embed(|embed| {
             embed.author(|author| {
                 author.name(album_name);
@@ -107,15 +116,26 @@ fn album(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
             });
             embed.color(0x001D_B954);
             embed.description(format!(
-                "**Album type**: {}\n\
+                "\
+                **Type**: {}\n\
+                **Length**: {}\n\
                 **Artist(s)**: {}\n\
-                **Release date**: {}\n\
+                **Released**: {}\n\
                 **Genres**: {}\n\
                 **Popularity**: {}\n\
                 **Markets**: {}\n\
-                **Track count**: {}\n\n\
-                **Tracks**: \n{}\n",
-                album_type, album_artists, album_date, album_genres, album_popularity, album_markets, album_tracks_total, album_tracks
+                **Tracks**: {}\n\n\
+                **Tracklist**:\n{}
+                ",
+                album_type,
+                format_duration(Duration::from_millis(album_length as u64 / 1000 * 1000)),
+                album_artists,
+                album_date,
+                album_genres,
+                album_popularity,
+                album_markets,
+                album_tracks_total,
+                album_tracks
             ));
             embed.footer(|footer| footer.text(album_copyright))
         })
