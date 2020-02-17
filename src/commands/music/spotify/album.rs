@@ -67,7 +67,10 @@ fn album(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
 
     let album_artists = &album.artists.iter().map(|a| format!("[{}]({})", &a.name, &a.external_urls["spotify"])).join(", ");
 
-    let album_date = NaiveDate::parse_from_str(&album.release_date, "%Y-%m-%d").map_or(album.release_date, |d| d.format("%B %-e, %Y").to_string());
+    let album_date = match NaiveDate::parse_from_str(&album.release_date, "%Y-%m-%d") {
+        Ok(date) => date.format("%B %-e, %Y").to_string(),
+        Err(_) => album.release_date,
+    };
 
     let album_copyright = if album.copyrights.is_empty() {
         album.label
