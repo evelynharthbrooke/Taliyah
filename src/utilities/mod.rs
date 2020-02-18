@@ -3,7 +3,6 @@ pub mod database;
 pub mod geo_utils;
 pub mod git_utils;
 pub mod parsing_utils;
-pub mod string_utils;
 
 use crate::spotify;
 

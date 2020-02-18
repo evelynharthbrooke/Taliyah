@@ -1,6 +1,5 @@
 use crate::spotify;
 use crate::utilities::get_spotify_token;
-use crate::utilities::string_utils::capitalize_first;
 
 use itertools::Itertools;
 
@@ -51,6 +50,8 @@ pub struct Source {
 #[command]
 #[description("Displays credits for a specific track on Spotify.")]
 fn credits(context: &mut Context, message: &Message, args: Args) -> CommandResult {
+    message.channel_id.broadcast_typing(&context)?;
+
     if args.rest().is_empty() {
         message.channel_id.send_message(&context, |message| {
             message.embed(|embed| {
@@ -64,10 +65,26 @@ fn credits(context: &mut Context, message: &Message, args: Args) -> CommandResul
         return Ok(());
     }
 
-    let track_name = args.rest();
-    let track_name_encoded = utf8_percent_encode(&track_name, NON_ALPHANUMERIC).to_string();
-    let track_search = spotify().search_track(&track_name_encoded, 1, 0, None);
+    let track_name = utf8_percent_encode(args.rest(), NON_ALPHANUMERIC).to_string();
+    let track_search = spotify().search_track(&track_name, 1, 0, None);
     let track_result = &track_search.unwrap().tracks.items;
+
+    if track_result.is_empty() {
+        message.channel_id.send_message(&context, |message| {
+            message.embed(|embed| {
+                embed.title("Error: No track found.");
+                embed.color(0x00FF_0000);
+                embed.description(format!(
+                    "I was unable to to find a track on Spotify matching the term `{}`. \
+                    Please try looking for a different track, or try again later.",
+                    track_name
+                ))
+            })
+        })?;
+
+        return Ok(());
+    }
+
     let track = track_result.first().unwrap();
     let track_name = &track.name;
     let track_url = &track.external_urls["spotify"];
@@ -83,17 +100,13 @@ fn credits(context: &mut Context, message: &Message, args: Args) -> CommandResul
     let access_token = get_spotify_token().unwrap();
     let spclient_url = format!("https://spclient.wg.spotify.com/track-credits-view/v0/track/{}/credits", track_id);
     let credits_request: Credits = client.get(&spclient_url).bearer_auth(&access_token).send()?.json()?;
-    let credits = credits_request
-        .role_credits
-        .iter()
-        .map(|role: &Role| {
-            let name = match role.role_title.as_str() {
-                "Performers" => "Performed by",
-                "Writers" => "Written by",
-                "Producers" => "Produced by",
-                _ => "Unknown credit title",
-            };
+    let credits_response = credits_request.role_credits;
+    let credits_source = credits_request.source.value;
+    let mut credits_fields = Vec::with_capacity(credits_response.len());
 
+    for role in credits_response {
+        if !role.artists.is_empty() {
+            let name = role.role_title;
             let artists = role
                 .artists
                 .iter()
@@ -101,17 +114,14 @@ fn credits(context: &mut Context, message: &Message, args: Args) -> CommandResul
                     let name = &artist.name;
                     let uri = &artist.uri;
                     let artist_id = uri.replace("spotify:artist:", "");
-                    let subroles = &artist.subroles.iter().map(|s| capitalize_first(s)).join(", ");
                     let artist_url = format!("https://open.spotify.com/artist/{}", artist_id);
-                    format!("[{}]({}) ({})", name, artist_url, subroles)
+                    format!("[{}]({})", name, artist_url)
                 })
                 .join("\n");
 
-            format!("**{}**:\n{}", name, artists)
-        })
-        .join("\n\n");
-
-    let credit_source = credits_request.source.value;
+            credits_fields.push((name, artists, true));
+        }
+    }
 
     message.channel_id.send_message(&context, |message| {
         message.embed(|embed| {
@@ -119,8 +129,8 @@ fn credits(context: &mut Context, message: &Message, args: Args) -> CommandResul
             embed.color(0x001D_B954);
             embed.thumbnail(track_image);
             embed.url(track_url);
-            embed.description(credits);
-            embed.footer(|footer| footer.text(format!("Credits provided by {} | Powered by the Spotify API.", credit_source)))
+            embed.fields(credits_fields);
+            embed.footer(|footer| footer.text(format!("Credits provided by {} | Powered by the Spotify API.", credits_source)))
         })
     })?;
 

@@ -38,7 +38,7 @@ struct ArtistInsights {
     monthly_listeners_delta: isize,
     follower_count: usize,
     following_count: usize, // Artists can't follow anyone, so I'm unsure why this value exists.
-    playlists: Playlists,
+    playlists: Option<Playlists>,
 }
 
 #[derive(Deserialize, Debug)]
@@ -63,6 +63,8 @@ struct Owner {
 #[command]
 #[description("Displays information about a specified artist on Spotify.")]
 fn artist(context: &mut Context, message: &Message, args: Args) -> CommandResult {
+    message.channel_id.broadcast_typing(&context)?;
+
     if args.rest().is_empty() {
         message.channel_id.send_message(&context, |message| {
             message.embed(|embed| {
@@ -75,12 +77,26 @@ fn artist(context: &mut Context, message: &Message, args: Args) -> CommandResult
         return Ok(());
     }
 
-    message.channel_id.broadcast_typing(&context)?;
-
-    let artist_name = args.rest();
-    let artist_name_encoded = utf8_percent_encode(&artist_name, NON_ALPHANUMERIC).to_string();
-    let artist_search = spotify().search_artist(&artist_name_encoded, 1, 0, None);
+    let artist_name = utf8_percent_encode(args.rest(), NON_ALPHANUMERIC).to_string();
+    let artist_search = spotify().search_artist(&artist_name, 1, 0, None);
     let artist_result = &artist_search.unwrap().artists.items;
+
+    if artist_result.is_empty() {
+        message.channel_id.send_message(&context, |message| {
+            message.embed(|embed| {
+                embed.title("Error: No artist found.");
+                embed.color(0x00FF_0000);
+                embed.description(format!(
+                    "I was unable to to find an artist on Spotify matching the term `{}`. \
+                    Please try looking for a different album, or try again later.",
+                    artist_name
+                ))
+            })
+        })?;
+
+        return Ok(());
+    }
+
     let artist = artist_result.first().unwrap();
 
     let user_agent_chunk_1 = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko)";
@@ -95,9 +111,9 @@ fn artist(context: &mut Context, message: &Message, args: Args) -> CommandResult
     let artist_url = &artist.external_urls["spotify"];
 
     let artist_genres = if !&artist.genres.is_empty() {
-        artist.genres.iter().map(|genre| genre).join(", ")
+        artist.genres.iter().map(|genre| genre).join("\n ")
     } else {
-        format!("No genres are available for {}.", artist_name)
+        "N/A".to_string()
     };
 
     let artist_image = &artist.images.first().unwrap().url;
@@ -105,11 +121,8 @@ fn artist(context: &mut Context, message: &Message, args: Args) -> CommandResult
     let artist_followers = format_int(artists_request.artist_insights.follower_count);
     let artist_listeners = format_int(artists_request.artist_insights.monthly_listeners);
     let chart_position = artists_request.artist_insights.global_chart_position;
-    let artist_position = if chart_position < 1 {
-        format!("{} is not on the chart.", artist_name)
-    } else {
-        format!("#{}", format_int(chart_position))
-    };
+
+    let artist_position = if chart_position < 1 { "N/A".to_string() } else { format!("#{}", format_int(chart_position)) };
 
     message.channel_id.send_message(&context, |message| {
         message.embed(|embed| {
@@ -117,15 +130,12 @@ fn artist(context: &mut Context, message: &Message, args: Args) -> CommandResult
             embed.url(artist_url);
             embed.thumbnail(artist_image);
             embed.color(0x001D_B954);
-            embed.description(format!(
-                "\
-                **Monthly listeners**: {}\n\
-                **Followers**: {}\n\
-                **Chart position**: {}\n\
-                **Genres**: {}\n\
-                ",
-                artist_listeners, artist_followers, artist_position, artist_genres
-            ));
+            embed.fields(vec![
+                ("Listeners", artist_listeners, true),
+                ("Followers", artist_followers, true),
+                ("Position", artist_position, true),
+                ("Genres", artist_genres, true),
+            ]);
             embed.footer(|footer| footer.text(format!("Spotify ID: {} | Powered by the Spotify API.", artist_id)))
         })
     })?;

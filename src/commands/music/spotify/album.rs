@@ -1,12 +1,14 @@
+use crate::spotify;
+
 use chrono::prelude::*;
 
 use humantime::format_duration;
 
 use itertools::Itertools;
 
-use rspotify::spotify::model::track::SimplifiedTrack;
+use percent_encoding::{utf8_percent_encode, NON_ALPHANUMERIC};
 
-use std::time::Duration;
+use rspotify::spotify::model::track::SimplifiedTrack;
 
 use serenity::client::Context;
 use serenity::framework::standard::macros::command;
@@ -14,11 +16,13 @@ use serenity::framework::standard::Args;
 use serenity::framework::standard::CommandResult;
 use serenity::model::prelude::Message;
 
-use crate::spotify;
+use std::time::Duration;
 
 #[command]
 #[description("Displays information about a specified album on Spotify.")]
 fn album(context: &mut Context, message: &Message, args: Args) -> CommandResult {
+    message.channel_id.broadcast_typing(&context)?;
+
     if args.rest().is_empty() {
         message.channel_id.send_message(&context, |message| {
             message.embed(|embed| {
@@ -31,17 +35,36 @@ fn album(context: &mut Context, message: &Message, args: Args) -> CommandResult 
         return Ok(());
     }
 
-    let album_name = args.rest();
-
+    let album_name = utf8_percent_encode(args.rest(), NON_ALPHANUMERIC).to_string();
     let album_search = spotify().search_album(&album_name, 1, 0, None);
     let album_result = &album_search.unwrap().albums.items;
+
+    if album_result.is_empty() {
+        message.channel_id.send_message(&context, |message| {
+            message.embed(|embed| {
+                embed.title("Error: No album found.");
+                embed.color(0x00FF_0000);
+                embed.description(format!(
+                    "I was unable to to find an album on Spotify matching the term `{}`. \
+                    Please try looking for a different album, or try again later.",
+                    album_name
+                ))
+            })
+        })?;
+
+        return Ok(());
+    }
+
     let album_id = album_result.first().unwrap().id.as_ref().unwrap();
 
     let album = spotify().album(album_id).unwrap();
     let album_name = &album.name;
+    let album_artists = &album.artists.iter().map(|a| format!("[{}]({})", &a.name, &a.external_urls["spotify"])).join(", ");
     let album_popularity = &album.popularity;
-    let album_url = &album.external_urls["spotify"];
     let album_image = &album.images.first().unwrap().url;
+    let album_markets = album.available_markets.len();
+    let album_track_count = album.tracks.total;
+    let album_url = &album.external_urls["spotify"];
 
     let mut album_type = match album.album_type.clone().as_str() {
         "album" => "Album".to_owned(),
@@ -51,21 +74,9 @@ fn album(context: &mut Context, message: &Message, args: Args) -> CommandResult 
         &_ => album.album_type.as_str().to_owned(),
     };
 
-    let mut album_markets = album.available_markets.len().to_string();
-
-    let album_genres = if album.genres.is_empty() {
-        "No genres available.".to_string()
-    } else {
-        album.genres.iter().map(|g| g).join(", ")
-    };
-
-    // This will have to be updated as Spotify is launched
-    // in more markets / countries.
-    if album_markets == "79" {
-        album_markets.push_str(" (Worldwide)");
+    if album_track_count <= 6 && album_track_count > 1 {
+        album_type = "Extended Play (EP)".to_string()
     }
-
-    let album_artists = &album.artists.iter().map(|a| format!("[{}]({})", &a.name, &a.external_urls["spotify"])).join(", ");
 
     let album_date = match NaiveDate::parse_from_str(&album.release_date, "%Y-%m-%d") {
         Ok(date) => date.format("%B %-e, %Y").to_string(),
@@ -78,32 +89,19 @@ fn album(context: &mut Context, message: &Message, args: Args) -> CommandResult 
         format!("{} ({})", album.copyrights.first().unwrap()["text"], album.label)
     };
 
-    let album_tracks_total = album.tracks.total;
-
-    if album_tracks_total <= 6 && album_tracks_total > 1 {
-        album_type = "Extended Play (EP)".to_string()
-    }
-
     let album_track_items = &album.tracks.items;
-
-    let mut album_length: u32 = 0;
-
-    // Iterate through an album's tracks, adding each track's
-    // length in milliseconds to the album_length variable, in 
-    // order to get the total length of the album.
-    for item in album_track_items {
-        album_length += item.duration_ms;
-    }
+    let album_track_lengths: u32 = album_track_items.iter().map(|track| track.duration_ms).sum();
+    let album_length = format_duration(Duration::from_millis(u64::from(album_track_lengths) / 1000 * 1000));
 
     let album_tracks = album_track_items
         .iter()
         .map(|track: &SimplifiedTrack| {
             let name = &track.name;
             let position = &track.track_number;
-            let external_link = &track.external_urls["spotify"];
-            let length = format_duration(Duration::from_millis(track.duration_ms as u64 / 1000 * 1000));
-            let explicit = if track.explicit { "(explicit)".to_string() } else { "".to_string() };
-            return format!("**{}.** [{}]({}) — {} {}", position, name, external_link, length, explicit);
+            let url = &track.external_urls["spotify"];
+            let length = format_duration(Duration::from_millis(u64::from(track.duration_ms) / 1000 * 1000));
+            let explicit = if track.explicit { "(explicit)" } else { "" };
+            format!("**{}.** [{}]({}) — {} {}", position, name, url, length, explicit)
         })
         .join("\n");
 
@@ -115,28 +113,16 @@ fn album(context: &mut Context, message: &Message, args: Args) -> CommandResult 
                 author.icon_url(album_image)
             });
             embed.color(0x001D_B954);
-            embed.description(format!(
-                "\
-                **Type**: {}\n\
-                **Length**: {}\n\
-                **Artist(s)**: {}\n\
-                **Released**: {}\n\
-                **Genres**: {}\n\
-                **Popularity**: {}\n\
-                **Markets**: {}\n\
-                **Tracks**: {}\n\n\
-                **Tracklist**:\n{}
-                ",
-                album_type,
-                format_duration(Duration::from_millis(album_length as u64 / 1000 * 1000)),
-                album_artists,
-                album_date,
-                album_genres,
-                album_popularity,
-                album_markets,
-                album_tracks_total,
-                album_tracks
-            ));
+            embed.fields(vec![
+                ("Type", album_type, true),
+                ("Length", album_length.to_string(), true),
+                ("Artists", album_artists.to_string(), true),
+                ("Release Date", album_date, true),
+                ("Popularity", format!("{}%", album_popularity), true),
+                ("Markets", album_markets.to_string(), true),
+                ("Tracks", album_track_count.to_string(), true),
+            ]);
+            embed.description(album_tracks);
             embed.footer(|footer| footer.text(album_copyright))
         })
     })?;
