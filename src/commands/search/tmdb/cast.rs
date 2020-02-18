@@ -1,6 +1,6 @@
 use crate::models::tmdb::show::*;
 
-use chrono::prelude::*;
+use chrono::prelude::Utc;
 
 use itertools::Itertools;
 

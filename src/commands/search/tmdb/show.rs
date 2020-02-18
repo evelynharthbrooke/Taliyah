@@ -1,7 +1,7 @@
 use crate::models::tmdb::show::*;
 use crate::utilities::calculate_average_sum;
 
-use chrono::prelude::*;
+use chrono::prelude::Utc;
 
 use humantime::format_duration;
 

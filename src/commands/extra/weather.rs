@@ -1,7 +1,7 @@
 use crate::utilities::database::get_user_location;
 use crate::utilities::geo_utils::get_coordinates;
 
-use chrono::prelude::*;
+use chrono::prelude::NaiveDateTime;
 
 use itertools::Itertools;
 

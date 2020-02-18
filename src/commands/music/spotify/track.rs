@@ -1,6 +1,6 @@
 use crate::spotify;
 
-use chrono::prelude::*;
+use chrono::prelude::NaiveDate;
 
 use humantime::format_duration;
 

@@ -1,7 +1,7 @@
 use crate::config::Config;
 use crate::utilities::git_utils::{show_branch, show_head_rev};
 
-use chrono::prelude::*;
+use chrono::prelude::Utc;
 
 use git2::Repository;
 

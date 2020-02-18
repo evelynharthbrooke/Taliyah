@@ -1,11 +1,16 @@
-use chrono::prelude::*;
+use chrono::prelude::{NaiveDate, Utc};
+
 use reqwest::blocking::Client;
 use reqwest::redirect::Policy;
+
 use serde::Deserialize;
+
 use serenity::client::Context;
+
 use serenity::framework::standard::macros::command;
 use serenity::framework::standard::Args;
 use serenity::framework::standard::CommandResult;
+
 use serenity::model::prelude::Message;
 
 #[derive(Deserialize, Debug)]
