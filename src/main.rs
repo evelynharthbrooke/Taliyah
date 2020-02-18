@@ -6,6 +6,7 @@
 mod commands;
 mod config;
 mod listeners;
+mod models;
 mod tests;
 mod utilities;
 

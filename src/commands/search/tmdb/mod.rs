@@ -1,7 +1,9 @@
+pub mod cast;
 pub mod collection;
 pub mod movie;
 pub mod show;
 
+use self::cast::*;
 use self::collection::*;
 use self::movie::*;
 use self::show::*;
@@ -12,7 +14,7 @@ use serenity::framework::standard::CommandResult;
 use serenity::model::prelude::Message;
 
 #[command]
-#[sub_commands(collection, movie, show)]
+#[sub_commands(cast, collection, movie, show)]
 /// Gets a variety of information from the API provided by The Movie Database.
 ///
 /// **Subcommands:**

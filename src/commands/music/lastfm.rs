@@ -5,10 +5,7 @@
 
 use chrono::NaiveDateTime;
 
-use crate::{
-    utilities,
-    utilities::{database, get_album_artwork},
-};
+use crate::utilities::{database, format_int, get_album_artwork};
 
 use itertools::Itertools;
 
@@ -26,6 +23,7 @@ use rustfm::{
         LastFMErrorResponse::{InvalidParameter, OperationFailed},
     },
     user::recent_tracks::Track,
+    user::top_artists::{Artist, Period},
     Client,
 };
 
@@ -135,11 +133,8 @@ pub fn lastfm(ctx: &mut Context, message: &Message, mut args: Args) -> CommandRe
         },
     };
 
-    let loved_tracks = if client.loved_tracks(&user).send().unwrap().attrs.total == "0" {
-        "No loved tracks...:(".to_string()
-    } else {
-        client.loved_tracks(&user).send().unwrap().attrs.total
-    };
+    let loved_tracks = client.loved_tracks(&user).send().unwrap().attrs.total;
+    let top_artists = client.top_artists(&user).with_period(Period::Overall).with_limit(5).send().unwrap();
 
     let user_info = client.user_info(&user).send().unwrap().user;
 
@@ -152,6 +147,18 @@ pub fn lastfm(ctx: &mut Context, message: &Message, mut args: Args) -> CommandRe
     let avatar = user_info.images[3].image_url.as_str();
     let country = user_info.country;
     let url = user_info.url;
+    let total_artists = format_int(top_artists.attrs.total.parse::<usize>().unwrap());
+
+    let artists = top_artists
+        .artists
+        .iter()
+        .map(|a: &Artist| {
+            let name = &a.name;
+            let plays = format_int(a.playcount.parse::<usize>().unwrap());
+
+            format!("**{}** — {} plays", name, plays)
+        })
+        .join("\n");
 
     let username = match database::get_user_display_name(message.author.id) {
         Ok(database_name) => {
@@ -170,7 +177,7 @@ pub fn lastfm(ctx: &mut Context, message: &Message, mut args: Args) -> CommandRe
     };
 
     let registered = NaiveDateTime::from_timestamp(user_info.registered.friendly_date, 0).format("%A, %B %e, %Y @ %l:%M %P");
-    let scrobbles = utilities::format_int(user_info.total_tracks.parse::<usize>().unwrap());
+    let scrobbles = format_int(user_info.total_tracks.parse::<usize>().unwrap());
 
     let track = recent_tracks.first().unwrap();
 
@@ -219,10 +226,13 @@ pub fn lastfm(ctx: &mut Context, message: &Message, mut args: Args) -> CommandRe
                 **Country**: {}\n\
                 **Join date**: {}\n\
                 **Loved tracks**: {}\n\
+                **Total played artists**: {}\n\
                 **Total track plays**: {}\n\n\
-                **__Recent tracks:__**\n\
+                **__Top Artists:__**\n\
+                {}\n\n\
+                **__Recently Played:__**\n\
                 {}",
-                currently_playing, display_name, country, registered, loved_tracks, scrobbles, tracks
+                currently_playing, display_name, country, registered, loved_tracks, total_artists, scrobbles, artists, tracks
             ));
             embed.footer(|f| f.text("Powered by the Last.fm API."))
         })
