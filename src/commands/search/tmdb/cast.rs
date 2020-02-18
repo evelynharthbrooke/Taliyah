@@ -150,7 +150,7 @@ pub fn cast(context: &mut Context, message: &Message, mut arguments: Args) -> Co
             // its inline property, and re-inserting it into the show cast and crew
             // field vectors.
             //
-            // TODO: Figure out why this is breaking with certain shows like How I Met 
+            // TODO: Figure out why this is breaking with certain shows like How I Met
             // Your Mother.
             5 | 8 | 11 | 14 | 17 | 20 | 23 => {
                 for member in &show_cast[0..show_cast.len() - 1] {
@@ -196,7 +196,7 @@ pub fn cast(context: &mut Context, message: &Message, mut arguments: Args) -> Co
             })
         })?;
 
-        return Ok(());
+        Ok(())
     } else if media_type.contains("movie") || media_type.contains("film") {
         let search_endpoint = "https://api.themoviedb.org/3/search/movie";
         let search_response: RequestBuilder;
@@ -243,7 +243,7 @@ pub fn cast(context: &mut Context, message: &Message, mut arguments: Args) -> Co
         let credits_endpoint = format!("https://api.themoviedb.org/3/movie/{}/credits", movie_id);
         let credits_response = client.get(&credits_endpoint).query(&[("api_key", &api_key)]).send()?;
         let credits_result: Credits = credits_response.json()?;
-        
+
         let movie_cast = &credits_result.cast[..20];
         let movie_crew = &credits_result.crew[..5];
         let movie_cast_url = format!("https://www.themoviedb.org/movie/{}/cast", movie_id);
@@ -266,7 +266,7 @@ pub fn cast(context: &mut Context, message: &Message, mut arguments: Args) -> Co
                 embed.description(format!(
                     "Please note that not all cast and crew members could be displayed \
                     for *{}*. For a full list of the cast and crew of this movie, please \
-                    visit the full The Movie Database website by [clicking here]({}).", 
+                    visit the full The Movie Database website by [clicking here]({}).",
                     movie_name, movie_cast_url
                 ));
                 embed.fields(movie_cast_fields);
@@ -277,10 +277,10 @@ pub fn cast(context: &mut Context, message: &Message, mut arguments: Args) -> Co
                 embed.timestamp(&Utc::now())
             })
         })?;
-        
-        return Ok(())
+
+        Ok(())
     } else {
         message.channel_id.send_message(&context, |message| message.content("This is not a recognized media type!"))?;
-        return Ok(())
+        Ok(())
     }
 }
