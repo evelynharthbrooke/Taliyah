@@ -36,6 +36,8 @@ pub struct SearchMovie {
 #[aliases("film")]
 #[description("Gets detailed information about a movie from The Movie Database.")]
 pub fn movie(context: &mut Context, message: &Message, arguments: Args) -> CommandResult {
+    message.channel_id.broadcast_typing(&context)?;
+    
     if arguments.rest().is_empty() {
         message.channel_id.send_message(&context, |message| {
             message.embed(|embed| {
@@ -46,8 +48,6 @@ pub fn movie(context: &mut Context, message: &Message, arguments: Args) -> Comma
         })?;
         return Ok(());
     }
-
-    message.channel_id.broadcast_typing(&context)?;
 
     let mut movie: String = arguments.rest().to_string();
 

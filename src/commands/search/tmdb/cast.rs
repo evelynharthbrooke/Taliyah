@@ -96,7 +96,28 @@ pub fn cast(context: &mut Context, message: &Message, mut arguments: Args) -> Co
 
     if media_type.contains("show") || media_type.contains("series") {
         let search_endpoint = "https://api.themoviedb.org/3/search/tv";
-        let search_response = client.get(search_endpoint).query(&[("api_key", &api_key), ("query", &media)]);
+        let search_response: RequestBuilder;
+
+        // This is a pretty hacky way of being able to search by year, but
+        // surprisingly enough it actually works from what I've tested, and
+        // while it might be a tad slow, it should compute fast enough to not
+        // make users wonder why its taking so long for the response to send.
+        //
+        // This code follows the y: notation syntax as available on the website
+        // for The Movie Database, with the additional ability to use year: in
+        // place of y:, depending on the user's preference.
+        if media.contains("y:") || media.contains("year:") {
+            media = media.replace(" y:", "").replace(" year:", "");
+            let mut year_rev: Vec<char> = media.chars().rev().take(4).collect();
+            year_rev.reverse();
+            let year = year_rev.iter().map(|c| c).join("");
+            media = media.replace(&year, "");
+            let query_string = &[("api_key", &api_key), ("query", &media), ("first_air_date_year", &year)];
+            search_response = client.get(search_endpoint).query(query_string);
+        } else {
+            search_response = client.get(search_endpoint).query(&[("api_key", &api_key), ("query", &media)]);
+        }
+
         let search_result: SeriesSearchResponse = search_response.send()?.json()?;
         let search_results = search_result.results;
 
@@ -195,8 +216,8 @@ pub fn cast(context: &mut Context, message: &Message, mut arguments: Args) -> Co
                 // weird.
                 //
                 // Personal Note: The amount of crew members listed in the HIMYM array
-                // could change at anytime, so this is a really hacky way of fixing the
-                // issue.
+                // could change at any time, so this is a really hacky way of fixing
+                // the issue and a better solution should be looked into.
                 if show_crew.len() == 11 {
                     for member in &show_crew[..11 - 1] {
                         show_crew_fields.push((&member.name, &member.job, true));
