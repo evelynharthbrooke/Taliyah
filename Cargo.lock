@@ -421,9 +421,9 @@ dependencies = [
 
 [[package]]
 name = "derive_more"
-version = "0.99.2"
+version = "0.99.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "2159be042979966de68315bce7034bb000c775f22e3e834e1c52ff78f041cae8"
+checksum = "a806e96c59a76a5ba6e18735b6cf833344671e61e7863f2edb5c518ea2cac95c"
 dependencies = [
  "proc-macro2 1.0.8",
  "quote 1.0.2",
@@ -1154,7 +1154,7 @@ dependencies = [
 [[package]]
 name = "libsqlite3-sys"
 version = "0.18.0"
-source = "git+https://github.com/jgallagher/rusqlite#406cd6d2cfe7197ea41fa197cb4c9931134ddc61"
+source = "git+https://github.com/jgallagher/rusqlite#0acdb19a38e753e7db92126b1b58d8c07ce2e46e"
 dependencies = [
  "cc",
  "pkg-config",
@@ -2013,7 +2013,7 @@ dependencies = [
 [[package]]
 name = "rusqlite"
 version = "0.21.0"
-source = "git+https://github.com/jgallagher/rusqlite#406cd6d2cfe7197ea41fa197cb4c9931134ddc61"
+source = "git+https://github.com/jgallagher/rusqlite#0acdb19a38e753e7db92126b1b58d8c07ce2e46e"
 dependencies = [
  "bitflags",
  "fallible-iterator",
