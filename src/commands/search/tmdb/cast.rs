@@ -167,14 +167,14 @@ pub fn cast(context: &mut Context, message: &Message, mut arguments: Args) -> Co
                 // crew members normally, without going through the process of
                 // removing the last crew member and re-adding it without the
                 // inline property enabled.
-                if show_crew.len() != 0 && show_crew.len() > 2 {
+                if !show_crew.is_empty() && show_crew.len() > 2 {
                     for member in &show_crew[0..show_cast.len() - 1] {
                         show_crew_fields.push((&member.name, &member.job, true));
                     }
 
                     let last_crew_member = show_crew.last().unwrap();
                     show_crew_fields.push((&last_crew_member.name, &last_crew_member.job, false));
-                } else if show_crew.len() >= 1 {
+                } else if !show_crew.is_empty() {
                     for member in &show_crew[0..show_cast.len()] {
                         show_crew_fields.push((&member.name, &member.job, true));
                     }
