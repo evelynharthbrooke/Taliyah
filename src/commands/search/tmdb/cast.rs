@@ -193,7 +193,7 @@ pub fn cast(context: &mut Context, message: &Message, mut arguments: Args) -> Co
                 // would refuse to go onto a separate non-inlined embed field and
                 // instead continue to be inlined, causing the last embed row to look
                 // weird.
-                // 
+                //
                 // Personal Note: The amount of crew members listed in the HIMYM array
                 // could change at anytime, so this is a really hacky way of fixing the
                 // issue.
