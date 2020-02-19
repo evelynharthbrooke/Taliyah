@@ -149,22 +149,35 @@ pub fn cast(context: &mut Context, message: &Message, mut arguments: Args) -> Co
             // the show cast and crew, removing the last inlined field and disabling
             // its inline property, and re-inserting it into the show cast and crew
             // field vectors.
-            //
-            // TODO: Figure out why this is breaking with certain shows like How I Met
-            // Your Mother.
             5 | 8 | 11 | 14 | 17 | 20 | 23 => {
                 for member in &show_cast[0..show_cast.len() - 1] {
                     show_cast_fields.push((&member.name, &member.character, true));
                 }
 
-                for member in &show_crew[0..show_cast.len() - 1] {
-                    show_crew_fields.push((&member.name, &member.job, true));
-                }
-
                 let last_cast_member = show_cast.last().unwrap();
                 show_cast_fields.push((&last_cast_member.name, &last_cast_member.character, false));
-                let last_crew_member = show_crew.last().unwrap();
-                show_crew_fields.push((&last_crew_member.name, &last_crew_member.job, false));
+
+                // Check the length of the show's crew array and make sure that it
+                // is larger than zero and greater than two, so that way we don't
+                // end up running into any array overflow errors when subtracting
+                // the last crew member from the array.
+                //
+                // When the array is greater than or equal to one, push the show
+                // crew members normally, without going through the process of
+                // removing the last crew member and re-adding it without the
+                // inline property enabled.
+                if show_crew.len() != 0 && show_crew.len() > 2 {
+                    for member in &show_crew[0..show_cast.len() - 1] {
+                        show_crew_fields.push((&member.name, &member.job, true));
+                    }
+
+                    let last_crew_member = show_crew.last().unwrap();
+                    show_crew_fields.push((&last_crew_member.name, &last_crew_member.job, false));
+                } else if show_crew.len() >= 1 {
+                    for member in &show_crew[0..show_cast.len()] {
+                        show_crew_fields.push((&member.name, &member.job, true));
+                    }
+                }
             }
             // If the length of the show crew or cast does not match any of the known
             // embed field amounts we match against, proceed to push each cast / crew
@@ -174,8 +187,22 @@ pub fn cast(context: &mut Context, message: &Message, mut arguments: Args) -> Co
                     show_cast_fields.push((&member.name, &member.character, true));
                 }
 
-                for member in &show_crew {
-                    show_crew_fields.push((&member.name, &member.job, true));
+                // This specifically fixes an issue with looking up the show How I
+                // Met Your Mother, where for some odd reason, the last crew member
+                // would refuse to go onto a separate non-inlined embed field and
+                // instead continue to be inlined, causing the last embed row to look
+                // weird.
+                if show_crew.len() == 11 {
+                    for member in &show_crew[..11 - 1] {
+                        show_crew_fields.push((&member.name, &member.job, true));
+                    }
+
+                    let last_crew_member = show_crew.last().unwrap();
+                    show_crew_fields.push((&last_crew_member.name, &last_crew_member.job, false));
+                } else {
+                    for member in &show_crew {
+                        show_crew_fields.push((&member.name, &member.job, true));
+                    }
                 }
             }
         }
