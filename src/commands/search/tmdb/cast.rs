@@ -130,6 +130,7 @@ pub fn cast(context: &mut Context, message: &Message, mut arguments: Args) -> Co
         let mut show_cast_fields = Vec::with_capacity(show_cast.len());
         let mut show_crew_fields = Vec::with_capacity(show_crew.len());
 
+        // TODO: Look into maybe simplifying this check
         match show_cast.len() | show_crew.len() {
             // Match the amount of fields known to break the formatting of the
             // Discord embed on desktop, making the embed look a tad bit better
@@ -192,6 +193,10 @@ pub fn cast(context: &mut Context, message: &Message, mut arguments: Args) -> Co
                 // would refuse to go onto a separate non-inlined embed field and
                 // instead continue to be inlined, causing the last embed row to look
                 // weird.
+                // 
+                // Personal Note: The amount of crew members listed in the HIMYM array
+                // could change at anytime, so this is a really hacky way of fixing the
+                // issue.
                 if show_crew.len() == 11 {
                     for member in &show_crew[..11 - 1] {
                         show_crew_fields.push((&member.name, &member.job, true));
