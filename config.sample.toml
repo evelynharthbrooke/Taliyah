@@ -1,4 +1,4 @@
-bot_codename = "Boron"
+bot_codename = "Carbon" # bump this each major update
 client_id = ""
 client_secret = ""
 darksky = ""

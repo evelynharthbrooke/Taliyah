@@ -43,26 +43,28 @@ pub fn about(context: &mut Context, message: &Message) -> CommandResult {
     let shards = cache.shard_count.to_string();
     let color = Colour::from_rgb(0, 191, 255);
 
+    let about_fields = vec![
+        ("Version", version, true),
+        ("Codename", codename, true),
+        ("Branch", branch, true),
+        ("Revision", format!("`{}`", revision), true),
+        ("Owner", owner_tag, true),
+        ("Owner ID", format!("`{}`", owner_id), true),
+        ("Users", users, true),
+        ("Guilds", guilds, true),
+        ("Shards", shards, true),
+        ("Channels", channels, true),
+        ("CPU", format!("{}%", cpu_usage), true),
+        ("Memory", format!("{} MB", memory), true),
+    ];
+
     message.channel_id.send_message(&context, |message| {
         message.embed(|embed| {
             embed.title("Ellie Information");
             embed.thumbnail(avatar);
             embed.color(color);
-            embed.fields(vec![
-                ("Version", version, true),
-                ("Codename", codename, true),
-                ("Branch", branch, true),
-                ("Revision", format!("`{}`", revision), true),
-                ("Owner", owner_tag, true),
-                ("Owner ID", format!("`{}`", owner_id), true),
-                ("Users", users, true),
-                ("Guilds", guilds, true),
-                ("Shards", shards, true),
-                ("Channels", channels, true),
-                ("CPU", format!("{}%", cpu_usage), true),
-                ("Memory", format!("{} MB", memory), true),
-            ]);
-            embed.footer(|footer| footer.text(format!("Bot user ID: {}", user_id)));
+            embed.fields(about_fields);
+            embed.footer(|footer| footer.text(format!("Bot ID: {} | Written using serenity.", user_id)));
             embed.timestamp(&Utc::now())
         })
     })?;

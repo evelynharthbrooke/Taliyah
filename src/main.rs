@@ -22,6 +22,7 @@ use commands::info::guild::*;
 use commands::info::profile::*;
 use commands::info::role::*;
 use commands::info::user::*;
+use commands::moderation::slowmode::*;
 use commands::music::lastfm::*;
 use commands::music::spotify::*;
 use commands::music::voice::join::*;
@@ -88,6 +89,11 @@ struct Fun;
 #[description = "Various informational commands."]
 #[commands(about, changelog, channel, guild, profile, role, user)]
 struct Information;
+
+#[group]
+#[description = "Server moderation command suite."]
+#[commands(slowmode)]
+struct Moderation;
 
 #[group]
 #[description = "Music-focused commands."]
@@ -222,6 +228,7 @@ pub fn main() {
             .group(&EXTRA_GROUP)
             .group(&FUN_GROUP)
             .group(&INFORMATION_GROUP)
+            .group(&MODERATION_GROUP)
             .group(&MUSIC_GROUP)
             .group(&SEARCH_GROUP)
             .group(&VOICE_GROUP)

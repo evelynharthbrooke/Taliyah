@@ -14,26 +14,21 @@ pub fn channel(context: &mut Context, message: &Message, arguments: Args) -> Com
     let guild_id = message.guild_id.ok_or("Failed to get GuildID from Message.")?;
     let cached_guild = cache.read().guild(guild_id).ok_or("Unable to retrieve guild")?;
     let guild = cached_guild.read();
-    let guild_name = &guild.name;
     let guild_icon = guild.icon_url().unwrap();
 
-    if arguments.is_empty() {
-        message.channel_id.send_message(&context, |message| message.content("You didn't provide a channel name."))?;
-        return Ok(());
-    }
+    let channel_name = if arguments.is_empty() {
+        message.channel_id.name(&context).unwrap()
+    } else {
+        arguments.rest().to_string()
+    };
 
-    let channel_name: &str = arguments.rest();
-    let channel_id = match parse_channel(channel_name, Some(&guild_id), Some(&context)) {
+    let channel_id = match parse_channel(&channel_name, Some(&guild_id), Some(&context)) {
         Some(channel_id) => channel_id,
         None => {
             message.channel_id.send_message(&context, |message| {
                 message.embed(|embed| {
                     embed.title("Error: Unknown channel provided.");
-                    embed.description(format!(
-                        "This channel does not exist as part of **{}**. Please \
-                        try a different channel name.",
-                        guild_name
-                    ))
+                    embed.description("This channel does not exist. Please try a different channel name.")
                 })
             })?;
             return Ok(());
@@ -45,6 +40,12 @@ pub fn channel(context: &mut Context, message: &Message, arguments: Args) -> Com
     let channel = guild_channel.read();
 
     let channel_name = &channel.name;
+
+    let channel_category = match channel.category_id {
+        Some(category) => category.name(&context).unwrap(),
+        None => "No category available".to_string(),
+    };
+
     let channel_position = &channel.position;
     let channel_id = &channel.id;
     let channel_nsfw = &channel.is_nsfw();
@@ -79,11 +80,12 @@ pub fn channel(context: &mut Context, message: &Message, arguments: Args) -> Com
             embed.description(format!(
                 "{}\
                 **__Channel Attributes:__**\n\
-                **NSFW:** {}\n\
-                **Kind:** {}\n\
+                **Category**: {}\n\
                 **Position:** {}\n\
+                **Kind:** {}\n\
+                **NSFW:** {}\n\
                 ",
-                channel_topic, channel_nsfw, channel_kind, channel_position
+                channel_topic, channel_category, channel_position, channel_kind, channel_nsfw,
             ));
             embed.footer(|footer| footer.text(format!("Channel ID: {}", channel_id)))
         })

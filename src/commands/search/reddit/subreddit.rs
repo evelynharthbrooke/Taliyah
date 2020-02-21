@@ -133,7 +133,7 @@ pub fn subreddit(context: &mut Context, message: &Message, mut arguments: Args) 
 
     let result: Response = response.json()?;
 
-    let created = result.data.created_utc().format("%A, %B %e, %Y @ %l:%M %P");
+    let created = result.data.created_utc().format("%B %e, %Y %l:%M %p").to_string();
     let active_users = format_int(result.data.active_user_count as usize);
     let subscribers = format_int(result.data.subscribers as usize);
     let icon = result.data.icon_img.unwrap();
@@ -156,28 +156,26 @@ pub fn subreddit(context: &mut Context, message: &Message, mut arguments: Args) 
         }
     };
 
+    let subreddit_fields = vec![
+        ("Creation Date", created, true),
+        ("Users Active", active_users, true),
+        ("Subscribers", subscribers, true),
+        ("Quarantined", quarantined.to_string(), true),
+        ("NSFW (Over 18)", over_eighteen.to_string(), true),
+        ("Posting Restricted", posts_restricted.to_string(), true),
+    ];
+
     message.channel_id.send_message(&context, |message| {
         message.embed(|embed| {
             embed.author(|author| {
-                author.name(name);
+                author.name(format!("{} — {}", name, title));
                 author.icon_url(icon);
                 author.url(url)
             });
             embed.color(color);
             embed.thumbnail(image);
-            embed.description(format!(
-                "\
-                {}\n\n\
-                **Title:** {}\n\
-                **Active Users:** {}\n\
-                **Subscribers:** {}\n\
-                **Quarantined:** {}\n\
-                **Over Eighteen?** {}\n\
-                **Posting Restricted?** {}\n\
-                **Created:** {}\n\
-                ",
-                description, title, active_users, subscribers, quarantined, over_eighteen, posts_restricted, created
-            ));
+            embed.description(description);
+            embed.fields(subreddit_fields);
             embed.footer(|footer| footer.text(format!("Subreddit ID: {}", object_id)))
         })
     })?;

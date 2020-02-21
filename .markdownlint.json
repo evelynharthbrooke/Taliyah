@@ -1,7 +1,7 @@
 {
   "default": true,
   "line-length": {
-      "line_length": 100
+      "line_length": 120
   },
   "no-duplicate-heading": {
     "allow_different_nesting": true

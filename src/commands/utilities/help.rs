@@ -9,6 +9,7 @@ use serenity::model::prelude::{Message, UserId};
 use std::collections::HashSet;
 
 #[help]
+#[max_levenshtein_distance(3)]
 #[no_help_available_text(
     "**Error**: I was unable to find any information on this command, \
     usually indicating that this command does not exist or does not have \
@@ -23,5 +24,5 @@ fn help(
     command_groups: &[&'static CommandGroup],
     bot_owners: HashSet<UserId>,
 ) -> CommandResult {
-    help_commands::with_embeds(context, message, arguments, &options, command_groups, bot_owners)
+    help_commands::plain(context, message, arguments, &options, command_groups, bot_owners)
 }

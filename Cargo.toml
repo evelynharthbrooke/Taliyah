@@ -1,6 +1,6 @@
 [package]
 name                = "ellie"
-version             = "0.5.1-alpha"
+version             = "0.6.0-alpha"
 authors             = ["Kamran Mackey <kamranm1200@gmail.com>"]
 description         = "A Discord bot written in Rust with Serenity."
 homepage            = "https://github.com/KamranMackey/Ellie"
