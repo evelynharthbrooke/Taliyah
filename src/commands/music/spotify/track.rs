@@ -28,7 +28,7 @@ fn track(context: &mut Context, message: &Message, args: Args) -> CommandResult 
                 embed.color(0x00FF_0000);
                 embed.description(
                     "You did not provide a track name. Please enter one and \
-                    then try again.",
+                    then try again."
                 )
             })
         })?;
@@ -78,7 +78,7 @@ fn track(context: &mut Context, message: &Message, args: Args) -> CommandResult 
 
     let track_date = match NaiveDate::parse_from_str(&track_album.release_date, "%Y-%m-%d") {
         Ok(date) => date.format("%B %-e, %Y").to_string(),
-        Err(_) => track_album.release_date,
+        Err(_) => track_album.release_date
     };
 
     let track_copyright = match &track_album.copyrights.is_empty() {
@@ -110,7 +110,7 @@ fn track(context: &mut Context, message: &Message, args: Args) -> CommandResult 
         9 => "A".to_owned(),
         10 => "A♯, B♭".to_owned(),
         11 => "B".to_owned(),
-        _ => track_analysis.key.to_string(),
+        _ => track_analysis.key.to_string()
     };
 
     let track_loudness = track_analysis.loudness;
@@ -119,7 +119,7 @@ fn track(context: &mut Context, message: &Message, args: Args) -> CommandResult 
     let track_mode = match track_analysis.mode as u32 {
         0 => "Minor".to_owned(),
         1 => "Major".to_owned(),
-        _ => track_analysis.mode.to_string(),
+        _ => track_analysis.mode.to_string()
     };
 
     message.channel_id.send_message(&context, |message| {

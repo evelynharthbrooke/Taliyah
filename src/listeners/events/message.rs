@@ -14,7 +14,7 @@ use serenity::model::prelude::Message;
 pub fn message(_ctx: Context, message: Message) {
     let database = match get_database() {
         Ok(connection) => connection,
-        Err(_) => return,
+        Err(_) => return
     };
 
     let user_id = message.author.id.to_string();

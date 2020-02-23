@@ -28,7 +28,7 @@ pub fn profile(context: &mut Context, message: &Message, args: Args) -> CommandR
         } else {
             match parse_user(&args.rest(), Some(&guild_id), Some(&context)) {
                 Some(i) => guild_id.member(&context, i)?,
-                None => return Ok(()),
+                None => return Ok(())
             }
         }
     } else {
@@ -149,7 +149,7 @@ pub fn profile(context: &mut Context, message: &Message, args: Args) -> CommandR
 pub fn set(context: &mut Context, message: &Message, mut arguments: Args) -> CommandResult {
     let connection = match database::get_database() {
         Ok(connection) => connection,
-        Err(_) => return Ok(()),
+        Err(_) => return Ok(())
     };
 
     let property = arguments.single::<String>()?;

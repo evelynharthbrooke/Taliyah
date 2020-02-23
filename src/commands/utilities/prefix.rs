@@ -45,7 +45,7 @@ fn prefix(context: &mut Context, message: &Message) -> CommandResult {
 pub fn set(context: &mut Context, message: &Message, arguments: Args) -> CommandResult {
     let connection = match get_database() {
         Ok(connection) => connection,
-        Err(_) => return Ok(()),
+        Err(_) => return Ok(())
     };
 
     let prefix = arguments.current().unwrap_or(";");
@@ -63,7 +63,7 @@ pub fn set(context: &mut Context, message: &Message, arguments: Args) -> Command
 
     let _ = connection.execute(
         "INSERT OR REPLACE INTO guild_settings (guild_id, guild_name, prefix) values (?1, ?2, ?3)",
-        &[&guild_id, &guild_name, &prefix.to_string()],
+        &[&guild_id, &guild_name, &prefix.to_string()]
     );
 
     message.channel_id.say(&context, format!("The prefix for **{}** has been set to `{}`.", guild_name, prefix))?;

@@ -17,7 +17,7 @@ pub fn parse_user(name: &str, guild_id: Option<&GuildId>, context: Option<&Conte
 
     let cached_guild = match guild_id.to_guild_cached(&context) {
         Some(guild) => guild,
-        None => return None,
+        None => return None
     };
 
     let guild = cached_guild.read();
@@ -57,7 +57,7 @@ pub fn parse_channel(name: &str, guild_id: Option<&GuildId>, context: Option<&Co
 
     let guild = match guild_id.to_guild_cached(&context) {
         Some(guild) => guild,
-        None => return None,
+        None => return None
     };
 
     let guild = guild.read();

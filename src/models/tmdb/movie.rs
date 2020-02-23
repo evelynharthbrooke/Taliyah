@@ -27,7 +27,7 @@ pub struct Movie {
     pub title: String,                                // The movie's title.
     pub video: bool,                                  // Whether or not this movie has a video available.
     pub vote_average: f64,                            // The movie's average user score on The Movie Database.
-    pub vote_count: f64,                              // The movie's total amount of votes on The Movie Database.
+    pub vote_count: f64                               // The movie's total amount of votes on The Movie Database.
 }
 
 #[derive(Debug, Deserialize)]
@@ -35,24 +35,24 @@ pub struct Collection {
     pub id: u64,               // The ID of the collection.
     pub name: String,          // The name of the collection.
     pub poster_path: String,   // The poster of the collection.
-    pub backdrop_path: String, // the backdrop of the collection.
+    pub backdrop_path: String  // the backdrop of the collection.
 }
 
 #[derive(Debug, Deserialize)]
 pub struct Genre {
     pub id: u64,      // The genre's ID.
-    pub name: String, // The genre's name.
+    pub name: String  // The genre's name.
 }
 
 #[derive(Debug, Deserialize)]
 pub struct ProductionCompany {
     pub name: String,           // The friendly name of the production company.
     pub id: u64,                // The ID of the production company on The Movie Database.
-    pub origin_country: String, // The country of origin of the production company.
+    pub origin_country: String  // The country of origin of the production company.
 }
 
 #[derive(Debug, Deserialize)]
 pub struct ProductionCountry {
     pub iso_3166_1: String, // The ISO standard shortcode of the production country.
-    pub name: String,       // The friendly name of the production country.
+    pub name: String        // The friendly name of the production country.
 }

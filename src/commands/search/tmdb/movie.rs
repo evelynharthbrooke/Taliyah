@@ -24,12 +24,12 @@ use std::time::Duration;
 
 #[derive(Debug, Deserialize)]
 pub struct SearchResponse {
-    pub results: Vec<SearchMovie>,
+    pub results: Vec<SearchMovie>
 }
 
 #[derive(Debug, Deserialize)]
 pub struct SearchMovie {
-    pub id: u64, // The movie's ID from the search result, which is all we need.
+    pub id: u64 // The movie's ID from the search result, which is all we need.
 }
 
 #[command]
@@ -104,7 +104,7 @@ pub fn movie(context: &mut Context, message: &Message, arguments: Args) -> Comma
                 format!("*{}*", tagline)
             }
         }
-        None => "".to_string(),
+        None => "".to_string()
     };
 
     let movie_overview = match movie_result.overview {
@@ -115,7 +115,7 @@ pub fn movie(context: &mut Context, message: &Message, arguments: Args) -> Comma
                 overview
             }
         }
-        None => "".to_string(),
+        None => "".to_string()
     };
 
     let movie_studios = if movie_result.production_companies.is_empty() {
@@ -126,12 +126,12 @@ pub fn movie(context: &mut Context, message: &Message, arguments: Args) -> Comma
 
     let movie_collection = match movie_result.belongs_to_collection {
         Some(collection) => collection.name,
-        None => "N/A".to_string(),
+        None => "N/A".to_string()
     };
 
     let movie_homepage = match movie_result.homepage {
         Some(homepage) => format!("[Website]({})", homepage),
-        None => "No Website".to_string(),
+        None => "No Website".to_string()
     };
 
     let movie_id = movie_result.id.to_string();

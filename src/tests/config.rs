@@ -31,7 +31,7 @@ mod test_config {
             google_key: None,
             lastfm_key: Some("TestLastFmKey".to_owned()),
             tmdb_key: None,
-            rust_log: None,
+            rust_log: None
         }
     }
 
@@ -99,7 +99,7 @@ mod test_config {
                     false
                 }
             }
-            None => res.is_none(),
+            None => res.is_none()
         };
         if !equal {
             remove_test_file(CONFIG_FILE);

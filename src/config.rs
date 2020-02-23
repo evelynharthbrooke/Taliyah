@@ -119,7 +119,7 @@ pub struct Config {
     pub google_key: Option<String>,
     pub lastfm_key: Option<String>,
     pub tmdb_key: Option<String>,
-    pub rust_log: Option<String>,
+    pub rust_log: Option<String>
 }
 
 impl Config {

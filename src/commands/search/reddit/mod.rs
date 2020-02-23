@@ -19,7 +19,7 @@ fn reddit(context: &mut Context, message: &Message) -> CommandResult {
             embed.title("Error: Invalid / No Subcommand Entered!");
             embed.description(
                 "You did not enter a valid subcommand! Please check \
-                `<prefix>help reddit` for the command usage.",
+                `<prefix>help reddit` for the command usage."
             )
         })
     })?;

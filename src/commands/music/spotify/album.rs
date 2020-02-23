@@ -71,7 +71,7 @@ fn album(context: &mut Context, message: &Message, args: Args) -> CommandResult 
         "single" => "Single".to_owned(),
         "appears_on" => "Appears On".to_owned(),
         "compilation" => "Compilation".to_owned(),
-        &_ => album.album_type.as_str().to_owned(),
+        &_ => album.album_type.as_str().to_owned()
     };
 
     if album_track_count <= 6 && album_track_count > 1 {
@@ -80,7 +80,7 @@ fn album(context: &mut Context, message: &Message, args: Args) -> CommandResult 
 
     let album_date = match NaiveDate::parse_from_str(&album.release_date, "%Y-%m-%d") {
         Ok(date) => date.format("%B %-e, %Y").to_string(),
-        Err(_) => album.release_date,
+        Err(_) => album.release_date
     };
 
     let album_copyright = if album.copyrights.is_empty() {

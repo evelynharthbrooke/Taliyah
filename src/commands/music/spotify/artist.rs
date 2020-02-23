@@ -22,12 +22,12 @@ struct Artist {
     #[serde(rename = "headerImages")]
     header_images: Option<Vec<HeaderImage>>,
     #[serde(rename = "artistInsights")]
-    artist_insights: ArtistInsights,
+    artist_insights: ArtistInsights
 }
 
 #[derive(Deserialize, Debug)]
 struct HeaderImage {
-    url: String,
+    url: String
 }
 
 #[derive(Deserialize, Debug)]
@@ -38,12 +38,12 @@ struct ArtistInsights {
     monthly_listeners_delta: isize,
     follower_count: usize,
     following_count: usize, // Artists can't follow anyone, so I'm unsure why this value exists.
-    playlists: Option<Playlists>,
+    playlists: Option<Playlists>
 }
 
 #[derive(Deserialize, Debug)]
 struct Playlists {
-    entries: Vec<Playlist>,
+    entries: Vec<Playlist>
 }
 
 #[derive(Deserialize, Debug)]
@@ -51,13 +51,13 @@ struct Playlist {
     uri: String,
     name: String,
     image_url: String,
-    owner: Owner,
+    owner: Owner
 }
 
 #[derive(Deserialize, Debug)]
 struct Owner {
     name: String,
-    uri: String,
+    uri: String
 }
 
 #[command]

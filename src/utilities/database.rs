@@ -16,7 +16,7 @@ pub fn create_database() {
     if !database.exists() {
         match File::create(&database) {
             Ok(_) => (),
-            Err(e) => error!("Failed to create database file: {}", e),
+            Err(e) => error!("Failed to create database file: {}", e)
         }
     }
 
@@ -24,7 +24,7 @@ pub fn create_database() {
         // Set user_version to 1.
         match connection.execute("PRAGMA user_version = 1;", NO_PARAMS) {
             Ok(_) => (),
-            Err(e) => error!("{}", e),
+            Err(e) => error!("{}", e)
         }
 
         // Create guild_settings table.
@@ -34,10 +34,10 @@ pub fn create_database() {
                 guild_name TEXT NOT NULL,
                 prefix TEXT NOT NULL
             );",
-            NO_PARAMS,
+            NO_PARAMS
         ) {
             Ok(_) => (),
-            Err(e) => error!("{}", e),
+            Err(e) => error!("{}", e)
         };
 
         // Create profile table.
@@ -54,10 +54,10 @@ pub fn create_database() {
                 playstation TEXT,
                 xbox TEXT
             )",
-            NO_PARAMS,
+            NO_PARAMS
         ) {
             Ok(_) => (),
-            Err(e) => error!("{}", e),
+            Err(e) => error!("{}", e)
         }
     } else {
         error!("Could not open connection to database ({})", &database.to_string_lossy())
@@ -140,7 +140,7 @@ pub fn get_prefix(guild_id: GuildId) -> Result<String, Box<dyn Error>> {
 pub fn clear_prefix(guild_id: GuildId) {
     let connection = match get_database() {
         Ok(d) => d,
-        Err(e) => return error!("An error occured while getting the database: {}", e),
+        Err(e) => return error!("An error occured while getting the database: {}", e)
     };
     let _ = connection.execute("DELETE FROM guild_settings where guild_id == ?1;", &[guild_id.to_string()]);
 }

@@ -30,7 +30,7 @@ pub fn user(context: &mut Context, message: &Message, args: Args) -> CommandResu
         } else {
             match parse_user(&args.rest(), Some(&guild_id), Some(&context)) {
                 Some(i) => guild_id.member(&context, i)?,
-                None => return Ok(()),
+                None => return Ok(())
             }
         }
     } else {
@@ -103,7 +103,7 @@ pub fn user(context: &mut Context, message: &Message, args: Args) -> CommandResu
                     }
                     ActivityType::Watching => "watching".to_owned(),
                     ActivityType::Streaming => "streaming on".to_owned(),
-                    _ => "".to_owned(),
+                    _ => "".to_owned()
                 };
                 format!("{} **{}**", activity_kind, activity_name)
             })
@@ -118,7 +118,7 @@ pub fn user(context: &mut Context, message: &Message, args: Args) -> CommandResu
             OnlineStatus::Idle => "Idle",
             OnlineStatus::DoNotDisturb => "Do Not Disturb",
             OnlineStatus::Invisible => "Invisible",
-            _ => "Offline",
+            _ => "Offline"
         };
 
         let client_status = match &presence.client_status {
@@ -139,7 +139,7 @@ pub fn user(context: &mut Context, message: &Message, args: Args) -> CommandResu
                     "Desktop and Web"
                 }
             }
-            None => "",
+            None => ""
         };
 
         if status != "Do Not Disturb" {

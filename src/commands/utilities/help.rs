@@ -22,7 +22,7 @@ fn help(
     arguments: Args,
     options: &'static HelpOptions,
     command_groups: &[&'static CommandGroup],
-    bot_owners: HashSet<UserId>,
+    bot_owners: HashSet<UserId>
 ) -> CommandResult {
     help_commands::plain(context, message, arguments, &options, command_groups, bot_owners)
 }

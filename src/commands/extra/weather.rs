@@ -28,7 +28,7 @@ struct Response {
     pub longitude: f64,
     pub timezone: String,
     pub currently: Currently,
-    pub daily: Daily,
+    pub daily: Daily
 }
 
 #[derive(Debug, Deserialize)]
@@ -46,14 +46,14 @@ struct Currently {
     wind_speed: f64,
     #[serde(rename = "uvIndex")]
     uv_index: u8,
-    visibility: f64,
+    visibility: f64
 }
 
 #[derive(Debug, Deserialize)]
 struct Daily {
     summary: String,
     icon: String,
-    data: Vec<DailyData>,
+    data: Vec<DailyData>
 }
 
 #[derive(Debug, Deserialize)]
@@ -63,7 +63,7 @@ struct DailyData {
     #[serde(rename = "temperatureHigh")]
     high: f64,
     #[serde(rename = "temperatureLow")]
-    low: f64,
+    low: f64
 }
 
 #[command]
@@ -85,7 +85,7 @@ pub fn weather(context: &mut Context, message: &Message, arguments: Args) -> Com
                             embed.description(
                                 "I could not find a location pertaining to your user record in my database, or \
                                 you did not provide a location to get weather information for. Please set a \
-                                location via the profile command, or provide a location as an argument.",
+                                location via the profile command, or provide a location as an argument."
                             );
                             embed.color(0x00FF_0000)
                         })

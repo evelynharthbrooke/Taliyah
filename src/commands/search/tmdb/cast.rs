@@ -17,31 +17,31 @@ use serenity::model::prelude::Message;
 
 #[derive(Debug, Deserialize)]
 pub struct SeriesSearchResponse {
-    pub results: Vec<SeriesResult>,
+    pub results: Vec<SeriesResult>
 }
 
 #[derive(Debug, Deserialize)]
 pub struct SeriesResult {
-    pub id: i64,
+    pub id: i64
 }
 
 #[derive(Debug, Deserialize)]
 pub struct MovieSearchResponse {
-    pub results: Vec<MovieResult>,
+    pub results: Vec<MovieResult>
 }
 
 #[derive(Debug, Deserialize)]
 pub struct MovieResult {
     pub title: String,
     pub poster_path: String,
-    pub id: i64,
+    pub id: i64
 }
 
 #[derive(Debug, Deserialize)]
 pub struct Credits {
     pub cast: Vec<CastMember>,
     pub crew: Vec<CrewMember>,
-    pub id: i64,
+    pub id: i64
 }
 
 #[derive(Debug, Deserialize)]
@@ -52,7 +52,7 @@ pub struct CastMember {
     pub name: String,
     pub gender: i64,
     pub profile_path: Option<String>,
-    pub order: i64,
+    pub order: i64
 }
 
 #[derive(Debug, Deserialize)]
@@ -63,7 +63,7 @@ pub struct CrewMember {
     pub name: String,
     pub gender: Option<i64>,
     pub job: String,
-    pub profile_path: Option<String>,
+    pub profile_path: Option<String>
 }
 
 /// Gets detailed information about the cast / crew of a television series
@@ -79,7 +79,7 @@ pub fn cast(context: &mut Context, message: &Message, mut arguments: Args) -> Co
                 embed.title("Error: No show or film name provided.");
                 embed.description(
                     "You did not provide the name of a show or film. Please provide one, \
-                    and then try again.",
+                    and then try again."
                 );
                 embed.color(0x00FF_0000)
             })

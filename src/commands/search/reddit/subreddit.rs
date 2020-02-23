@@ -19,7 +19,7 @@ use serenity::utils::Colour;
 
 #[derive(Debug, Deserialize)]
 pub struct Response {
-    pub data: SubredditData,
+    pub data: SubredditData
 }
 
 #[derive(Debug, Deserialize)]
@@ -27,7 +27,7 @@ pub struct ForbiddenResponse {
     pub reason: String,                     // The reason for the 403 Forbidden error.
     pub message: String,                    // The status message.
     pub quarantine_message: Option<String>, // The reasoning behind the subreddit quarantine, if available.
-    pub error: u64,                         // The status code of the response.
+    pub error: u64                          // The status code of the response.
 }
 
 #[derive(Debug, Deserialize)]
@@ -46,7 +46,7 @@ pub struct SubredditData {
     pub public_description: String,     // The public description of the subreddit.
     pub community_icon: Option<String>, // The community icon for the subreddit.
     pub over18: bool,                   // Whether or not the subreddit is rated for users age 18 and over.
-    pub created_utc: f64,               // The creation date of the subreddit, as a Unix timestamp.
+    pub created_utc: f64                // The creation date of the subreddit, as a Unix timestamp.
 }
 
 impl SubredditData {
@@ -105,7 +105,7 @@ pub fn subreddit(context: &mut Context, message: &Message, mut arguments: Args) 
                         embed.description(
                             "Reddit has transmitted a 403 Forbidden error, meaning there \
                             was an issue in trying to get the result for this request. Please \
-                            try again later.",
+                            try again later."
                         )
                     })
                 })?;
@@ -122,13 +122,13 @@ pub fn subreddit(context: &mut Context, message: &Message, mut arguments: Args) 
                         redirect to the Reddit Search API, usually indicating that the \
                         subreddit you tried searching for does not exist or could not \
                         be found in Reddit's database. Please try searching for a different \
-                        subreddit.",
+                        subreddit."
                     )
                 })
             })?;
             return Ok(());
         }
-        _ => (),
+        _ => ()
     }
 
     let result: Response = response.json()?;
@@ -152,7 +152,7 @@ pub fn subreddit(context: &mut Context, message: &Message, mut arguments: Args) 
     } else {
         match RGB::from_hex_code(&result.data.primary_color) {
             Ok(rgb) => Colour::from_rgb(rgb.r, rgb.g, rgb.b),
-            Err(_) => Colour::BLURPLE,
+            Err(_) => Colour::BLURPLE
         }
     };
 

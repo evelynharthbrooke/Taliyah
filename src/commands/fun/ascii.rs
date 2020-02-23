@@ -26,7 +26,7 @@ pub fn ascii(context: &mut Context, message: &Message, arguments: Args) -> Comma
                 embed.title("Error: No string provided.");
                 embed.description(
                     "You didn't provide a string to convert to ASCII. Please provide one.\n\
-                    For more details, please view the help documentation.",
+                    For more details, please view the help documentation."
                 );
                 embed.color(0x00FF_0000)
             })
@@ -38,7 +38,7 @@ pub fn ascii(context: &mut Context, message: &Message, arguments: Args) -> Comma
                 embed.title("Error: Zero width space detected.");
                 embed.description(
                     "A zero width space was detected in your message's content. This \
-                    is not allowed. Please send a string without a zero width space included.",
+                    is not allowed. Please send a string without a zero width space included."
                 );
                 embed.color(0x00FF_0000)
             })

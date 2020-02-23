@@ -15,12 +15,12 @@ use serenity::model::prelude::Message;
 
 #[derive(Deserialize, Debug)]
 pub struct SearchResponse {
-    pub results: Vec<SearchCollection>, // The collection search results.
+    pub results: Vec<SearchCollection> // The collection search results.
 }
 
 #[derive(Deserialize, Debug)]
 pub struct SearchCollection {
-    pub id: u64, // The ID of the collection. All we need.
+    pub id: u64 // The ID of the collection. All we need.
 }
 
 #[derive(Deserialize, Debug)]
@@ -30,7 +30,7 @@ pub struct Collection {
     pub overview: String,            // The overview of the collection.
     pub poster_path: String,         // The poster belonging to the collection.
     pub backdrop_path: String,       // The backdrop path of the collection.
-    pub parts: Vec<SimplifiedMovie>, // The movies part of the collection.
+    pub parts: Vec<SimplifiedMovie>  // The movies part of the collection.
 }
 
 #[derive(Deserialize, Debug)]
@@ -39,12 +39,12 @@ pub struct SimplifiedMovie {
     pub id: u64,                 // The TMDb ID belonging to the movie.
     pub overview: String,        // The overview of the movie.
     pub release_date: NaiveDate, // The release date of the movie.
-    pub title: String,           // The title of the movie.
+    pub title: String            // The title of the movie.
 }
 
 #[derive(Deserialize, Debug)]
 pub struct Movie {
-    pub status: String,
+    pub status: String
 }
 
 #[command]
@@ -101,7 +101,7 @@ pub fn collection(context: &mut Context, message: &Message, arguments: Args) -> 
 
     for part in &collection_parts {
         // This probably isn't the best implementation for getting a collection
-        // movie's release date, because everytime a collection entry is processed,
+        // movie's release date, because every time a collection entry is processed,
         // its gonna make a request to The Movie Database, using additional requests
         // in the process. While the TMDb API doesn't have rate limits, this might
         // become a bit network I/O intensive if there are a lot of movies in a given
@@ -115,7 +115,7 @@ pub fn collection(context: &mut Context, message: &Message, arguments: Args) -> 
         let movie_result: Movie = movie_response.json()?;
         let movie_status = match movie_result.status.as_str() {
             "Planned" | "In Production" | "Post Production" => "releasing on",
-            _ => "released",
+            _ => "released"
         };
 
         collection_part_fields.push((format!("{} — {} {}", part_title, movie_status, part_release_date), part_summary, false))

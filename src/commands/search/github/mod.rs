@@ -18,7 +18,7 @@ fn github(ctx: &mut Context, message: &Message) -> CommandResult {
             embed.title("Error: Invalid / No Subcommand Entered!");
             embed.description(
                 "You did not enter a valid subcommand! Please check \
-                `<prefix>help github` for the command usage.",
+                `<prefix>help github` for the command usage."
             )
         })
     })?;

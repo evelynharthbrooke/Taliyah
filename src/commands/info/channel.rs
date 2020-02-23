@@ -43,7 +43,7 @@ pub fn channel(context: &mut Context, message: &Message, arguments: Args) -> Com
 
     let channel_category = match channel.category_id {
         Some(category) => category.name(&context).unwrap(),
-        None => "No category available".to_string(),
+        None => "No category available".to_string()
     };
 
     let channel_position = &channel.position;
@@ -58,7 +58,7 @@ pub fn channel(context: &mut Context, message: &Message, arguments: Args) -> Com
                 "".to_string()
             }
         }
-        None => "".to_string(),
+        None => "".to_string()
     };
 
     let channel_kind = match channel.kind.name() {
@@ -67,7 +67,7 @@ pub fn channel(context: &mut Context, message: &Message, arguments: Args) -> Com
         "category" => "Channel Category",
         "news" => "News Channel",
         "store" => "Store Channel",
-        _ => "Unrecognized channel type",
+        _ => "Unrecognized channel type"
     };
 
     message.channel_id.send_message(&context, |message| {

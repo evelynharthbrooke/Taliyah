@@ -26,12 +26,12 @@ use std::time::Duration;
 
 #[derive(Debug, Deserialize)]
 pub struct SearchResponse {
-    pub results: Vec<Result>,
+    pub results: Vec<Result>
 }
 
 #[derive(Debug, Deserialize)]
 pub struct Result {
-    pub id: i64,
+    pub id: i64
 }
 
 #[command]

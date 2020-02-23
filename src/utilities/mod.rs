@@ -20,7 +20,7 @@ use serde::{Deserialize, Serialize};
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Config {
     #[serde(rename = "accessToken")]
-    pub access_token: String,
+    pub access_token: String
 }
 
 pub fn format_int(integer: usize) -> String {
@@ -51,7 +51,7 @@ pub fn get_album_artwork(artist: &str, track: &str, album: &str) -> String {
             let album_art = image.url.as_str();
             album_art.to_string()
         }
-        None => "".to_string(),
+        None => "".to_string()
     }
 }
 

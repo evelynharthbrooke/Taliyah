@@ -14,17 +14,17 @@ use log::error;
 use serenity::{
     client::Context,
     framework::standard::{macros::command, Args, CommandResult},
-    model::prelude::Message,
+    model::prelude::Message
 };
 
 use rustfm::{
     error::{
         Error,
-        LastFMErrorResponse::{InvalidParameter, OperationFailed},
+        LastFMErrorResponse::{InvalidParameter, OperationFailed}
     },
     user::recent_tracks::Track,
     user::top_artists::{Artist, Period},
-    Client,
+    Client
 };
 
 #[command]
@@ -49,7 +49,7 @@ pub fn lastfm(ctx: &mut Context, message: &Message, mut args: Args) -> CommandRe
                                 embed.description(
                                     "I could not find a Last.fm username pertaining to your user record, or \
                                     you did not provide a Last.fm username as an argument. Please set a username \
-                                    via the profile command, or provide a Last.fm username as an argument.",
+                                    via the profile command, or provide a Last.fm username as an argument."
                                 )
                             })
                         })?;
@@ -75,7 +75,7 @@ pub fn lastfm(ctx: &mut Context, message: &Message, mut args: Args) -> CommandRe
                                 "
                                 Last.fm is currently offline and unavailable for use. \
                                 Please try again later.
-                                ",
+                                "
                             );
                             embed.color(0x00FF_0000)
                         })
@@ -130,7 +130,7 @@ pub fn lastfm(ctx: &mut Context, message: &Message, mut args: Args) -> CommandRe
 
                 return Ok(());
             }
-        },
+        }
     };
 
     let loved_tracks = client.loved_tracks(&user).send().unwrap().attrs.total;
@@ -164,7 +164,7 @@ pub fn lastfm(ctx: &mut Context, message: &Message, mut args: Args) -> CommandRe
         Ok(database_name) => {
             let lastfm_name = match database::get_user_lastfm(message.author.id) {
                 Ok(name) => name,
-                Err(_) => user_info.username.to_string(),
+                Err(_) => user_info.username.to_string()
             };
 
             if lastfm_name == user {
@@ -173,7 +173,7 @@ pub fn lastfm(ctx: &mut Context, message: &Message, mut args: Args) -> CommandRe
                 user_info.username
             }
         }
-        Err(_) => user_info.username.to_string(),
+        Err(_) => user_info.username.to_string()
     };
 
     let registered = NaiveDateTime::from_timestamp(user_info.registered.friendly_date, 0).format("%A, %B %e, %Y @ %l:%M %P");

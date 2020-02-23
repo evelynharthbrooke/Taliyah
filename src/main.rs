@@ -136,7 +136,7 @@ pub fn main() {
             owners.insert(info.owner.id);
             (owners, info.id)
         }
-        Err(why) => panic!("Couldn't get app info: {:?}", why),
+        Err(why) => panic!("Couldn't get app info: {:?}", why)
     };
 
     create_database();
@@ -167,7 +167,7 @@ pub fn main() {
                     message.content(
                         "Hello! I noticed that you provided my prefix but didn't send a \
                         command. If you would like to get help on how to use my functionality, \
-                        please run the help command.",
+                        please run the help command."
                     )
                 });
             })
@@ -179,7 +179,7 @@ pub fn main() {
                             "Sorry, it looks like you are being rate limited! Please try this \
                             again in {} second(s).",
                             secs
-                        ),
+                        )
                     );
                 }
                 DispatchError::OnlyForOwners => {
@@ -216,7 +216,7 @@ pub fn main() {
                     });
                 }
                 DispatchError::IgnoredBot => {}
-                _ => error!("Dispatch Error: {} failed: {:?}", message.content, err),
+                _ => error!("Dispatch Error: {} failed: {:?}", message.content, err)
             })
             .after(|context, message, command_name, err| {
                 if let Err(why) = err {
@@ -232,7 +232,7 @@ pub fn main() {
             .group(&MUSIC_GROUP)
             .group(&SEARCH_GROUP)
             .group(&VOICE_GROUP)
-            .group(&UTILITIES_GROUP),
+            .group(&UTILITIES_GROUP)
     );
 
     if let Err(err) = client.start_autosharded() {

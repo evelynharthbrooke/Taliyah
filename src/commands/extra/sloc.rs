@@ -14,7 +14,7 @@ use serenity::model::prelude::Message;
 #[derive(Debug, Deserialize)]
 struct Response {
     languages: Vec<Language>,
-    total: Language,
+    total: Language
 }
 
 #[derive(Debug, Deserialize)]
@@ -24,7 +24,7 @@ pub struct Language {
     lines: usize,
     code: usize,
     comments: usize,
-    blanks: usize,
+    blanks: usize
 }
 
 #[command("sloc")]

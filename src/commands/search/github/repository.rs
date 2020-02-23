@@ -56,7 +56,7 @@ pub fn repository(context: &mut Context, message: &Message, mut arguments: Args)
 
     let query = Repository::build_query(repository::Variables {
         owner: arguments.single::<String>()?,
-        name: arguments.single::<String>()?,
+        name: arguments.single::<String>()?
     });
 
     let resp: Response<repository::ResponseData> = client.post(endpoint).bearer_auth(token).json(&query).send()?.json()?;
@@ -70,7 +70,7 @@ pub fn repository(context: &mut Context, message: &Message, mut arguments: Args)
                     embed.title("Error: Repository Not Found.");
                     embed.description(
                         "I was unable to find a repository matching the terms you were looking for. \
-                        Please try searching for a different repository.",
+                        Please try searching for a different repository."
                     )
                 })
             })?;
@@ -88,7 +88,7 @@ pub fn repository(context: &mut Context, message: &Message, mut arguments: Args)
     let repository_default_branch_name = &repository_default_branch.name;
     let repository_default_branch_commits = match &repository_default_branch.target.on {
         Commit(c) => format_int(c.history.total_count as usize),
-        _ => "".to_string(),
+        _ => "".to_string()
     };
 
     let repository_website = match repository.homepage_url {
@@ -99,7 +99,7 @@ pub fn repository(context: &mut Context, message: &Message, mut arguments: Args)
                 format!("[Click here]({})", url)
             }
         }
-        None => "No website available.".to_string(),
+        None => "No website available.".to_string()
     };
 
     let repository_disk_usage = match repository.disk_usage {
@@ -109,12 +109,12 @@ pub fn repository(context: &mut Context, message: &Message, mut arguments: Args)
             let friendly_bytes = bytes.get_appropriate_unit(false);
             friendly_bytes.format(2)
         }
-        None => "No disk usage data is available.".to_string(),
+        None => "No disk usage data is available.".to_string()
     };
 
     let repository_description = match repository.description {
         Some(description) => format!("{}\n\n", description),
-        None => "".to_string(),
+        None => "".to_string()
     };
 
     let repository_language = match repository.primary_language {
@@ -123,12 +123,12 @@ pub fn repository(context: &mut Context, message: &Message, mut arguments: Args)
 
             match color_utils::RGB::from_hex_code(&code) {
                 Ok(rgb) => color = Colour::from_rgb(rgb.r, rgb.g, rgb.b),
-                Err(_) => println!("{} isn't a valid color code...", code),
+                Err(_) => println!("{} isn't a valid color code...", code)
             }
 
             language.name
         }
-        None => "No language is available.".to_string(),
+        None => "No language is available.".to_string()
     };
 
     let repository_code_of_conduct = match repository.code_of_conduct {
@@ -139,7 +139,7 @@ pub fn repository(context: &mut Context, message: &Message, mut arguments: Args)
                 format!("[{}]({})", conduct.name, conduct.url.unwrap())
             }
         }
-        None => "No code of conduct is available.".to_string(),
+        None => "No code of conduct is available.".to_string()
     };
 
     let repository_owner = repository.owner.login;
@@ -154,7 +154,7 @@ pub fn repository(context: &mut Context, message: &Message, mut arguments: Args)
                 format!("[{}]({})", license.name, license.url.unwrap())
             }
         }
-        None => "No license available.".to_string(),
+        None => "No license available.".to_string()
     };
 
     message.channel_id.send_message(&context, |message| {

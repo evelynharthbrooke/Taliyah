@@ -43,7 +43,7 @@ pub fn guild(context: &mut Context, message: &Message) -> CommandResult {
         0 => "Disabled".to_owned(),
         1 => "Media scanned from members w/o a role.".to_owned(),
         2 => "Everyone".to_owned(),
-        _ => "Unrecognized filter setting.".to_owned(),
+        _ => "Unrecognized filter setting.".to_owned()
     };
 
     let guild_region = match guild.region.as_str() {
@@ -62,7 +62,7 @@ pub fn guild(context: &mut Context, message: &Message) -> CommandResult {
         "us-east" => "Eastern United States",
         "us-south" => "Southern United States",
         "us-west" => "Western United States",
-        &_ => guild.region.as_str(),
+        &_ => guild.region.as_str()
     };
 
     let guild_boosts = guild.premium_subscription_count;
@@ -71,7 +71,7 @@ pub fn guild(context: &mut Context, message: &Message) -> CommandResult {
         1 => "Level 1 (2+ boosts)",
         2 => "Level 2 (15+ boosts)",
         3 => "Level 3 (30+ boosts)",
-        _ => "Unrecognized boost tier.",
+        _ => "Unrecognized boost tier."
     };
 
     let guild_roles_sorted = guild.roles.iter().sorted_by_key(|&(_, r)| -r.position);
@@ -84,13 +84,13 @@ pub fn guild(context: &mut Context, message: &Message) -> CommandResult {
         2 => "Medium - Registered on Discord for 5+ minutes.",
         3 => "(╯°□°）╯︵ ┻━┻ - In the server for 10+ minutes.",
         4 => "┻━┻ ﾐヽ(ಠ益ಠ)ノ彡┻━┻) - Must have a verified phone number.",
-        _ => "Unrecognized verification level.",
+        _ => "Unrecognized verification level."
     };
 
     let guild_mfa_level = match guild.mfa_level.num() {
         0 => "Multi-factor authentication not required.",
         1 => "Multi-Factor authentication required.",
-        _ => "Unrecognized multi-factor authentication level.",
+        _ => "Unrecognized multi-factor authentication level."
     };
 
     let mut highest = None;

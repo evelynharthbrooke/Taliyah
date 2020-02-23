@@ -33,7 +33,7 @@ pub fn changelog(context: &mut Context, message: &Message) -> CommandResult {
     let query = Commits::build_query(commits::Variables {
         owner: "KamranMackey".to_string(),
         name: "Ellie".to_string(),
-        branch: "master".to_string(),
+        branch: "master".to_string()
     });
 
     let response: Response<commits::ResponseData> = client.post(endpoint).bearer_auth(token).json(&query).send()?.json()?;
@@ -62,7 +62,7 @@ pub fn changelog(context: &mut Context, message: &Message) -> CommandResult {
                 })
                 .join("\n")
         }
-        _ => "".to_string(),
+        _ => "".to_string()
     };
 
     message.channel_id.send_message(&context, |message| {

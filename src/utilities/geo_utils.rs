@@ -8,7 +8,7 @@ use std::env;
 #[derive(Debug, Deserialize)]
 pub struct Response {
     pub results: Vec<ResultResponse>,
-    pub status: String,
+    pub status: String
 }
 
 #[derive(Debug, Deserialize)]
@@ -17,20 +17,20 @@ pub struct ResultResponse {
     pub formatted_address: String,
     pub geometry: Geometry,
     pub place_id: String,
-    pub types: Vec<String>,
+    pub types: Vec<String>
 }
 
 #[derive(Debug, Deserialize)]
 pub struct AddressComponent {
     pub long_name: String,
     pub short_name: String,
-    pub types: Vec<String>,
+    pub types: Vec<String>
 }
 
 #[derive(Debug, Deserialize)]
 pub struct Geometry {
     pub location: Location,
-    pub location_type: String,
+    pub location_type: String
 }
 
 #[derive(Debug, Deserialize)]
@@ -38,7 +38,7 @@ pub struct Location {
     #[serde(rename = "lat")]
     pub latitude: f64,
     #[serde(rename = "lng")]
-    pub longitude: f64,
+    pub longitude: f64
 }
 
 /// Gets coordinates for a specified location using the Google Maps Geocoding API.

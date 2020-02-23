@@ -18,7 +18,7 @@ pub struct Response {
     #[serde(rename = "crate")]
     krate: Crate,
     versions: Vec<Version>,
-    keywords: Vec<Keyword>,
+    keywords: Vec<Keyword>
 }
 
 #[derive(Deserialize, Debug)]
@@ -37,7 +37,7 @@ struct Crate {
     description: Option<String>,
     homepage: Option<String>,
     repository: Option<String>,
-    exact_match: bool,
+    exact_match: bool
 }
 
 #[derive(Deserialize, Debug)]
@@ -55,7 +55,7 @@ struct Version {
     license: String,
     crate_size: Option<usize>,
     published_by: Option<User>,
-    audit_actions: Option<Vec<AuditAction>>,
+    audit_actions: Option<Vec<AuditAction>>
 }
 
 #[derive(Deserialize, Debug)]
@@ -64,14 +64,14 @@ struct User {
     login: String,
     name: Option<String>,
     avatar: String,
-    url: String,
+    url: String
 }
 
 #[derive(Deserialize, Debug)]
 struct AuditAction {
     action: String,
     user: User,
-    time: DateTime<Utc>,
+    time: DateTime<Utc>
 }
 
 #[derive(Deserialize, Debug)]
@@ -79,7 +79,7 @@ struct Keyword {
     id: String,
     keyword: String,
     created_at: DateTime<Utc>,
-    crates_cnt: usize,
+    crates_cnt: usize
 }
 
 #[command("crate")]
@@ -126,12 +126,12 @@ pub fn krate(context: &mut Context, message: &Message, mut arguments: Args) -> C
 
     let homepage = match result.krate.homepage {
         Some(homepage) => homepage,
-        None => "No homepage is available for this crate.".to_string(),
+        None => "No homepage is available for this crate.".to_string()
     };
 
     let repository = match result.krate.repository {
         Some(repository) => repository,
-        None => "No repository is available for this crate.".to_string(),
+        None => "No repository is available for this crate.".to_string()
     };
 
     message.channel_id.send_message(&context, |message| {

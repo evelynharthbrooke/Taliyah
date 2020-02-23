@@ -28,7 +28,7 @@ fn tmdb(context: &mut Context, message: &Message) -> CommandResult {
             embed.title("Error: Invalid / No Subcommand Entered!");
             embed.description(
                 "You did not enter a valid subcommand! Please check \
-                `<prefix>help tmdb` for the command usage.",
+                `<prefix>help tmdb` for the command usage."
             )
         })
     })?;

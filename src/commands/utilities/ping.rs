@@ -46,9 +46,9 @@ fn ping(context: &mut Context, message: &Message) -> CommandResult {
     let latency = match runner.latency {
         Some(latency) => match Duration::from_std(latency) {
             Ok(milli) => format!("`{}ms`", milli.num_milliseconds()),
-            Err(_) => "Could not get latency information... :(".to_string(),
+            Err(_) => "Could not get latency information... :(".to_string()
         },
-        None => "No data available yet.".to_string(),
+        None => "No data available yet.".to_string()
     };
 
     let response = format!(

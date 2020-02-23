@@ -24,27 +24,27 @@ pub struct Credits {
     track_title: String,
     #[serde(rename = "roleCredits")]
     role_credits: Vec<Role>,
-    source: Source,
+    source: Source
 }
 
 #[derive(Deserialize, Debug)]
 pub struct Role {
     #[serde(rename = "roleTitle")]
     role_title: String,
-    artists: Vec<Artist>,
+    artists: Vec<Artist>
 }
 
 #[derive(Deserialize, Debug)]
 pub struct Artist {
     uri: String,
     name: String,
-    subroles: Vec<String>,
+    subroles: Vec<String>
 }
 
 #[derive(Deserialize, Debug)]
 pub struct Source {
     label: String,
-    value: String,
+    value: String
 }
 
 #[command]
@@ -58,7 +58,7 @@ fn credits(context: &mut Context, message: &Message, args: Args) -> CommandResul
                 embed.title("Error: No track name provided.");
                 embed.description(
                     "You did not provide a track name. Please enter one and \
-                        then try again.",
+                        then try again."
                 )
             })
         })?;

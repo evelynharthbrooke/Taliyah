@@ -19,7 +19,7 @@ use serenity::utils::Colour;
 
 #[derive(Debug, Deserialize)]
 pub struct AboutResponse {
-    pub data: UserData,
+    pub data: UserData
 }
 
 #[derive(Debug, Deserialize)]
@@ -38,7 +38,7 @@ pub struct UserData {
     pub verified: bool,           // Whether or not the user is verified.
     pub subreddit: UserSubreddit, // The user's own subreddit, if available.
     pub has_verified_email: bool, // Whether or not the user has a verified email address.
-    pub id: String,               // The reddit object ID of the user.
+    pub id: String                // The reddit object ID of the user.
 }
 
 #[derive(Debug, Deserialize)]
@@ -48,7 +48,7 @@ pub struct UserSubreddit {
     pub user_is_banned: Option<bool>,  // Whether or not the user has been banned from posting in the subreddit.
     pub display_name_prefixed: String, // The user's prefixed name.
     pub public_description: String,    // The description of the user's subreddit.
-    pub subreddit_type: String,        // The type of the subreddit, e.g. User or Public.
+    pub subreddit_type: String         // The type of the subreddit, e.g. User or Public.
 }
 
 impl UserData {
@@ -61,17 +61,17 @@ impl UserData {
 
 #[derive(Debug, Deserialize)]
 pub struct TrophiesResponse {
-    pub data: Trophies,
+    pub data: Trophies
 }
 
 #[derive(Debug, Deserialize)]
 pub struct Trophies {
-    pub trophies: Vec<Trophy>,
+    pub trophies: Vec<Trophy>
 }
 
 #[derive(Debug, Deserialize)]
 pub struct Trophy {
-    pub data: TrophyData, // The data containing information about the trophies.
+    pub data: TrophyData // The data containing information about the trophies.
 }
 
 #[derive(Debug, Deserialize)]
@@ -79,7 +79,7 @@ pub struct TrophyData {
     pub icon_70: String,             // The icon of the trophy.
     pub name: String,                // The name of the trophy.
     pub award_id: Option<String>,    // The ID of the trophy.
-    pub description: Option<String>, // The description of the trophy.
+    pub description: Option<String>  // The description of the trophy.
 }
 
 #[command("user")]
@@ -119,13 +119,13 @@ pub fn user(context: &mut Context, message: &Message, mut arguments: Args) -> Co
                         "Reddit either could not find this user, or tried to redirect \
                         to the Reddit Search API, usually indicating that the user \
                         you tried searching for does not exist or could not be found \
-                        in Reddit's database. Please try searching for a different user.",
+                        in Reddit's database. Please try searching for a different user."
                     )
                 })
             })?;
             return Ok(());
         }
-        _ => (),
+        _ => ()
     }
 
     let about_result: AboutResponse = about_response.json()?;

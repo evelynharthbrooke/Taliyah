@@ -11,7 +11,7 @@ use serenity::model::prelude::Message;
 #[derive(Debug, Deserialize)]
 pub struct Response {
     #[serde(rename = "list")]
-    definitions: Vec<Definition>,
+    definitions: Vec<Definition>
 }
 
 #[derive(Debug, Deserialize)]
@@ -21,7 +21,7 @@ pub struct Definition {
     word: String,
     thumbs_up: usize,
     thumbs_down: usize,
-    permalink: String,
+    permalink: String
 }
 
 #[command]

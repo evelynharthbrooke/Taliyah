@@ -23,7 +23,7 @@ pub fn status(context: &mut Context, message: &Message, args: Args) -> CommandRe
         } else {
             match parse_user(&args.rest(), Some(&guild_id), Some(&context)) {
                 Some(i) => guild_id.member(&context, i)?,
-                None => return Ok(()),
+                None => return Ok(())
             }
         }
     } else {
