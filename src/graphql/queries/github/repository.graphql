@@ -1,13 +1,14 @@
 query Repository($owner: String!, $name: String!) {
   repository(owner: $owner, name: $name) {
+    createdAt
     description
     homepageUrl
     nameWithOwner
-    createdAt
     updatedAt
     forkCount
     diskUsage
     url
+    isFork
     stargazers {
       totalCount
     }
@@ -20,10 +21,17 @@ query Repository($owner: String!, $name: String!) {
       target {
         __typename
         ... on Commit {
-          history(first: 10) {
+          history(first: 1) {
             totalCount
           }
         }
+      }
+    }
+    parent {
+      name
+      owner {
+        __typename
+        login
       }
     }
     owner {

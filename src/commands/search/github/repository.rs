@@ -80,6 +80,7 @@ pub fn repository(context: &mut Context, message: &Message, mut arguments: Args)
 
     let repository_name = repository.name_with_owner;
     let repository_url = repository.url;
+    let repository_is_fork = repository.is_fork;
     let repository_stars = format_int(repository.stargazers.total_count as usize);
     let repository_forks = format_int(repository.fork_count as usize);
     let repository_creation_date = repository.created_at.format("%A, %B %e, %Y @ %l:%M %P");
@@ -89,6 +90,15 @@ pub fn repository(context: &mut Context, message: &Message, mut arguments: Args)
     let repository_default_branch_commits = match &repository_default_branch.target.on {
         Commit(c) => format_int(c.history.total_count as usize),
         _ => "".to_string()
+    };
+
+    let repository_forked = if repository_is_fork {
+        let repo_parent = repository.parent.unwrap();
+        let parent_owner = repo_parent.owner.login;
+        let parent_name = repo_parent.name;
+        format!("*Forked from {}/{}.*\n\n", parent_owner, parent_name)
+    } else {
+        "".to_string()
     };
 
     let repository_website = match repository.homepage_url {
@@ -164,7 +174,7 @@ pub fn repository(context: &mut Context, message: &Message, mut arguments: Args)
             embed.thumbnail(repository_owner_avatar);
             embed.color(color);
             embed.description(format!(
-                "{}\
+                "{}{}\
                 **Owner**: [{}]({})\n\
                 **License**: {}\n\
                 **Language**: {}\n\
@@ -176,6 +186,7 @@ pub fn repository(context: &mut Context, message: &Message, mut arguments: Args)
                 **Disk usage**: {}\n\
                 **Star count**: {}\n\
                 **Fork count**: {}\n",
+                repository_forked,
                 repository_description,
                 repository_owner,
                 repository_owner_url,
