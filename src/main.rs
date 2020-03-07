@@ -155,7 +155,7 @@ pub fn main() {
                     )
                 });
             })
-            .before(|context, message, command_name| {
+            .before(|context, message, _command_name| {
                 message.channel_id.broadcast_typing(&context).unwrap();
                 true
             })

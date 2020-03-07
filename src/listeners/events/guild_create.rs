@@ -14,7 +14,7 @@ pub fn guild_create(_context: Context, guild: Guild) {
         Err(_) => return
     };
 
-    let prefix = config.discord_prefix.unwrap_or("e.".to_string());
+    let prefix = config.discord_prefix.unwrap_or_else(|| "e.".to_string());
 
     let guild_name = guild.name;
     let guild_id = guild.id.as_u64().to_string();
