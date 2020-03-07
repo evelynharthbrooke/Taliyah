@@ -6,11 +6,12 @@ use serenity::model::prelude::Message;
 /// Message handler
 ///
 /// Upon message receive events, Ellie will automatically add the
-/// author's user id to the profiles database. This event might get
-/// expanded later on to handle other things, too.
+/// author's user id to the profiles table in the database. This
+/// event might get expanded later on to handle other things, too.
 ///
 /// Bots are blacklisted from being added to the database, due to them
-/// not being actual users, so having profiles holds no value.
+/// not being actual users, so bots having their own profile sort of
+/// holds no value.
 pub fn message(_ctx: Context, message: Message) {
     let database = match get_database() {
         Ok(connection) => connection,
@@ -21,6 +22,6 @@ pub fn message(_ctx: Context, message: Message) {
     let user_tag = message.author.tag();
 
     if !message.author.bot {
-        let _ = database.execute("INSERT INTO profile (user_id, user_tag) values (?1, ?2)", &[&user_id, &user_tag]);
+        let _ = database.execute("INSERT OR IGNORE INTO profile (user_id, user_tag) values (?1, ?2)", &[&user_id, &user_tag]);
     }
 }

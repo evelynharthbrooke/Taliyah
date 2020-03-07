@@ -13,16 +13,16 @@ use serenity::model::prelude::Message;
 
 #[command]
 #[description = "Shows yours or another user's Spotify status."]
-pub fn status(context: &mut Context, message: &Message, args: Args) -> CommandResult {
+pub fn status(context: &mut Context, message: &Message, arguments: Args) -> CommandResult {
     let cache = &context.cache;
     let guild_id = message.guild_id.ok_or("Failed to get GuildID from Message.")?;
     let cached_guild = cache.read().guild(guild_id).ok_or("Unable to retrieve guild")?;
     let member = if message.mentions.is_empty() {
-        if args.is_empty() {
+        if arguments.is_empty() {
             message.member(&context).ok_or("Could not find member.")?
         } else {
-            match parse_user(&args.rest(), Some(&guild_id), Some(&context)) {
-                Some(i) => guild_id.member(&context, i)?,
+            match parse_user(&arguments.rest(), Some(&guild_id), Some(&context)) {
+                Some(user_id) => guild_id.member(&context, user_id)?,
                 None => return Ok(())
             }
         }
@@ -58,8 +58,10 @@ pub fn status(context: &mut Context, message: &Message, args: Args) -> CommandRe
                 let length = if end - start < 60 {
                     NaiveDateTime::from_timestamp(end - start, 0).format("%-S seconds")
                 } else if end - start > 3600 {
-                    // this might be a redundant check...but might as well have it
-                    NaiveDateTime::from_timestamp(end - start, 0).format("%-H hours, %-M minutes, %-S seconds")
+                    // some audio tracks on spotify can actually go past the minutes mark, so
+                    // if that ends up being the case, lets have a timestamp that shows hours
+                    // as well.
+                    NaiveDateTime::from_timestamp(end - start, 0).format("%-H hour(s), %-M minutes, %-S seconds")
                 } else {
                     NaiveDateTime::from_timestamp(end - start, 0).format("%-M minutes, %-S seconds")
                 };
@@ -83,6 +85,13 @@ pub fn status(context: &mut Context, message: &Message, args: Args) -> CommandRe
                 let artwork = assets.large_image.as_ref().unwrap().replace("spotify:", "");
                 let artwork_url = format!("https://i.scdn.co/image/{}", artwork);
 
+                let status_fields = vec![
+                    ("Song", format!("[{}]({})", song, url), false),
+                    ("Artists", artists, false),
+                    ("Album", album.to_string(), false),
+                    ("Duration", length.to_string(), false),
+                ];
+
                 message.channel_id.send_message(&context, |message| {
                     message.embed(|embed| {
                         embed.author(|author| {
@@ -91,12 +100,7 @@ pub fn status(context: &mut Context, message: &Message, args: Args) -> CommandRe
                         });
                         embed.colour(0x001D_B954);
                         embed.thumbnail(artwork_url);
-                        embed.fields(vec![
-                            ("Song", format!("[{}]({})", song, url), false),
-                            ("Artists", artists, false),
-                            ("Album", album.to_string(), false),
-                            ("Duration", length.to_string(), false),
-                        ]);
+                        embed.fields(status_fields);
                         embed.footer(|footer| footer.text(format!("Track ID: {}", id)))
                     })
                 })?

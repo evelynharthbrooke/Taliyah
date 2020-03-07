@@ -25,9 +25,6 @@ use commands::info::user::*;
 use commands::moderation::slowmode::*;
 use commands::music::lastfm::*;
 use commands::music::spotify::*;
-use commands::music::voice::join::*;
-use commands::music::voice::leave::*;
-use commands::music::voice::play::*;
 use commands::search::github::*;
 use commands::search::krate::*;
 use commands::search::reddit::*;
@@ -43,11 +40,10 @@ use listeners::handler::Handler;
 
 use log::error;
 
-use rspotify::spotify::client::Spotify;
-use rspotify::spotify::oauth2::SpotifyClientCredentials;
+use rspotify::blocking::client::Spotify;
+use rspotify::blocking::oauth2::SpotifyClientCredentials;
 
 use serenity::client::bridge::gateway::ShardManager;
-use serenity::client::bridge::voice::ClientVoiceManager;
 use serenity::client::Client;
 
 use serenity::framework::standard::macros::group;
@@ -62,12 +58,6 @@ use std::sync::Arc;
 
 use utilities::database::create_database;
 use utilities::database::get_prefix;
-
-pub struct VoiceManager;
-
-impl TypeMapKey for VoiceManager {
-    type Value = Arc<Mutex<ClientVoiceManager>>;
-}
 
 pub struct ShardManagerContainer;
 
@@ -101,11 +91,6 @@ struct Moderation;
 struct Music;
 
 #[group]
-#[description = "Ellie's voice command suite."]
-#[commands(join, leave, play)]
-struct Voice;
-
-#[group]
 #[description = "Ellie's selection of utility commands."]
 #[commands(invite, ping, prefix, shutdown, source)]
 struct Utilities;
@@ -125,7 +110,6 @@ pub fn main() {
     {
         let mut data = client.data.write();
         data.insert::<ShardManagerContainer>(Arc::clone(&client.shard_manager));
-        data.insert::<VoiceManager>(Arc::clone(&client.voice_manager));
     }
 
     pretty_env_logger::init();
@@ -170,6 +154,10 @@ pub fn main() {
                         please run the help command."
                     )
                 });
+            })
+            .before(|context, message, command_name| {
+                message.channel_id.broadcast_typing(&context).unwrap();
+                true
             })
             .on_dispatch_error(|context, message, err| match err {
                 DispatchError::Ratelimited(secs) => {
@@ -231,7 +219,6 @@ pub fn main() {
             .group(&MODERATION_GROUP)
             .group(&MUSIC_GROUP)
             .group(&SEARCH_GROUP)
-            .group(&VOICE_GROUP)
             .group(&UTILITIES_GROUP)
     );
 

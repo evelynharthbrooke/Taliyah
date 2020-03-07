@@ -30,6 +30,8 @@ pub fn ready(context: Context, ready: Ready) {
     info!("Connected to SQLite version {}.", get_sqlite_version());
     info!("Connected to {} guild(s).", guilds);
 
+    let presence_string = format!("on {} guilds | e.help", guilds);
+
     // Set a basic presence. This will be improved later on.
-    context.set_presence(Some(Activity::watching(format!("{} guilds", guilds).as_str())), OnlineStatus::Online);
+    context.set_presence(Some(Activity::playing(&presence_string)), OnlineStatus::Online);
 }

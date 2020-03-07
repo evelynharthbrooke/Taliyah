@@ -62,8 +62,6 @@ pub fn collection(context: &mut Context, message: &Message, arguments: Args) -> 
         return Ok(());
     }
 
-    message.channel_id.broadcast_typing(&context)?;
-
     let collection: String = arguments.rest().to_string();
 
     let api_key = crate::config::tmdb_key().expect("Could not find API key for The Movie Database...").to_owned();

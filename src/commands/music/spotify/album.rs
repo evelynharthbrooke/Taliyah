@@ -8,7 +8,7 @@ use itertools::Itertools;
 
 use percent_encoding::{utf8_percent_encode, NON_ALPHANUMERIC};
 
-use rspotify::spotify::model::track::SimplifiedTrack;
+use rspotify::model::track::SimplifiedTrack;
 
 use serenity::client::Context;
 use serenity::framework::standard::macros::command;
@@ -21,8 +21,6 @@ use std::time::Duration;
 #[command]
 #[description("Displays information about a specified album on Spotify.")]
 fn album(context: &mut Context, message: &Message, args: Args) -> CommandResult {
-    message.channel_id.broadcast_typing(&context)?;
-
     if args.rest().is_empty() {
         message.channel_id.send_message(&context, |message| {
             message.embed(|embed| {
@@ -66,17 +64,19 @@ fn album(context: &mut Context, message: &Message, args: Args) -> CommandResult 
     let album_track_count = album.tracks.total;
     let album_url = &album.external_urls["spotify"];
 
-    let mut album_type = match album.album_type.clone().as_str() {
+    let album_type = match album.album_type.clone().as_str() {
         "album" => "Album".to_owned(),
-        "single" => "Single".to_owned(),
+        "single" => {
+            if album_track_count <= 6 && album_track_count > 1 {
+                "Extended Play (EP)".to_string()
+            } else {
+                "Single".to_owned()
+            }
+        }
         "appears_on" => "Appears On".to_owned(),
         "compilation" => "Compilation".to_owned(),
         &_ => album.album_type.as_str().to_owned()
     };
-
-    if album_track_count <= 6 && album_track_count > 1 {
-        album_type = "Extended Play (EP)".to_string()
-    }
 
     let album_date = match NaiveDate::parse_from_str(&album.release_date, "%Y-%m-%d") {
         Ok(date) => date.format("%B %-e, %Y").to_string(),
@@ -105,23 +105,23 @@ fn album(context: &mut Context, message: &Message, args: Args) -> CommandResult 
         })
         .join("\n");
 
+    let album_fields = vec![
+        ("Type", album_type, true),
+        ("Length", album_length.to_string(), true),
+        ("Artists", album_artists.to_string(), true),
+        ("Release Date", album_date, true),
+        ("Popularity", format!("{}%", album_popularity), true),
+        ("Markets", album_markets.to_string(), true),
+        ("Tracks", album_track_count.to_string(), true),
+    ];
+
     message.channel_id.send_message(&context, |message| {
         message.embed(|embed| {
-            embed.author(|author| {
-                author.name(album_name);
-                author.url(album_url);
-                author.icon_url(album_image)
-            });
+            embed.title(album_name);
+            embed.url(album_url);
+            embed.thumbnail(album_image);
             embed.color(0x001D_B954);
-            embed.fields(vec![
-                ("Type", album_type, true),
-                ("Length", album_length.to_string(), true),
-                ("Artists", album_artists.to_string(), true),
-                ("Release Date", album_date, true),
-                ("Popularity", format!("{}%", album_popularity), true),
-                ("Markets", album_markets.to_string(), true),
-                ("Tracks", album_track_count.to_string(), true),
-            ]);
+            embed.fields(album_fields);
             embed.description(album_tracks);
             embed.footer(|footer| footer.text(album_copyright))
         })

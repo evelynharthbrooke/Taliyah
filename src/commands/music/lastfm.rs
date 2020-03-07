@@ -31,18 +31,18 @@ use rustfm::{
 #[description("Retrieves various Last.fm user stats.")]
 #[aliases("fm", "lfm", "lastfm")]
 #[usage("<user> <limit>")]
-pub fn lastfm(ctx: &mut Context, message: &Message, mut args: Args) -> CommandResult {
-    let user = if !args.rest().is_empty() {
-        args.single::<String>().unwrap()
+pub fn lastfm(context: &mut Context, message: &Message, mut arguments: Args) -> CommandResult {
+    let user = if !arguments.rest().is_empty() {
+        arguments.single::<String>().unwrap()
     } else {
         match database::get_user_lastfm(message.author.id) {
             Ok(user) => user,
             Err(e) => {
                 error!("Could not get Last.fm username in database: {}", e);
-                match args.single::<String>() {
+                match arguments.single::<String>() {
                     Ok(argument) => argument,
                     Err(_) => {
-                        message.channel_id.send_message(&ctx, |message| {
+                        message.channel_id.send_message(&context, |message| {
                             message.embed(|embed| {
                                 embed.title("Error: No Last.fm username was found or provided.");
                                 embed.color(0x00FF_0000);
@@ -68,7 +68,7 @@ pub fn lastfm(ctx: &mut Context, message: &Message, mut args: Args) -> CommandRe
         Err(error) => match error {
             Error::LastFMError(OperationFailed(error)) => match error.message.as_str() {
                 "Operation failed - Most likely the backend service failed. Please try again." => {
-                    message.channel_id.send_message(&ctx, |message| {
+                    message.channel_id.send_message(&context, |message| {
                         message.embed(|embed| {
                             embed.title("Error: Last.fm is currently offline.");
                             embed.description(
@@ -84,7 +84,7 @@ pub fn lastfm(ctx: &mut Context, message: &Message, mut args: Args) -> CommandRe
                 }
                 _ => {
                     error!("Last.fm operation failed: {:#?}", error);
-                    message.channel_id.send_message(&ctx, |message| {
+                    message.channel_id.send_message(&context, |message| {
                         message.embed(|embed| {
                             embed.title("Error: Unknown Last.fm operation error.");
                             embed.description("An unknown Last.fm operation error was encountered. Please try again later.");
@@ -96,7 +96,7 @@ pub fn lastfm(ctx: &mut Context, message: &Message, mut args: Args) -> CommandRe
             },
             Error::LastFMError(InvalidParameter(error)) => match error.message.as_str() {
                 "User not found" => {
-                    message.channel_id.send_message(&ctx, |message| {
+                    message.channel_id.send_message(&context, |message| {
                         message.embed(|embed| {
                             embed.title("Error: Invalid Last.fm username provided.");
                             embed.description("Invalid username provided. Please provide a valid one and then try again.");
@@ -107,7 +107,7 @@ pub fn lastfm(ctx: &mut Context, message: &Message, mut args: Args) -> CommandRe
                 }
                 _ => {
                     error!("Unknown Last.fm parameter error: {:#?}", error);
-                    message.channel_id.send_message(&ctx, |message| {
+                    message.channel_id.send_message(&context, |message| {
                         message.embed(|embed| {
                             embed.title("Error: Invalid Last.fm parameter provided.");
                             embed.description("An invalid last.fm parameter was provided.");
@@ -120,7 +120,7 @@ pub fn lastfm(ctx: &mut Context, message: &Message, mut args: Args) -> CommandRe
             },
             _ => {
                 error!("Unknown Last.fm error encountered: {:#?}", error);
-                message.channel_id.send_message(&ctx, |message| {
+                message.channel_id.send_message(&context, |message| {
                     message.embed(|embed| {
                         embed.title("Error: Unknown Last.fm Error Encountered.");
                         embed.description("An unknown Last.fm error has occured. Please try again later.");
@@ -210,7 +210,7 @@ pub fn lastfm(ctx: &mut Context, message: &Message, mut args: Args) -> CommandRe
 
     let currently_playing: String = format!("{} {} **{}** by **{}** on **{}**.", username, play_state, name, artist, album);
 
-    message.channel_id.send_message(&ctx, |message| {
+    message.channel_id.send_message(&context, |message| {
         message.embed(|embed| {
             embed.author(|author| {
                 author.name(username);
@@ -234,7 +234,9 @@ pub fn lastfm(ctx: &mut Context, message: &Message, mut args: Args) -> CommandRe
                 {}",
                 currently_playing, display_name, country, registered, loved_tracks, total_artists, scrobbles, artists, tracks
             ));
-            embed.footer(|f| f.text("Powered by the Last.fm API."))
+            embed.footer(|f| f.text("Powered by the Last.fm API."));
+            log::info!("{:#?}", embed);
+            embed
         })
     })?;
 

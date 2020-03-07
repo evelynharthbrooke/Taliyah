@@ -71,8 +71,6 @@ pub struct CrewMember {
 #[command]
 #[aliases("cast", "credits")]
 pub fn cast(context: &mut Context, message: &Message, mut arguments: Args) -> CommandResult {
-    message.channel_id.broadcast_typing(&context)?;
-
     if arguments.rest().is_empty() {
         message.channel_id.send_message(&context, |message| {
             message.embed(|embed| {

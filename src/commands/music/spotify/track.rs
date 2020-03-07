@@ -19,8 +19,6 @@ use std::time::Duration;
 #[command]
 #[description("Displays information about a specified track on Spotify.")]
 fn track(context: &mut Context, message: &Message, args: Args) -> CommandResult {
-    message.channel_id.broadcast_typing(&context)?;
-
     if args.rest().is_empty() {
         message.channel_id.send_message(&context, |embed| {
             embed.embed(|embed| {

@@ -8,7 +8,6 @@ use serenity::framework::standard::Args;
 use serenity::framework::standard::CommandResult;
 use serenity::model::gateway::Activity;
 use serenity::model::gateway::ActivityType;
-use serenity::model::guild::Role;
 use serenity::model::prelude::Message;
 use serenity::model::user::OnlineStatus;
 use serenity::utils::Colour;
@@ -184,8 +183,10 @@ pub fn user(context: &mut Context, message: &Message, args: Args) -> CommandResu
     let mut role_count = 0;
 
     if !member.roles(&cache).is_none() {
-        roles = member.roles(&cache).unwrap().iter().map(|r: &Role| format!("<@&{}>", &r.id.as_u64())).join(" / ");
-        role_count = member.roles(&cache).unwrap().len();
+        let cached_roles = member.roles(&cache).unwrap();
+        let cached_roles_sorted = cached_roles.iter().sorted_by_key(|r| -r.position);
+        roles = cached_roles_sorted.map(|r| format!("<@&{}>", &r.id.as_u64())).join(" / ");
+        role_count = cached_roles.len();
         if roles.is_empty() {
             roles = "No roles available.".to_owned();
         }

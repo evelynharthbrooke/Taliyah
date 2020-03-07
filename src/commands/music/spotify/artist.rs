@@ -63,8 +63,6 @@ struct Owner {
 #[command]
 #[description("Displays information about a specified artist on Spotify.")]
 fn artist(context: &mut Context, message: &Message, args: Args) -> CommandResult {
-    message.channel_id.broadcast_typing(&context)?;
-
     if args.rest().is_empty() {
         message.channel_id.send_message(&context, |message| {
             message.embed(|embed| {
