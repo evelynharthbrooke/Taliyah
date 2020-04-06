@@ -1,4 +1,4 @@
-bot_codename = "Carbon" # bump this each major update
+bot_codename = "Carbon" # reminder: update after each major update
 client_id = ""
 client_secret = ""
 darksky = ""
