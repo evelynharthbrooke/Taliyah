@@ -100,4 +100,3 @@ For answers to common questions about this code of conduct, see the FAQ [here][f
 [translations]:https://www.contributor-covenant.org/translations
 [diversity]: https://github.com/mozilla/diversity
 [email]: mailto:kamranm102@gmail.com?subject=Contributor%20Complaint
-[version]: http://contributor-covenant.org/version/1/4/
