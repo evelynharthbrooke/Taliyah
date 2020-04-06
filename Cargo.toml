@@ -1,6 +1,6 @@
 [package]
 name                = "ellie"
-version             = "0.6.0-alpha"
+version             = "0.7.0-alpha"
 authors             = ["Kamran Mackey <kamranm1200@gmail.com>"]
 description         = "A Discord bot written in Rust with Serenity."
 homepage            = "https://github.com/KamranMackey/Ellie"
@@ -27,9 +27,10 @@ pretty_env_logger   = "0.4.0"
 reqwest             = "0.10.4"
 percent-encoding    = "2.1.0"
 rusqlite            = { git = "https://github.com/jgallagher/rusqlite", features = ["bundled"] }
-rspotify            = { git = "https://github.com/KamranMackey/rspotify", features = ["blocking"] }
-serenity            = { git = "https://github.com/KamranMackey/serenity.git", branch = "kamrans-fork" }
+rspotify            = { git = "https://github.com/KamranMackey/rspotify" }
+serenity            = { git = "https://github.com/KamranMackey/serenity.git", branch = "kamrans-fork-await" }
 serde               = { version = "1.0.106", features = ["derive"] }
 serde_json          = "1.0.51"
+tokio               = { version = "0.2.16", features = ["macros"] }
 toml                = "0.5.6"
 sysinfo             = "0.12.0"
