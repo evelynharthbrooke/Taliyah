@@ -1,0 +1,11 @@
+bot_codename = "Carbon" # bump this each major update
+client_id = ""
+client_secret = ""
+darksky = ""
+discord_token = ""
+discord_prefix = ""
+github_key = ""
+google_key = ""
+lastfm_key = ""
+tmdb_key = ""
+rust_log = ""
