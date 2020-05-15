@@ -1,10 +1,8 @@
-use serenity::client::Context;
-use serenity::framework::standard::help_commands;
-use serenity::framework::standard::macros::help;
-use serenity::framework::standard::Args;
-use serenity::framework::standard::HelpOptions;
-use serenity::framework::standard::{CommandGroup, CommandResult};
-use serenity::model::prelude::{Message, UserId};
+use serenity::{
+    client::Context,
+    framework::standard::{help_commands, macros::help, Args, CommandGroup, CommandResult, HelpOptions},
+    model::prelude::{Message, UserId}
+};
 
 use std::collections::HashSet;
 

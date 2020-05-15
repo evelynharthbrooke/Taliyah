@@ -1,6 +1,10 @@
-use serenity::client::Context;
-use serenity::model::gateway::{Activity, Ready};
-use serenity::model::user::OnlineStatus;
+use serenity::{
+    client::Context,
+    model::{
+        gateway::{Gateway, Ready},
+        user::OnlineStatus
+    }
+};
 
 use tracing::info;
 

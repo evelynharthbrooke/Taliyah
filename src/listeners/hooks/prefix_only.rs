@@ -1,6 +1,8 @@
-use serenity::client::Context;
-use serenity::framework::standard::macros::hook;
-use serenity::model::channel::Message;
+use serenity::{
+    client::Context,
+    framework::standard::macros::hook,
+    model::channel::Message
+};
 
 #[hook]
 pub async fn prefix_only(context: &Context, message: &Message) -> () {
