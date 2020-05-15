@@ -2085,7 +2085,7 @@ dependencies = [
 [[package]]
 name = "rspotify"
 version = "0.9.0"
-source = "git+https://github.com/KamranMackey/rspotify#e2dcb6eb4ae3f31a2e7bdb267b0213d860b35e1a"
+source = "git+https://github.com/KamranMackey/rspotify#5fe2d3432bf606e665d6ac5966238c11ec424b19"
 dependencies = [
  "base64 0.11.0",
  "chrono",
