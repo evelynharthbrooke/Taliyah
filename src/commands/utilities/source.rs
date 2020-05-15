@@ -10,10 +10,9 @@ use serenity::{
 #[command]
 #[description = "Sends a link containing the bot's source code."]
 pub async fn source(context: &Context, message: &Message) -> CommandResult {
-
     message.channel_id.send_message(context, |message| {
-        let source = "https://github.com/KamranMackey/Ellie";
-        message.content(format!("Source code: <{}>", source))
+        let github_url = "https://github.com/KamranMackey/Ellie";
+        message.content(format!("GitHub repository: <{}>", github_url))
     }).await?;
 
     Ok(())
