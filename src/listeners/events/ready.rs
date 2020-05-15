@@ -1,7 +1,7 @@
 use serenity::{
     client::Context,
     model::{
-        gateway::{Gateway, Ready},
+        gateway::{Activity, Ready},
         user::OnlineStatus
     }
 };
