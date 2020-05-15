@@ -16,6 +16,13 @@ use std::collections::HashSet;
     any help available for said command. Please try again later, or try \
     searching for a different command instead."
 )]
-async fn help(context: &Context, msg: &Message, args: Args, help_options: &'static HelpOptions, groups: &[&'static CommandGroup], owners: HashSet<UserId>) -> CommandResult {
-    help_commands::with_embeds(context, msg, args, help_options, groups, owners).await
+async fn help(
+    context: &Context,
+    message: &Message,
+    arguments: Args,
+    options: &'static HelpOptions,
+    command_groups: &[&'static CommandGroup],
+    bot_owners: HashSet<UserId>
+) -> CommandResult {
+    help_commands::plain(context, message, arguments, &options, command_groups, bot_owners).await
 }

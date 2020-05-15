@@ -7,6 +7,9 @@ mod commands;
 mod listeners;
 
 use commands::utilities::help::*;
+use commands::utilities::invite::*;
+use commands::utilities::ping::*;
+use commands::utilities::source::*;
 
 use listeners::{handler::Handler, hooks::prefix_only::*};
 
@@ -15,7 +18,7 @@ use serenity::{
         bridge::gateway::{GatewayIntents, ShardManager},
         Client
     },
-    framework::StandardFramework,
+    framework::{standard::macros::group, StandardFramework},
     http::Http,
     prelude::{Mutex, TypeMapKey}
 };
@@ -33,6 +36,11 @@ struct ShardManagerContainer;
 impl TypeMapKey for ShardManagerContainer {
     type Value = Arc<Mutex<ShardManager>>;
 }
+
+#[group("Utilities")]
+#[description = "Miscellaneous commands that don't really fit into a more-specific category."]
+#[commands(invite, ping, source)]
+struct Utilities;
 
 #[tokio::main]
 #[instrument]
@@ -89,6 +97,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
                 .case_insensitivity(true)
         })
         .prefix_only(prefix_only)
+        .group(&UTILITIES_GROUP)
         .help(&HELP);
 
     let mut client = Client::new(&token)
