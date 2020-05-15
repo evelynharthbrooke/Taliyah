@@ -2,7 +2,7 @@ use serenity::client::Context;
 use serenity::model::gateway::{Activity, Ready};
 use serenity::model::user::OnlineStatus;
 
-use log::info;
+use tracing::info;
 
 /// Ready event handler
 ///

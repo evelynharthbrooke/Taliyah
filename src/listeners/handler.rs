@@ -2,9 +2,7 @@ use crate::listeners::events::ready;
 
 use serenity::async_trait;
 use serenity::client::{Context, EventHandler};
-use serenity::model::{
-    gateway::Ready,
-};
+use serenity::model::gateway::Ready;
 
 pub struct Handler;
 

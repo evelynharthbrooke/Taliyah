@@ -22,15 +22,16 @@ itertools           = "0.9.0"
 kuchiki             = "0.8.0"
 lastfm-rs           = "0.2.2"
 lazy_static         = "1.4.0"
-log                 = "0.4.8"
-pretty_env_logger   = "0.4.0"
 reqwest             = "0.10.4"
 percent-encoding    = "2.1.0"
-rusqlite            = { git = "https://github.com/jgallagher/rusqlite", features = ["bundled"] }
 rspotify            = { git = "https://github.com/KamranMackey/rspotify" }
 serenity            = { git = "https://github.com/KamranMackey/serenity.git", branch = "kamrans-fork-await" }
 serde               = { version = "1.0.110", features = ["derive"] }
 serde_json          = "1.0.53"
 tokio               = { version = "0.2.21", features = ["macros"] }
 toml                = "0.5.6"
+tracing             = "0.1.14"
+tracing-log         = "0.1.1"
+tracing-subscriber  = "0.2.5"
+sqlx                = "0.3.5"
 sysinfo             = "0.14.2"

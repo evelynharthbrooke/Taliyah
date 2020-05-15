@@ -1,11 +1,23 @@
-bot_codename = "Carbon" # reminder: update after each major update
-client_id = ""
-client_secret = ""
-darksky = ""
-discord_token = ""
-discord_prefix = ""
-github_key = ""
-google_key = ""
-lastfm_key = ""
-tmdb_key = ""
-rust_log = ""
+[general]
+codename = "Carbon" # reminder: bump this after each major update.
+
+[logging]
+enabled = true
+level = "info"
+
+[discord]
+token = ""
+prefix = ""
+
+[api]
+
+    [api.spotify]
+    client_id = ""
+    client_secret = ""
+
+    [api.misc]
+    github = ""
+    google = ""
+    darksky = ""
+    lastfm = ""
+    tmdb = ""
