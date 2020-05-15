@@ -21,7 +21,6 @@ isolang             = "1.0.0"
 itertools           = "0.9.0"
 kuchiki             = "0.8.0"
 lastfm-rs           = "0.2.2"
-lazy_static         = "1.4.0"
 reqwest             = "0.10.4"
 percent-encoding    = "2.1.0"
 rspotify            = { git = "https://github.com/KamranMackey/rspotify" }
