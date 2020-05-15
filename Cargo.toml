@@ -14,7 +14,7 @@ include             = ["src/**/*", "config.sample.toml", "build.rs", "Cargo.toml
 [dependencies]
 byte-unit           = "3.0.3"
 chrono              = "0.4.11"
-git2                = "0.13.1"
+git2                = "0.13.5"
 graphql_client      = "0.9.0"
 humantime           = "2.0.0"
 isolang             = "1.0.0"
@@ -29,8 +29,8 @@ percent-encoding    = "2.1.0"
 rusqlite            = { git = "https://github.com/jgallagher/rusqlite", features = ["bundled"] }
 rspotify            = { git = "https://github.com/KamranMackey/rspotify" }
 serenity            = { git = "https://github.com/KamranMackey/serenity.git", branch = "kamrans-fork-await" }
-serde               = { version = "1.0.106", features = ["derive"] }
-serde_json          = "1.0.51"
-tokio               = { version = "0.2.16", features = ["macros"] }
+serde               = { version = "1.0.110", features = ["derive"] }
+serde_json          = "1.0.53"
+tokio               = { version = "0.2.21", features = ["macros"] }
 toml                = "0.5.6"
-sysinfo             = "0.12.0"
+sysinfo             = "0.14.2"
