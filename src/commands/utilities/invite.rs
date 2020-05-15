@@ -1,13 +1,7 @@
 use serenity::{
     client::Context,
-    framework::standard::{
-        macros::command,
-        CommandResult
-    },
-    model::{
-        prelude::Message,
-        Permissions
-    }
+    framework::standard::{macros::command, CommandResult},
+    model::{prelude::Message, Permissions}
 };
 
 use tracing::error;
@@ -25,14 +19,17 @@ pub async fn invite(context: &Context, message: &Message) -> CommandResult {
         }
     };
 
-    message.channel_id.send_message(context, |message| {
-        message.embed(|embed| {
-            let user = &cache.user.name;
-            embed.title(format!("{} Invite URL", user));
-            embed.thumbnail(cache.user.avatar_url().unwrap());
-            embed.description(format!("Click [here]({}) to add {} to your Discord server.", invite_url, user))
+    message
+        .channel_id
+        .send_message(context, |message| {
+            message.embed(|embed| {
+                let user = &cache.user.name;
+                embed.title(format!("{} Invite URL", user));
+                embed.thumbnail(cache.user.avatar_url().unwrap());
+                embed.description(format!("Click [here]({}) to add {} to your Discord server.", invite_url, user))
+            })
         })
-    }).await?;
+        .await?;
 
     Ok(())
 }
