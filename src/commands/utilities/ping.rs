@@ -9,12 +9,12 @@ use serenity::{
 };
 
 #[command]
-#[description = "Checks message latency and API response time."]
+#[description = "Checks Discord's API / message latency."]
 async fn ping(context: &Context, message: &Message) -> CommandResult {
     let start = Utc::now();
     let start_ts = start.timestamp();
     let start_ts_ss = start.timestamp_subsec_millis() as i64;
-    let mut msg = message.channel_id.send_message(context, |m| m.content(":ping_pong: Pinging!")).await?;
+    let mut ping: Message = message.channel_id.send_message(context, |m| m.content(":ping_pong: Pinging!")).await?;
     let end = Utc::now();
     let end_ts = end.timestamp();
     let end_ts_ss = end.timestamp_subsec_millis() as i64;
@@ -53,7 +53,7 @@ async fn ping(context: &Context, message: &Message) -> CommandResult {
         api_response, shard_response
     );
 
-    msg.edit(context, |message| {
+    ping.edit(context, |message| {
         message.content("");
         message.embed(|embed| {
             embed.color(0x008b_0000);

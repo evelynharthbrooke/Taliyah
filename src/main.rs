@@ -5,6 +5,7 @@
 
 mod commands;
 mod listeners;
+mod utils;
 
 use commands::utilities::help::*;
 use commands::utilities::invite::*;
