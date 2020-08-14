@@ -8,7 +8,7 @@ pub async fn prefix_only(context: &Context, message: &Message) -> () {
             message.content(
                 "Hello! I noticed that you provided my prefix but didn't send a \
                 command. If you would like to get help on how to use my functionality, \
-                please run the help command."
+                please run the help command.",
             )
         })
         .await;

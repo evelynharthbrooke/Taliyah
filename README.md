@@ -7,7 +7,6 @@
 A feature-packed bot for Discord servers, written in Rust with Serenity and various other libraries.
 
 [![Invite Ellie][invite-badge]][invite-link]
-[![Join Server][server-badge]][server-link]
 [![License][license-badge]][license-link]
 [![Dependency Status][dependency-badge]][dependency-link]
 [![GitHub Actions Build Status][github-actions-badge]][github-actions-link]
@@ -213,9 +212,6 @@ SOFTWARE.
 
 [invite-link]: https://discordapp.com/oauth2/authorize?client_id=483499705108529163&scope=bot
 [invite-badge]: https://img.shields.io/badge/invite-to%20your%20Discord%20server-7289da.svg?style=flat-square&logo=discord
-
-[server-link]: https://discord.gg/ZjZRkbW
-[server-badge]: https://img.shields.io/discord/678282606537736203?label=join%20server&logo=discord&style=flat-square
 
 [dependency-link]: https://deps.rs/repo/github/kamranmackey/ellie
 [dependency-badge]: https://deps.rs/repo/github/kamranmackey/ellie/status.svg

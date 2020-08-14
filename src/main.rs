@@ -7,21 +7,21 @@ mod commands;
 mod listeners;
 mod utils;
 
-use commands::utilities::help::*;
-use commands::utilities::invite::*;
-use commands::utilities::ping::*;
-use commands::utilities::source::*;
+use commands::{
+    fun::{ascii::*, printerfacts::*},
+    utilities::{help::*, invite::*, ping::*, source::*},
+};
 
 use listeners::{handler::Handler, hooks::prefix_only::*};
 
 use serenity::{
     client::{
         bridge::gateway::{GatewayIntents, ShardManager},
-        Client
+        Client,
     },
     framework::{standard::macros::group, StandardFramework},
     http::Http,
-    prelude::{Mutex, TypeMapKey}
+    prelude::{Mutex, TypeMapKey},
 };
 
 use std::{collections::HashSet, error::Error, fs::File, io::prelude::*, sync::Arc};
@@ -37,6 +37,11 @@ struct ShardManagerContainer;
 impl TypeMapKey for ShardManagerContainer {
     type Value = Arc<Mutex<ShardManager>>;
 }
+
+#[group("Fun")]
+#[description = "Commands that could be considered fun / silly."]
+#[commands(ascii, printerfacts)]
+struct Fun;
 
 #[group("Utilities")]
 #[description = "Miscellaneous commands that don't really fit into a more-specific category."]
@@ -64,7 +69,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
             "info" => Level::INFO,
             "debug" => Level::DEBUG,
             "trace" => Level::TRACE,
-            _ => Level::TRACE
+            _ => Level::TRACE,
         };
 
         let subscriber = FmtSubscriber::builder().with_max_level(level).finish();
@@ -83,7 +88,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
             owners.insert(info.owner.id);
             (owners, info.id)
         }
-        Err(why) => panic!("Unable to retrieve application info: {:?}", why)
+        Err(why) => panic!("Unable to retrieve application info: {:?}", why),
     };
 
     let framework = StandardFramework::new()
@@ -98,6 +103,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
                 .case_insensitivity(true)
         })
         .prefix_only(prefix_only)
+        .group(&FUN_GROUP)
         .group(&UTILITIES_GROUP)
         .help(&HELP);
 

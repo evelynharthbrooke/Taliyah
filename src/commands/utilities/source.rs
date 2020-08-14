@@ -1,7 +1,7 @@
 use serenity::{
     client::Context,
     framework::standard::{macros::command, CommandResult},
-    model::prelude::Message
+    model::prelude::Message,
 };
 
 #[command]

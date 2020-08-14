@@ -2,8 +2,8 @@ use serenity::{
     client::Context,
     model::{
         gateway::{Activity, Ready},
-        user::OnlineStatus
-    }
+        user::OnlineStatus,
+    },
 };
 
 use tracing::info;

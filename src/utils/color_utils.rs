@@ -9,7 +9,7 @@ use std::num::ParseIntError;
 pub struct RGB {
     pub r: u8,
     pub g: u8,
-    pub b: u8
+    pub b: u8,
 }
 
 impl RGB {
