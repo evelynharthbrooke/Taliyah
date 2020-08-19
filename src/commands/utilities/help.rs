@@ -1,7 +1,7 @@
 use serenity::{
     client::Context,
     framework::standard::{help_commands, macros::help, Args, CommandGroup, CommandResult, HelpOptions},
-    model::prelude::{Message, UserId},
+    model::prelude::{Message, UserId}
 };
 
 use std::collections::HashSet;
@@ -20,7 +20,7 @@ async fn help(
     arguments: Args,
     options: &'static HelpOptions,
     command_groups: &[&'static CommandGroup],
-    bot_owners: HashSet<UserId>,
+    bot_owners: HashSet<UserId>
 ) -> CommandResult {
     let _ = help_commands::plain(context, message, arguments, &options, command_groups, bot_owners).await;
     Ok(())

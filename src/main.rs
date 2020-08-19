@@ -24,13 +24,13 @@ use serenity::{
     prelude::{Mutex, TypeMapKey}
 };
 
-use std::{collections::HashSet, error::Error, fs::File, io::prelude::*, sync::Arc};
-
-use toml::Value;
+use std::{collections::HashSet, error::Error, sync::Arc};
 
 use tracing::{info, instrument, Level};
 use tracing_log::LogTracer;
 use tracing_subscriber::FmtSubscriber;
+
+use utils::read_config;
 
 struct ShardManagerContainer;
 
@@ -51,11 +51,7 @@ struct Utilities;
 #[tokio::main]
 #[instrument]
 async fn main() -> Result<(), Box<dyn Error>> {
-    let mut file = File::open("config.toml")?;
-    let mut contents = String::new();
-    file.read_to_string(&mut contents)?;
-
-    let configuration = contents.parse::<Value>().unwrap();
+    let configuration = read_config("config.toml");
     let logging = configuration["logging"]["enabled"].as_bool().unwrap();
 
     if logging {
