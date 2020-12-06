@@ -1,3 +1,4 @@
 /target
 *.sqlite3
 *config.toml
+.spotify_token_cache.json

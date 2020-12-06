@@ -3,7 +3,7 @@ use reqwest::Client;
 use serenity::{
     client::Context,
     framework::standard::{macros::command, Args, CommandResult},
-    model::prelude::Message,
+    model::prelude::Message
 };
 
 #[command]
@@ -27,14 +27,14 @@ pub async fn ascii(context: &Context, message: &Message, arguments: Args) -> Com
                     embed.title("Error: No string provided.");
                     embed.description(
                         "You didn't provide a string to convert to ASCII. Please provide one.\n\
-                        For more details, please view the help documentation.",
+                        For more details, please view the help documentation."
                     );
                     embed.color(0x00FF_0000)
                 })
             })
             .await?;
         return Ok(());
-    } else if arguments.rest().contains("\u{200B}") {
+    } else if arguments.rest().contains('\u{200B}') {
         message
             .channel_id
             .send_message(&context, |message| {
@@ -42,7 +42,7 @@ pub async fn ascii(context: &Context, message: &Message, arguments: Args) -> Com
                     embed.title("Error: Zero width space detected.");
                     embed.description(
                         "A zero width space was detected in your message's content. This \
-                        is not allowed. Please send a string without a zero width space included.",
+                        is not allowed. Please send a string without a zero width space included."
                     );
                     embed.color(0x00FF_0000)
                 })

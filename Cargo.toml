@@ -9,28 +9,55 @@ keywords            = ["discord", "bot", "serenity"]
 edition             = "2018"
 license             = "MIT"
 readme              = "README.md"
-include             = ["src/**/*", "config.sample.toml", "build.rs", "Cargo.toml", "README.md"]
+include             = ["src/**/*", "config.sample.toml", "Cargo.toml", "README.md"]
 
 [dependencies]
 byte-unit           = "4.0.9"
-chrono              = "0.4.15"
-git2                = "0.13.8"
+chrono              = "0.4.19"
+derive_builder      = "0.9.0"
+failure             = "0.1.8"
+git2                = "0.13.12"
 graphql_client      = "0.9.0"
 humantime           = "2.0.1"
-isolang             = "1.0.0"
 itertools           = "0.9.0"
-kuchiki             = "0.8.1"
-lastfm-rs           = "0.2.2"
-reqwest             = "0.10.7"
+lastfm-rs           = "0.3.2"
+reqwest             = "0.10.9"
 percent-encoding    = "2.1.0"
 rspotify            = { git = "https://github.com/KamranMackey/rspotify" }
-serenity            = { git = "https://github.com/KamranMackey/serenity.git", branch = "kamrans-fork-await" }
-serde               = { version = "1.0.115", features = ["derive"] }
-serde_json          = "1.0.57"
-tokio               = { version = "0.2.22", features = ["macros"] }
-toml                = "0.5.6"
-tracing             = "0.1.19"
+serde               = { version = "1.0.117", features = ["derive"] }
+serde_json          = "1.0.59"
+tokio               = { version = "0.2.23", features = ["full"] }
+toml                = "0.5.7"
+tracing             = "0.1.21"
+tracing-futures     = "0.2.4"
 tracing-log         = "0.1.1"
-tracing-subscriber  = "0.2.11"
-sqlx                = "0.3.5"
-sysinfo             = "0.15.1"
+tracing-subscriber  = "0.2.15"
+
+[dependencies.lavalink-rs]
+# My own fork is used here because otherwise lavalink-rs doesn't properly
+# integrate with my versions of serenity and songbird. Main repository
+# is https://gitlab.com/nitsuga5124/lavalink-rs.
+git                 = "https://gitlab.com/KamranMackey/lavalink-rs"
+branch              = "kamrans-fork"
+
+[dependencies.serenity]
+# My own fork is used here because my fork has some API identifiers that
+# simply are not present in the official versions of serenity.
+git                 = "https://github.com/KamranMackey/serenity"
+branch              = "kamrans-fork-await"
+default-features    = true
+features            = ["voice", "collector"]
+
+[dependencies.songbird]
+# My own fork is used here too because songbird has a hard link to the
+# official serenity repository otherwise which prevents it from being
+# able to properly integrate with my fork.
+git                 = "https://github.com/KamranMackey/songbird/"
+branch              = "kamrans-fork"
+default-features    = false
+features            = ["serenity-native", "gateway"]
+
+[dependencies.sqlx]
+git                 = "https://github.com/launchbadge/sqlx"
+default-features    = false
+features            = ["runtime-tokio-rustls", "macros", "postgres", "uuid", "offline"]

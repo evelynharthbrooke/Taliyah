@@ -1,23 +1,38 @@
-[general]
-codename = "Carbon" # reminder: bump this after each major update.
+[bot]
 
-[logging]
-enabled = true
-level = "info"
+    [bot.general]
+    codename = "Carbon"
+    prefix = ""
 
-[discord]
-token = ""
-prefix = ""
+    [bot.database]
+    url = ""
+
+    [bot.discord]
+    token = ""
+
+    [bot.logging]
+    enabled = true
+    level = "info"
 
 [api]
 
-    [api.spotify]
-    client_id = ""
-    client_secret = ""
+    [api.music]
 
-    [api.misc]
+        [api.music.spotify]
+        client_id = ""
+        client_secret = ""
+
+        [api.music.lastfm]
+        api_key = ""
+
+        [api.music.lavalink]
+        host = ""
+        port = 1000
+        password = ""
+
+    [api.entertainment]
+    tmdb = ""
+
+    [api.services]
     github = ""
     google = ""
-    darksky = ""
-    lastfm = ""
-    tmdb = ""

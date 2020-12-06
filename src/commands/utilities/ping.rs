@@ -5,7 +5,7 @@ use chrono::{offset::Utc, Duration};
 use serenity::{
     client::{bridge::gateway::ShardId, Context},
     framework::standard::{macros::command, CommandResult},
-    model::prelude::Message,
+    model::prelude::Message
 };
 
 #[command]
@@ -41,9 +41,9 @@ async fn ping(context: &Context, message: &Message) -> CommandResult {
     let shard_response = match runner.latency {
         Some(latency) => match Duration::from_std(latency) {
             Ok(time) => format!("`{}ms`", time.num_milliseconds()),
-            Err(_) => "No latency information available".to_string(),
+            Err(_) => "No latency information available".to_string()
         },
-        None => "No data available at the moment.".to_string(),
+        None => "No data available at the moment.".to_string()
     };
 
     let response = format!(
