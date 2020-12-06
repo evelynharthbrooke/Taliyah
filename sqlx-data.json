@@ -1,0 +1,131 @@
+{
+  "db": "PostgreSQL",
+  "05da349f1c49f978710fc53ee5cf99bb638ced3dcc0484f2ee44a3dc947f0259": {
+    "query": "UPDATE profile_data SET user_gender = $1 WHERE user_id = $2;",
+    "describe": {
+      "columns": [],
+      "parameters": {
+        "Left": [
+          "Text",
+          "Int8"
+        ]
+      },
+      "nullable": []
+    }
+  },
+  "29371135698c8b4cd22674f079dfdfedb2c1969a334318a566bec8ab5538e6e0": {
+    "query": "UPDATE profile_data SET user_location = $1 WHERE user_id = $2;",
+    "describe": {
+      "columns": [],
+      "parameters": {
+        "Left": [
+          "Text",
+          "Int8"
+        ]
+      },
+      "nullable": []
+    }
+  },
+  "4601186a791e93b230942c4f57c5e3c57517987095155ec9e5dd68483976e1f5": {
+    "query": "UPDATE profile_data SET user_name = $1 WHERE user_id = $2;",
+    "describe": {
+      "columns": [],
+      "parameters": {
+        "Left": [
+          "Text",
+          "Int8"
+        ]
+      },
+      "nullable": []
+    }
+  },
+  "4fa65bcaf0c21f37817873d89be0eb49bae9991f5bcd0ac79a3cea316863acb0": {
+    "query": "UPDATE profile_data SET user_pronouns = $1 WHERE user_id = $2;",
+    "describe": {
+      "columns": [],
+      "parameters": {
+        "Left": [
+          "Text",
+          "Int8"
+        ]
+      },
+      "nullable": []
+    }
+  },
+  "9f550445cc8f10b2614781323c1faf69480e843320c89a6a019c6355871e9a26": {
+    "query": "INSERT INTO profile_data (user_id, user_tag) VALUES ($1, $2) ON CONFLICT DO NOTHING",
+    "describe": {
+      "columns": [],
+      "parameters": {
+        "Left": [
+          "Int8",
+          "Text"
+        ]
+      },
+      "nullable": []
+    }
+  },
+  "af1c2df5a769cc57955f3afc765323b3b63ea69eef6df6f9943b9ea976509ae4": {
+    "query": "UPDATE profile_data SET user_lastfm_id = $1 WHERE user_id = $2;",
+    "describe": {
+      "columns": [],
+      "parameters": {
+        "Left": [
+          "Text",
+          "Int8"
+        ]
+      },
+      "nullable": []
+    }
+  },
+  "b58ff8f6a1f4dfcf081049eb042e30be7ed157bc55f58aa9dc7cca4a4219c8be": {
+    "query": "SELECT version();",
+    "describe": {
+      "columns": [
+        {
+          "ordinal": 0,
+          "name": "version",
+          "type_info": "Text"
+        }
+      ],
+      "parameters": {
+        "Left": []
+      },
+      "nullable": [
+        null
+      ]
+    }
+  },
+  "ba936fe2479d195ade601cd0f72a827105f5d25488b2fd4479a5b77909848646": {
+    "query": "INSERT INTO guild_info (guild_id, guild_name, guild_prefix) VALUES ($1, $2, $3) ON CONFLICT DO NOTHING",
+    "describe": {
+      "columns": [],
+      "parameters": {
+        "Left": [
+          "Int8",
+          "Text",
+          "Text"
+        ]
+      },
+      "nullable": []
+    }
+  },
+  "cc9c618aa93e92c49d7ce505ce7891a8a16c73b6ab7e3aeb0c7e23864c6e9ab6": {
+    "query": "SELECT current_database();",
+    "describe": {
+      "columns": [
+        {
+          "ordinal": 0,
+          "name": "current_database",
+          "type_info": "Name"
+        }
+      ],
+      "parameters": {
+        "Left": []
+      },
+      "nullable": [
+        null
+      ]
+    }
+  }
+}
