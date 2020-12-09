@@ -302,7 +302,7 @@ dependencies = [
 [[package]]
 name = "command_attr"
 version = "0.3.1"
-source = "git+https://github.com/KamranMackey/serenity?branch=kamrans-fork-await#db88fbadddabc1329f241b03532b28b0a59a21c1"
+source = "git+https://github.com/KamranMackey/serenity?branch=kamrans-fork-await#7c057201afa9602ceff051286a184efaf79dbeba"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -1511,12 +1511,12 @@ checksum = "624a8340c38c1b80fd549087862da4ba43e08858af025b236e509b6649fc13d5"
 
 [[package]]
 name = "openssl"
-version = "0.10.30"
+version = "0.10.31"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8d575eff3665419f9b83678ff2815858ad9d11567e082f5ac1814baba4e2bcb4"
+checksum = "8d008f51b1acffa0d3450a68606e6a51c123012edaacb0f4e1426bd978869187"
 dependencies = [
  "bitflags",
- "cfg-if 0.1.10",
+ "cfg-if 1.0.0",
  "foreign-types",
  "lazy_static",
  "libc",
@@ -2006,7 +2006,7 @@ dependencies = [
 [[package]]
 name = "serenity"
 version = "0.9.2"
-source = "git+https://github.com/KamranMackey/serenity?branch=kamrans-fork-await#db88fbadddabc1329f241b03532b28b0a59a21c1"
+source = "git+https://github.com/KamranMackey/serenity?branch=kamrans-fork-await#7c057201afa9602ceff051286a184efaf79dbeba"
 dependencies = [
  "async-trait",
  "async-tungstenite 0.9.3",
@@ -2017,6 +2017,7 @@ dependencies = [
  "command_attr",
  "flate2",
  "futures",
+ "percent-encoding",
  "reqwest",
  "serde",
  "serde_json",
