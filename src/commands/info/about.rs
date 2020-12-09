@@ -1,9 +1,12 @@
-use crate::utils::{git_utils::{show_branch, show_head_rev}, read_config};
+use crate::utils::{
+    git_utils::{show_branch, show_head_rev},
+    read_config
+};
 use git2::Repository;
 use serenity::{
     client::Context,
-    framework::standard::{CommandResult, macros::command},
-    model::prelude::Message,
+    framework::standard::{macros::command, CommandResult},
+    model::prelude::Message
 };
 
 #[command]
@@ -40,17 +43,20 @@ pub async fn about(context: &Context, message: &Message) -> CommandResult {
         ("Users", num_users.to_string(), true),
     ];
 
-    message.channel_id.send_message(&context, |message| {
-        message.embed(|embed| {
-            embed.title(format!("**{}**", bot_name));
-            embed.url("https://github.com/KamranMackey/Ellie");
-            embed.thumbnail(bot_avatar);
-            embed.color(0x00BFFF);
-            embed.fields(about_fields);
-            embed.footer(|footer| footer.text("Written with Rust & serenity."));
-            embed
+    message
+        .channel_id
+        .send_message(&context, |message| {
+            message.embed(|embed| {
+                embed.title(format!("**{}**", bot_name));
+                embed.url("https://github.com/KamranMackey/Ellie");
+                embed.thumbnail(bot_avatar);
+                embed.color(0x00BFFF);
+                embed.fields(about_fields);
+                embed.footer(|footer| footer.text("Written with Rust & serenity."));
+                embed
+            })
         })
-    }).await?;
+        .await?;
 
     Ok(())
 }

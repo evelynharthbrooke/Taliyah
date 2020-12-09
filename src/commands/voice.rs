@@ -25,7 +25,7 @@ async fn _join(context: &Context, message: &Message) -> Result<String, Error> {
     let channel = match channel_id {
         Some(channel) => channel,
         None => {
-            message.reply(&context, "You are not currently connected to a voice channel.").await?;
+            message.reply(context, "You are not currently connected to a voice channel.").await?;
             return Err(JoinError.into());
         }
     };
@@ -37,8 +37,7 @@ async fn _join(context: &Context, message: &Message) -> Result<String, Error> {
         Ok(connection) => {
             let mut data = context.data.write().await;
             let client_lock = data.get_mut::<Lavalink>().expect("Expected an active Lavalink client in the TypeMap.");
-            let connection = &connection.recv_async().await?;
-            client_lock.lock().await.create_session(guild_id, connection).await?;
+            client_lock.lock().await.create_session(guild_id, &connection).await?;
             Ok(channel.name(context).await.unwrap())
         }
         Err(why) => {
@@ -127,7 +126,7 @@ async fn play_playlist(context: &Context, message: &Message, args: Args) -> Comm
 
             if res.tracks.is_empty() {
                 if iter == 5 {
-                    message.channel_id.say(&context, "Couldn't find any videos matching this search query.").await?;
+                    message.channel_id.say(context, "Couldn't find any videos matching this search query.").await?;
                     return Ok(());
                 }
             } else {

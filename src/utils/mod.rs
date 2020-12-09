@@ -1,6 +1,5 @@
 // pub mod color_utils;
 pub mod git_utils;
-pub mod macros;
 pub mod locale_utils;
 pub mod parsers;
 
@@ -18,6 +17,7 @@ use rspotify::{
 use serenity::{client::Context, model::id::UserId};
 use sqlx::Row;
 use std::{env, fs::File, io::prelude::Read};
+use tracing::error;
 
 pub fn read_config(file: &str) -> ConfigurationData {
     let mut file = File::open(file).unwrap();
@@ -33,8 +33,17 @@ pub async fn get_profile_field(context: &Context, field: &str, user_id: UserId) 
         .fetch_one(&pool)
         .await
     {
-        Ok(row) => row.try_get(0).map_err(|e| EllieError::DatabaseError(e)),
-        Err(err) => Err(EllieError::DatabaseError(err))
+        Ok(row) => match row.try_get(0).map_err(EllieError::DatabaseError) {
+            Ok(row) => Ok(row),
+            Err(err) => {
+                error!("Field not set in database: {}", err);
+                Ok("Field not set.".to_string())
+            }
+        },
+        Err(err) => {
+            error!("Error querying database: {}", err);
+            Ok("Database unsuccessfully queried.".to_string())
+        }
     }
 }
 

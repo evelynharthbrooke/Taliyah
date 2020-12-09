@@ -16,18 +16,14 @@ pub enum EllieError {
 
 impl Display for EllieError {
     fn fmt(&self, f: &mut Formatter) -> Result {
-        let mut msg = String::from("[Error] ");
-        let mut log_message = String::from(String::new());
         let error = match self {
             EllieError::DatabaseError(e) => e.to_string(),
             EllieError::ParseError(e) => e.to_string(),
             EllieError::SerenityError(e) => e.to_string(),
             EllieError::CustomError(e) => e.to_string()
         };
-        msg += &error;
-        log_message += &error;
-        f.write_str(&msg)?;
-        error!("Encountered an error: {}", &msg);
+        f.write_str(&error)?;
+        error!("Encountered an error: {}", &error);
         Ok(())
     }
 }

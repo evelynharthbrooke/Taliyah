@@ -3,10 +3,7 @@
 //! Retrieves a chosen user's last.fm state, along with various
 //! user information such as their most recent tracks.
 
-use crate::{
-    ifelse,
-    utils::{format_int, get_album_artwork, get_profile_field, read_config}
-};
+use crate::utils::{format_int, get_album_artwork, get_profile_field, read_config};
 
 use chrono::NaiveDateTime;
 use itertools::Itertools;
@@ -152,10 +149,7 @@ pub async fn lastfm(context: &Context, message: &Message, mut arguments: Args) -
     let top_artists = client.top_artists(&user).await.within_period(Period::Overall).with_limit(5).send().await.unwrap();
     let user_info = client.user_info(&user).await.send().await.unwrap().user;
 
-    let display_name = match user_info.display_name {
-        Some(name) => name,
-        None => "None".to_string()
-    };
+    let display_name = if user_info.display_name.is_empty() { "None".to_string() } else { user_info.display_name };
 
     let avatar = user_info.images[3].image_url.as_str();
     let country = user_info.country;
@@ -179,7 +173,11 @@ pub async fn lastfm(context: &Context, message: &Message, mut arguments: Args) -
                 Err(_) => user_info.username.to_string()
             };
 
-            ifelse!(lastfm_name == user, database_name, user_info.username.to_string())
+            if lastfm_name == user {
+                database_name
+            } else {
+                user_info.username.to_string()
+            }
         }
         Err(_) => user_info.username.as_str().to_string()
     };
@@ -191,7 +189,7 @@ pub async fn lastfm(context: &Context, message: &Message, mut arguments: Args) -
 
     let name = &track.name;
     let artist = &track.artist.name;
-    let album = ifelse!(track.album.name.is_empty(), "".to_string(), track.album.name.to_string());
+    let album = if track.album.name.is_empty() { "".to_owned() } else { track.album.name.to_owned() };
     let artwork = get_album_artwork(artist, name, &album).await;
 
     let tracks = if recent_tracks.is_empty() {
@@ -200,7 +198,7 @@ pub async fn lastfm(context: &Context, message: &Message, mut arguments: Args) -
         recent_tracks
             .iter()
             .map(|track: &Track| {
-                let track_status = ifelse!(track.attrs.is_none(), "", "\x5c▶️");
+                let track_status = if track.attrs.is_none() { "" } else { "\x5c▶️" };
                 let track_name = &track.name.replace("**", "\x5c**");
                 let track_url = &track.url;
                 let track_artist = &track.artist.name;
@@ -209,8 +207,8 @@ pub async fn lastfm(context: &Context, message: &Message, mut arguments: Args) -
             .join("\n")
     };
 
-    let play_state = ifelse!(track.attrs.as_ref().is_none(), "last listened to", "is currently listening to");
-    let now_playing = format!("{} {} **{}** by **{}** on **{}**.", username, play_state, name, artist, album);
+    let play_state = if track.attrs.as_ref().is_none() { "last listened to" } else { "is currently listening to" };
+    let now_playing = format!("{} {} **{}** by **{}** on **{}**.", username, play_state, name, artist, album.to_string());
 
     let lastfm_fields = vec![
         ("**Name**", display_name, true),
@@ -232,7 +230,7 @@ pub async fn lastfm(context: &Context, message: &Message, mut arguments: Args) -
                 embed.color(0x00d5_1007);
                 embed.description(now_playing);
                 embed.fields(lastfm_fields);
-                embed.footer(|f| f.text("Powered by the Last.fm API."));
+                embed.footer(|f| f.text("Powered by Last.fm."));
                 embed
             })
         })

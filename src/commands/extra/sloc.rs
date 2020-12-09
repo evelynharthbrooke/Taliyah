@@ -1,11 +1,14 @@
 use itertools::Itertools;
 
-use reqwest::Client;
-use reqwest::Url;
+use reqwest::{Client, Url};
 
 use serde::Deserialize;
 
-use serenity::{client::Context, framework::standard::{Args, CommandResult, macros::command}, model::prelude::Message};
+use serenity::{
+    client::Context,
+    framework::standard::{macros::command, Args, CommandResult},
+    model::prelude::Message
+};
 
 #[derive(Debug, Deserialize)]
 struct Response {
@@ -30,22 +33,26 @@ pub struct Language {
 #[aliases("tokei")]
 pub async fn sloc(context: &Context, message: &Message, mut arguments: Args) -> CommandResult {
     if arguments.is_empty() {
-        message.channel_id.send_message(context, |m| {
-            m.embed(|e| {
-                e.title("Error: No repository details provided.");
-                e.description("You didn't provide repository details. Please provide them and try again.");
-                e.color(0x00FF_0000)
+        message
+            .channel_id
+            .send_message(context, |m| {
+                m.embed(|e| {
+                    e.title("Error: No repository details provided.");
+                    e.description("You didn't provide repository details. Please provide them and try again.");
+                    e.color(0x00FF_0000)
+                })
             })
-        }).await?;
+            .await?;
         return Ok(());
     }
 
     let owner = arguments.single::<String>()?;
     let name = arguments.single::<String>()?;
 
-    let mut msg = message.channel_id.send_message(context, |m| {
-        m.content(format!("Getting statistics for `{}/{}`, please wait...", owner, name))
-    }).await?;
+    let mut msg = message
+        .channel_id
+        .send_message(context, |m| m.content(format!("Getting statistics for `{}/{}`, please wait...", owner, name)))
+        .await?;
 
     let user_agent: &str = concat!(env!("CARGO_PKG_NAME"), "/", env!("CARGO_PKG_VERSION"));
     let client = Client::builder().user_agent(user_agent).build()?;
