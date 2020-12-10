@@ -3,7 +3,7 @@
 //! Retrieves a chosen user's last.fm state, along with various
 //! user information such as their most recent tracks.
 
-use crate::utils::{format_int, get_album_artwork, get_profile_field, read_config};
+use crate::{data::ReqwestContainer, utils::{format_int, get_album_artwork, get_profile_field, read_config}};
 
 use chrono::NaiveDateTime;
 use itertools::Itertools;
@@ -63,7 +63,9 @@ pub async fn lastfm(context: &Context, message: &Message, mut arguments: Args) -
 
     let config = read_config(&env::var("ELLIE_CONFIG_FILE").unwrap());
     let api_key = config.api.music.lastfm.api_key;
-    let mut client: Client = Client::new(&api_key);
+    let reqwest_client = context.data.read().await.get::<ReqwestContainer>().cloned().unwrap();
+
+    let mut client = Client::from_reqwest_client(reqwest_client, &api_key);
 
     let recent_tracks = match client.recent_tracks(&user).await.with_limit(5).send().await {
         Ok(rt) => rt.tracks,

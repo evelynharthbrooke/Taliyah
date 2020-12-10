@@ -1,11 +1,6 @@
-use crate::{
-    models::tmdb::movie::*,
-    utils::{format_int, locale_utils, read_config}
-};
-
 use humantime::format_duration;
 use itertools::Itertools;
-use reqwest::{redirect::Policy, Client, RequestBuilder};
+use reqwest::RequestBuilder;
 use serde::Deserialize;
 
 use serenity::{
@@ -15,6 +10,12 @@ use serenity::{
 };
 
 use std::{env, time::Duration};
+
+use crate::{
+    data::ReqwestContainer,
+    models::tmdb::movie::*,
+    utils::{format_int, locale_utils, read_config}
+};
 
 #[derive(Debug, Deserialize)]
 pub struct SearchResponse {
@@ -48,10 +49,8 @@ pub async fn movie(context: &Context, message: &Message, arguments: Args) -> Com
     let mut movie: String = arguments.rest().to_string();
 
     let config = read_config(&env::var("ELLIE_CONFIG_FILE").unwrap());
-
     let api_key = config.api.entertainment.tmdb;
-    let user_agent: &str = concat!(env!("CARGO_PKG_NAME"), ", v", env!("CARGO_PKG_VERSION"));
-    let client = Client::builder().user_agent(user_agent).redirect(Policy::none()).build().unwrap();
+    let client = context.data.read().await.get::<ReqwestContainer>().cloned().unwrap();
 
     let search_endpoint = "https://api.themoviedb.org/3/search/movie";
     let search_response: RequestBuilder;

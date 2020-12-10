@@ -1,5 +1,3 @@
-use reqwest::Client;
-
 use serde::Deserialize;
 
 use serenity::{
@@ -7,6 +5,8 @@ use serenity::{
     framework::standard::{macros::command, Args, CommandResult},
     model::prelude::Message
 };
+
+use crate::data::ReqwestContainer;
 
 #[derive(Debug, Deserialize)]
 pub struct Response {
@@ -43,11 +43,9 @@ pub async fn urban(context: &Context, message: &Message, arguments: Args) -> Com
         return Ok(());
     }
 
-    let user_agent: &str = concat!(env!("CARGO_PKG_NAME"), "/", env!("CARGO_PKG_VERSION"));
-    let client = Client::builder().user_agent(user_agent).build()?;
-
     let term = arguments.rest();
 
+    let client = context.data.read().await.get::<ReqwestContainer>().cloned().unwrap();
     let request = client.get("https://api.urbandictionary.com/v0/define").query(&[("term", term)]).send().await?;
     let response: Response = request.json().await?;
 
@@ -95,8 +93,7 @@ pub async fn urban(context: &Context, message: &Message, arguments: Args) -> Com
 #[command]
 #[description = "Gets a random definition from the Urban Dictionary."]
 pub async fn randefine(context: &Context, message: &Message) -> CommandResult {
-    let user_agent: &str = concat!(env!("CARGO_PKG_NAME"), "/", env!("CARGO_PKG_VERSION"));
-    let client = Client::builder().user_agent(user_agent).build()?;
+    let client = context.data.read().await.get::<ReqwestContainer>().cloned().unwrap();
     let request = client.get("http://api.urbandictionary.com/v0/random").send().await?;
     let response: Response = request.json().await?;
 

@@ -1,7 +1,5 @@
-use crate::{models::tmdb::show::*, utils::read_config};
-
 use itertools::Itertools;
-use reqwest::{redirect::Policy, Client, RequestBuilder};
+use reqwest::RequestBuilder;
 use serde::Deserialize;
 
 use serenity::{
@@ -11,6 +9,8 @@ use serenity::{
 };
 
 use std::env;
+
+use crate::{data::ReqwestContainer, models::tmdb::show::*, utils::read_config};
 
 #[derive(Debug, Deserialize)]
 pub struct SeriesSearchResponse {
@@ -86,10 +86,8 @@ pub async fn cast(context: &Context, message: &Message, mut arguments: Args) -> 
     let mut media: String = arguments.rest().to_string();
 
     let config = read_config(&env::var("ELLIE_CONFIG_FILE").unwrap());
-
     let api_key = config.api.entertainment.tmdb;
-    let user_agent: &str = concat!(env!("CARGO_PKG_NAME"), ", v", env!("CARGO_PKG_VERSION"));
-    let client = Client::builder().user_agent(user_agent).redirect(Policy::none()).build()?;
+    let client = context.data.read().await.get::<ReqwestContainer>().cloned().unwrap();
 
     if media_type.contains("show") || media_type.contains("series") {
         let search_endpoint = "https://api.themoviedb.org/3/search/tv";

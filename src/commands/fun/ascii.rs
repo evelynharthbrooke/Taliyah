@@ -1,10 +1,10 @@
-use reqwest::Client;
-
 use serenity::{
     client::Context,
     framework::standard::{macros::command, Args, CommandResult},
     model::prelude::Message
 };
+
+use crate::data::ReqwestContainer;
 
 #[command]
 #[usage = "<font> <string>"]
@@ -51,11 +51,9 @@ pub async fn ascii(context: &Context, message: &Message, arguments: Args) -> Com
         return Ok(());
     }
 
-    let user_agent: &str = concat!(env!("CARGO_PKG_NAME"), "/", env!("CARGO_PKG_VERSION"));
-    let client = Client::builder().user_agent(user_agent).build()?;
-
     let text = arguments.rest();
 
+    let client = context.data.read().await.get::<ReqwestContainer>().cloned().unwrap();
     let font_url = "https://artii.herokuapp.com/fonts_list";
     let font_in_text = text.split_whitespace().next().unwrap_or("");
     let fonts_request = client.get(font_url).send().await?.text().await?;

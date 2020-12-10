@@ -1,5 +1,3 @@
-use crate::ShardManagerContainer;
-
 use chrono::{offset::Utc, Duration};
 
 use serenity::{
@@ -7,6 +5,8 @@ use serenity::{
     framework::standard::{macros::command, CommandResult},
     model::prelude::Message
 };
+
+use crate::ShardManagerContainer;
 
 #[command]
 #[description = "Checks Discord's API / message latency."]

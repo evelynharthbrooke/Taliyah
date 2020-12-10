@@ -1,9 +1,3 @@
-use crate::{
-    read_config,
-    utils::{get_profile_field, parsers::parse_user},
-    DatabasePool
-};
-
 use lastfm_rs::{
     error::{Error, LastFMErrorResponse::InvalidParameter},
     Client
@@ -16,6 +10,12 @@ use serenity::{
     utils::Colour
 };
 
+use crate::{
+    read_config,
+    utils::{get_profile_field, parsers::parse_user},
+    DatabasePool
+};
+
 #[command]
 #[usage = "<user> or <blank>"]
 #[sub_commands(set)]
@@ -23,14 +23,14 @@ use serenity::{
 /// Shows the profile of a given user.
 ///
 /// To set your profile parameters, use the set command.
-pub async fn profile(context: &Context, message: &Message, args: Args) -> CommandResult {
+pub async fn profile(context: &Context, message: &Message, arguments: Args) -> CommandResult {
     let cache = &context.cache;
     let guild_id = message.guild_id.ok_or("Failed to get GuildID from Message.")?;
     let member = if message.mentions.is_empty() {
-        if args.is_empty() {
+        if arguments.is_empty() {
             message.member(&context).await.map_err(|_| "Could not find member.")?
         } else {
-            match parse_user(&args.rest(), Some(&guild_id), Some(&context)).await {
+            match parse_user(&arguments.rest(), Some(&guild_id), Some(&context)).await {
                 Some(i) => guild_id.member(&context, i).await?,
                 None => return Ok(())
             }
@@ -97,7 +97,9 @@ pub async fn set(context: &Context, message: &Message, mut arguments: Args) -> C
                 return Ok(());
             };
 
-            sqlx::query!("UPDATE profile_data SET user_location = $1 WHERE user_id = $2;", &value, user_id)
+            sqlx::query("UPDATE profile_data SET user_location = $1 WHERE user_id = $2;")
+                .bind(&value)
+                .bind(&user_id)
                 .execute(&pool)
                 .await
                 .unwrap();
@@ -133,7 +135,9 @@ pub async fn set(context: &Context, message: &Message, mut arguments: Args) -> C
                 }
             }
 
-            sqlx::query!("UPDATE profile_data SET user_lastfm_id = $1 WHERE user_id = $2;", &value, user_id)
+            sqlx::query("UPDATE profile_data SET user_lastfm_id = $1 WHERE user_id = $2")
+                .bind(&value)
+                .bind(&user_id)
                 .execute(&pool)
                 .await
                 .unwrap();
@@ -146,7 +150,9 @@ pub async fn set(context: &Context, message: &Message, mut arguments: Args) -> C
                 return Ok(());
             };
 
-            sqlx::query!("UPDATE profile_data SET user_name = $1 WHERE user_id = $2;", &value, user_id)
+            sqlx::query("UPDATE profile_data SET user_name = $1 WHERE user_id = $2")
+                .bind(&value)
+                .bind(&user_id)
                 .execute(&pool)
                 .await
                 .unwrap();
@@ -159,7 +165,9 @@ pub async fn set(context: &Context, message: &Message, mut arguments: Args) -> C
                 return Ok(());
             };
 
-            sqlx::query!("UPDATE profile_data SET user_gender = $1 WHERE user_id = $2;", &value, user_id)
+            sqlx::query("UPDATE profile_data SET user_gender = $1 WHERE user_id = $2")
+                .bind(&value)
+                .bind(&user_id)
                 .execute(&pool)
                 .await
                 .unwrap();
@@ -172,7 +180,9 @@ pub async fn set(context: &Context, message: &Message, mut arguments: Args) -> C
                 return Ok(());
             }
 
-            sqlx::query!("UPDATE profile_data SET user_pronouns = $1 WHERE user_id = $2;", &value, user_id)
+            sqlx::query("UPDATE profile_data SET user_pronouns = $1 WHERE user_id = $2")
+                .bind(&value)
+                .bind(&user_id)
                 .execute(&pool)
                 .await
                 .unwrap();

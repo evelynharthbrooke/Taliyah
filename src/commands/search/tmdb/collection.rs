@@ -1,9 +1,4 @@
-use crate::utils::read_config;
-
 use chrono::prelude::{NaiveDate, Utc};
-
-use reqwest::{redirect::Policy, Client};
-
 use serde::Deserialize;
 
 use serenity::{
@@ -13,6 +8,8 @@ use serenity::{
 };
 
 use std::env;
+
+use crate::{data::ReqwestContainer, utils::read_config};
 
 #[derive(Deserialize, Debug)]
 pub struct SearchResponse {
@@ -69,10 +66,8 @@ pub async fn collection(context: &Context, message: &Message, arguments: Args) -
     let collection: String = arguments.rest().to_string();
 
     let config = read_config(&env::var("ELLIE_CONFIG_FILE").unwrap());
-
     let api_key = config.api.entertainment.tmdb;
-    let user_agent: &str = concat!(env!("CARGO_PKG_NAME"), ", v", env!("CARGO_PKG_VERSION"));
-    let client = Client::builder().user_agent(user_agent).redirect(Policy::none()).build()?;
+    let client = context.data.read().await.get::<ReqwestContainer>().cloned().unwrap();
 
     let search_endpoint = "https://api.themoviedb.org/3/search/collection";
     let search_response = client.get(search_endpoint).query(&[("api_key", &api_key), ("query", &collection)]);
@@ -85,7 +80,7 @@ pub async fn collection(context: &Context, message: &Message, arguments: Args) -
             .send_message(&context, |message| {
                 message.content(format!(
                     "Sorry, I was unable to find a collection on TMDb matching the term `{}`. \
-                Please try a different search term.",
+                    Please try a different search term.",
                     collection
                 ))
             })

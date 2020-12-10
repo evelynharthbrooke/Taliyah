@@ -1,5 +1,3 @@
-use crate::utils::parsers::parse_user;
-
 use itertools::Itertools;
 
 use serenity::{
@@ -11,6 +9,8 @@ use serenity::{
 };
 
 use tracing::info;
+
+use crate::utils::parsers::parse_user;
 
 #[command]
 #[description = "Shows various information about a user."]

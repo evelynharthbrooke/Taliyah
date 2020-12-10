@@ -5,17 +5,16 @@
 
 mod commands;
 mod config;
+mod constants;
 mod data;
 mod error;
 mod listeners;
 mod models;
 mod utils;
 
-use crate::data::*;
-
 use commands::{
     extra::sloc::*,
-    fun::{ascii::*, printerfacts::*, urban::*},
+    fun::{ascii::*, printerfacts::*, urban::*, xkcd::*},
     info::{about::*, channel::*, first_message::*, guild::*, profile::*, role::*, user::*},
     moderation::slowmode::*,
     music::{lastfm::*, spotify::*},
@@ -31,6 +30,7 @@ use listeners::{
     hooks::*
 };
 
+use reqwest::{redirect::Policy, Client};
 use serenity::{
     client::{bridge::gateway::GatewayIntents, ClientBuilder},
     framework::{standard::macros::group, StandardFramework},
@@ -46,7 +46,7 @@ use tracing::{info, instrument, Level};
 use tracing_log::LogTracer;
 use tracing_subscriber::{EnvFilter, FmtSubscriber};
 
-use utils::read_config;
+use crate::{constants::*, data::*, utils::read_config};
 
 #[group("Extra")]
 #[description = "Commands that don't really fit in the other command groups."]
@@ -55,7 +55,7 @@ struct Extra;
 
 #[group("Fun")]
 #[description = "Commands that could be considered fun / silly."]
-#[commands(ascii, printerfacts, urban, randefine)]
+#[commands(ascii, printerfacts, urban, randefine, xkcd)]
 struct Fun;
 
 #[group("Info")]
@@ -159,10 +159,13 @@ async fn main() -> Result<(), Box<dyn Error + Send + Sync>> {
 
     {
         let mut data = client.data.write().await;
+
         let pool = PgPoolOptions::new().max_connections(20).connect(&env::var("DATABASE_URL")?).await?;
+        let reqwest_client = Client::builder().user_agent(REQWEST_USER_AGENT).redirect(Policy::none()).build()?;
 
         data.insert::<DatabasePool>(pool);
         data.insert::<ShardManagerContainer>(Arc::clone(&client.shard_manager));
+        data.insert::<ReqwestContainer>(reqwest_client);
 
         {
             let host = configuration.api.music.lavalink.host;

@@ -1,5 +1,3 @@
-use crate::utils::spotify;
-
 use chrono::prelude::*;
 use humantime::format_duration;
 use itertools::Itertools;
@@ -17,6 +15,8 @@ use serenity::{
 };
 
 use std::time::Duration;
+
+use crate::utils::spotify;
 
 #[command]
 #[description("Displays information about a specified album on Spotify.")]

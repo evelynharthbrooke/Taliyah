@@ -1,8 +1,5 @@
-use crate::utils::format_int;
-
 use chrono::{DateTime, Utc};
 use itertools::Itertools;
-use reqwest::Client;
 use serde::Deserialize;
 
 use serenity::{
@@ -10,6 +7,8 @@ use serenity::{
     framework::standard::{macros::command, Args, CommandResult},
     model::prelude::Message
 };
+
+use crate::{data::ReqwestContainer, utils::format_int};
 
 #[derive(Debug, Deserialize)]
 pub struct Response {
@@ -112,9 +111,7 @@ pub async fn krate(context: &Context, message: &Message, mut arguments: Args) ->
 
     let krate = arguments.single::<String>()?;
 
-    let user_agent: &str = concat!(env!("CARGO_PKG_NAME"), "/", env!("CARGO_PKG_VERSION"));
-    let client = Client::builder().user_agent(user_agent).build()?;
-
+    let client = context.data.read().await.get::<ReqwestContainer>().cloned().unwrap();
     let request_url = format!("https://crates.io/api/v1/crates/{}", krate);
     let response = client.get(&request_url).send().await?;
     let result: Response = response.json().await?;
