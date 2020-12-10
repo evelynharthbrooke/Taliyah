@@ -3,7 +3,10 @@
 //! Retrieves a chosen user's last.fm state, along with various
 //! user information such as their most recent tracks.
 
-use crate::{data::ReqwestContainer, utils::{format_int, get_album_artwork, get_profile_field, read_config}};
+use crate::{
+    data::ReqwestContainer,
+    utils::{format_int, get_album_artwork, get_profile_field, read_config}
+};
 
 use chrono::NaiveDateTime;
 use itertools::Itertools;
