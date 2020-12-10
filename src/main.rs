@@ -128,12 +128,13 @@ async fn main() -> Result<(), Box<dyn Error + Send + Sync>> {
     };
 
     let framework = StandardFramework::new()
-        .configure(|config| {
-            config
+        .configure(|configuration| {
+            configuration
                 .on_mention(Some(bot_id))
                 .prefix(prefix)
                 .ignore_webhooks(false)
                 .ignore_bots(true)
+                .no_dm_prefix(true)
                 .with_whitespace(true)
                 .owners(owners)
                 .case_insensitivity(true)
@@ -159,6 +160,7 @@ async fn main() -> Result<(), Box<dyn Error + Send + Sync>> {
 
     {
         let mut data = client.data.write().await;
+
         let database_url = configuration.bot.database.url;
         let pool = PgPoolOptions::new().max_connections(20).connect(&database_url).await?;
         let reqwest_client = Client::builder().user_agent(REQWEST_USER_AGENT).redirect(Policy::none()).build()?;
