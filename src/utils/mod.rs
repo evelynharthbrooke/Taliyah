@@ -16,7 +16,7 @@ use rspotify::{
 
 use serenity::{client::Context, model::id::UserId};
 use sqlx::Row;
-use std::{env, fs::File, io::prelude::Read};
+use std::{fs::File, io::prelude::Read};
 use tracing::error;
 
 pub fn read_config(file: &str) -> ConfigurationData {
@@ -89,7 +89,7 @@ pub async fn get_album_artwork(artist: &str, track: &str, album: &str) -> String
 }
 
 pub async fn spotify() -> Spotify {
-    let config = read_config(&env::var("ELLIE_CONFIG_FILE").unwrap());
+    let config = read_config("config.toml");
     let client_id = config.api.music.spotify.client_id;
     let client_secret = config.api.music.spotify.client_secret;
     let credentials = SpotifyClientCredentials::default().client_id(&client_id).client_secret(&client_secret).build();

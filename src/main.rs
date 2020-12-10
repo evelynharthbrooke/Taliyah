@@ -40,7 +40,7 @@ use serenity::{
 use songbird::SerenityInit;
 use sqlx::postgres::PgPoolOptions;
 
-use std::{collections::HashSet, env, error::Error, sync::Arc};
+use std::{collections::HashSet, error::Error, sync::Arc};
 
 use tracing::{info, instrument, Level};
 use tracing_log::LogTracer;
@@ -91,7 +91,7 @@ struct Voice;
 #[tokio::main(core_threads = 16)]
 #[instrument]
 async fn main() -> Result<(), Box<dyn Error + Send + Sync>> {
-    let configuration = read_config(&env::var("ELLIE_CONFIG_FILE")?);
+    let configuration = read_config("config.toml");
     let logging = configuration.bot.logging.enabled;
 
     if logging {
@@ -159,8 +159,8 @@ async fn main() -> Result<(), Box<dyn Error + Send + Sync>> {
 
     {
         let mut data = client.data.write().await;
-
-        let pool = PgPoolOptions::new().max_connections(20).connect(&env::var("DATABASE_URL")?).await?;
+        let database_url = configuration.bot.database.url;
+        let pool = PgPoolOptions::new().max_connections(20).connect(&database_url).await?;
         let reqwest_client = Client::builder().user_agent(REQWEST_USER_AGENT).redirect(Policy::none()).build()?;
 
         data.insert::<DatabasePool>(pool);

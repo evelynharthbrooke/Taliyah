@@ -9,7 +9,7 @@ use serenity::{
     model::prelude::Message
 };
 
-use std::{env, time::Duration};
+use std::time::Duration;
 
 use crate::{
     data::ReqwestContainer,
@@ -48,7 +48,7 @@ pub async fn movie(context: &Context, message: &Message, arguments: Args) -> Com
 
     let mut movie: String = arguments.rest().to_string();
 
-    let config = read_config(&env::var("ELLIE_CONFIG_FILE").unwrap());
+    let config = read_config("config.toml");
     let api_key = config.api.entertainment.tmdb;
     let client = context.data.read().await.get::<ReqwestContainer>().cloned().unwrap();
 

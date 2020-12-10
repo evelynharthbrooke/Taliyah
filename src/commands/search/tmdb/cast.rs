@@ -8,8 +8,6 @@ use serenity::{
     model::prelude::Message
 };
 
-use std::env;
-
 use crate::{data::ReqwestContainer, models::tmdb::show::*, utils::read_config};
 
 #[derive(Debug, Deserialize)]
@@ -85,7 +83,7 @@ pub async fn cast(context: &Context, message: &Message, mut arguments: Args) -> 
     let media_type: String = arguments.single()?;
     let mut media: String = arguments.rest().to_string();
 
-    let config = read_config(&env::var("ELLIE_CONFIG_FILE").unwrap());
+    let config = read_config("config.toml");
     let api_key = config.api.entertainment.tmdb;
     let client = context.data.read().await.get::<ReqwestContainer>().cloned().unwrap();
 

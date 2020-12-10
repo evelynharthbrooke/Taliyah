@@ -29,7 +29,6 @@ use serenity::{
     model::prelude::Message
 };
 
-use std::env;
 use tracing::error;
 
 #[command]
@@ -64,7 +63,7 @@ pub async fn lastfm(context: &Context, message: &Message, mut arguments: Args) -
         }
     };
 
-    let config = read_config(&env::var("ELLIE_CONFIG_FILE").unwrap());
+    let config = read_config("config.toml");
     let api_key = config.api.music.lastfm.api_key;
     let reqwest_client = context.data.read().await.get::<ReqwestContainer>().cloned().unwrap();
 

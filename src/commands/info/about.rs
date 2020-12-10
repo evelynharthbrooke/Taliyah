@@ -12,7 +12,7 @@ use serenity::{
 #[command]
 #[aliases("info", "botinfo")]
 pub async fn about(context: &Context, message: &Message) -> CommandResult {
-    let config = read_config(env!("ELLIE_CONFIG_FILE"));
+    let config = read_config("config.toml");
     let repo = Repository::open(env!("CARGO_MANIFEST_DIR"))?;
 
     let current_user = context.cache.current_user().await;
