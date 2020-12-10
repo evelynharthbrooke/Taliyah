@@ -27,12 +27,12 @@ pub async fn slowmode(context: &Context, message: &Message, mut arguments: Args)
         match channel.slow_mode_rate {
             Some(rate) => {
                 if rate == 0 {
-                    format!("Slowmode is not currently set in this channel.")
+                    "Slowmode is not currently set in this channel.".to_string()
                 } else {
                     format!("Current slowmode rate is set to `{}` seconds.", rate)
                 }
             }
-            None => format!("Slowmode is not available for this channel type.")
+            None => "Slowmode is not available for this channel type.".to_string()
         }
     } else {
         "Failed to find channel in cache.".to_string()
