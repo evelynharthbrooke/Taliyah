@@ -1,9 +1,5 @@
 # Ellie
 
-> Ellie is currently undergoing a rewrite in the Rust programming language. As such,
-> the following README text is entirely invalid. It's only here for posterity sake.
-> Updated release notes will be added later on.
-
 A feature-packed bot for Discord servers, written in Rust with Serenity and various other libraries.
 
 [![Invite Ellie][invite-badge]][invite-link]
@@ -11,108 +7,87 @@ A feature-packed bot for Discord servers, written in Rust with Serenity and vari
 [![Dependency Status][dependency-badge]][dependency-link]
 [![GitHub Actions Build Status][github-actions-badge]][github-actions-link]
 
-Welcome to the official GitHub / GitLab repository for Ellie, a bot for the Discord chat platform written
-in Rust with Serenity and various other libraries. This bot is still a WIP, but it has a pretty good
-subset of commands available for use in servers.
-
-> Past this point is the old Ellie README, made available for posterity reasons. The below sections
-> were written when Ellie was written with Node.js and TypeScript, and this no longer applies. Be
-> patient while a new README with re-written installation instructions is written.
+Welcome to the official GitHub / GitLab repository for Ellie, a bot for the Discord chat platform written in Rust with the
+serenity library, as well as various other libraries. It should be noted that this project is still in a heavy Work-In-Progress
+state, however
 
 ## Installation
 
 ### Prerequisites
 
-Alright, before we can get Ellie up and running, we'll need to make sure Node.js is installed, which we can do by
-running the following command (or file) for your respective platform. Node is basically the only thing we need to
-really install. Everything else can be done through `npm` or `yarn`, but for these instructions, I'll be using `npm`.
+Alright, before we can get Ellie up and running, we'll need to install a couple pieces of software in order for Ellie
+to actually build and run. This will depend on your operating system, be it either Windows, macOS or Linux. On Windows,
+this means you'll need Visual Studio 2019 installed, be it either the full IDE (Community, Professional, or Enterprise work
+fine) or just the Visual Studio 2019 Build Tools, and Rust itself. On macOS, you will need the Xcode Developer Tools, as
+it includes the system compiler (`clang`) necessary to build Rust programs and libraries, or you could also go with simply
+installing Rust through the `homebrew` tool. On Linux, you don't need to install anything in most cases, as most Linux
+distributions such as Ubuntu and Fedora already have the `gcc` toolchain installed, however if desired this can be switched
+to the same `clang` compiler as macOS by installing it through your respective package manager, or through `homebrew` as
+well.
+
+Across *all* operating systems, however, you will need to install the PostgreSQL database server, version 13 or later, as
+that is required for the database. For the voice functionalities provided by Ellie, you will need Opus, FFmpeg, `youtube-dl`,
+as well as a Lavalink-compatible voice server, e.g. Lavalink or Andesite, meaning you will also need Python and Java. Version
+15 of the AdoptOpenJDK distribution is recommended, with the OpenJ9 runtime being a good option. For Python, version 3.2
+or better work fine, however Python 3.9.1 or later is recommended as newer versions of Python perform faster. Version 2.6
+or 2.7 are NOT, and I mean ARE NOT, supported. They are supported by the `youtube-dl` tool, but I will provide absolutely
+ZERO support for these, as they are EOL and completely unsupported, even by the Python Software Foundation.
+
+All in all, you will need the following prerequisites for Ellie to build and run:
+
+* Visual Studio 2019 / Visual Studio 2019 Build Tools (*Windows (non-WSL) only*)
+* PostgreSQL, version 13 or later
+* Opus 1.3.1 or later
+* FFmpeg 3.4.8 or later
+* youtube-dl
+* Lavalink / Andesite
+* AdoptOpenJDK 15 or later (OpenJ9 runtime)
+* Python, version 3.2 or later
+* Rust, preferably version 1.48 or later
 
 #### Windows
 
-To install Node.js on Windows, you can head on over to the Node.js website ([located here](https://nodejs.org)) and
-download the latest version available in the **Current** channel. You can also use the nightly builds if you so choose,
-but I should note that nightly builds can be unstable at times, and as such I currently recommend against using said
-builds, but if you still decide to use them, all I can say is that you _use them at your own risk_, and report any
-issues you experience with the bot while using the nightly builds to me via the respective issue trackers and I'll
-take a look if I can fix the problem. **NOTE**: I won't be able to fix dependency-related problems if there is no
-respective dependency update that fixes the problem with the latest Node.js verison! As I can't fork every available
-unmaintained dependency (if I happen to use any), please don't make any requests regarding this.
+> **TODO**: Add instructions for Java, Python, and other dependencies (for both Windows and WSL)
 
-#### macOS
+To install Visual Studio 2019, or the Visual Studio 2019 build tools, please visit the website for Visual Studio, which can
+be accessed by [clicking here](https://visualstudio.microsoft.com/), hover over the Download Visual Studio button on the
+tile for Visual Studio, and selecting any given edition. If you have a license for either Professional or Enterprise, select
+either of those, but if you do not, the Community works fine too. Or, if you would just like to install the Build Tools instead
+of installing the entire IDE, you can visit [this URL](https://visualstudio.microsoft.com/downloads/), scroll down to the
+All Downloads section, expand the "Tools for Visual Studio 2019" section, and click the Download button next to Build Tools
+for Visual Studio 2019.
 
-First, let's get Homebrew installed if it isn't already, so we can easily install the Node Version Manager (nvm), a
-really nice utility to manage and install multiple Node.js versions!
+Next, we will need to install the `rustup` tool, which allows us to very easily manage Rust toolchain installations as well
+as easily update Rust when new versions are available. To download the tool, visit the website for the Rust programming language,
+located [here](https://www.rust-lang.org/learn/get-started), or the Rustup website, located [here](https://rustup.rs/), and
+select the 64-bit executable file to begin the process of initializing the Rustup utility.
 
-**Note**: You may need Xcode and Xcode's tools for certain Homebrew features but I am not 100% sure on this. However,
-Xcode's comandline tools include Apple's version of git (currently at version 2.17.1). I'm not sure if git is already
-included in macOS without the dev tools, but installing the tools are pretty useful for other development purposes,
-so go ahead and install them.
+#### With Windows Subsystem for Linux (WSL) 2
 
-```bash
-/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-```
-
-Now, let's update Homebrew's formulae, so we're all up-to-date and won't be installing any outdated versions of any
-packages.
+Installing Rust in the Windows Subsystem for Linux is even easier, and doesn't require Visual Studio 2019, or the Build Tools,
+as the GNU Compiler Collection (gcc) is more than likely already installed for you. To install Rust, just run the following
+command in a WSL terminal window and follow any instructions that are provided to you:
 
 ```bash
-brew update
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 ```
 
-##### With the Node Version Manager
+Rust may also be provided in the respective Windows Subsystem for Linux distribution you are using, however this is not recommended,
+as the version of Rust available in the distribution's package repositories may be significantly outdated, due to the nature
+of Ubuntu, Debian, and other non-rolling Linux distributions preferring to wait until new distribution versions to update
+their packages to new major versions. For example, Ubuntu still has Rust 1.43.0 in their package repositories, a version
+that was released in April of 2020, despite Rust 1.48.0 being the current stable version available, and installing Rust
+through your system's package manager also removes the ability to have multiple Rust toolchains installed, which `rustup`
+provides, among other features.
 
-This option allows you to install Node.js with the Node Version Manager, which is strongly recommended because `nvm`
-allows you to e.g. manage multiple Node.js versions, which is ridiculously useful for testing purposes. But, you can
-also install node without `nvm` and I'll describe how to do that in the next section.
+##### Advanced Notes
 
-```bash
-brew install nvm && mkdir ~/.nvm
-# add the below part to your current shell profile.
-# this step is crucial if you actually want to use
-# nvm.
-export NVM_DIR="$HOME/.nvm"
-. "#{opt_prefix}/nvm.sh"
-```
+To install `rustup`, `rustc`, and `cargo` to a different folder than the default, create both the `RUSTUP_HOME` and the `CARGO_HOME`
+system environment variables under the System Properties window in Windows, under Advanced. The `rustup` tool does not currently
+offer a user-friendly way of changing the instal location, but this is an option if you would like to install Rust to e.g.,
+a different drive.
 
-Finally, we can install the latest version of Node.js.
-
-```bash
-nvm install node # this installs the latest Node.js version
-```
-
-##### Without the Node Version Manager
-
-This option allows you to install Node.js without the Node Version Manager. If you would like to proceed with this route,
-you only have to accomplish one step, which is to install Node.js using Homebrew. This will install `icu4c` which allows
-full Unicode support, as well as Node.js itself. You can also install Node.js with OpenSSL 1.1 support, but its optional,
-since macOS already comes with its own SSL library, LibreSSL, found in BSD operating systems such as OpenBSD and FreeBSD.
-Anyways, babbling aside, you can install Node with the below command.
-
-```bash
-brew install node # simple, right?
-```
-
-#### Linux
-
-Installing Node.js on Linux is pretty easy, just use your respective package manager included in your distribution
-to install Node.js. As an example, on Arch Linux, you can run the following command and you'll be done:
-
-```bash
-sudo pacman -S nodejs npm # This should install the latest available version of Node.js, as well as npm.
-```
-
-On distributions such as Ubuntu, Debian, Linux Mint, and other `apt`-based distributions, you can run the following
-commands to install the latest current version of Node.js, as well as npm. (these commands are borrowed from the
-Node.js Linux installation page on the Node.js website, which will be listed below).
-
-```bash
-curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -
-sudo apt-get install -y nodejs
-sudo apt-get install -y build-essential # required if you want to install native Node.js modules via npm!
-```
-
-For other distributions, such as Gentoo, openSUSE, and others, you can visit the respective page on the Node.js
-website, which you can visit [here](https://nodejs.org/en/download/package-manager/).
+> **TODO**: Add macOS and Linux install instructions
 
 ### Installing the Bot
 
@@ -120,17 +95,18 @@ Now, we can actually download Ellie and set her up. This step 100% requires Git,
 be downloading her.
 
 ```bash
-git clone https://github.com/KamranMackey/Ellie
+git clone https://github.com/KamranMackey/Ellie.git
 ```
 
 If you'd like to use GitLab for the cloning process instead of GitHub, you can do that too. Just use
 the following command instead to clone from Ellie's GitLab mirror.
 
 ```bash
-git clone https://gitlab.com/KamranMackey/Ellie
+git clone https://gitlab.com/KamranMackey/Ellie.git
 ```
 
-Alright, now let's `cd` into the download directory where we downloaded Ellie to.
+Alright, now let's `cd` into the download directory where we downloaded Ellie to. This works across any and all operating
+systems, including Windows.
 
 ```bash
 cd Ellie
@@ -140,14 +116,25 @@ Now we can install Ellie's dependencies. On Windows, you will need to install th
 package using npm, as Windows does not natively include build tools like Linux does. For macOS, just
 install Xcode and the commandline tools.
 
+
+#### Non-release variant (unoptimized and with debug symbols)
+
 ```bash
-npm install
+cargo build
+```
+
+#### Release variant (optimized, without debug symbols)
+
+```bash
+cargo build --release
 ```
 
 Just be patient while this process completes. It may take a while to complete, depending on your Internet
-speed as well as the speed of your system's SSD and/or hardrive.
+speed as well as the speed of your system's SSD and/or hard drive.
 
 ### Configuring the Bot
+
+> This section is currently out of date. This section will be updated soon.
 
 Now we can set up Ellie. You will need to go to the developers site for Discord, and create a new application.
 You can do this by going [here](https://discordapp.com/developers/applications/), logging in, and selecting
@@ -173,42 +160,19 @@ You have reached the final step of the install instructions. You're almost there
 the bot and then start her up.
 
 ```bash
-npm run build && npm start
+cargo run # (--release if you want to run the optimized variant)
 ```
 
 Congratulations! You have (hopefully) successfully installed and set up Ellie, and you can now add the bot to
-any guild you'd like! (if you have the permission to of course!)
+any guild you'd like. (if you have the permission to of course)
 
-**NOTE**: Ellie does not use PM2. When I personally start usiing PM2 for running Ellie, I will re-add instructions
-on how to run Ellie using it.
+### Licensing
 
-### Licensing and Other Information
-
-Ellie is licensed under the terms of the GNU General Public License, version 3.0, or any later versions that
-may release in the near or far future. The license snippet is below, and the full terms can be found by looking
-at the `LICENSE` file, located in the root directory.
-
-```text
-Copyright (c) 2019-present Kamran Mackey
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-```
+Ellie is licensed under the terms of the MIT License, a fairly unrestrictive license that gives you the power to do
+mostly anything you want with this project, and is one of two licenses used by the Rust project itself alongside version
+2.0 of the Apache License, meaning that this software should be 100% compatible. The full contents of the MIT license are
+written in the `LICENSE` file, in the root project directory. Please read it in full to understand your full rights
+with regards to this software.
 
 [invite-link]: https://discordapp.com/oauth2/authorize?client_id=483499705108529163&scope=bot
 [invite-badge]: https://img.shields.io/badge/invite-to%20your%20Discord%20server-7289da.svg?style=flat-square&logo=discord

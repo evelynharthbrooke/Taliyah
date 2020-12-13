@@ -8,13 +8,12 @@ use crate::{
     utils::{format_int, get_album_artwork, get_profile_field, read_config}
 };
 
-use chrono::NaiveDateTime;
 use itertools::Itertools;
 
 use lastfm_rs::{
     error::{
         Error,
-        LastFMErrorResponse::{InvalidParameter, OperationFailed}
+        LastFMErrorResponse::{InvalidParameters, OperationFailed}
     },
     user::{
         recent_tracks::Track,
@@ -101,7 +100,7 @@ pub async fn lastfm(context: &Context, message: &Message, mut arguments: Args) -
                     return Ok(());
                 }
             },
-            Error::LastFMError(InvalidParameter(error)) => match error.message.as_str() {
+            Error::LastFMError(InvalidParameters(error)) => match error.message.as_str() {
                 "User not found" => {
                     message
                         .channel_id
@@ -165,8 +164,8 @@ pub async fn lastfm(context: &Context, message: &Message, mut arguments: Args) -
         .iter()
         .map(|a: &Artist| {
             let name = &a.name;
-            let plays = format_int(a.playcount.parse::<usize>().unwrap());
-            format!("**{}** — {} plays", name, plays)
+            let plays = format_int(a.scrobbles.parse::<usize>().unwrap());
+            format!("**{}** — {} scrobbles", name, plays)
         })
         .join("\n");
 
@@ -186,8 +185,8 @@ pub async fn lastfm(context: &Context, message: &Message, mut arguments: Args) -
         Err(_) => user_info.username.as_str().to_string()
     };
 
-    let registered = NaiveDateTime::from_timestamp(user_info.registered.friendly_date, 0).format("%B %e, %Y");
-    let scrobbles = format_int(user_info.total_tracks.parse::<usize>().unwrap());
+    let registered = user_info.registered.date.format("%B %e, %Y");
+    let scrobbles = format_int(user_info.scrobbles.parse::<usize>().unwrap());
 
     let track = recent_tracks.first().unwrap();
 
@@ -197,7 +196,7 @@ pub async fn lastfm(context: &Context, message: &Message, mut arguments: Args) -
     let artwork = get_album_artwork(artist, name, &album).await;
 
     let tracks = if recent_tracks.is_empty() {
-        "No recent tracks available".to_owned()
+        "Unknown".to_owned()
     } else {
         recent_tracks
             .iter()

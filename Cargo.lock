@@ -17,15 +17,15 @@ checksum = "ee2a4ec343196209d6594e19543ae87a39f96d5534d7174822a3ad825dd6ed7e"
 
 [[package]]
 name = "ahash"
-version = "0.4.6"
+version = "0.4.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f6789e291be47ace86a60303502173d84af8327e3627ecf334356ee0f87a164c"
+checksum = "739f4a8db6605981345c5654f3a85b056ce52f37a39d34da03f25bf2151ea16e"
 
 [[package]]
 name = "ahash"
-version = "0.5.9"
+version = "0.5.10"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "062782ee945b38cab67201cd84c77ab3881c07125a1f1f7a5d2fd213f797a2d6"
+checksum = "19fac972e53443ba111b1ff866e9d3b6484df5c05030e13bc7c6a1ebc802e983"
 dependencies = [
  "getrandom 0.2.0",
  "lazy_static",
@@ -302,7 +302,7 @@ dependencies = [
 [[package]]
 name = "command_attr"
 version = "0.3.1"
-source = "git+https://github.com/KamranMackey/serenity?branch=kamrans-fork-await#7c057201afa9602ceff051286a184efaf79dbeba"
+source = "git+https://github.com/KamranMackey/serenity?branch=kamrans-fork-await#ecafc9403be898c14307379414f8df9b937b92bc"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -394,9 +394,9 @@ dependencies = [
 
 [[package]]
 name = "darling"
-version = "0.10.2"
+version = "0.10.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0d706e75d87e35569db781a9b5e2416cff1236a47ed380831f959382ccd5f858"
+checksum = "15d658711a12632b5574c8d5b3fc5d2f0d2f87b9fbf9237ee0f759b88bb6bdec"
 dependencies = [
  "darling_core",
  "darling_macro",
@@ -404,9 +404,9 @@ dependencies = [
 
 [[package]]
 name = "darling_core"
-version = "0.10.2"
+version = "0.10.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f0c960ae2da4de88a91b2d920c2a7233b400bc33cb28453a2987822d8392519b"
+checksum = "16d3514d243331d8acde56bfcf45d0147aabbda853c2f49dce081ea85f9a7220"
 dependencies = [
  "fnv",
  "ident_case",
@@ -418,9 +418,9 @@ dependencies = [
 
 [[package]]
 name = "darling_macro"
-version = "0.10.2"
+version = "0.10.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d9b5a2f4ac4969822c62224815d069952656cadc7084fdca9751e6d959189b72"
+checksum = "44f63c369ef0c17ad17585d31d5f2bf10dece2710bf0766e01db57a6f9849a2e"
 dependencies = [
  "darling_core",
  "quote",
@@ -493,9 +493,6 @@ name = "either"
 version = "1.6.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e78d4f1cc4ae33bbfc157ed5d5a5ef3bc29227303d595861deb238fcec4e9457"
-dependencies = [
- "serde",
-]
 
 [[package]]
 name = "ellie"
@@ -900,7 +897,7 @@ version = "0.9.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d7afe4a420e3fe79967a00898cc1f4db7c8a49a9333a29f8a4bd76a253d5cd04"
 dependencies = [
- "ahash 0.4.6",
+ "ahash 0.4.7",
 ]
 
 [[package]]
@@ -1143,10 +1140,11 @@ dependencies = [
 
 [[package]]
 name = "lastfm-rs"
-version = "0.3.3"
+version = "0.4.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b456e6e58e9a98531912371e33959bd267d3d06e4bd93214aadd5e8fccf43767"
+checksum = "e658bc6200b99d906c776986903f3b8d25d25967d0120ed7eabbc6b6ed12cb4e"
 dependencies = [
+ "chrono",
  "futures",
  "reqwest",
  "serde",
@@ -1985,7 +1983,6 @@ version = "1.0.60"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "1500e84d27fe482ed1dc791a56eddc2f230046a040fa908c08bda1d9fb615779"
 dependencies = [
- "indexmap",
  "itoa",
  "ryu",
  "serde",
@@ -2006,7 +2003,7 @@ dependencies = [
 [[package]]
 name = "serenity"
 version = "0.9.2"
-source = "git+https://github.com/KamranMackey/serenity?branch=kamrans-fork-await#7c057201afa9602ceff051286a184efaf79dbeba"
+source = "git+https://github.com/KamranMackey/serenity?branch=kamrans-fork-await#ecafc9403be898c14307379414f8df9b937b92bc"
 dependencies = [
  "async-trait",
  "async-tungstenite 0.9.3",
@@ -2177,7 +2174,7 @@ name = "sqlx-core"
 version = "0.4.0"
 source = "git+https://github.com/launchbadge/sqlx#04647ae09ae7f2d211c06e594561690ec9117acd"
 dependencies = [
- "ahash 0.5.9",
+ "ahash 0.5.10",
  "atoi",
  "base64 0.13.0",
  "bitflags",
@@ -2203,7 +2200,6 @@ dependencies = [
  "percent-encoding",
  "rand",
  "rustls",
- "serde",
  "sha-1 0.9.2",
  "sha2",
  "smallvec",
@@ -2227,12 +2223,8 @@ dependencies = [
  "either",
  "futures",
  "heck",
- "hex",
  "proc-macro2",
  "quote",
- "serde",
- "serde_json",
- "sha2",
  "sqlx-core",
  "sqlx-rt",
  "syn",
@@ -2316,9 +2308,9 @@ dependencies = [
 
 [[package]]
 name = "strsim"
-version = "0.9.3"
+version = "0.10.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6446ced80d6c486436db5c078dde11a9f73d42b57fb273121e160b84f63d894c"
+checksum = "73473c0e59e6d5812c5dfe2a064a6444949f089e20eec9a2e5506596494e4623"
 
 [[package]]
 name = "subtle"
@@ -2775,9 +2767,9 @@ checksum = "f4bf03e0ca70d626ecc4ba6b0763b934b6f2976e8c744088bb3c1d646fbb1ad0"
 
 [[package]]
 name = "vcpkg"
-version = "0.2.10"
+version = "0.2.11"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6454029bf181f092ad1b853286f23e2c507d8e8194d01d92da4a55c274a5508c"
+checksum = "b00bca6106a5e23f3eee943593759b7fcddb00554332e856d990c893966879fb"
 
 [[package]]
 name = "version_check"

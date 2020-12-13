@@ -13,7 +13,7 @@ mod models;
 mod utils;
 
 use commands::{
-    extra::sloc::*,
+    extra::{sloc::*, steamstatus::*},
     fun::{ascii::*, printerfacts::*, urban::*, xkcd::*},
     info::{about::*, channel::*, first_message::*, guild::*, profile::*, role::*, user::*},
     moderation::slowmode::*,
@@ -50,7 +50,7 @@ use crate::{constants::*, data::*, utils::read_config};
 
 #[group("Extra")]
 #[description = "Commands that don't really fit in the other command groups."]
-#[commands(sloc)]
+#[commands(sloc, steamstatus)]
 struct Extra;
 
 #[group("Fun")]

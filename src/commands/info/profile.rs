@@ -1,5 +1,5 @@
 use lastfm_rs::{
-    error::{Error, LastFMErrorResponse::InvalidParameter},
+    error::{Error, LastFMErrorResponse::InvalidParameters},
     Client
 };
 
@@ -118,7 +118,7 @@ pub async fn set(context: &Context, message: &Message, mut arguments: Args) -> C
             match client.user_info(&value).await.send().await {
                 Ok(_) => (),
                 Err(e) => {
-                    if let Error::LastFMError(InvalidParameter(e)) = e {
+                    if let Error::LastFMError(InvalidParameters(e)) = e {
                         if let "User not found" = e.message.as_str() {
                             message
                                 .channel_id
