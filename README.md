@@ -9,7 +9,9 @@ A feature-packed bot for Discord servers, written in Rust with Serenity and vari
 
 Welcome to the official GitHub / GitLab repository for Ellie, a bot for the Discord chat platform written in Rust with the
 serenity library, as well as various other libraries. It should be noted that this project is still in a heavy Work-In-Progress
-state, however
+state, however there are still a pretty robust set of commands implemented so far, including a near-complete suite of voice
+commands, which I am very happy with. This project will be continulously improved and updated with more commands and features,
+so please keep an eye on this repository for any new features and updates, as well as the changelog.
 
 ## Installation
 
