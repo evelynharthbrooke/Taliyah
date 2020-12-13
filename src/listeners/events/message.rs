@@ -17,7 +17,9 @@ pub async fn message(context: Context, message: Message) {
     let user_tag = message.author.tag();
 
     if !message.author.bot {
-        sqlx::query!("INSERT INTO profile_data (user_id, user_tag) VALUES ($1, $2) ON CONFLICT DO NOTHING", user_id, user_tag)
+        sqlx::query("INSERT INTO profile_data (user_id, user_tag) VALUES ($1, $2) ON CONFLICT DO NOTHING")
+            .bind(user_id)
+            .bind(user_tag)
             .execute(&pool)
             .await
             .unwrap();
