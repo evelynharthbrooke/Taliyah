@@ -32,7 +32,7 @@ use listeners::{
 
 use reqwest::{redirect::Policy, Client};
 use serenity::{
-    client::{bridge::gateway::GatewayIntents, ClientBuilder},
+    client::{bridge::gateway::GatewayIntents, validate_token, ClientBuilder},
     framework::{standard::macros::group, StandardFramework},
     http::Http
 };
@@ -42,7 +42,7 @@ use sqlx::postgres::PgPoolOptions;
 
 use std::{collections::HashSet, error::Error, sync::Arc};
 
-use tracing::{info, instrument, Level};
+use tracing::{error, info, instrument, Level};
 use tracing_log::LogTracer;
 use tracing_subscriber::{EnvFilter, FmtSubscriber};
 
@@ -116,6 +116,15 @@ async fn main() -> Result<(), Box<dyn Error + Send + Sync>> {
 
     let token = configuration.bot.discord.token;
     let prefix = configuration.bot.general.prefix.as_str();
+
+    let token_validation = validate_token(&token);
+    match token_validation {
+        Ok(_) => info!("Token successfully validated. Continuing."),
+        Err(_) => {
+            error!("Token was not successfully validated. Cannot continue.");
+            return Ok(())
+        }
+    }
 
     let http = Http::new_with_token(&token);
     let (owners, bot_id) = match http.get_current_application_info().await {
