@@ -117,8 +117,7 @@ async fn main() -> Result<(), Box<dyn Error + Send + Sync>> {
     let token = configuration.bot.discord.token;
     let prefix = configuration.bot.general.prefix.as_str();
 
-    let token_validation = validate_token(&token);
-    match token_validation {
+    match validate_token(&token) {
         Ok(_) => info!("Token successfully validated. Continuing."),
         Err(_) => {
             error!("Token was not successfully validated. Cannot continue.");
@@ -133,7 +132,10 @@ async fn main() -> Result<(), Box<dyn Error + Send + Sync>> {
             owners.insert(info.owner.id);
             (owners, info.id)
         }
-        Err(why) => panic!("Unable to retrieve application info: {:?}", why)
+        Err(why) => {
+            error!("Unable to retrieve application info: {:?}", why);
+            return Ok(())
+        }
     };
 
     let framework = StandardFramework::new()
