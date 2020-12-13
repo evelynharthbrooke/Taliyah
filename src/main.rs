@@ -121,7 +121,7 @@ async fn main() -> Result<(), Box<dyn Error + Send + Sync>> {
         Ok(_) => info!("Token successfully validated. Continuing."),
         Err(_) => {
             error!("Token was not successfully validated. Cannot continue.");
-            return Ok(())
+            return Ok(());
         }
     }
 
@@ -134,7 +134,7 @@ async fn main() -> Result<(), Box<dyn Error + Send + Sync>> {
         }
         Err(why) => {
             error!("Unable to retrieve application info: {:?}", why);
-            return Ok(())
+            return Ok(());
         }
     };
 
