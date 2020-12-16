@@ -1,2 +1,8 @@
+# Enable the use of unstable features.
+unstable_features = true
+
+# Width formatting options
 max_width = 188
+
+# General formatting options
 trailing_comma = "Never"

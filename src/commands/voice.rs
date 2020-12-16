@@ -77,9 +77,9 @@ async fn leave(context: &Context, message: &Message) -> CommandResult {
         message.reply(context, format!("Failed: {:?}", e)).await?;
     }
 
-    let cached_data = context.data.read().await;
-    let lava_lock = cached_data.get::<Lavalink>().cloned().unwrap();
-    let mut lava_client = lava_lock.lock().await;
+    let data = context.data.read().await;
+    let lava_data = data.get::<Lavalink>().cloned().unwrap();
+    let mut lava_client = lava_data.lock().await;
 
     lava_client.destroy(guild_id).await?;
     lava_client.nodes.remove(&guild_id.0);
@@ -137,10 +137,7 @@ async fn play_playlist(context: &Context, message: &Message, args: Args) -> Comm
         drop(lava_client);
 
         for track in query_information.clone().tracks {
-            LavalinkClient::play(guild_id, track.clone())
-                .requester(message.author.id)
-                .queue(Arc::clone(&lava_client_lock))
-                .await?;
+            LavalinkClient::play(guild_id, track.clone()).requester(message.author.id).queue(Arc::clone(&lava_client_lock)).await?;
         }
 
         message
@@ -155,10 +152,7 @@ async fn play_playlist(context: &Context, message: &Message, args: Args) -> Comm
             })
             .await?;
     } else {
-        message
-            .channel_id
-            .say(context, "Please connect the bot to voice first before attempting to play anything.")
-            .await?;
+        message.reply(context, "Please connect the bot to voice first before attempting to play anything.").await?;
     }
 
     Ok(())
@@ -175,16 +169,16 @@ async fn play(context: &Context, message: &Message, args: Args) -> CommandResult
     let guild_id = match context.cache.guild_channel(message.channel_id).await {
         Some(channel) => channel.guild_id,
         None => {
-            message.channel_id.say(context, "Error finding channel information.").await?;
+            message.reply(context, "Error finding channel information.").await?;
             return Ok(());
         }
     };
 
     let _ = _join(context, message).await?;
 
-    let cached_data = context.data.read().await;
-    let lava_lock = cached_data.get::<Lavalink>().cloned().unwrap();
-    let lava_client = lava_lock.lock().await;
+    let data = context.data.read().await;
+    let lava_data = data.get::<Lavalink>().cloned().unwrap();
+    let lava_client = lava_data.lock().await;
 
     let mut iter = 0;
     let mut already_checked = false;
@@ -229,7 +223,7 @@ async fn play(context: &Context, message: &Message, args: Args) -> CommandResult
 
     LavalinkClient::play(guild_id, info.tracks[0].clone())
         .requester(message.author.id)
-        .queue(Arc::clone(&lava_lock))
+        .queue(Arc::clone(&lava_data))
         .await?;
 
     message
@@ -274,9 +268,9 @@ async fn pause(context: &Context, message: &Message) -> CommandResult {
         return Ok(());
     }
 
-    let cached_data = context.data.read().await;
-    let lava_lock = cached_data.get::<Lavalink>().cloned().unwrap();
-    let mut lava_client = lava_lock.lock().await;
+    let data = context.data.read().await;
+    let lava_data = data.get::<Lavalink>().cloned().unwrap();
+    let mut lava_client = lava_data.lock().await;
 
     lava_client.set_pause(guild_id, true).await?;
 
@@ -297,9 +291,9 @@ async fn resume(context: &Context, message: &Message) -> CommandResult {
         return Ok(());
     }
 
-    let cached_data = context.data.read().await;
-    let lava_lock = cached_data.get::<Lavalink>().cloned().unwrap();
-    let mut lava_client = lava_lock.lock().await;
+    let data = context.data.read().await;
+    let lava_data = data.get::<Lavalink>().cloned().unwrap();
+    let mut lava_client = lava_data.lock().await;
 
     lava_client.set_pause(guild_id, false).await?;
 
@@ -320,9 +314,9 @@ async fn stop(context: &Context, message: &Message) -> CommandResult {
         return Ok(());
     }
 
-    let cached_data = context.data.read().await;
-    let lava_lock = cached_data.get::<Lavalink>().cloned().unwrap();
-    let mut lava_client = lava_lock.lock().await;
+    let data = context.data.read().await;
+    let lava_data = data.get::<Lavalink>().cloned().unwrap();
+    let mut lava_client = lava_data.lock().await;
 
     lava_client.stop(guild_id).await?;
 
@@ -337,9 +331,9 @@ async fn stop(context: &Context, message: &Message) -> CommandResult {
 #[only_in(guilds)]
 async fn now_playing(context: &Context, message: &Message) -> CommandResult {
     let guild = message.guild(context).await.unwrap();
-    let cached_data = context.data.read().await;
-    let lava_lock = cached_data.get::<Lavalink>().cloned().unwrap();
-    let lava_client = lava_lock.lock().await;
+    let data = context.data.read().await;
+    let lava_data = data.get::<Lavalink>().cloned().unwrap();
+    let lava_client = lava_data.lock().await;
 
     let node = match lava_client.nodes.get(&guild.id.as_u64()) {
         Some(node) => node,
@@ -417,9 +411,9 @@ async fn queue(context: &Context, message: &Message) -> CommandResult {
         return Ok(());
     }
 
-    let cached_data = context.data.read().await;
-    let lava_lock = cached_data.get::<Lavalink>().cloned().unwrap();
-    let lava_client = lava_lock.lock().await;
+    let data = context.data.read().await;
+    let lava_data = data.get::<Lavalink>().cloned().unwrap();
+    let lava_client = lava_data.lock().await;
 
     let node = match lava_client.nodes.get(&guild.id.as_u64()) {
         Some(node) => node,
@@ -483,9 +477,9 @@ async fn clear_queue(context: &Context, message: &Message) -> CommandResult {
         return Ok(());
     }
 
-    let cached_data = context.data.read().await;
-    let lava_lock = cached_data.get::<Lavalink>().cloned().unwrap();
-    let mut lava_client = lava_lock.lock().await;
+    let data = context.data.read().await;
+    let lava_data = data.get::<Lavalink>().cloned().unwrap();
+    let mut lava_client = lava_data.lock().await;
 
     let node = match lava_client.nodes.get_mut(&guild.id.as_u64()) {
         Some(node) => node,

@@ -94,19 +94,23 @@ pub async fn show(context: &Context, message: &Message, arguments: Args) -> Comm
     let show_imdb_url = format!("https://www.imdb.com/title/{}", show_imdb_id);
     let show_external_links = format!("[IMDb]({})", show_imdb_url);
     let show_genres = show_result.genres.iter().map(|genre| &genre.name).join("\n");
+
     let show_tagline = if !show_result.tagline.is_empty() {
         format!("*{}*", show_result.tagline)
     } else {
         "".to_string()
     };
+
     let show_language = locale_utils::get_language_name_from_iso(&show_result.original_language).to_string();
     let show_languages = show_result.languages.iter().map(|l| locale_utils::get_language_name_from_iso(&l).to_string()).join("\n");
     let show_origin_country = show_result.origin_country.iter().map(|c| locale_utils::get_country_name_from_iso(&c).to_string()).join("\n");
+
     let show_creators = if show_result.created_by.is_empty() {
         "Unknown".to_string()
     } else {
         show_result.created_by.iter().map(|creator| &creator.name).join("\n")
     };
+
     let show_user_score = show_result.vote_average * 10.0;
     let show_user_score_count = show_result.vote_count;
     let show_first_air_date = show_result.first_air_date.format("%B %-e, %Y").to_string();
@@ -118,6 +122,28 @@ pub async fn show(context: &Context, message: &Message, arguments: Args) -> Comm
         show_result.studios.iter().map(|s| &s.name).join("\n")
     };
 
+    let show_fields = vec![
+        ("Overview", show_overview, false),
+        ("Status", show_status, true),
+        ("Type", show_type, true),
+        ("Created By", show_creators, true),
+        ("Runtime", show_runtime, true),
+        ("First Air Date", show_first_air_date, true),
+        ("Last Air Date", show_last_air_date, true),
+        ("Main Language", show_language, true),
+        ("Origin Countries", show_origin_country, true),
+        ("Languages", show_languages, true),
+        ("Popularity", format!("{}%", show_popularity), true),
+        ("User Score", format!("{}/100 ({} votes)", show_user_score, show_user_score_count), true),
+        ("Seasons", show_seasons, true),
+        ("Episodes", show_episodes, true),
+        ("Networks / Services", show_networks, true),
+        ("Genres", show_genres, true),
+        ("Studios", show_studios, false),
+        ("Production Status", show_production_status.to_string(), true),
+        ("External Links", show_external_links, false),
+    ];
+
     message
         .channel_id
         .send_message(&context, |message| {
@@ -127,32 +153,11 @@ pub async fn show(context: &Context, message: &Message, arguments: Args) -> Comm
                 embed.thumbnail(show_poster);
                 embed.color(0x01b4e4);
                 embed.description(show_tagline);
-                embed.fields(vec![
-                    ("Overview", show_overview, false),
-                    ("Status", show_status, true),
-                    ("Type", show_type, true),
-                    ("Created By", show_creators, true),
-                    ("Runtime", show_runtime, true),
-                    ("First Air Date", show_first_air_date, true),
-                    ("Last Air Date", show_last_air_date, true),
-                    ("Main Language", show_language, true),
-                    ("Origin Countries", show_origin_country, true),
-                    ("Languages", show_languages, true),
-                    ("Popularity", format!("{}%", show_popularity), true),
-                    ("User Score", format!("{}/100 ({} votes)", show_user_score, show_user_score_count), true),
-                    ("Seasons", show_seasons, true),
-                    ("Episodes", show_episodes, true),
-                    ("Networks / Services", show_networks, true),
-                    ("Genres", show_genres, true),
-                    ("Studios", show_studios, false),
-                    ("Production Status", show_production_status.to_string(), true),
-                    ("External Links", show_external_links, false),
-                ]);
+                embed.fields(show_fields);
                 embed.footer(|footer| footer.text("Powered by the The Movie Database API."))
             })
         })
-        .await
-        .unwrap();
+        .await?;
 
     Ok(())
 }

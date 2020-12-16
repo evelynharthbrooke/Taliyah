@@ -13,7 +13,13 @@ use tracing::info;
 
 pub async fn ready(context: Context, ready: Ready) {
     let pool = context.data.read().await.get::<DatabasePool>().cloned().unwrap();
-    let owner = context.http.get_current_application_info().await.unwrap().owner;
+    let http = &context.http;
+
+    let bot_gateway = http.get_bot_gateway().await.unwrap();
+    let bot_owner = http.get_current_application_info().await.unwrap().owner;
+
+    let sessions_total = bot_gateway.session_start_limit.total;
+    let sessions_remaining = bot_gateway.session_start_limit.remaining;
 
     let name: String = sqlx::query("SELECT current_database()").fetch_one(&pool).await.unwrap().get(0);
     let version: String = sqlx::query("SELECT version()").fetch_one(&pool).await.unwrap().get(0);
@@ -21,14 +27,16 @@ pub async fn ready(context: Context, ready: Ready) {
     info!("Successfully logged into Discord as the following user:");
     info!("Bot username: {}", ready.user.tag());
     info!("Bot user ID: {}", ready.user.id);
-    info!("Bot owner: {}", owner.tag());
-    info!("Bot owner ID: {}", owner.id);
+    info!("Bot owner: {}", bot_owner.tag());
+    info!("Bot owner ID: {}", bot_owner.id);
 
     let guilds = ready.guilds.len();
 
-    info!("Connected to version {} of the Discord gateway.", ready.version);
+    info!("Connected to the Discord bot API gateway, version {}.", ready.version);
     info!("Connected to database {} running {}.", name, version);
     info!("Connected to {} guild(s).", guilds);
+
+    info!("Used {} sessions used out of {} total.", sessions_remaining, sessions_total);
 
     let presence_string = format!("on {} guilds | e.help", guilds);
 
