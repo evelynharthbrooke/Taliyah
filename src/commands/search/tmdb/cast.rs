@@ -150,9 +150,9 @@ pub async fn cast(context: &Context, message: &Message, mut arguments: Args) -> 
             // instead of having the 2nd field break its alignment due to a bug
             // that exists in the Discord desktop and web client's embed parsing
             // code. This issue does not exist on Discord's mobile apps, due to
-            // the inline property being completely ignored, due to the way the
-            // embeds were designed to look and work on Discord's suite of mobile
-            // applications.
+            // the inline property being completely ignored, in turn due to the
+            // way the embeds were designed to look and work on Discord's suite
+            // of mobile applications.
             //
             // Quite frankly, I'm honestly surprised that Discord has not yet been
             // able to figure out a fix to this embed parsing issue. Hopefully at
@@ -315,9 +315,9 @@ pub async fn cast(context: &Context, message: &Message, mut arguments: Args) -> 
                     embed.thumbnail(movie_poster);
                     embed.description(format!(
                         "\
-                    Please note that not all cast and crew members could be displayed \
-                    for *{}*. For a full list of the cast and crew of this movie, please \
-                    visit the full The Movie Database website by [clicking here]({}).\
+                    Not all cast and crew members could be displayed for *{}*. For a full \
+                    list of the cast / crew members in this movie, please visit the The Movie \
+                    Database website by [clicking here]({}).\
                     ",
                         movie_name, movie_cast_url
                     ));

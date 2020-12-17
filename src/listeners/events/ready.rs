@@ -33,10 +33,9 @@ pub async fn ready(context: Context, ready: Ready) {
     let guilds = ready.guilds.len();
 
     info!("Connected to the Discord bot API gateway, version {}.", ready.version);
+    info!("Gateway reports {}/{} sessions remaining.", sessions_remaining, sessions_total);
     info!("Connected to database {} running {}.", name, version);
     info!("Connected to {} guild(s).", guilds);
-
-    info!("Used {} sessions used out of {} total.", sessions_remaining, sessions_total);
 
     let presence_string = format!("on {} guilds | e.help", guilds);
 
