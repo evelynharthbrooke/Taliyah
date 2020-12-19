@@ -19,6 +19,7 @@ use commands::{
     moderation::slowmode::*,
     music::{lastfm::*, spotify::*},
     search::{krate::*, tmdb::*},
+    social::{twitter::*},
     utilities::{help::*, invite::*, ping::*, source::*},
     voice::*
 };
@@ -77,6 +78,11 @@ struct Music;
 #[description = "Various commands that search various web services."]
 #[commands(krate, tmdb)]
 struct Search;
+
+#[group("Social")]
+#[description = "Commands that integrate with various services, e.g. Twitter."]
+#[commands(twitter)]
+struct Social;
 
 #[group("Utilities")]
 #[description = "Miscellaneous commands that don't really fit into a more-specific category."]
@@ -158,6 +164,7 @@ async fn main() -> Result<(), Box<dyn Error + Send + Sync>> {
         .group(&MODERATION_GROUP)
         .group(&MUSIC_GROUP)
         .group(&SEARCH_GROUP)
+        .group(&SOCIAL_GROUP)
         .group(&UTILITIES_GROUP)
         .group(&VOICE_GROUP)
         .help(&HELP);

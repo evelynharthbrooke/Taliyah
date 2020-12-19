@@ -1,12 +1,6 @@
-pub mod cast;
-pub mod collection;
-pub mod movie;
-pub mod show;
+pub mod user;
 
-use self::cast::*;
-use self::collection::*;
-use self::movie::*;
-use self::show::*;
+use self::user::*;
 
 use serenity::{
     client::Context,
@@ -16,8 +10,9 @@ use serenity::{
 
 /// Gets a variety of information from the API provided by The Movie Database.
 #[command]
-#[sub_commands(cast, collection, movie, show)]
-async fn tmdb(context: &Context, message: &Message) -> CommandResult {
+#[sub_commands(user)]
+#[aliases("tw")]
+async fn twitter(context: &Context, message: &Message) -> CommandResult {
     message.channel_id.send_message(&context, |message| {
         message.embed(|embed| {
             embed.title("Error: Invalid / No Subcommand Entered!");

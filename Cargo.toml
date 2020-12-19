@@ -46,7 +46,7 @@ branch              = "kamrans-fork"
 git                 = "https://github.com/KamranMackey/serenity"
 branch              = "kamrans-fork-await"
 default-features    = true
-features            = ["voice", "collector"]
+features            = ["voice", "collector", "unstable"]
 
 [dependencies.songbird]
 # My own fork is used here too because songbird has a hard link to the
