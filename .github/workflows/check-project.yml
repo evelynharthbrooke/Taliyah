@@ -15,7 +15,7 @@ jobs:
 
       # Required for serenity voice
       - name: Install dependencies
-        if: matrix.os == macos.latest
+        if: matrix.os == macos-latest
         run: brew install automake autoconf libtool libsodium pkg-config opus
 
       - name: Install Nightly toolchain
