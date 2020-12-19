@@ -137,7 +137,10 @@ async fn play_playlist(context: &Context, message: &Message, args: Args) -> Comm
         drop(lava_client);
 
         for track in query_information.clone().tracks {
-            LavalinkClient::play(guild_id, track.clone()).requester(message.author.id).queue(Arc::clone(&lava_client_lock)).await?;
+            LavalinkClient::play(guild_id, track.clone())
+                .requester(message.author.id)
+                .queue(Arc::clone(&lava_client_lock))
+                .await?;
         }
 
         message

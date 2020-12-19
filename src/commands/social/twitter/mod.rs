@@ -13,12 +13,15 @@ use serenity::{
 #[sub_commands(user)]
 #[aliases("tw")]
 async fn twitter(context: &Context, message: &Message) -> CommandResult {
-    message.channel_id.send_message(&context, |message| {
-        message.embed(|embed| {
-            embed.title("Error: Invalid / No Subcommand Entered!");
-            embed.description("No valid subcommand entered. Please check the help, or try again.")
+    message
+        .channel_id
+        .send_message(&context, |message| {
+            message.embed(|embed| {
+                embed.title("Error: Invalid / No Subcommand Entered!");
+                embed.description("No valid subcommand entered. Please check the help, or try again.")
+            })
         })
-    }).await?;
+        .await?;
 
     Ok(())
 }

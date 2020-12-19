@@ -19,7 +19,7 @@ use commands::{
     moderation::slowmode::*,
     music::{lastfm::*, spotify::*},
     search::{krate::*, tmdb::*},
-    social::{twitter::*},
+    social::twitter::*,
     utilities::{help::*, invite::*, ping::*, source::*},
     voice::*
 };

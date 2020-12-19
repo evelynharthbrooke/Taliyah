@@ -95,7 +95,7 @@ pub async fn user(context: &Context, message: &Message, mut args: Args) -> Comma
         Some(tweets) => {
             let tweet = tweets.first().unwrap();
             tweet.text.clone()
-        },
+        }
         None => "Tweet not available.".to_string()
     };
 
