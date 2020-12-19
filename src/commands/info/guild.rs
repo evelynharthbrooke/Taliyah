@@ -35,7 +35,7 @@ pub async fn guild(context: &Context, message: &Message) -> CommandResult {
     let guild_emojis = cached_guild.emojis.len();
     let guild_emojis_animated = cached_guild.emojis.iter().filter(|(_, e)| e.animated).count();
     let guild_emojis_normal = cached_guild.emojis.iter().filter(|(_, e)| !e.animated).count();
-    let guild_features = cached_guild.features.iter().map(|f| f).join(", ");
+    let guild_features = cached_guild.features.iter().join(", ");
 
     let guild_region = match cached_guild.region.as_str() {
         "us-west" => "Western United States",
@@ -143,8 +143,6 @@ pub async fn guild(context: &Context, message: &Message) -> CommandResult {
             })
         })
         .await?;
-
-    drop(&guild_summary);
 
     Ok(())
 }
