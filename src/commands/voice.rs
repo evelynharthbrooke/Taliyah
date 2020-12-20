@@ -1,6 +1,7 @@
 use crate::data::Lavalink;
 
-use failure::{Error, Fail};
+use anyhow::{anyhow, Error};
+
 use lavalink_rs::LavalinkClient;
 
 use serenity::{
@@ -13,10 +14,6 @@ use std::sync::Arc;
 use tokio::process::Command;
 use tracing::{error, info, instrument};
 
-#[derive(Debug, Fail)]
-#[fail(display = "Not in a voice channel.")]
-struct JoinError;
-
 #[instrument(skip(context))]
 async fn _join(context: &Context, message: &Message) -> Result<String, Error> {
     let guild = message.guild(&context.cache).await.unwrap();
@@ -26,7 +23,7 @@ async fn _join(context: &Context, message: &Message) -> Result<String, Error> {
         Some(channel) => channel,
         None => {
             message.reply(context, "You are not currently connected to a voice channel.").await?;
-            return Err(JoinError.into());
+            return Err(anyhow!("Not in a voice channel."));
         }
     };
 
@@ -43,7 +40,7 @@ async fn _join(context: &Context, message: &Message) -> Result<String, Error> {
         Err(why) => {
             error!("Error joining voice channel: {}", why);
             message.reply(context, "Error joining voice channel.").await?;
-            Err(JoinError.into())
+            Err(anyhow!("Not in a voice channel."))
         }
     }
 }
