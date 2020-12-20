@@ -26,8 +26,8 @@ percent-encoding    = "2.1.0"
 rspotify            = { git = "https://github.com/KamranMackey/rspotify" }
 serde               = { version = "1.0.118", features = ["derive"] }
 serde_json          = "1.0.60"
-serenity            = { git = "https://github.com/serenity-rs/serenity", features = ["collector", "unstable", "voice"]}
-songbird            = { git = "https://github.com/serenity-rs/songbird", default-features = false, features = ["serenity-native", "gateway"]}
+serenity            = { git = "https://github.com/serenity-rs/serenity", branch = "current", features = ["collector", "unstable", "voice"]}
+songbird            = { git = "https://github.com/serenity-rs/songbird", branch = "current", default-features = false, features = ["serenity-native", "gateway"]}
 tokio               = { version = "0.2.24", features = ["full"] }
 toml                = "0.5.8"
 tracing             = "0.1.22"

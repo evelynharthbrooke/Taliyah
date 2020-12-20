@@ -2089,30 +2089,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "serenity"
-version = "0.9.3"
-source = "git+https://github.com/KamranMackey/serenity?branch=kamrans-fork-await#f1204a8b7bae333fae4cbff2553882e6f2ab9f0d"
-dependencies = [
- "async-trait",
- "async-tungstenite 0.9.3",
- "base64 0.13.0",
- "bitflags",
- "bytes 0.5.6",
- "chrono",
- "flate2",
- "futures",
- "percent-encoding",
- "reqwest",
- "serde",
- "serde_json",
- "tokio",
- "tracing",
- "tracing-futures",
- "typemap_rev",
- "url",
-]
-
-[[package]]
 name = "sha-1"
 version = "0.8.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2201,7 +2177,7 @@ dependencies = [
 [[package]]
 name = "songbird"
 version = "0.1.0"
-source = "git+https://github.com/KamranMackey/songbird/?branch=kamrans-fork#c7a10c268474a519954a470618683001338863c7"
+source = "git+https://github.com/serenity-rs/songbird?branch=current#2fc88a6ef1f950c17a076dd6e6c2f85f99607962"
 dependencies = [
  "async-trait",
  "async-tungstenite 0.9.3",
@@ -2210,7 +2186,7 @@ dependencies = [
  "parking_lot",
  "serde",
  "serde_json",
- "serenity 0.9.3 (git+https://github.com/KamranMackey/serenity?branch=kamrans-fork-await)",
+ "serenity 0.9.3 (git+https://github.com/serenity-rs/serenity?branch=current)",
  "tokio",
  "tracing",
  "tracing-futures",
