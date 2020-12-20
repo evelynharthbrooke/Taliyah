@@ -118,8 +118,7 @@ Now we can install Ellie's dependencies. On Windows, you will need to install th
 package using npm, as Windows does not natively include build tools like Linux does. For macOS, just
 install Xcode and the commandline tools.
 
-
-#### Non-release variant (unoptimized and with debug symbols)
+#### Non-release variant (unoptimized, with debug symbols)
 
 ```bash
 cargo build

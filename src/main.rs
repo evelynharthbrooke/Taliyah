@@ -158,6 +158,7 @@ async fn main() -> Result<(), Box<dyn Error + Send + Sync>> {
         })
         .after(after)
         .prefix_only(prefix_only)
+        .on_dispatch_error(dispatch_error)
         .group(&EXTRA_GROUP)
         .group(&FUN_GROUP)
         .group(&INFO_GROUP)

@@ -65,6 +65,8 @@ pub struct CrewMember {
 /// from The Movie Database.
 #[command]
 #[aliases("cast", "credits")]
+#[min_args(2)]
+#[max_args(2)]
 pub async fn cast(context: &Context, message: &Message, mut arguments: Args) -> CommandResult {
     if arguments.rest().is_empty() {
         message
