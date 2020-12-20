@@ -16,6 +16,15 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ee2a4ec343196209d6594e19543ae87a39f96d5534d7174822a3ad825dd6ed7e"
 
 [[package]]
+name = "aead"
+version = "0.3.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "7fc95d1bdb8e6666b2b217308eeeb09f2d6728d104be3e31916cc74d15420331"
+dependencies = [
+ "generic-array 0.14.4",
+]
+
+[[package]]
 name = "ahash"
 version = "0.4.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -111,6 +120,25 @@ dependencies = [
 ]
 
 [[package]]
+name = "audiopus"
+version = "0.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "3743519567e9135cf6f9f1a509851cb0c8e4cb9d66feb286668afb1923bec458"
+dependencies = [
+ "audiopus_sys",
+]
+
+[[package]]
+name = "audiopus_sys"
+version = "0.1.8"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "927791de46f70facea982dbfaf19719a41ce6064443403be631a85de6a58fff9"
+dependencies = [
+ "log",
+ "pkg-config",
+]
+
+[[package]]
 name = "autocfg"
 version = "1.0.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -189,6 +217,15 @@ name = "block-buffer"
 version = "0.9.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "4152116fd6e9dadb291ae18fc1ec3575ed6d84c29642d97890f4b4a3417297e4"
+dependencies = [
+ "generic-array 0.14.4",
+]
+
+[[package]]
+name = "block-cipher"
+version = "0.8.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "f337a3e6da609650eb74e02bc9fac7b735049f7623ab12f2e4c719316fcc7e80"
 dependencies = [
  "generic-array 0.14.4",
 ]
@@ -296,7 +333,7 @@ dependencies = [
 [[package]]
 name = "command_attr"
 version = "0.3.2"
-source = "git+https://github.com/KamranMackey/serenity?branch=kamrans-fork-await#f1204a8b7bae333fae4cbff2553882e6f2ab9f0d"
+source = "git+https://github.com/serenity-rs/serenity?branch=current#f1204a8b7bae333fae4cbff2553882e6f2ab9f0d"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -324,6 +361,12 @@ name = "cpuid-bool"
 version = "0.1.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "8aebca1129a03dc6dc2b127edd729435bbc4a37e1d5f4d7513165089ceb02634"
+
+[[package]]
+name = "cpuid-bool"
+version = "0.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "dcb25d077389e53838a8158c8e99174c5a9d902dee4904320db714f3c653ffba"
 
 [[package]]
 name = "crc32fast"
@@ -489,7 +532,7 @@ dependencies = [
  "rspotify",
  "serde",
  "serde_json",
- "serenity",
+ "serenity 0.9.3 (git+https://github.com/serenity-rs/serenity?branch=current)",
  "songbird",
  "sqlx",
  "tokio",
@@ -1071,7 +1114,7 @@ dependencies = [
 [[package]]
 name = "lavalink-rs"
 version = "0.3.0-alpha"
-source = "git+https://gitlab.com/KamranMackey/lavalink-rs?branch=kamrans-fork#1b60e8a41a9dc4c397f318ab802a2a6a5385112f"
+source = "git+https://gitlab.com/nitsuga5124/lavalink-rs#1e78027b644a66180e6cf1e813d717c5cbe10c83"
 dependencies = [
  "async-tungstenite 0.4.2",
  "futures",
@@ -1081,8 +1124,7 @@ dependencies = [
  "serde",
  "serde-aux",
  "serde_json",
- "serenity",
- "songbird",
+ "serenity 0.9.3 (registry+https://github.com/rust-lang/crates.io-index)",
  "tokio",
  "tokio-tls",
  "tracing-log",
@@ -1588,6 +1630,16 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "3831453b3449ceb48b6d9c7ad7c96d5ea673e9b470a1dc578c2ce6521230884c"
 
 [[package]]
+name = "poly1305"
+version = "0.6.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "4b7456bc1ad2d4cf82b3a016be4c2ac48daf11bf990c1603ebd447fe6f30fca8"
+dependencies = [
+ "cpuid-bool 0.2.0",
+ "universal-hash",
+]
+
+[[package]]
 name = "ppv-lite86"
 version = "0.2.10"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1827,6 +1879,16 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "71d301d4193d031abdd79ff7e3dd721168a9572ef3fe51a1517aba235bd8f86e"
 
 [[package]]
+name = "salsa20"
+version = "0.6.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "c7f47b10fa80f6969bbbd9c8e7cc998f082979d402a9e10579e2303a87955395"
+dependencies = [
+ "stream-cipher",
+ "zeroize",
+]
+
+[[package]]
 name = "schannel"
 version = "0.1.19"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1974,7 +2036,35 @@ dependencies = [
 [[package]]
 name = "serenity"
 version = "0.9.3"
-source = "git+https://github.com/KamranMackey/serenity?branch=kamrans-fork-await#f1204a8b7bae333fae4cbff2553882e6f2ab9f0d"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "00e8fe0572712e2bcfe1122b09561599dd3d459563e48f9afd4518f9cfbbe17c"
+dependencies = [
+ "async-trait",
+ "async-tungstenite 0.9.3",
+ "audiopus",
+ "base64 0.13.0",
+ "bitflags",
+ "byteorder",
+ "bytes 0.5.6",
+ "chrono",
+ "flate2",
+ "futures",
+ "rand",
+ "reqwest",
+ "serde",
+ "serde_json",
+ "tokio",
+ "tracing",
+ "tracing-futures",
+ "typemap_rev",
+ "url",
+ "xsalsa20poly1305",
+]
+
+[[package]]
+name = "serenity"
+version = "0.9.3"
+source = "git+https://github.com/serenity-rs/serenity?branch=current#f1204a8b7bae333fae4cbff2553882e6f2ab9f0d"
 dependencies = [
  "async-trait",
  "async-tungstenite 0.9.3",
@@ -1999,6 +2089,30 @@ dependencies = [
 ]
 
 [[package]]
+name = "serenity"
+version = "0.9.3"
+source = "git+https://github.com/KamranMackey/serenity?branch=kamrans-fork-await#f1204a8b7bae333fae4cbff2553882e6f2ab9f0d"
+dependencies = [
+ "async-trait",
+ "async-tungstenite 0.9.3",
+ "base64 0.13.0",
+ "bitflags",
+ "bytes 0.5.6",
+ "chrono",
+ "flate2",
+ "futures",
+ "percent-encoding",
+ "reqwest",
+ "serde",
+ "serde_json",
+ "tokio",
+ "tracing",
+ "tracing-futures",
+ "typemap_rev",
+ "url",
+]
+
+[[package]]
 name = "sha-1"
 version = "0.8.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2018,7 +2132,7 @@ checksum = "ce3cdf1b5e620a498ee6f2a171885ac7e22f0e12089ec4b3d22b84921792507c"
 dependencies = [
  "block-buffer 0.9.0",
  "cfg-if 1.0.0",
- "cpuid-bool",
+ "cpuid-bool 0.1.2",
  "digest 0.9.0",
  "opaque-debug 0.3.0",
 ]
@@ -2037,7 +2151,7 @@ checksum = "6e7aab86fe2149bad8c507606bdb3f4ef5e7b2380eb92350f56122cca72a42a8"
 dependencies = [
  "block-buffer 0.9.0",
  "cfg-if 1.0.0",
- "cpuid-bool",
+ "cpuid-bool 0.1.2",
  "digest 0.9.0",
  "opaque-debug 0.3.0",
 ]
@@ -2087,7 +2201,7 @@ dependencies = [
 [[package]]
 name = "songbird"
 version = "0.1.0"
-source = "git+https://github.com/KamranMackey/songbird/?branch=kamrans-fork#a5fb87890c536a157493a8869002d9916e3775ea"
+source = "git+https://github.com/KamranMackey/songbird/?branch=kamrans-fork#c7a10c268474a519954a470618683001338863c7"
 dependencies = [
  "async-trait",
  "async-tungstenite 0.9.3",
@@ -2096,7 +2210,7 @@ dependencies = [
  "parking_lot",
  "serde",
  "serde_json",
- "serenity",
+ "serenity 0.9.3 (git+https://github.com/KamranMackey/serenity?branch=kamrans-fork-await)",
  "tokio",
  "tracing",
  "tracing-futures",
@@ -2133,7 +2247,7 @@ dependencies = [
 [[package]]
 name = "sqlx"
 version = "0.4.2"
-source = "git+https://github.com/launchbadge/sqlx#b6cc0b4a76a0f118377ba7c122eecfac15438276"
+source = "git+https://github.com/launchbadge/sqlx#3aeb46f329f7b5b540ad9e7b518c128b07925505"
 dependencies = [
  "sqlx-core",
  "sqlx-macros",
@@ -2142,7 +2256,7 @@ dependencies = [
 [[package]]
 name = "sqlx-core"
 version = "0.4.2"
-source = "git+https://github.com/launchbadge/sqlx#b6cc0b4a76a0f118377ba7c122eecfac15438276"
+source = "git+https://github.com/launchbadge/sqlx#3aeb46f329f7b5b540ad9e7b518c128b07925505"
 dependencies = [
  "ahash 0.6.2",
  "atoi",
@@ -2187,7 +2301,7 @@ dependencies = [
 [[package]]
 name = "sqlx-macros"
 version = "0.4.2"
-source = "git+https://github.com/launchbadge/sqlx#b6cc0b4a76a0f118377ba7c122eecfac15438276"
+source = "git+https://github.com/launchbadge/sqlx#3aeb46f329f7b5b540ad9e7b518c128b07925505"
 dependencies = [
  "cargo_metadata",
  "dotenv",
@@ -2206,7 +2320,7 @@ dependencies = [
 [[package]]
 name = "sqlx-rt"
 version = "0.2.0"
-source = "git+https://github.com/launchbadge/sqlx#b6cc0b4a76a0f118377ba7c122eecfac15438276"
+source = "git+https://github.com/launchbadge/sqlx#3aeb46f329f7b5b540ad9e7b518c128b07925505"
 dependencies = [
  "once_cell",
  "tokio",
@@ -2267,6 +2381,16 @@ name = "stdweb-internal-runtime"
 version = "0.1.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "213701ba3370744dcd1a12960caa4843b3d68b4d1c0a5d575e0d65b2ee9d16c0"
+
+[[package]]
+name = "stream-cipher"
+version = "0.7.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "c80e15f898d8d8f25db24c253ea615cc14acf418ff307822995814e7d42cfa89"
+dependencies = [
+ "block-cipher",
+ "generic-array 0.14.4",
+]
 
 [[package]]
 name = "stringprep"
@@ -2693,6 +2817,16 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "39ec24b3121d976906ece63c9daad25b85969647682eee313cb5779fdd69e14e"
 
 [[package]]
+name = "universal-hash"
+version = "0.4.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "8326b2c654932e3e4f9196e69d08fdf7cfd718e1dc6f66b347e6024a0c961402"
+dependencies = [
+ "generic-array 0.14.4",
+ "subtle",
+]
+
+[[package]]
 name = "untrusted"
 version = "0.7.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2959,3 +3093,23 @@ name = "wyz"
 version = "0.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "85e60b0d1b5f99db2556934e21937020776a5d31520bf169e851ac44e6420214"
+
+[[package]]
+name = "xsalsa20poly1305"
+version = "0.5.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "3cf80dc8a38a8cfa8aa0300ab4ccda61c850beef39712d2fa994d8fc8f077f44"
+dependencies = [
+ "aead",
+ "poly1305",
+ "rand_core",
+ "salsa20",
+ "subtle",
+ "zeroize",
+]
+
+[[package]]
+name = "zeroize"
+version = "1.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "81a974bcdd357f0dca4d41677db03436324d45a4c9ed2d0b873a5a360ce41c36"

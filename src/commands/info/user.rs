@@ -97,6 +97,7 @@ pub async fn user(context: &Context, message: &Message, args: Args) -> CommandRe
                             "playing".to_owned()
                         }
                     }
+                    ActivityType::Competing => "competing in".to_owned(),
                     ActivityType::Streaming => "streaming on".to_owned(),
                     _ => "".to_owned()
                 };

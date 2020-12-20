@@ -20,41 +20,20 @@ git2                = "0.13.13"
 humantime           = "2.0.1"
 itertools           = "0.9.0"
 lastfm-rs           = "0.4.2"
+lavalink-rs         = { git = "https://gitlab.com/nitsuga5124/lavalink-rs" }
 reqwest             = "0.10.10"
 percent-encoding    = "2.1.0"
 rspotify            = { git = "https://github.com/KamranMackey/rspotify" }
 serde               = { version = "1.0.118", features = ["derive"] }
 serde_json          = "1.0.60"
+serenity            = { git = "https://github.com/serenity-rs/serenity", features = ["collector", "unstable", "voice"]}
+songbird            = { git = "https://github.com/serenity-rs/songbird", features = ["serenity-native", "gateway"]}
 tokio               = { version = "0.2.24", features = ["full"] }
 toml                = "0.5.8"
 tracing             = "0.1.22"
 tracing-futures     = "0.2.4"
 tracing-log         = "0.1.1"
 tracing-subscriber  = "0.2.15"
-
-[dependencies.lavalink-rs]
-# My own fork is used here because otherwise lavalink-rs doesn't properly
-# integrate with my versions of serenity and songbird. Main repository
-# is https://gitlab.com/nitsuga5124/lavalink-rs.
-git                 = "https://gitlab.com/KamranMackey/lavalink-rs"
-branch              = "kamrans-fork"
-
-[dependencies.serenity]
-# My own fork is used here because my fork has some API identifiers that
-# simply are not present in the official versions of serenity.
-git                 = "https://github.com/KamranMackey/serenity"
-branch              = "kamrans-fork-await"
-default-features    = true
-features            = ["collector", "unstable", "voice"]
-
-[dependencies.songbird]
-# My own fork is used here too because songbird has a hard link to the
-# official serenity repository otherwise which prevents it from being
-# able to properly integrate with my fork.
-git                 = "https://github.com/KamranMackey/songbird/"
-branch              = "kamrans-fork"
-default-features    = false
-features            = ["serenity-native", "gateway"]
 
 [dependencies.sqlx]
 git                 = "https://github.com/launchbadge/sqlx"

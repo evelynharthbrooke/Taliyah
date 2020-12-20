@@ -32,11 +32,11 @@ pub async fn urban(context: &Context, message: &Message, arguments: Args) -> Com
     if arguments.rest().is_empty() {
         message
             .channel_id
-            .send_message(&context, |m| {
-                m.embed(|e| {
-                    e.title("Error: No word provided.");
-                    e.description("You did not provide a word to look up. Please provide one and then try again.");
-                    e.color(0x00FF_0000)
+            .send_message(context, |message| {
+                message.embed(|embed| {
+                    embed.title("Error: No word provided.");
+                    embed.description("You did not provide a word to look up. Please provide one and then try again.");
+                    embed.color(0x00FF_0000)
                 })
             })
             .await?;
@@ -76,10 +76,7 @@ pub async fn urban(context: &Context, message: &Message, arguments: Args) -> Com
         .channel_id
         .send_message(&context, |message| {
             message.embed(|embed| {
-                embed.author(|author| {
-                    author.name(word);
-                    author.url(permalink)
-                });
+                embed.author(|author| author.name(word).url(permalink));
                 embed.color(0x00EF_FF00);
                 embed.description(format!("*{}*\n\n{}\n\n**Ratings**: {}", definition, example, rating));
                 embed.footer(|footer| footer.text("Powered by the Urban Dictionary."))
@@ -110,10 +107,7 @@ pub async fn randefine(context: &Context, message: &Message) -> CommandResult {
         .channel_id
         .send_message(&context, |message| {
             message.embed(|embed| {
-                embed.author(|author| {
-                    author.name(word);
-                    author.url(permalink)
-                });
+                embed.author(|author| author.name(word).url(permalink));
                 embed.color(0x00EF_FF00);
                 embed.description(format!("*{}*\n\n{}\n\n**Ratings**: {}", definition, example, rating));
                 embed.footer(|footer| footer.text("Powered by the Urban Dictionary."))
