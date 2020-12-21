@@ -84,7 +84,7 @@ async fn album(context: &Context, message: &Message, args: Args) -> CommandResul
 
     let album_track_items = &album.tracks.items;
     let album_track_lengths: u64 = album_track_items.iter().map(|track| track.duration.as_millis() as u64).sum();
-    let album_length = format_duration(Duration::from_millis(u64::from(album_track_lengths) / 1000 * 1000));
+    let album_length = format_duration(Duration::from_millis(album_track_lengths / 1000 * 1000));
 
     let album_tracks = album_track_items
         .iter()
