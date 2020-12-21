@@ -9,7 +9,11 @@ use sqlx::Row;
 use std::{fs::File, io::prelude::Read};
 use tracing::error;
 
-use crate::{config::ConfigurationData, data::{DatabasePool, SpotifyContainer}, error::EllieError};
+use crate::{
+    config::ConfigurationData,
+    data::{DatabasePool, SpotifyContainer},
+    error::EllieError
+};
 
 pub fn read_config(file: &str) -> ConfigurationData {
     let mut file = File::open(file).unwrap();
