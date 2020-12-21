@@ -193,7 +193,7 @@ pub async fn lastfm(context: &Context, message: &Message, mut arguments: Args) -
     let name = &track.name;
     let artist = &track.artist.name;
     let album = if track.album.name.is_empty() { "".to_owned() } else { track.album.name.to_owned() };
-    let artwork = get_album_artwork(artist, name, &album).await;
+    let artwork = get_album_artwork(context, artist, name, &album).await;
 
     let tracks = if recent_tracks.is_empty() {
         "Unknown".to_owned()

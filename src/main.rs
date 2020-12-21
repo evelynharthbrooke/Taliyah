@@ -189,6 +189,14 @@ async fn main() -> Result<(), Box<dyn Error + Send + Sync>> {
         data.insert::<ReqwestContainer>(reqwest_client);
 
         {
+            let id = configuration.api.music.spotify.client_id;
+            let secret = configuration.api.music.spotify.client_secret;
+            let credentials = aspotify::ClientCredentials { id, secret };
+            let spotify_client = aspotify::Client::new(credentials);
+            data.insert::<SpotifyContainer>(spotify_client);
+        }
+
+        {
             let host = configuration.api.music.lavalink.host;
             let port = configuration.api.music.lavalink.port;
             let password = configuration.api.music.lavalink.password;

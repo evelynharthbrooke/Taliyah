@@ -3,21 +3,13 @@ pub mod git_utils;
 pub mod locale_utils;
 pub mod parsers;
 
-use crate::{config::ConfigurationData, data::DatabasePool, error::EllieError};
-
-use percent_encoding::{utf8_percent_encode, NON_ALPHANUMERIC};
-
-use rspotify::{
-    client::Spotify,
-    model::{page::Page, search::SearchResult, track::FullTrack},
-    oauth2::SpotifyClientCredentials,
-    senum::SearchType
-};
-
+use aspotify::ItemType;
 use serenity::{client::Context, model::id::UserId};
 use sqlx::Row;
 use std::{fs::File, io::prelude::Read};
 use tracing::error;
+
+use crate::{config::ConfigurationData, data::{DatabasePool, SpotifyContainer}, error::EllieError};
 
 pub fn read_config(file: &str) -> ConfigurationData {
     let mut file = File::open(file).unwrap();
@@ -68,30 +60,17 @@ pub fn calculate_average_sum(ints: &[i64]) -> f64 {
 /// Retrieves album artwork for a specified song via the Spotify
 /// Web API. If it is unable to find any artwork, it will return an
 /// empty string.
-pub async fn get_album_artwork(artist: &str, track: &str, album: &str) -> String {
-    let sp_search_string = format!("artist:{} track:{} album:{}", artist, track, album);
-    let sp_search_string_encoded = utf8_percent_encode(&sp_search_string, NON_ALPHANUMERIC).to_string();
-    let sp_track_search = spotify().await.search(&sp_search_string_encoded, SearchType::Track, 1, 0, None, None).await;
-    let sp_track_result = &sp_track_search.unwrap();
+pub async fn get_album_artwork(context: &Context, artist: &str, track: &str, album: &str) -> String {
+    let data = context.data.read().await;
+    let spotify = data.get::<SpotifyContainer>().unwrap();
 
-    match sp_track_result {
-        SearchResult::Tracks(track) => {
-            let track: &Page<FullTrack> = track;
-            let items = &track.items;
+    let search_string = format!("artist:{} track:{} album:{}", artist, track, album);
+    let track_search = spotify.search().search(&search_string, [ItemType::Track].iter().copied(), false, 1, 0, None).await;
+    let track_result = &track_search.unwrap().data.tracks.unwrap();
 
-            let track = items.first().unwrap();
-            let image = track.album.images.first().unwrap();
-            let album_art = image.url.as_str();
-            album_art.to_string()
-        }
-        _ => String::new()
-    }
-}
-
-pub async fn spotify() -> Spotify {
-    let config = read_config("config.toml");
-    let client_id = config.api.music.spotify.client_id;
-    let client_secret = config.api.music.spotify.client_secret;
-    let credentials = SpotifyClientCredentials::default().client_id(&client_id).client_secret(&client_secret).build();
-    Spotify::default().client_credentials_manager(credentials).build()
+    let items = &track_result.items;
+    let track = items.first().unwrap();
+    let image = track.album.images.first().unwrap();
+    let album_art = image.url.as_str();
+    album_art.to_string()
 }
