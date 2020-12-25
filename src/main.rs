@@ -91,7 +91,7 @@ struct Utilities;
 
 #[group("Voice")]
 #[description = "Ellie's fully featured suite of voice commands."]
-#[commands(join, leave, now_playing, play, play_playlist, pause, resume, stop, queue, clear_queue)]
+#[commands(join, leave, now_playing, play, play_playlist, pause, resume, stop, volume, queue, clear_queue)]
 struct Voice;
 
 #[tokio::main(core_threads = 16)]

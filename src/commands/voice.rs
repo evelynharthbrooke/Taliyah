@@ -12,7 +12,7 @@ use serenity::{
 
 use std::sync::Arc;
 use tokio::process::Command;
-use tracing::{error, info, instrument};
+use tracing::{error, instrument};
 
 #[instrument(skip(context))]
 async fn _join(context: &Context, message: &Message) -> Result<String, Error> {
@@ -200,8 +200,6 @@ async fn play(context: &Context, message: &Message, args: Args) -> CommandResult
                         stdout.pop();
                         let url = stdout.last().unwrap();
 
-                        info!("{:#?}", stdout);
-
                         iter = 0;
                         query = url.to_string();
 
@@ -270,8 +268,8 @@ async fn pause(context: &Context, message: &Message) -> CommandResult {
 
     let data = context.data.read().await;
     let lava_data = data.get::<Lavalink>().cloned().unwrap();
-    let mut lava_client = lava_data.lock().await;
 
+    let mut lava_client = lava_data.lock().await;
     lava_client.set_pause(guild_id, true).await?;
 
     message.reply(context, "Paused playback; use the resume command to resume playback.").await?;
@@ -293,8 +291,8 @@ async fn resume(context: &Context, message: &Message) -> CommandResult {
 
     let data = context.data.read().await;
     let lava_data = data.get::<Lavalink>().cloned().unwrap();
-    let mut lava_client = lava_data.lock().await;
 
+    let mut lava_client = lava_data.lock().await;
     lava_client.set_pause(guild_id, false).await?;
 
     message.reply(context, "Resumed playback.").await?;
@@ -316,11 +314,36 @@ async fn stop(context: &Context, message: &Message) -> CommandResult {
 
     let data = context.data.read().await;
     let lava_data = data.get::<Lavalink>().cloned().unwrap();
-    let mut lava_client = lava_data.lock().await;
 
+    let mut lava_client = lava_data.lock().await;
     lava_client.stop(guild_id).await?;
 
     message.reply(context, "Stopped current playback.").await?;
+
+    Ok(())
+}
+
+#[command]
+#[description = "Sets the given voice volume for the current voice channel."]
+#[only_in(guilds)]
+#[min_args(1)]
+#[max_args(1)]
+async fn volume(context: &Context, message: &Message, mut arguments: Args) -> CommandResult {
+    let guild = message.guild(&context.cache).await.unwrap();
+    let volume = arguments.single::<u16>().unwrap();
+
+    if !(guild.voice_states.contains_key(&message.author.id)) {
+        message.channel_id.say(context, "You are not in a voice channel.").await?;
+        return Ok(());
+    }
+
+    let data = context.data.read().await;
+    let lava_data = data.get::<Lavalink>().cloned().unwrap();
+
+    let mut lava_client = lava_data.lock().await;
+    lava_client.volume(guild.id, volume).await?;
+
+    message.reply(context, format!("Set the current volume to {}%.", volume)).await?;
 
     Ok(())
 }
