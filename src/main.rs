@@ -114,7 +114,12 @@ async fn main() -> Result<(), Box<dyn Error + Send + Sync>> {
             _ => Level::TRACE
         };
 
-        let subscriber = FmtSubscriber::builder().with_max_level(level).with_env_filter(EnvFilter::from_default_env()).finish();
+        let subscriber = FmtSubscriber::builder()
+            .with_target(false)
+            .with_max_level(level)
+            .with_env_filter(EnvFilter::from_default_env())
+            .finish();
+
         tracing::subscriber::set_global_default(subscriber)?;
 
         info!("Tracing initialized; level {}.", level);

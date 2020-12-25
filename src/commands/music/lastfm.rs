@@ -73,76 +73,29 @@ pub async fn lastfm(context: &Context, message: &Message, mut arguments: Args) -
         Err(error) => match error {
             Error::LastFMError(OperationFailed(error)) => match error.message.as_str() {
                 "Operation failed - Most likely the backend service failed. Please try again." => {
-                    message
-                        .channel_id
-                        .send_message(&context, |message| {
-                            message.embed(|embed| {
-                                embed.title("Error: Last.fm is currently offline.");
-                                embed.description("Last.fm's servers are currently offline. Please try again later.");
-                                embed.color(0x00FF_0000)
-                            })
-                        })
-                        .await?;
+                    message.channel_id.say(context, "Last.fm's servers are currently offline. Please try again later.").await?;
                     return Ok(());
                 }
                 _ => {
                     error!("Last.fm operation failed: {:#?}", error);
-                    message
-                        .channel_id
-                        .send_message(&context, |message| {
-                            message.embed(|embed| {
-                                embed.title("Error: Unknown Last.fm operation error.");
-                                embed.description("An unknown Last.fm operation error was encountered. Please try again later.");
-                                embed.color(0x00FF_0000)
-                            })
-                        })
-                        .await?;
+                    message.channel_id.say(context, "An unknown Last.fm operation error occurred. Try again later.").await?;
                     return Ok(());
                 }
             },
             Error::LastFMError(InvalidParameters(error)) => match error.message.as_str() {
                 "User not found" => {
-                    message
-                        .channel_id
-                        .send_message(&context, |message| {
-                            message.embed(|embed| {
-                                embed.title("Error: Invalid Last.fm username provided.");
-                                embed.description("Invalid username provided. Please provide a valid one and then try again.");
-                                embed.color(0x00FF_0000)
-                            })
-                        })
-                        .await?;
+                    message.channel_id.say(context, "Invalid username provided. Please provide a valid one and try again.").await?;
                     return Ok(());
                 }
                 _ => {
                     error!("Unknown Last.fm parameter error: {:#?}", error);
-                    message
-                        .channel_id
-                        .send_message(&context, |message| {
-                            message.embed(|embed| {
-                                embed.title("Error: Invalid Last.fm parameter provided.");
-                                embed.description("An invalid Last.fm parameter was provided.");
-                                embed.color(0x00FF_0000)
-                            })
-                        })
-                        .await?;
-
+                    message.channel_id.say(context, "An invalid Last.fm parameter was provided.").await?;
                     return Ok(());
                 }
             },
             _ => {
                 error!("Unrecognized Last.fm error encountered: {:#?}", error);
-                message
-                    .channel_id
-                    .send_message(&context, |message| {
-                        message.embed(|embed| {
-                            embed.title("Error: Unrecognized Last.fm error encountered.");
-                            embed.description("An unrecognized Last.fm error was detected. Please try again later.");
-                            embed.color(0x00FF_0000)
-                        })
-                    })
-                    .await?;
-
+                message.channel_id.say(context, "An unrecognized Last.fm error was detected. Please try again later.").await?;
                 return Ok(());
             }
         }
