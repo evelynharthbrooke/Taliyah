@@ -73,7 +73,7 @@ dependencies = [
  "futures-util",
  "isocountry",
  "isolanguage-1",
- "itertools",
+ "itertools 0.9.0",
  "rand",
  "reqwest",
  "serde",
@@ -313,7 +313,7 @@ dependencies = [
 [[package]]
 name = "command_attr"
 version = "0.3.2"
-source = "git+https://github.com/serenity-rs/serenity?branch=current#dbb3669594144a2343a304bba34c4ffe2c942d7b"
+source = "git+https://github.com/serenity-rs/serenity?branch=current#d2cb9000fa352f7d6221b32ca77b48df988286df"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -438,7 +438,7 @@ dependencies = [
  "chrono",
  "git2",
  "humantime",
- "itertools",
+ "itertools 0.10.0",
  "lastfm-rs",
  "lavalink-rs",
  "reqwest",
@@ -983,6 +983,15 @@ name = "itertools"
 version = "0.9.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "284f18f85651fe11e8a991b2adb42cb078325c996ed026d994719efcfca1d54b"
+dependencies = [
+ "either",
+]
+
+[[package]]
+name = "itertools"
+version = "0.10.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "37d572918e350e82412fe766d24b15e6682fb2ed2bbe018280caa810397cb319"
 dependencies = [
  "either",
 ]
@@ -1927,7 +1936,7 @@ dependencies = [
 [[package]]
 name = "serenity"
 version = "0.9.3"
-source = "git+https://github.com/serenity-rs/serenity?branch=current#dbb3669594144a2343a304bba34c4ffe2c942d7b"
+source = "git+https://github.com/serenity-rs/serenity?branch=current#d2cb9000fa352f7d6221b32ca77b48df988286df"
 dependencies = [
  "async-trait",
  "async-tungstenite 0.9.3",
@@ -2040,7 +2049,7 @@ dependencies = [
 [[package]]
 name = "songbird"
 version = "0.1.0"
-source = "git+https://github.com/serenity-rs/songbird/?branch=current#2fc88a6ef1f950c17a076dd6e6c2f85f99607962"
+source = "git+https://github.com/serenity-rs/songbird/?branch=current#c0d3cb31130ebeece6acb1b68cf366a57196d244"
 dependencies = [
  "async-trait",
  "async-tungstenite 0.9.3",
@@ -2086,7 +2095,7 @@ dependencies = [
 [[package]]
 name = "sqlx"
 version = "0.4.2"
-source = "git+https://github.com/launchbadge/sqlx#b8839c6d90c6117c049489a1a4eb21d8fb27660c"
+source = "git+https://github.com/launchbadge/sqlx#63bbd3445b3c8c8c14b5c4b235acb9832bf12272"
 dependencies = [
  "sqlx-core",
  "sqlx-macros",
@@ -2095,7 +2104,7 @@ dependencies = [
 [[package]]
 name = "sqlx-core"
 version = "0.4.2"
-source = "git+https://github.com/launchbadge/sqlx#b8839c6d90c6117c049489a1a4eb21d8fb27660c"
+source = "git+https://github.com/launchbadge/sqlx#63bbd3445b3c8c8c14b5c4b235acb9832bf12272"
 dependencies = [
  "ahash 0.6.2",
  "atoi",
@@ -2140,7 +2149,7 @@ dependencies = [
 [[package]]
 name = "sqlx-macros"
 version = "0.4.2"
-source = "git+https://github.com/launchbadge/sqlx#b8839c6d90c6117c049489a1a4eb21d8fb27660c"
+source = "git+https://github.com/launchbadge/sqlx#63bbd3445b3c8c8c14b5c4b235acb9832bf12272"
 dependencies = [
  "cargo_metadata",
  "dotenv",
@@ -2159,7 +2168,7 @@ dependencies = [
 [[package]]
 name = "sqlx-rt"
 version = "0.2.0"
-source = "git+https://github.com/launchbadge/sqlx#b8839c6d90c6117c049489a1a4eb21d8fb27660c"
+source = "git+https://github.com/launchbadge/sqlx#63bbd3445b3c8c8c14b5c4b235acb9832bf12272"
 dependencies = [
  "once_cell",
  "tokio 0.2.24",
@@ -2239,9 +2248,9 @@ checksum = "1e81da0851ada1f3e9d4312c704aa4f8806f0f9d69faaf8df2f3464b4a9437c2"
 
 [[package]]
 name = "syn"
-version = "1.0.55"
+version = "1.0.56"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a571a711dddd09019ccc628e1b17fe87c59b09d513c06c026877aa708334f37a"
+checksum = "a9802ddde94170d186eeee5005b798d9c159fa970403f1be19976d0cfb939b72"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -2282,18 +2291,18 @@ dependencies = [
 
 [[package]]
 name = "thiserror"
-version = "1.0.22"
+version = "1.0.23"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0e9ae34b84616eedaaf1e9dd6026dbe00dcafa92aa0c8077cb69df1fcfe5e53e"
+checksum = "76cc616c6abf8c8928e2fdcc0dbfab37175edd8fb49a4641066ad1364fdab146"
 dependencies = [
  "thiserror-impl",
 ]
 
 [[package]]
 name = "thiserror-impl"
-version = "1.0.22"
+version = "1.0.23"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "9ba20f23e85b10754cd195504aebf6a27e2e6cbe28c17778a0c930724628dd56"
+checksum = "9be73a2caec27583d0046ef3796c3794f868a5bc813db689eed00c7631275cd1"
 dependencies = [
  "proc-macro2",
  "quote",

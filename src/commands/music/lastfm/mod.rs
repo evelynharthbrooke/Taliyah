@@ -3,11 +3,6 @@
 //! Retrieves a chosen user's last.fm state, along with various
 //! user information such as their most recent tracks.
 
-use crate::{
-    data::ReqwestContainer,
-    utils::{format_int, get_album_artwork, get_profile_field, read_config}
-};
-
 use itertools::Itertools;
 
 use lastfm_rs::{
@@ -18,8 +13,7 @@ use lastfm_rs::{
     user::{
         recent_tracks::Track,
         top_artists::{Artist, Period}
-    },
-    Client
+    }
 };
 
 use serenity::{
@@ -30,9 +24,11 @@ use serenity::{
 
 use tracing::error;
 
+use crate::utils::{format_int, get_profile_field, net_utils::*};
+
 #[command]
 #[description("Retrieves various Last.fm user stats.")]
-#[aliases("fm", "lfm", "lastfm")]
+#[aliases("fm", "lfm")]
 #[usage("<user> <limit>")]
 pub async fn lastfm(context: &Context, message: &Message, mut arguments: Args) -> CommandResult {
     let user = if !arguments.rest().is_empty() {
@@ -40,36 +36,20 @@ pub async fn lastfm(context: &Context, message: &Message, mut arguments: Args) -
     } else {
         match get_profile_field(context, "user_lastfm_id", message.author.id).await {
             Ok(user) => user,
-            Err(e) => {
-                error!("Could not get Last.fm username in database: {}", e);
-                match arguments.single::<String>() {
-                    Ok(argument) => argument,
-                    Err(_) => {
-                        message
-                            .channel_id
-                            .send_message(&context, |message| {
-                                message.embed(|embed| {
-                                    embed.title("Error: No Last.fm username was found or provided.");
-                                    embed.color(0x00FF_0000);
-                                    embed.description("No username found. Please provide one or set one via `profile set`.")
-                                })
-                            })
-                            .await?;
-                        return Ok(());
-                    }
+            Err(_) => match arguments.single::<String>() {
+                Ok(argument) => argument,
+                Err(_) => {
+                    message.channel_id.say(context, "No username found. Please set one via `profile set` or provide one.").await?;
+                    return Ok(());
                 }
             }
         }
     };
 
-    let config = read_config("config.toml");
-    let api_key = config.api.music.lastfm.api_key;
-    let reqwest_client = context.data.read().await.get::<ReqwestContainer>().cloned().unwrap();
-
-    let mut client = Client::from_reqwest_client(reqwest_client, &api_key);
+    let mut client = get_lastfm_client(&context).await;
 
     let recent_tracks = match client.recent_tracks(&user).await.with_limit(5).send().await {
-        Ok(rt) => rt.tracks,
+        Ok(recent) => recent.tracks,
         Err(error) => match error {
             Error::LastFMError(OperationFailed(error)) => match error.message.as_str() {
                 "Operation failed - Most likely the backend service failed. Please try again." => {

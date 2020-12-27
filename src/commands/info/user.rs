@@ -10,7 +10,7 @@ use serenity::{
 
 use tracing::info;
 
-use crate::utils::parsers::parse_user;
+use crate::utils::parsing_utils::parse_user;
 
 #[command]
 #[description = "Shows various information about a user."]

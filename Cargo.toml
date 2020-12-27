@@ -18,7 +18,7 @@ byte-unit           = "4.0.9"
 chrono              = "0.4.19"
 git2                = "0.13.13"
 humantime           = "2.0.1"
-itertools           = "0.9.0"
+itertools           = "0.10.0"
 lastfm-rs           = "0.4.2"
 reqwest             = "0.10.10"
 serde               = { version = "1.0.118", features = ["derive"] }
@@ -38,7 +38,7 @@ branch              = "songbird"
 git                 = "https://github.com/serenity-rs/serenity"
 branch              = "current"
 default-features    = true
-features            = ["collector", "unstable", "voice"]
+features            = ["collector", "unstable_discord_api", "voice"]
 
 [dependencies.songbird]
 git                 = "https://github.com/serenity-rs/songbird/"

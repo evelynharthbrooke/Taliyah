@@ -1,19 +1,15 @@
 // pub mod color_utils;
 pub mod git_utils;
 pub mod locale_utils;
-pub mod parsers;
+pub mod net_utils;
+pub mod parsing_utils;
 
-use aspotify::ItemType;
 use serenity::{client::Context, model::id::UserId};
 use sqlx::Row;
 use std::{fs::File, io::prelude::Read};
 use tracing::error;
 
-use crate::{
-    config::ConfigurationData,
-    data::{DatabasePool, SpotifyContainer},
-    error::EllieError
-};
+use crate::{config::ConfigurationData, data::DatabasePool, error::EllieError};
 
 pub fn read_config(file: &str) -> ConfigurationData {
     let mut file = File::open(file).unwrap();
@@ -59,22 +55,4 @@ pub fn format_int(integer: usize) -> String {
 /// Calculates the average sum of an array of i64's.
 pub fn calculate_average_sum(ints: &[i64]) -> f64 {
     ints.iter().sum::<i64>() as f64 / ints.len() as f64
-}
-
-/// Retrieves album artwork for a specified song via the Spotify
-/// Web API. If it is unable to find any artwork, it will return an
-/// empty string.
-pub async fn get_album_artwork(context: &Context, artist: &str, track: &str, album: &str) -> String {
-    let data = context.data.read().await;
-    let spotify = data.get::<SpotifyContainer>().unwrap();
-
-    let search_string = format!("artist:{} track:{} album:{}", artist, track, album);
-    let track_search = spotify.search().search(&search_string, [ItemType::Track].iter().copied(), false, 1, 0, None).await;
-    let track_result = &track_search.unwrap().data.tracks.unwrap();
-
-    let items = &track_result.items;
-    let track = items.first().unwrap();
-    let image = track.album.images.first().unwrap();
-    let album_art = image.url.as_str();
-    album_art.to_string()
 }

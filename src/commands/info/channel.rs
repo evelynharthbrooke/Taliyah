@@ -1,4 +1,4 @@
-use crate::utils::parsers::parse_channel;
+use crate::utils::parsing_utils::parse_channel;
 
 use serenity::{
     client::Context,
