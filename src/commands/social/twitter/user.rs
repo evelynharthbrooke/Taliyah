@@ -50,7 +50,6 @@ pub struct UserTweet {
 }
 
 #[command]
-#[aliases("pf")]
 #[min_args(1)]
 #[max_args(1)]
 /// Displays information about a given user on Twitter.
