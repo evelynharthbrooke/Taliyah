@@ -26,7 +26,6 @@ pub struct UserData {
     pub username: String,                  // The user's username / handle.
     pub created_at: DateTime<Utc>,         // The user's date of when they joined Twitter, in UTC.
     pub location: Option<String>,          // The user's provided location, if available.
-    pub url: String,                       // The user's profile web URL.
     pub description: String,               // The user's description / bio.
     pub verified: bool,                    // The user's verified status.
     pub profile_image_url: String,         // The user's profile image.
@@ -61,41 +60,34 @@ pub async fn user(context: &Context, message: &Message, mut args: Args) -> Comma
     let config = read_config("config.toml");
     let bearer = config.api.social.twitter.bearer_token;
 
-    let user_fields = [("user.fields", "created_at,location,url,public_metrics,description,verified,profile_image_url")];
+    let user_fields = [("user.fields", "created_at,location,public_metrics,description,verified,profile_image_url")];
     let tweet_fields = [("max_results", "5"), ("exclude", "retweets,replies")];
 
     let client = context.data.read().await.get::<ReqwestContainer>().cloned().unwrap();
 
-    let user_details_endpoint = format!("https://api.twitter.com/2/users/by/username/{}", user);
-    let user_details_request = client.get(&user_details_endpoint).bearer_auth(&bearer).query(&user_fields).send().await?;
+    let mut endpoint = format!("https://api.twitter.com/2/users/by/username/{}", user);
+    let mut request = client.get(&endpoint).bearer_auth(&bearer).query(&user_fields).send().await?;
 
-    let user: User = user_details_request.json().await?;
+    let user: UserData = request.json::<User>().await?.data;
+    let user_id = &user.id;
+    let user_name = &user.name;
+    let user_handle = user.username;
+    let user_joined = user.created_at.format("%B %-e, %Y").to_string();
+    let user_location = user.location;
+    let user_url = format!("https://twitter.com/{}", user_handle);
+    let user_description = &user.description;
+    let user_verified = user.verified;
+    let user_avatar = &user.profile_image_url.replace("normal", "400x400").to_string();
+    let user_followers = format_int(user.public_metrics.followers_count as usize);
+    let user_following = format_int(user.public_metrics.following_count as usize);
+    let user_tweet_count = format_int(user.public_metrics.tweet_count as usize);
 
-    let user_data = user.data;
-    let user_id = &user_data.id;
+    endpoint = format!("https://api.twitter.com/2/users/{}/tweets", user_id);
+    request = client.get(&endpoint).bearer_auth(&bearer).query(&tweet_fields).send().await?;
 
-    let user_name = &user_data.name;
-    let user_handle = user_data.username;
-    let user_joined = user_data.created_at.format("%B %-e, %Y").to_string();
-    let user_location = user_data.location;
-    let user_url = &user_data.url;
-    let user_description = &user_data.description;
-    let user_verified = user_data.verified;
-    let user_avatar = &user_data.profile_image_url.replace("normal", "400x400").to_string();
-
-    let user_followers = format_int(user_data.public_metrics.followers_count as usize);
-    let user_following = format_int(user_data.public_metrics.following_count as usize);
-    let user_tweet_count = format_int(user_data.public_metrics.tweet_count as usize);
-
-    let user_tweets_endpoint = format!("https://api.twitter.com/2/users/{}/tweets", user_id);
-    let user_tweets_request = client.get(&user_tweets_endpoint).bearer_auth(&bearer).query(&tweet_fields).send().await?;
-    let user_tweets_response: UserTweets = user_tweets_request.json().await?;
-
+    let user_tweets_response: UserTweets = request.json().await?;
     let user_latest_tweet = match user_tweets_response.data {
-        Some(tweets) => {
-            let tweet = tweets.first().unwrap();
-            tweet.text.clone()
-        }
+        Some(tweets) => tweets.first().unwrap().clone().text.clone(),
         None => "Tweet not available.".to_string()
     };
 
