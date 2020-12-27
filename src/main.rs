@@ -185,13 +185,13 @@ async fn main() -> Result<(), Box<dyn Error + Send + Sync>> {
     {
         let mut data = client.data.write().await;
 
-        let database_url = configuration.bot.database.url;
-        let pool = PgPoolOptions::new().max_connections(20).connect(&database_url).await?;
-        let reqwest_client = Client::builder().user_agent(REQWEST_USER_AGENT).redirect(Policy::none()).build()?;
+        let url = configuration.bot.database.url;
+        let pool = PgPoolOptions::new().max_connections(20).connect(&url).await?;
+        let http_client = Client::builder().user_agent(REQWEST_USER_AGENT).redirect(Policy::none()).build()?;
 
         data.insert::<DatabasePool>(pool);
         data.insert::<ShardManagerContainer>(Arc::clone(&client.shard_manager));
-        data.insert::<ReqwestContainer>(reqwest_client);
+        data.insert::<ReqwestContainer>(http_client);
 
         {
             let id = configuration.api.music.spotify.client_id;

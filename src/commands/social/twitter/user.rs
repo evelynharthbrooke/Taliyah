@@ -92,7 +92,7 @@ pub async fn user(context: &Context, message: &Message, mut args: Args) -> Comma
 
     let mut user_header = String::new();
 
-    writeln!(user_header, "{} {}", user_name, if user_verified { "\\✔️" } else { "" })?;
+    write!(user_header, "{} {}", user_name, if user_verified { "\\✔️" } else { "" })?;
 
     let user_fields = vec![
         ("Username", user_handle, true),
