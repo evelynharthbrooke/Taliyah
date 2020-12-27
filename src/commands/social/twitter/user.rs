@@ -87,7 +87,7 @@ pub async fn user(context: &Context, message: &Message, mut args: Args) -> Comma
 
     let user_tweets_response: UserTweets = request.json().await?;
     let user_latest_tweet = match user_tweets_response.data {
-        Some(tweets) => tweets.first().unwrap().clone().text.clone(),
+        Some(tweets) => tweets.first().unwrap().text.clone(),
         None => "Tweet not available.".to_string()
     };
 
