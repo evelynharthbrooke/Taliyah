@@ -41,10 +41,7 @@ pub async fn urban(context: &Context, message: &Message, arguments: Args) -> Com
     let response: Response = request.json().await?;
 
     if response.definitions.is_empty() {
-        message
-            .channel_id
-            .say(context, format!("No definitions found for the word `{}`. Try a different word.", term))
-            .await?;
+        message.channel_id.say(context, format!("No definitions found for `{}`. Try a different word.", term)).await?;
         return Ok(());
     }
 
