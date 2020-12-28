@@ -16,7 +16,8 @@ pub struct Response {
 
 #[derive(Debug, Deserialize)]
 pub struct Definition {
-    definition: String,
+    #[serde(rename = "definition")]
+    description: String,
     example: String,
     word: String,
     thumbs_up: usize,
@@ -45,12 +46,14 @@ pub async fn urban(context: &Context, message: &Message, arguments: Args) -> Com
         return Ok(());
     }
 
-    let word = &response.definitions[0].word;
-    let definition = &response.definitions[0].definition;
-    let example = &response.definitions[0].example;
-    let permalink = &response.definitions[0].permalink;
-    let thumbs_up = &response.definitions[0].thumbs_up;
-    let thumbs_down = &response.definitions[0].thumbs_down;
+    let definition = response.definitions.iter().next().unwrap();
+
+    let word = &definition.word;
+    let description = &definition.description;
+    let example = &definition.example;
+    let permalink = &definition.permalink;
+    let thumbs_up = &definition.thumbs_up;
+    let thumbs_down = &definition.thumbs_down;
 
     let rating = format!("{} 👍 | {} 👎", thumbs_up, thumbs_down);
 
@@ -60,7 +63,7 @@ pub async fn urban(context: &Context, message: &Message, arguments: Args) -> Com
             message.embed(|embed| {
                 embed.author(|author| author.name(word).url(permalink));
                 embed.color(0x00EF_FF00);
-                embed.description(format!("*{}*\n\n{}\n\n**Ratings**: {}", definition, example, rating));
+                embed.description(format!("*{}*\n\n{}\n\n**Ratings**: {}", description, example, rating));
                 embed.footer(|footer| footer.text("Powered by the Urban Dictionary."))
             })
         })
@@ -75,13 +78,14 @@ pub async fn randefine(context: &Context, message: &Message) -> CommandResult {
     let client = context.data.read().await.get::<ReqwestContainer>().cloned().unwrap();
     let request = client.get("http://api.urbandictionary.com/v0/random").send().await?;
     let response: Response = request.json().await?;
+    let definition = response.definitions.iter().next().unwrap();
 
-    let word = &response.definitions[0].word;
-    let definition = &response.definitions[0].definition;
-    let example = &response.definitions[0].example;
-    let permalink = &response.definitions[0].permalink;
-    let thumbs_up = &response.definitions[0].thumbs_up;
-    let thumbs_down = &response.definitions[0].thumbs_down;
+    let word = &definition.word;
+    let description = &definition.description;
+    let example = &definition.example;
+    let permalink = &definition.permalink;
+    let thumbs_up = &definition.thumbs_up;
+    let thumbs_down = &definition.thumbs_down;
 
     let rating = format!("{} 👍 | {} 👎", thumbs_up, thumbs_down);
 
@@ -91,7 +95,7 @@ pub async fn randefine(context: &Context, message: &Message) -> CommandResult {
             message.embed(|embed| {
                 embed.author(|author| author.name(word).url(permalink));
                 embed.color(0x00EF_FF00);
-                embed.description(format!("*{}*\n\n{}\n\n**Ratings**: {}", definition, example, rating));
+                embed.description(format!("*{}*\n\n{}\n\n**Ratings**: {}", description, example, rating));
                 embed.footer(|footer| footer.text("Powered by the Urban Dictionary."))
             })
         })
