@@ -31,17 +31,7 @@ pub struct Result {
 #[description("Gets detailed information about a TV series from The Movie Database.")]
 pub async fn show(context: &Context, message: &Message, arguments: Args) -> CommandResult {
     if arguments.rest().is_empty() {
-        message
-            .channel_id
-            .send_message(&context, |message| {
-                message.embed(|embed| {
-                    embed.title("Error: Invalid series name provided.");
-                    embed.description("You have provided an invalid series name. Please try again.");
-                    embed.color(0x00FF_0000)
-                })
-            })
-            .await
-            .unwrap();
+        message.channel_id.say(context, "Invalid show name provided. Please try again.").await?;
         return Ok(());
     }
 
@@ -58,13 +48,7 @@ pub async fn show(context: &Context, message: &Message, arguments: Args) -> Comm
     let search_results = search_result.results;
 
     if search_results.is_empty() {
-        message
-            .channel_id
-            .send_message(&context, |message| {
-                message.content(format!("Unable to find a show on TMdb matching the term {}. Try a different name.", show))
-            })
-            .await
-            .unwrap();
+        message.channel_id.say(context, format!("Nothing found for `{}`. Please try a different name.", show)).await?;
         return Ok(());
     }
 

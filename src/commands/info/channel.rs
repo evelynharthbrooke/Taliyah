@@ -25,15 +25,7 @@ pub async fn channel(context: &Context, message: &Message, arguments: Args) -> C
     let channel_id = match parse_channel(&channel_name, Some(&guild_id), Some(&context)).await {
         Some(channel_id) => channel_id,
         None => {
-            message
-                .channel_id
-                .send_message(&context, |message| {
-                    message.embed(|embed| {
-                        embed.title("Error: Unknown channel provided.");
-                        embed.description("This channel does not exist. Please try a different channel name.")
-                    })
-                })
-                .await?;
+            message.channel_id.say(context, "This channel does not exist.").await?;
             return Ok(());
         }
     };

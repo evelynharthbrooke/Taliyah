@@ -69,16 +69,7 @@ pub struct CrewMember {
 #[max_args(2)]
 pub async fn cast(context: &Context, message: &Message, mut arguments: Args) -> CommandResult {
     if arguments.rest().is_empty() {
-        message
-            .channel_id
-            .send_message(&context, |message| {
-                message.embed(|embed| {
-                    embed.title("Error: No show or film name provided.");
-                    embed.description("No show or film name was provided. Please provide one and then try again.");
-                    embed.color(0x00FF_0000)
-                })
-            })
-            .await?;
+        message.channel_id.say(context, "No show or movie name provided. Provide one & try again.").await?;
         return Ok(());
     }
 

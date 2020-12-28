@@ -10,44 +10,22 @@ use crate::data::ReqwestContainer;
 #[usage = "<font> <string>"]
 #[example = "speed this is ascii"]
 /// Converts a string to various ASCII forms. Various ASCII font faces / font types
-/// are supported.
+/// are supported and are available to send to the command to change / modify the
+/// look of the fed ASCII text.
 ///
-/// For the list of various fonts you can use, please visit the following website:
-/// https://artii.herokuapp.com/fonts_list
+/// For the list containing the various fonts you can use, please visit the following
+/// website: https://artii.herokuapp.com/fonts_list
 ///
 /// **Note:** The ASCII text this command produces is best viewed on a desktop or
 /// laptop computer, tablet, or a mobile device in landscape mode. Portrait mode
-/// does not work well due to various is
+/// does not work well due to various issues relating to the portrait nature of
+/// that orientation.
 pub async fn ascii(context: &Context, message: &Message, arguments: Args) -> CommandResult {
     if arguments.rest().is_empty() {
-        message
-            .channel_id
-            .send_message(&context, |message| {
-                message.embed(|embed| {
-                    embed.title("Error: No string provided.");
-                    embed.description(
-                        "You didn't provide a string to convert to ASCII. Please provide one.\n\
-                        For more details, please view the help documentation."
-                    );
-                    embed.color(0x00FF_0000)
-                })
-            })
-            .await?;
+        message.channel_id.say(context, "No ASCII string provided. Please provide one.").await?;
         return Ok(());
     } else if arguments.rest().contains('\u{200B}') {
-        message
-            .channel_id
-            .send_message(&context, |message| {
-                message.embed(|embed| {
-                    embed.title("Error: Zero width space detected.");
-                    embed.description(
-                        "A zero width space was detected in your message's content. This \
-                        is not allowed. Please send a string without a zero width space included."
-                    );
-                    embed.color(0x00FF_0000)
-                })
-            })
-            .await?;
+        message.channel_id.say(context, "Zero width space detected. Don't send these.").await?;
         return Ok(());
     }
 
@@ -74,10 +52,7 @@ pub async fn ascii(context: &Context, message: &Message, arguments: Args) -> Com
 
     let response = request.text().await?;
 
-    message
-        .channel_id
-        .send_message(&context, |message| message.content(format!("```Markup\n{}```", response)))
-        .await?;
+    message.channel_id.say(context, format!("```Markup\n{}```", response)).await?;
 
     Ok(())
 }

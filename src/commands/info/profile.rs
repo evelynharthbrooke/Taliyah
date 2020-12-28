@@ -54,19 +54,26 @@ pub async fn profile(context: &Context, message: &Message, arguments: Args) -> C
     let pronouns = get_profile_field(context, "user_pronouns", user_id).await?;
     let lastfm = get_profile_field(context, "user_lastfm_id", user_id).await?;
 
+    let profile_fields = vec![
+        ("Name", name, true),
+        ("Location", location, true),
+        ("Gender", gender, true),
+        ("Pronouns", pronouns, true),
+        ("Last.fm", lastfm, false),
+    ];
+
     message
         .channel_id
-        .send_message(&context, |m| {
-            m.embed(|e| {
-                e.author(|a| {
-                    a.name(format!("{}'s profile", user_name));
-                    a.icon_url(&member.user.face())
+        .send_message(&context, |message| {
+            message.embed(|embed| {
+                embed.author(|author| {
+                    author.name(format!("Profile for user {}", user_name));
+                    author.icon_url(&member.user.face());
+                    author
                 });
-                e.color(color);
-                e.description(format!(
-                    "**Name**: {}\n**Location**: {}\n**Gender**: {}\n**Pronouns**: {}\n**Last.fm**: {}",
-                    name, location, gender, pronouns, lastfm
-                ))
+                embed.color(color);
+                embed.fields(profile_fields);
+                embed
             })
         })
         .await?;
@@ -120,16 +127,7 @@ pub async fn set(context: &Context, message: &Message, mut arguments: Args) -> C
                 Err(e) => {
                     if let Error::LastFMError(InvalidParameters(e)) = e {
                         if let "User not found" = e.message.as_str() {
-                            message
-                                .channel_id
-                                .send_message(&context, |m| {
-                                    m.embed(|e| {
-                                        e.title("Error: Invalid username provided.");
-                                        e.description("You cannot use this as your profile's Last.fm username.");
-                                        e.color(0x00FF_0000)
-                                    })
-                                })
-                                .await?;
+                            message.channel_id.say(context, "You cannot use this as your username.").await?;
                         }
                     }
                 }

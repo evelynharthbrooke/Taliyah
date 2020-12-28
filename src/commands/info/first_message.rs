@@ -20,7 +20,9 @@ pub async fn first_message(context: &Context, message: &Message) -> CommandResul
     let messages = message.channel_id.messages(&context, |retriever| retriever.after(1).limit(1)).await.unwrap();
     let msg = messages.first().unwrap();
     let msg_link = msg.link().replace("@me", &guild_id.unwrap().to_string()).to_string();
-    let msg_author_color = message.guild(context).await.unwrap().member(context, msg.author.id).await.unwrap().colour(context).await.unwrap();
+    let msg_guild = message.guild(context).await.unwrap();
+    let msg_member = msg_guild.member(context, msg.author.id).await.unwrap();
+    let msg_author_color = msg_member.colour(context).await.unwrap();
 
     message
         .channel_id

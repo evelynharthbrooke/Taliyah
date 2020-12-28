@@ -48,16 +48,7 @@ pub struct Movie {
 #[description("Gets detailed information about a collection from The Movie Database.")]
 pub async fn collection(context: &Context, message: &Message, arguments: Args) -> CommandResult {
     if arguments.rest().is_empty() {
-        message
-            .channel_id
-            .send_message(&context, |message| {
-                message.embed(|embed| {
-                    embed.title("Error: Invalid collection name provided.");
-                    embed.description("You have provided an invalid collection name. Please try again.");
-                    embed.color(0x00FF_0000)
-                })
-            })
-            .await?;
+        message.channel_id.say(context, "Invalid collection name provided. Please try again.").await?;
         return Ok(());
     }
 
@@ -73,16 +64,7 @@ pub async fn collection(context: &Context, message: &Message, arguments: Args) -
     let search_results = search_result.results;
 
     if search_results.is_empty() {
-        message
-            .channel_id
-            .send_message(&context, |message| {
-                message.content(format!(
-                    "Sorry, I was unable to find a collection on TMDb matching the term `{}`. \
-                    Please try a different search term.",
-                    collection
-                ))
-            })
-            .await?;
+        message.channel_id.say(context, format!("Nothing found for `{}`. Please try something else.", collection)).await?;
         return Ok(());
     }
 

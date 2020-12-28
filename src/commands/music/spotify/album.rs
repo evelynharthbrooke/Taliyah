@@ -16,16 +16,7 @@ use crate::data::SpotifyContainer;
 #[description("Displays information about a specified album on Spotify.")]
 async fn album(context: &Context, message: &Message, args: Args) -> CommandResult {
     if args.rest().is_empty() {
-        message
-            .channel_id
-            .send_message(&context, |message| {
-                message.embed(|embed| {
-                    embed.title("Error: No album name provided.");
-                    embed.color(0x00FF_0000);
-                    embed.description("You did not provide an album name. Please enter one and then try again.")
-                })
-            })
-            .await?;
+        message.channel_id.say(context, "No album name provided. Please provide one & try again.").await?;
         return Ok(());
     }
 

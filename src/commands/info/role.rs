@@ -15,10 +15,7 @@ pub async fn role(context: &Context, message: &Message, arguments: Args) -> Comm
     let guild_icon = cached_guild.icon_url().unwrap();
 
     if arguments.is_empty() {
-        message
-            .channel_id
-            .send_message(&context, |message| message.content("You didn't provide a role to lookup!"))
-            .await?;
+        message.channel_id.say(&context, "You didn't provide a role to lookup!").await?;
         return Ok(());
     }
 
@@ -26,7 +23,7 @@ pub async fn role(context: &Context, message: &Message, arguments: Args) -> Comm
     let role = match cached_guild.role_by_name(role_name) {
         Some(role) => role,
         None => {
-            message.channel_id.send_message(&context, |message| message.content("That is an invalid role!")).await?;
+            message.channel_id.say(context, "That is an invalid role!").await?;
             return Ok(());
         }
     };

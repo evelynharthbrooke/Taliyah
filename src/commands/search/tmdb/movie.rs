@@ -32,17 +32,7 @@ pub struct SearchMovie {
 #[description("Gets detailed information about a movie from The Movie Database.")]
 pub async fn movie(context: &Context, message: &Message, arguments: Args) -> CommandResult {
     if arguments.rest().is_empty() {
-        message
-            .channel_id
-            .send_message(&context, |message| {
-                message.embed(|embed| {
-                    embed.title("Error: Invalid movie title provided.");
-                    embed.description("You have provided an invalid movie title. Please try again.");
-                    embed.color(0x00FF_0000)
-                })
-            })
-            .await
-            .unwrap();
+        message.channel_id.say(context, "Invalid movie name provided. Please try again.").await?;
         return Ok(());
     }
 
@@ -78,16 +68,7 @@ pub async fn movie(context: &Context, message: &Message, arguments: Args) -> Com
     let search_results = search_result.results;
 
     if search_results.is_empty() {
-        message
-            .channel_id
-            .send_message(&context, |message| {
-                message.content(format!(
-                    "Sorry, I was unable to find a movie on TMDb matching the term `{}`. Please try a different search term.",
-                    movie
-                ))
-            })
-            .await
-            .unwrap();
+        message.channel_id.say(context, format!("Nothing found for `{}`. Please try again.", movie)).await?;
         return Ok(());
     }
 

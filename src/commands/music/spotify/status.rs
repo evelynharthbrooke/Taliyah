@@ -34,7 +34,7 @@ pub async fn status(context: &Context, message: &Message, arguments: Args) -> Co
         let presence = guild.presences.get(&user.id).unwrap();
 
         if presence.activities.first().is_none() {
-            message.channel_id.say(&context, format!("**{}** does not have an activity active.", &user.name)).await?
+            message.channel_id.say(&context, format!("**{}** does not have an active activity.", &user.name)).await?
         } else {
             let activities = presence.activities.iter().filter(|a| a.name == "Spotify").collect::<Vec<&Activity>>();
             if !activities.is_empty() {

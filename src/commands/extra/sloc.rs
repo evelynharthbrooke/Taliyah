@@ -33,26 +33,14 @@ pub struct Language {
 #[aliases("tokei")]
 pub async fn sloc(context: &Context, message: &Message, mut arguments: Args) -> CommandResult {
     if arguments.is_empty() {
-        message
-            .channel_id
-            .send_message(context, |m| {
-                m.embed(|e| {
-                    e.title("Error: No repository details provided.");
-                    e.description("You didn't provide repository details. Please provide them and try again.");
-                    e.color(0x00FF_0000)
-                })
-            })
-            .await?;
+        message.channel_id.say(context, "No repository details provided. Please provide them & try again.").await?;
         return Ok(());
     }
 
     let owner = arguments.single::<String>()?;
     let name = arguments.single::<String>()?;
 
-    let mut msg = message
-        .channel_id
-        .send_message(context, |m| m.content(format!("Getting statistics for `{}/{}`, please wait...", owner, name)))
-        .await?;
+    let mut msg = message.channel_id.say(context, format!("Getting statistics for `{}/{}`, please wait...", owner, name)).await?;
 
     let user_agent: &str = concat!(env!("CARGO_PKG_NAME"), "/", env!("CARGO_PKG_VERSION"));
     let client = Client::builder().user_agent(user_agent).build()?;

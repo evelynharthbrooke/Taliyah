@@ -96,16 +96,7 @@ struct Category {
 #[aliases("crates", "cratesio", "cio")]
 pub async fn krate(context: &Context, message: &Message, mut arguments: Args) -> CommandResult {
     if arguments.rest().is_empty() {
-        message
-            .channel_id
-            .send_message(&context, |message| {
-                message.embed(|embed| {
-                    embed.title("Error: Invalid crate name provided.");
-                    embed.color(0x00FF_0000);
-                    embed.description("You have provided an invalid crate name. Please try again.")
-                })
-            })
-            .await?;
+        message.channel_id.say(context, "Invalid crate name provided. Please try again.").await?;
         return Ok(());
     }
 

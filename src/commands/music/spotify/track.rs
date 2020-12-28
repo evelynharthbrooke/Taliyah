@@ -16,17 +16,7 @@ use crate::data::SpotifyContainer;
 #[description("Displays information about a specified track on Spotify.")]
 pub async fn track(context: &Context, message: &Message, args: Args) -> CommandResult {
     if args.rest().is_empty() {
-        message
-            .channel_id
-            .send_message(context, |embed| {
-                embed.embed(|embed| {
-                    embed.title("Error: No track name provided.");
-                    embed.color(0x00FF_0000);
-                    embed.description("No track name provided. Please provide one.");
-                    embed
-                })
-            })
-            .await?;
+        message.channel_id.say(context, "No track name provided. Please provide one & try again.").await?;
         return Ok(());
     }
 
@@ -39,18 +29,7 @@ pub async fn track(context: &Context, message: &Message, args: Args) -> CommandR
     let items = tracks.unwrap().items;
 
     if items.is_empty() {
-        message
-            .channel_id
-            .send_message(context, |message| {
-                message.embed(|embed| {
-                    embed.title("Error: No track found.");
-                    embed.color(0x00FF_0000);
-                    embed.description(format!("No track found matching {}. Try a different search term.", args.rest()));
-                    embed
-                })
-            })
-            .await?;
-
+        message.channel_id.say(context, format!("No track was found for `{}`. Try something else.", args.rest())).await?;
         return Ok(());
     }
 

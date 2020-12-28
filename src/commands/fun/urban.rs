@@ -30,16 +30,7 @@ pub struct Definition {
 #[aliases("urbandict", "ud", "urban", "define")]
 pub async fn urban(context: &Context, message: &Message, arguments: Args) -> CommandResult {
     if arguments.rest().is_empty() {
-        message
-            .channel_id
-            .send_message(context, |message| {
-                message.embed(|embed| {
-                    embed.title("Error: No word provided.");
-                    embed.description("You did not provide a word to look up. Please provide one and then try again.");
-                    embed.color(0x00FF_0000)
-                })
-            })
-            .await?;
+        message.channel_id.say(context, "You did not provide a word to look up. Please provide one.").await?;
         return Ok(());
     }
 

@@ -18,15 +18,6 @@ use serenity::{
 #[command]
 #[sub_commands(cast, collection, movie, show)]
 async fn tmdb(context: &Context, message: &Message) -> CommandResult {
-    message
-        .channel_id
-        .send_message(&context, |message| {
-            message.embed(|embed| {
-                embed.title("Error: Invalid / No Subcommand Entered!");
-                embed.description("No valid subcommand entered. Please check the help, or try again.")
-            })
-        })
-        .await?;
-
+    message.channel_id.say(context, "No valid subcommand entered. Do `help tmdb` to see the commands.").await?;
     Ok(())
 }
