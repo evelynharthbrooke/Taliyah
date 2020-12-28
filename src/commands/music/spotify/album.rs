@@ -29,17 +29,7 @@ async fn album(context: &Context, message: &Message, args: Args) -> CommandResul
     let items = albums.unwrap().items;
 
     if items.is_empty() {
-        message
-            .channel_id
-            .send_message(context, |message| {
-                message.embed(|embed| {
-                    embed.title("Error: No album found.");
-                    embed.color(0x00FF_0000);
-                    embed.description(format!("No albums found matching {}. Try a different search term.", args.rest()));
-                    embed
-                })
-            })
-            .await?;
+        message.channel_id.say(context, format!("No album found for `{}`. Try a different name.", args.rest())).await?;
         return Ok(());
     }
 

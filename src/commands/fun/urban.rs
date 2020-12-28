@@ -43,13 +43,7 @@ pub async fn urban(context: &Context, message: &Message, arguments: Args) -> Com
     if response.definitions.is_empty() {
         message
             .channel_id
-            .send_message(&context, |message| {
-                message.embed(|embed| {
-                    embed.title(format!("Error: No definitions for `{}` found.", term));
-                    embed.color(0x00FF_0000);
-                    embed.description(format!("No definitions found for the word `{}`. Please try searching for a different word.", term))
-                })
-            })
+            .say(context, format!("No definitions found for the word `{}`. Try a different word.", term))
             .await?;
         return Ok(());
     }
