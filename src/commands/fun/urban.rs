@@ -46,7 +46,7 @@ pub async fn urban(context: &Context, message: &Message, arguments: Args) -> Com
         return Ok(());
     }
 
-    let definition = response.definitions.iter().next().unwrap();
+    let definition = response.definitions.get(0).unwrap();
 
     let word = &definition.word;
     let description = &definition.description;
@@ -78,7 +78,7 @@ pub async fn randefine(context: &Context, message: &Message) -> CommandResult {
     let client = context.data.read().await.get::<ReqwestContainer>().cloned().unwrap();
     let request = client.get("http://api.urbandictionary.com/v0/random").send().await?;
     let response: Response = request.json().await?;
-    let definition = response.definitions.iter().next().unwrap();
+    let definition = response.definitions.get(0).unwrap();
 
     let word = &definition.word;
     let description = &definition.description;

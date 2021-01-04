@@ -16,7 +16,7 @@ pub async fn bnick(context: &Context, message: &Message, args: Args) -> CommandR
     if args.is_empty() {
         context.http.edit_nickname(*gid_u64, None).await?;
         message.channel_id.say(context, "Cleared my nickname / left it the same.").await?;
-        return Ok(())
+        return Ok(());
     }
 
     let nick = args.rest();
