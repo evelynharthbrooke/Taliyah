@@ -20,7 +20,7 @@ use commands::{
     music::{lastfm::*, spotify::*},
     search::{krate::*, tmdb::*},
     social::twitter::*,
-    utilities::{help::*, invite::*, ping::*, source::*},
+    utilities::{help::*, invite::*, owner::bnick::*, ping::*, source::*},
     voice::*
 };
 
@@ -73,6 +73,12 @@ struct Moderation;
 #[description = "Music-focused commands."]
 #[commands(lastfm, spotify)]
 struct Music;
+
+#[group("Owner")]
+#[description = "Commands restricted to the bot owner."]
+#[commands(bnick)]
+#[owners_only]
+struct Owner;
 
 #[group("Search")]
 #[description = "Various commands that search various web services."]
@@ -169,6 +175,7 @@ async fn main() -> Result<(), Box<dyn Error + Send + Sync>> {
         .group(&INFO_GROUP)
         .group(&MODERATION_GROUP)
         .group(&MUSIC_GROUP)
+        .group(&OWNER_GROUP)
         .group(&SEARCH_GROUP)
         .group(&SOCIAL_GROUP)
         .group(&UTILITIES_GROUP)
