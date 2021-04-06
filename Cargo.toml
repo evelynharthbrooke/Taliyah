@@ -12,39 +12,33 @@ readme              = "README.md"
 include             = ["src/**/*", "config.sample.toml", "Cargo.toml", "README.md"]
 
 [dependencies]
-anyhow              = "1.0.36"
-aspotify            = "0.6.2"
-byte-unit           = "4.0.9"
+anyhow              = "1.0.40"
+aspotify            = "0.7.0"
+byte-unit           = "4.0.10"
 chrono              = "0.4.19"
-git2                = "0.13.13"
-humantime           = "2.0.1"
+git2                = "0.13.17"
+humantime           = "2.1.0"
 itertools           = "0.10.0"
-lastfm-rs           = "0.4.2"
-reqwest             = "0.10.10"
-serde               = { version = "1.0.118", features = ["derive"] }
-serde_json          = "1.0.60"
-tokio               = { version = "0.2.24", features = ["full"] }
+lastfm-rs           = "0.5.0"
+serde               = { version = "1.0.125", features = ["derive"] }
+serde_json          = "1.0.64"
+tokio               = { version = "1.4.0", features = ["full"] }
 toml                = "0.5.8"
-tracing             = "0.1.22"
-tracing-futures     = "0.2.4"
-tracing-log         = "0.1.1"
-tracing-subscriber  = "0.2.15"
+tracing             = "0.1.25"
+tracing-futures     = "0.2.5"
+tracing-log         = "0.1.2"
+tracing-subscriber  = "0.2.17"
 
-[dependencies.lavalink-rs]
-git                 = "https://gitlab.com/nitsuga5124/lavalink-rs"
-branch              = "songbird"
+[dependencies.reqwest]
+version = "0.11.2"
+default-features = false
+features = ["json", "multipart", "stream", "rustls-tls"]
 
 [dependencies.serenity]
 git                 = "https://github.com/serenity-rs/serenity"
 branch              = "current"
 default-features    = true
-features            = ["collector", "unstable_discord_api", "voice"]
-
-[dependencies.songbird]
-git                 = "https://github.com/serenity-rs/songbird/"
-branch              = "current"
-default-features    = false
-features            = ["serenity-native", "gateway"]
+features            = ["collector", "unstable_discord_api", "rustls_backend"]
 
 [dependencies.sqlx]
 git                 = "https://github.com/launchbadge/sqlx"

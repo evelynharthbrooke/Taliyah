@@ -31,6 +31,8 @@ use crate::utils::{format_int, get_profile_field, net_utils::*};
 #[aliases("fm", "lfm")]
 #[usage("<user> <limit>")]
 pub async fn lastfm(context: &Context, message: &Message, mut arguments: Args) -> CommandResult {
+    message.channel_id.broadcast_typing(context).await?;
+
     let user = if !arguments.rest().is_empty() {
         arguments.single::<String>().unwrap()
     } else {

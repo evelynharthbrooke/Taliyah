@@ -21,13 +21,10 @@ use commands::{
     search::{krate::*, tmdb::*},
     social::twitter::*,
     utilities::{help::*, invite::*, owner::bnick::*, ping::*, source::*},
-    voice::*
 };
 
-use lavalink_rs::LavalinkClient;
-
 use listeners::{
-    handler::{Handler, LavaHandler},
+    handler::Handler,
     hooks::*
 };
 
@@ -38,7 +35,6 @@ use serenity::{
     http::Http
 };
 
-use songbird::SerenityInit;
 use sqlx::postgres::PgPoolOptions;
 
 use std::{collections::HashSet, error::Error, sync::Arc};
@@ -95,12 +91,7 @@ struct Social;
 #[commands(invite, ping, source)]
 struct Utilities;
 
-#[group("Voice")]
-#[description = "Ellie's fully featured suite of voice commands."]
-#[commands(join, leave, now_playing, play, play_playlist, pause, resume, stop, volume, queue, clear_queue)]
-struct Voice;
-
-#[tokio::main(core_threads = 16)]
+#[tokio::main(worker_threads = 16)]
 #[instrument]
 async fn main() -> Result<(), Box<dyn Error + Send + Sync>> {
     let configuration = read_config("config.toml");
@@ -179,14 +170,12 @@ async fn main() -> Result<(), Box<dyn Error + Send + Sync>> {
         .group(&SEARCH_GROUP)
         .group(&SOCIAL_GROUP)
         .group(&UTILITIES_GROUP)
-        .group(&VOICE_GROUP)
         .help(&HELP);
 
     let mut client = ClientBuilder::new(&token)
         .event_handler(Handler)
         .intents(GatewayIntents::all())
         .framework(framework)
-        .register_songbird()
         .await?;
 
     {
@@ -206,21 +195,6 @@ async fn main() -> Result<(), Box<dyn Error + Send + Sync>> {
             let credentials = aspotify::ClientCredentials { id, secret };
             let spotify_client = aspotify::Client::new(credentials);
             data.insert::<SpotifyContainer>(spotify_client);
-        }
-
-        {
-            let host = configuration.api.music.lavalink.host;
-            let port = configuration.api.music.lavalink.port;
-            let password = configuration.api.music.lavalink.password;
-
-            let mut lava_client = LavalinkClient::new(bot_id.0);
-
-            lava_client.set_host(host);
-            lava_client.set_port(port);
-            lava_client.set_password(password);
-
-            let lava = lava_client.initialize(LavaHandler).await?;
-            data.insert::<Lavalink>(lava);
         }
     }
 

@@ -1,5 +1,4 @@
 use crate::listeners::events::{guild_create, message, ready};
-use lavalink_rs::gateway::LavalinkEventHandler;
 use serenity::{
     async_trait,
     client::{Context, EventHandler},
@@ -8,7 +7,6 @@ use serenity::{
 };
 
 pub struct Handler;
-pub struct LavaHandler;
 
 #[async_trait]
 impl EventHandler for Handler {
@@ -24,6 +22,3 @@ impl EventHandler for Handler {
         message::message(context, message).await
     }
 }
-
-#[async_trait]
-impl LavalinkEventHandler for LavaHandler {}

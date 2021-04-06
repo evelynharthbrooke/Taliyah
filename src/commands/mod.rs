@@ -6,4 +6,3 @@ pub mod music;
 pub mod search;
 pub mod social;
 pub mod utilities;
-pub mod voice;
