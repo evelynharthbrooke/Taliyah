@@ -38,10 +38,21 @@ pub struct DiscordConfig {
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
 pub struct ApiConfig {
-    pub music: MusicConfig,
     pub entertainment: EntertainmentConfig,
+    pub minecraft: MinecraftConfig,
+    pub music: MusicConfig,
+    pub services: ServicesConfig,
     pub social: SocialConfig,
-    pub services: ServicesConfig
+}
+
+#[derive(Debug, Clone, Deserialize, Serialize)]
+pub struct EntertainmentConfig {
+    pub tmdb: String
+}
+
+#[derive(Debug, Clone, Deserialize, Serialize)]
+pub struct MinecraftConfig {
+    pub hypixel: String
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
@@ -49,6 +60,18 @@ pub struct MusicConfig {
     pub spotify: SpotifyConfig,
     pub lastfm: LastFmConfig,
     pub lavalink: LavalinkConfig
+}
+
+#[derive(Debug, Clone, Deserialize, Serialize)]
+pub struct ServicesConfig {
+    pub github: String,
+    pub google: String
+}
+
+
+#[derive(Debug, Clone, Deserialize, Serialize)]
+pub struct SocialConfig {
+    pub twitter: TwitterConfig
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
@@ -70,26 +93,10 @@ pub struct LavalinkConfig {
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct EntertainmentConfig {
-    pub tmdb: String
-}
-
-#[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct SocialConfig {
-    pub twitter: TwitterConfig
-}
-
-#[derive(Debug, Clone, Deserialize, Serialize)]
 pub struct TwitterConfig {
     pub api_key: String,
     pub api_key_secret: String,
     pub access_token: String,
     pub access_token_secret: String,
     pub bearer_token: String
-}
-
-#[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct ServicesConfig {
-    pub github: String,
-    pub google: String
 }

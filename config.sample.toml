@@ -33,6 +33,9 @@
     [api.entertainment]
     tmdb = ""
 
+    [api.minecraft]
+    hypixel = ""
+
     [api.social]
 
         [api.social.twitter]

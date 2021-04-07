@@ -222,7 +222,7 @@ dependencies = [
 [[package]]
 name = "command_attr"
 version = "0.3.5"
-source = "git+https://github.com/serenity-rs/serenity?branch=current#7e088780515dbd1210b2245b52bab297962084e8"
+source = "git+https://github.com/serenity-rs/serenity?branch=current#8ab08007680f9612bbab3109b8efe0912c923371"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -838,9 +838,9 @@ dependencies = [
 
 [[package]]
 name = "libc"
-version = "0.2.92"
+version = "0.2.93"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "56d855069fafbb9b344c0f962150cd2c1187975cb1c22c1522c240d8c4986714"
+checksum = "9385f66bf6105b241aa65a61cb923ef20efc665cb9f9bb50ac2f0c4b7f378d41"
 
 [[package]]
 name = "libgit2-sys"
@@ -1515,7 +1515,7 @@ dependencies = [
 [[package]]
 name = "serenity"
 version = "0.10.5"
-source = "git+https://github.com/serenity-rs/serenity?branch=current#7e088780515dbd1210b2245b52bab297962084e8"
+source = "git+https://github.com/serenity-rs/serenity?branch=current#8ab08007680f9612bbab3109b8efe0912c923371"
 dependencies = [
  "async-trait",
  "async-tungstenite",
@@ -1626,7 +1626,7 @@ dependencies = [
 [[package]]
 name = "sqlx"
 version = "0.5.1"
-source = "git+https://github.com/launchbadge/sqlx#64e872ffd81b03e0f795786989da5e387a0b0740"
+source = "git+https://github.com/launchbadge/sqlx#5295ff10a55a8a4854f410c45968c5c709aa65a4"
 dependencies = [
  "sqlx-core",
  "sqlx-macros",
@@ -1635,7 +1635,7 @@ dependencies = [
 [[package]]
 name = "sqlx-core"
 version = "0.5.1"
-source = "git+https://github.com/launchbadge/sqlx#64e872ffd81b03e0f795786989da5e387a0b0740"
+source = "git+https://github.com/launchbadge/sqlx#5295ff10a55a8a4854f410c45968c5c709aa65a4"
 dependencies = [
  "ahash 0.6.3",
  "atoi",
@@ -1683,7 +1683,7 @@ dependencies = [
 [[package]]
 name = "sqlx-macros"
 version = "0.5.1"
-source = "git+https://github.com/launchbadge/sqlx#64e872ffd81b03e0f795786989da5e387a0b0740"
+source = "git+https://github.com/launchbadge/sqlx#5295ff10a55a8a4854f410c45968c5c709aa65a4"
 dependencies = [
  "dotenv",
  "either",
@@ -1700,7 +1700,7 @@ dependencies = [
 [[package]]
 name = "sqlx-rt"
 version = "0.3.0"
-source = "git+https://github.com/launchbadge/sqlx#64e872ffd81b03e0f795786989da5e387a0b0740"
+source = "git+https://github.com/launchbadge/sqlx#5295ff10a55a8a4854f410c45968c5c709aa65a4"
 dependencies = [
  "once_cell",
  "tokio",
@@ -2041,9 +2041,9 @@ dependencies = [
 
 [[package]]
 name = "unicode-bidi"
-version = "0.3.4"
+version = "0.3.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "49f2bd0c6468a8230e1db229cff8029217cf623c767ea5d60bfbd42729ea54d5"
+checksum = "eeb8be209bb1c96b7c177c7420d26e04eccacb0eeae6b980e35fcb74678107e0"
 dependencies = [
  "matches",
 ]
