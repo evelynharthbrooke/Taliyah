@@ -53,13 +53,14 @@ pub async fn profile(context: &Context, message: &Message, arguments: Args) -> C
     let gender = get_profile_field(context, "user_gender", user_id).await?;
     let pronouns = get_profile_field(context, "user_pronouns", user_id).await?;
     let lastfm = get_profile_field(context, "user_lastfm_id", user_id).await?;
+    let lastfm_url = format!("[{}](https://www.last.fm/user/{})", lastfm, lastfm);
 
     let profile_fields = vec![
         ("Name", name, true),
         ("Location", location, true),
         ("Gender", gender, true),
         ("Pronouns", pronouns, true),
-        ("Last.fm", lastfm, false),
+        ("Last.fm", lastfm_url, false),
     ];
 
     message

@@ -149,7 +149,7 @@ pub async fn lastfm(context: &Context, message: &Message, mut arguments: Args) -
     let now_playing = format!("{} {} **{}** by **{}** on **{}**.", username, play_state, name, artist, album.to_string());
 
     let lastfm_fields = vec![
-        ("**Name**", display_name, true),
+        ("**Display Name**", display_name, true),
         ("**Country**", country, true),
         ("**Join Date**", registered.to_string(), true),
         ("**Loved Tracks**", loved_tracks, true),
