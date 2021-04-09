@@ -16,7 +16,7 @@ use crate::{
     DatabasePool
 };
 
-const LASTFM_USER_BASE: &str = "https://www.lastfm/user";
+const LASTFM_USER_BASE: &str = "https://www.last.fm/user";
 
 #[command]
 #[usage = "<user> or <blank>"]
