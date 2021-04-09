@@ -16,6 +16,8 @@ use crate::{
     DatabasePool
 };
 
+const LASTFM_USER_BASE: &str = "https://www.lastfm/user";
+
 #[command]
 #[usage = "<user> or <blank>"]
 #[sub_commands(set)]
@@ -53,7 +55,7 @@ pub async fn profile(context: &Context, message: &Message, arguments: Args) -> C
     let gender = get_profile_field(context, "user_gender", user_id).await?;
     let pronouns = get_profile_field(context, "user_pronouns", user_id).await?;
     let lastfm = get_profile_field(context, "user_lastfm_id", user_id).await?;
-    let lastfm_url = format!("[{}](https://www.last.fm/user/{})", lastfm, lastfm);
+    let lastfm_url = format!("[{}]({}/{})", lastfm, LASTFM_USER_BASE, lastfm);
 
     let profile_fields = vec![
         ("Name", name, true),
