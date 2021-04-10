@@ -35,7 +35,12 @@ pub async fn profile(context: &Context, message: &Message, mut arguments: Args) 
     message.channel_id.broadcast_typing(context).await?;
 
     let user = if !arguments.rest().is_empty() {
-        arguments.single::<String>().unwrap()
+        if !message.mentions.is_empty() {
+            let mid = message.mentions.first().unwrap().id;
+            get_profile_field(context, "user_lastfm_id", mid).await.unwrap()
+        } else {
+            arguments.single::<String>().unwrap()
+        }
     } else {
         match get_profile_field(context, "user_lastfm_id", message.author.id).await {
             Ok(user) => user,
