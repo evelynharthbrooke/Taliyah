@@ -1,7 +1,6 @@
-//! Last.fm command
+//! Last.fm profile command
 //!
-//! Retrieves a chosen user's last.fm state, along with various
-//! user information such as their most recent tracks.
+//! Retrieves a given user's Last.fm profile, including a bit of
 
 use itertools::Itertools;
 
@@ -28,9 +27,9 @@ use crate::utils::{format_int, get_profile_field, net_utils::*};
 
 #[command]
 #[description("Retrieves various Last.fm user stats.")]
-#[aliases("fm", "lfm")]
+#[aliases("p", "prof", "pf")]
 #[usage("<user> <limit>")]
-pub async fn lastfm(context: &Context, message: &Message, mut arguments: Args) -> CommandResult {
+pub async fn profile(context: &Context, message: &Message, mut arguments: Args) -> CommandResult {
     message.channel_id.broadcast_typing(context).await?;
 
     let user = if !arguments.rest().is_empty() {
