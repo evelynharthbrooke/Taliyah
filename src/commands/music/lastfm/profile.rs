@@ -1,6 +1,7 @@
 //! Last.fm profile command
 //!
-//! Retrieves a given user's Last.fm profile, including a bit of
+//! Retrieves a given user's Last.fm profile, including some user statistics
+//! like top artists, and recently played tracks.
 
 use itertools::Itertools;
 
