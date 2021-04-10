@@ -18,12 +18,17 @@ use crate::utils::{get_profile_field, net_utils::*};
 #[command]
 #[description("Retrieves the Last.fm now playing state of a given user.")]
 #[aliases("np")]
-#[usage("<user>")]
+#[usage("<user>, or leave blank")]
 pub async fn nowplaying(context: &Context, message: &Message, mut arguments: Args) -> CommandResult {
     message.channel_id.broadcast_typing(context).await?;
 
     let user = if !arguments.rest().is_empty() {
-        arguments.single::<String>().unwrap()
+        if !message.mentions.is_empty() {
+            let mid = message.mentions.first().unwrap().id;
+            get_profile_field(context, "user_lastfm_id", mid).await.unwrap()
+        } else {
+            arguments.single::<String>().unwrap()
+        }
     } else {
         match get_profile_field(context, "user_lastfm_id", message.author.id).await {
             Ok(user) => user,
