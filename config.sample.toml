@@ -8,6 +8,7 @@
     url = ""
 
     [bot.discord]
+    appid = "" # replace with unquoted integer
     token = ""
 
     [bot.logging]
