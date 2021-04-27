@@ -33,6 +33,7 @@ pub struct DatabaseConfig {
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
 pub struct DiscordConfig {
+    pub appid: u64,
     pub token: String
 }
 

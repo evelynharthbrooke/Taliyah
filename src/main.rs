@@ -122,6 +122,7 @@ async fn main() -> Result<(), Box<dyn Error + Send + Sync>> {
         info!("Tracing initialized; level {}.", level);
     }
 
+    let appid = configuration.bot.discord.appid;
     let token = configuration.bot.discord.token;
     let prefix = configuration.bot.general.prefix.as_str();
 
@@ -174,6 +175,7 @@ async fn main() -> Result<(), Box<dyn Error + Send + Sync>> {
 
     let mut client = ClientBuilder::new(&token)
         .event_handler(Handler)
+        .application_id(appid)
         .intents(GatewayIntents::all())
         .framework(framework)
         .await?;
