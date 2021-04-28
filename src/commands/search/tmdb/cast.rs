@@ -74,7 +74,7 @@ pub async fn cast(context: &Context, message: &Message, mut arguments: Args) -> 
     }
 
     let media_type: String = arguments.single()?;
-    let mut media: String = arguments.rest().to_string();
+    let mut input: String = arguments.rest().to_string();
 
     let config = read_config("config.toml");
     let api_key = config.api.entertainment.tmdb;
@@ -92,16 +92,16 @@ pub async fn cast(context: &Context, message: &Message, mut arguments: Args) -> 
         // This code follows the y: notation syntax as available on the website
         // for The Movie Database, with the additional ability to use year: in
         // place of y:, depending on the user's preference.
-        if media.contains("y:") || media.contains("year:") {
-            media = media.replace(" y:", "").replace(" year:", "");
-            let mut year_rev: Vec<char> = media.chars().rev().take(4).collect();
+        if input.contains("y:") || input.contains("year:") {
+            input = input.replace(" y:", "").replace(" year:", "");
+            let mut year_rev: Vec<char> = input.chars().rev().take(4).collect();
             year_rev.reverse();
             let year = year_rev.iter().join("");
-            media = media.replace(&year, "");
-            let query_string = &[("api_key", &api_key), ("query", &media), ("first_air_date_year", &year)];
+            input = input.replace(&year, "");
+            let query_string = &[("api_key", &api_key), ("query", &input), ("first_air_date_year", &year)];
             search_response = client.get(search_endpoint).query(query_string);
         } else {
-            search_response = client.get(search_endpoint).query(&[("api_key", &api_key), ("query", &media)]);
+            search_response = client.get(search_endpoint).query(&[("api_key", &api_key), ("query", &input)]);
         }
 
         let search_result: SeriesSearchResponse = search_response.send().await?.json().await?;
@@ -111,7 +111,7 @@ pub async fn cast(context: &Context, message: &Message, mut arguments: Args) -> 
             message
                 .channel_id
                 .send_message(&context, |message| {
-                    message.content(format!("Nothing found for `{}` on TMDb. Please try a different term.", media))
+                    message.content(format!("Nothing found for `{}` on TMDb. Please try a different term.", input))
                 })
                 .await?;
             return Ok(());
@@ -251,15 +251,15 @@ pub async fn cast(context: &Context, message: &Message, mut arguments: Args) -> 
         // This code follows the y: notation syntax as available on the website
         // for The Movie Database, with the additional ability to use year: in
         // place of y:, depending on the user's preference.
-        if media.contains("y:") || media.contains("year:") {
-            media = media.replace(" y:", "").replace(" year:", "");
-            let mut year_rev: Vec<char> = media.chars().rev().take(4).collect();
+        if input.contains("y:") || input.contains("year:") {
+            input = input.replace(" y:", "").replace(" year:", "");
+            let mut year_rev: Vec<char> = input.chars().rev().take(4).collect();
             year_rev.reverse();
             let year = year_rev.iter().join("");
-            media = media.replace(&year, "");
-            search_response = client.get(search_endpoint).query(&[("api_key", &api_key), ("query", &media), ("year", &year)]);
+            input = input.replace(&year, "");
+            search_response = client.get(search_endpoint).query(&[("api_key", &api_key), ("query", &input), ("year", &year)]);
         } else {
-            search_response = client.get(search_endpoint).query(&[("api_key", &api_key), ("query", &media)]);
+            search_response = client.get(search_endpoint).query(&[("api_key", &api_key), ("query", &input)]);
         }
 
         let search_result: MovieSearchResponse = search_response.send().await?.json().await?;
@@ -269,7 +269,7 @@ pub async fn cast(context: &Context, message: &Message, mut arguments: Args) -> 
             message
                 .channel_id
                 .send_message(&context, |message| {
-                    message.content(format!("Nothing found for `{}` on TMDb. Please try a different search term.", media))
+                    message.content(format!("Nothing found for `{}` on TMDb. Please try a different search term.", input))
                 })
                 .await?;
             return Ok(());

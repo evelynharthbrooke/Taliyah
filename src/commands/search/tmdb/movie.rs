@@ -144,7 +144,7 @@ pub async fn movie(context: &Context, message: &Message, arguments: Args) -> Com
                 embed.description(format!("{}{}", movie_tagline, movie_overview));
                 embed.fields(vec![
                     ("Status", movie_status, true),
-                    ("TMDb ID", movie_id, true),
+                    ("Film ID", movie_id, true),
                     ("Language", movie_language, true),
                     ("Runtime", movie_runtime, true),
                     ("Release Date", movie_release_date, true),

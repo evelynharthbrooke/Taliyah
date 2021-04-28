@@ -61,6 +61,7 @@ pub async fn channel(context: &Context, message: &Message, arguments: Args) -> C
         "category" => "Channel Category",
         "news" => "News Channel",
         "store" => "Store Channel",
+        "stage" => "Stage Channel",
         _ => "Unrecognized channel type"
     };
 
