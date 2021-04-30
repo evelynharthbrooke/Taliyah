@@ -37,29 +37,6 @@ pub async fn guild(context: &Context, message: &Message) -> CommandResult {
     let guild_emojis_normal = cached_guild.emojis.iter().filter(|(_, e)| !e.animated).count();
     let guild_features = cached_guild.features.iter().join(", ");
 
-    let guild_region = match cached_guild.region.as_str() {
-        "us-west" => "Western United States",
-        "us-east" => "Eastern United States",
-        "us-central" => "Central United States",
-        "us-south" => "Southern United States",
-        "singapore" => "Singapore",
-        "southafrica" => "South Africa",
-        "sydney" => "Sydney",
-        "europe" => "Europe",
-        "brazil" => "Brazil",
-        "hongkong" => "Hong Kong",
-        "russia" => "Russia",
-        "japan" => "Japan",
-        "india" => "India",
-        "dubai" => "Dubai",
-        "amsterdam" => "Amsterdam",
-        "london" => "London",
-        "frankfurt" => "Frankfurt",
-        "eu-central" => "Central Europe",
-        "eu-west" => "Western Eurpe",
-        &_ => cached_guild.region.as_str()
-    };
-
     let guild_verification_level = match cached_guild.verification_level.num() {
         0 => "None - Unrestricted.",
         1 => "Low - Must have a verified email.",
@@ -123,7 +100,6 @@ pub async fn guild(context: &Context, message: &Message) -> CommandResult {
     writeln!(guild_summary, "**Channels**: {} ({} text, {} voice)", guild_channels, guild_channels_text, guild_channels_voice)?;
     writeln!(guild_summary, "**Emojis**: {} ({} static, {} animated)", guild_emojis, guild_emojis_normal, guild_emojis_animated)?;
     writeln!(guild_summary, "**Features**: {}", if !guild_features.is_empty() { &guild_features } else { "None" })?;
-    writeln!(guild_summary, "**Region**: {}", guild_region)?;
     writeln!(guild_summary, "**MFA Level**: {}", guild_mfa_level)?;
     writeln!(guild_summary, "**Verification Level**: {}", guild_verification_level)?;
     writeln!(guild_summary, "**Explicit Content Filter**: {}", guild_explicit_filter)?;
