@@ -39,11 +39,12 @@ pub async fn get_profile_field(context: &Context, field: &str, user_id: UserId) 
     }
 }
 
-pub fn format_int(integer: usize) -> String {
+// converts integers to human-readable integers separated by
+// commas, e.g. "1000000" displays as "1,000,000" when fed through
+// this function.
+pub fn format_int(int: usize) -> String {
     let mut string = String::new();
-    let integer_str = integer.to_string();
-    let a = integer_str.chars().rev().enumerate();
-    for (idx, val) in a {
+    for (idx, val) in int.to_string().chars().rev().enumerate() {
         if idx != 0 && idx % 3 == 0 {
             string.insert(0, ',');
         }
