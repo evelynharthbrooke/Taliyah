@@ -1,8 +1,6 @@
-use lastfm_rs::{
-    error::{
-        Error,
-        LastFMErrorResponse::{InvalidParameters, OperationFailed}
-    }
+use lastfm_rs::error::{
+    Error,
+    LastFMErrorResponse::{InvalidParameters, OperationFailed}
 };
 
 use serenity::{

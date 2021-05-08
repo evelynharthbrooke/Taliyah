@@ -42,7 +42,11 @@ pub async fn channel(context: &Context, message: &Message, arguments: Args) -> C
 
     let channel_position = &guild_channel.position;
     let channel_id = &guild_channel.id;
-    let channel_bitrate = if guild_channel.bitrate != None { guild_channel.bitrate.unwrap().to_string() + " kbps" } else { "N/A".to_string() };
+    let channel_bitrate = if guild_channel.bitrate != None {
+        guild_channel.bitrate.unwrap().to_string() + " kbps"
+    } else {
+        "N/A".to_string()
+    };
     let channel_nsfw = &guild_channel.is_nsfw();
 
     let channel_topic = match &guild_channel.topic {

@@ -43,7 +43,7 @@ pub struct ApiConfig {
     pub minecraft: MinecraftConfig,
     pub music: MusicConfig,
     pub services: ServicesConfig,
-    pub social: SocialConfig,
+    pub social: SocialConfig
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
@@ -68,7 +68,6 @@ pub struct ServicesConfig {
     pub github: String,
     pub google: String
 }
-
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
 pub struct SocialConfig {

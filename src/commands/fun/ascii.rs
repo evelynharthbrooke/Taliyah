@@ -17,9 +17,9 @@ use crate::data::ReqwestContainer;
 /// website: https://artii.herokuapp.com/fonts_list
 ///
 /// **Note:** The ASCII text this command produces is best viewed on a desktop or
-/// laptop computer, tablet, or a mobile device in landscape mode. Portrait mode
-/// does not work well due to various issues relating to the portrait nature of
-/// that orientation.
+/// laptop computer, tablet, or a smartphone in landscape mode. Portrait mode will
+/// not and does not work well due to various issues relating to the portrait nature
+/// of that orientation.
 pub async fn ascii(context: &Context, message: &Message, arguments: Args) -> CommandResult {
     if arguments.rest().is_empty() {
         message.channel_id.say(context, "No ASCII string provided. Please provide one.").await?;

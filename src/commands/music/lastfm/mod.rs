@@ -1,5 +1,5 @@
-pub mod profile;
 pub mod nowplaying;
+pub mod profile;
 
 use serenity::{
     client::Context,

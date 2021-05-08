@@ -20,13 +20,10 @@ use commands::{
     music::{lastfm::*, spotify::*},
     search::{krate::*, tmdb::*},
     social::twitter::*,
-    utilities::{help::*, invite::*, owner::bnick::*, ping::*, source::*},
+    utilities::{help::*, invite::*, owner::bnick::*, ping::*, source::*}
 };
 
-use listeners::{
-    handler::Handler,
-    hooks::*
-};
+use listeners::{handler::Handler, hooks::*};
 
 use reqwest::{redirect::Policy, Client};
 use serenity::{
