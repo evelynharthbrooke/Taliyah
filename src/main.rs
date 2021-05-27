@@ -44,7 +44,7 @@ use crate::{constants::*, data::*, utils::read_config};
 
 #[group("Extra")]
 #[description = "Commands that don't really fit in the other command groups."]
-#[commands(sloc, steamstatus)]
+#[commands(sloc)]
 struct Extra;
 
 #[group("Fun")]
