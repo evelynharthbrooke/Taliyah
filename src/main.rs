@@ -13,7 +13,7 @@ mod models;
 mod utils;
 
 use commands::{
-    extra::{sloc::*, steamstatus::*},
+    extra::sloc::*,
     fun::{ascii::*, printerfacts::*, urban::*, xkcd::*},
     info::{about::*, channel::*, first_message::*, guild::*, profile::*, role::*, user::*},
     moderation::slowmode::*,
@@ -27,7 +27,7 @@ use listeners::{handler::Handler, hooks::*};
 
 use reqwest::{redirect::Policy, Client};
 use serenity::{
-    client::{bridge::gateway::GatewayIntents, validate_token, ClientBuilder},
+    client::{bridge::gateway::GatewayIntents, ClientBuilder},
     framework::{standard::macros::group, StandardFramework},
     http::Http
 };
@@ -116,20 +116,12 @@ async fn main() -> Result<(), Box<dyn Error + Send + Sync>> {
 
         tracing::subscriber::set_global_default(subscriber)?;
 
-        info!("Tracing initialized; level {}.", level);
+        info!("Tracing initialized with logging level set to {}.", level);
     }
 
     let appid = configuration.bot.discord.appid;
     let token = configuration.bot.discord.token;
     let prefix = configuration.bot.general.prefix.as_str();
-
-    match validate_token(&token) {
-        Ok(_) => info!("Token successfully validated. Continuing."),
-        Err(_) => {
-            error!("Token was not successfully validated. Cannot continue.");
-            return Ok(());
-        }
-    }
 
     let http = Http::new_with_token(&token);
     let (owners, bot_id) = match http.get_current_application_info().await {
