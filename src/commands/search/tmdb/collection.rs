@@ -2,9 +2,10 @@ use chrono::prelude::{NaiveDate, Utc};
 use serde::Deserialize;
 
 use serenity::{
+    builder::CreateActionRow,
     client::Context,
     framework::standard::{macros::command, Args, CommandResult},
-    model::prelude::Message
+    model::{interactions::ButtonStyle, prelude::Message}
 };
 
 use crate::{data::ReqwestContainer, utils::read_config};
@@ -80,6 +81,7 @@ pub async fn collection(context: &Context, message: &Message, arguments: Args) -
     let collection_overview = collection_result.overview;
     let collection_parts = collection_result.parts;
     let mut collection_part_fields = Vec::with_capacity(collection_parts.len());
+    let mut collection_rows = CreateActionRow::default();
 
     for part in &collection_parts {
         // This probably isn't the best implementation for getting a collection
@@ -90,6 +92,7 @@ pub async fn collection(context: &Context, message: &Message, arguments: Args) -
         // collection.
         let part_id = part.id;
         let part_title = &part.title;
+        let part_url = format!("https://www.themoviedb.org/movie/{}", part_id);
         let part_release_date = part.release_date.format("%B %-e, %Y");
         let part_summary = &part.overview;
         let movie_endpoint = format!("https://api.themoviedb.org/3/movie/{}", part_id);
@@ -100,7 +103,8 @@ pub async fn collection(context: &Context, message: &Message, arguments: Args) -
             _ => "released"
         };
 
-        collection_part_fields.push((format!("{} — {} {}", part_title, movie_status, part_release_date), part_summary, false))
+        collection_part_fields.push((format!("{} — {} {}", part_title, movie_status, part_release_date), part_summary, false));
+        collection_rows.create_button(|b| b.label(part_title).url(part_url).style(ButtonStyle::Link));
     }
 
     message
@@ -113,9 +117,10 @@ pub async fn collection(context: &Context, message: &Message, arguments: Args) -
                 embed.color(0x0001_d277);
                 embed.description(collection_overview);
                 embed.fields(collection_part_fields);
-                embed.footer(|footer| footer.text("Powered by the The Movie Database API."));
+                embed.footer(|footer| footer.text("Powered by The Movie Database."));
                 embed.timestamp(&Utc::now())
-            })
+            });
+            message.components(|comps| comps.add_action_row(collection_rows))
         })
         .await?;
 
