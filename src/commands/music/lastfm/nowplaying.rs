@@ -22,8 +22,7 @@ pub async fn nowplaying(context: &Context, message: &Message, mut arguments: Arg
 
     let user = if !arguments.rest().is_empty() {
         if !message.mentions.is_empty() {
-            let mid = message.mentions.first().unwrap().id;
-            get_profile_field(context, "user_lastfm_id", mid).await.unwrap()
+            get_profile_field(context, "user_lastfm_id", message.mentions.first().unwrap().id).await.unwrap()
         } else {
             arguments.single::<String>().unwrap()
         }

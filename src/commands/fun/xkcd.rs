@@ -50,8 +50,8 @@ pub async fn xkcd(context: &Context, message: &Message, mut arguments: Args) -> 
             });
             message.components(|comps| {
                 comps.create_action_row(|row| {
-                    row.create_button(|button| button.label("XKCD").style(Link).emoji(Unicode("🌐".to_string())).url(page));
-                    row.create_button(|button| button.label("Explain XKCD").style(Link).emoji(Unicode("🧠".to_string())).url(wiki));
+                    row.create_button(|b| b.label("XKCD").style(Link).emoji(Unicode("🌐".to_string())).url(page));
+                    row.create_button(|b| b.label("Explain XKCD").style(Link).emoji(Unicode("🧠".to_string())).url(wiki));
                     row
                 });
                 comps
