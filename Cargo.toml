@@ -35,8 +35,8 @@ default-features = false
 features = ["json", "multipart", "stream", "rustls-tls"]
 
 [dependencies.serenity]
-git                 = "https://github.com/serenity-rs/serenity"
-branch              = "current"
+git                 = "https://github.com/KamranMackey/serenity"
+branch              = "kamrans-fork-await"
 default-features    = true
 features            = ["collector", "unstable_discord_api", "rustls_backend"]
 
