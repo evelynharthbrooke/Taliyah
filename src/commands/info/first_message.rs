@@ -1,4 +1,8 @@
-use serenity::{client::Context, framework::standard::{Args, CommandResult, macros::command}, model::prelude::Message};
+use serenity::{
+    client::Context,
+    framework::standard::{macros::command, Args, CommandResult},
+    model::prelude::Message
+};
 
 use crate::utils::parsing_utils::parse_channel;
 
