@@ -86,8 +86,8 @@ pub async fn show(context: &Context, message: &Message, arguments: Args) -> Comm
     };
 
     let show_language = locale_utils::get_language_name_from_iso(&show_result.original_language).to_string();
-    let show_languages = show_result.languages.iter().map(|l| locale_utils::get_language_name_from_iso(&l).to_string()).join("\n");
-    let show_origin_country = show_result.origin_country.iter().map(|c| locale_utils::get_country_name_from_iso(&c).to_string()).join("\n");
+    let show_languages = show_result.languages.iter().map(|l| locale_utils::get_language_name_from_iso(l).to_string()).join("\n");
+    let show_origin_country = show_result.origin_country.iter().map(|c| locale_utils::get_country_name_from_iso(c).to_string()).join("\n");
 
     let show_creators = if show_result.created_by.is_empty() {
         "Unknown".to_string()

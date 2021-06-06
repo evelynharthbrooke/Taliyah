@@ -32,7 +32,7 @@ pub async fn profile(context: &Context, message: &Message, arguments: Args) -> C
         if arguments.is_empty() {
             message.member(&context).await.map_err(|_| "Could not find member.")?
         } else {
-            match parse_user(&arguments.rest(), Some(&guild_id), Some(&context)).await {
+            match parse_user(arguments.rest(), Some(&guild_id), Some(context)).await {
                 Some(i) => guild_id.member(&context, i).await?,
                 None => return Ok(())
             }
@@ -125,7 +125,7 @@ pub async fn set(context: &Context, message: &Message, mut arguments: Args) -> C
             let api_key = config.api.music.lastfm.api_key;
             let mut client: Client = Client::new(&api_key);
 
-            match client.user_info(&value).await.send().await {
+            match client.user_info(value).await.send().await {
                 Ok(_) => (),
                 Err(e) => {
                     if let Error::LastFMError(InvalidParameters(e)) = e {

@@ -75,7 +75,7 @@ pub async fn guild(context: &Context, message: &Message) -> CommandResult {
     let mut highest = None;
 
     for role_id in cached_guild.roles.keys() {
-        if let Some(role) = cached_guild.roles.get(&role_id) {
+        if let Some(role) = cached_guild.roles.get(role_id) {
             if let Some((id, pos)) = highest {
                 if role.position < pos || (role.position == pos && role.id > id) {
                     continue;

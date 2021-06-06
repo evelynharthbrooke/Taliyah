@@ -20,7 +20,7 @@ pub async fn first_message(context: &Context, message: &Message, args: Args) -> 
         args.rest().to_string()
     };
 
-    let channel_id = match parse_channel(&channel_name, Some(&guild_id), Some(&context)).await {
+    let channel_id = match parse_channel(&channel_name, Some(&guild_id), Some(context)).await {
         Some(channel_id) => channel_id,
         None => {
             message.channel_id.say(context, "This channel does not exist.").await?;

@@ -39,7 +39,7 @@ pub async fn nowplaying(context: &Context, message: &Message, mut arguments: Arg
         }
     };
 
-    let mut client = get_lastfm_client(&context).await;
+    let mut client = get_lastfm_client(context).await;
 
     let recent_tracks = match client.recent_tracks(&user).await.with_limit(1).send().await {
         Ok(recent) => recent.tracks,
