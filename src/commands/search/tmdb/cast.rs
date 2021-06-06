@@ -308,10 +308,10 @@ pub async fn cast(context: &Context, message: &Message, mut arguments: Args) -> 
                     embed.thumbnail(movie_poster);
                     embed.description(format!(
                         "\
-                    Not all cast and crew members could be displayed for *{}*. For a full \
-                    list of the cast / crew members in this movie, please visit the The Movie \
-                    Database website by [clicking here]({}).\
-                    ",
+                        Not all cast and crew members could be displayed for *{}*. For a full \
+                        list of the cast / crew members in this movie, please visit the The Movie \
+                        Database website by [clicking here]({}).\
+                        ",
                         movie_name, movie_cast_url
                     ));
                     embed.fields(movie_cast_fields);
@@ -327,10 +327,7 @@ pub async fn cast(context: &Context, message: &Message, mut arguments: Args) -> 
 
         Ok(())
     } else {
-        message
-            .channel_id
-            .send_message(&context, |message| message.content("This is not a recognized media type!"))
-            .await?;
+        message.channel_id.say(&context, "This is not a recognized media type!").await?;
         Ok(())
     }
 }

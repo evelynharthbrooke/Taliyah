@@ -14,11 +14,13 @@ use crate::{data::SpotifyContainer, utils::locale_utils};
 pub async fn newreleases(context: &Context, message: &Message, args: Args) -> CommandResult {
     let market = args.rest().to_string();
 
-    if market.len() > 2 || market.len() < 2 {
-        message
-            .channel_id
-            .say(context, "You did not provide a valid market name. Name cannot be more or less than 2 characters.")
-            .await?;
+    if !market.is_empty() {
+        if market.len() < 2 || market.len() > 2 {
+            message.channel_id.say(context, "The market name you provided is more or less than 2 characters long.").await?;
+            return Ok(());
+        }
+    } else if market.is_empty() {
+        message.channel_id.say(context, "You did not provide a valid market name.").await?;
         return Ok(());
     }
 

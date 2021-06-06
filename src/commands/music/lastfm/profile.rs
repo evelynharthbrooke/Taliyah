@@ -143,7 +143,7 @@ pub async fn profile(context: &Context, message: &Message, mut arguments: Args) 
             .map(|track: &Track| {
                 let track_status = if track.attrs.is_none() { "" } else { "\x5c▶️" };
                 let track_name = &track.name.replace("**", "\x5c**");
-                let track_url = &track.url;
+                let track_url = &track.url.replace("**", "\x5c**");
                 let track_artist = &track.artist.name;
                 format!("{} **[{}]({})** — {}", track_status, track_name, track_url, track_artist)
             })
