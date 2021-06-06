@@ -1,4 +1,4 @@
-use aspotify::{AlbumType, ItemType, TrackSimplified};
+use aspotify::{AlbumType, ItemType};
 use humantime::format_duration;
 use itertools::Itertools;
 
@@ -69,7 +69,7 @@ async fn album(context: &Context, message: &Message, args: Args) -> CommandResul
 
     let album_tracks = album_track_items
         .iter()
-        .map(|track: &TrackSimplified| {
+        .map(|track| {
             let name = &track.name;
             let position = &track.track_number;
             let url = &track.external_urls["spotify"];

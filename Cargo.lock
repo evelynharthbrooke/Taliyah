@@ -216,7 +216,7 @@ dependencies = [
 [[package]]
 name = "command_attr"
 version = "0.3.6"
-source = "git+https://github.com/KamranMackey/serenity?branch=kamrans-fork-await#33f3733cd3d32426ec4bbf6f7c7da800a51df867"
+source = "git+https://github.com/KamranMackey/serenity?branch=kamrans-fork-await#839619e0b26f72cc5d5c8cf3716cbf56f2bb4968"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -1548,7 +1548,7 @@ dependencies = [
 [[package]]
 name = "serenity"
 version = "0.10.7"
-source = "git+https://github.com/KamranMackey/serenity?branch=kamrans-fork-await#33f3733cd3d32426ec4bbf6f7c7da800a51df867"
+source = "git+https://github.com/KamranMackey/serenity?branch=kamrans-fork-await#839619e0b26f72cc5d5c8cf3716cbf56f2bb4968"
 dependencies = [
  "async-trait",
  "async-tungstenite",

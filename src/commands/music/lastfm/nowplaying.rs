@@ -105,8 +105,8 @@ pub async fn nowplaying(context: &Context, message: &Message, mut arguments: Arg
 
     message
         .channel_id
-        .send_message(context, |msg| {
-            msg.embed(|embed| {
+        .send_message(context, |m| {
+            m.embed(|embed| {
                 embed.author(|author| author.name(header).url(url).icon_url(avatar));
                 embed.title(name);
                 embed.url(track_url);

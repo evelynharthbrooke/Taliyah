@@ -11,10 +11,7 @@ use lastfm_rs::{
         Error,
         LastFMErrorResponse::{InvalidParameters, OperationFailed}
     },
-    user::{
-        recent_tracks::Track,
-        top_artists::{Artist, Period}
-    }
+    user::top_artists::Period
 };
 
 use serenity::{
@@ -53,7 +50,7 @@ pub async fn profile(context: &Context, message: &Message, mut arguments: Args) 
         }
     };
 
-    let mut client = get_lastfm_client(&context).await;
+    let mut client = get_lastfm_client(context).await;
 
     let recent_tracks = match client.recent_tracks(&user).await.with_limit(5).send().await {
         Ok(recent) => recent.tracks,
@@ -102,9 +99,9 @@ pub async fn profile(context: &Context, message: &Message, mut arguments: Args) 
     let artists = top_artists
         .artists
         .iter()
-        .map(|a: &Artist| {
-            let name = &a.name;
-            let plays = format_int(a.scrobbles.parse::<usize>().unwrap());
+        .map(|artist| {
+            let name = &artist.name;
+            let plays = format_int(artist.scrobbles.parse::<usize>().unwrap());
             format!("**{}** — {} scrobbles", name, plays)
         })
         .join("\n");
@@ -140,7 +137,7 @@ pub async fn profile(context: &Context, message: &Message, mut arguments: Args) 
     } else {
         recent_tracks
             .iter()
-            .map(|track: &Track| {
+            .map(|track| {
                 let track_status = if track.attrs.is_none() { "" } else { "\x5c▶️" };
                 let track_name = &track.name.replace("**", "\x5c**");
                 let track_url = &track.url.replace("**", "\x5c**");

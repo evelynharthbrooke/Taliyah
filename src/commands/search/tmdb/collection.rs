@@ -80,7 +80,7 @@ pub async fn collection(context: &Context, message: &Message, arguments: Args) -
     let collection_url = format!("https://www.themoviedb.org/collection/{}", collection_id);
     let collection_overview = collection_result.overview;
     let collection_parts = collection_result.parts;
-    let mut collection_part_fields = Vec::with_capacity(collection_parts.len());
+    let mut collection_fields = Vec::with_capacity(collection_parts.len());
     let mut collection_rows = CreateActionRow::default();
 
     for part in &collection_parts {
@@ -103,7 +103,7 @@ pub async fn collection(context: &Context, message: &Message, arguments: Args) -
             _ => "released"
         };
 
-        collection_part_fields.push((format!("{} — {} {}", part_title, movie_status, part_release_date), part_summary, false));
+        collection_fields.push((format!("{} — {} {}", part_title, movie_status, part_release_date), part_summary, false));
         collection_rows.create_button(|b| b.label(part_title).url(part_url).style(ButtonStyle::Link));
     }
 
@@ -116,7 +116,7 @@ pub async fn collection(context: &Context, message: &Message, arguments: Args) -
                 embed.thumbnail(collection_poster);
                 embed.color(0x0001_d277);
                 embed.description(collection_overview);
-                embed.fields(collection_part_fields);
+                embed.fields(collection_fields);
                 embed.footer(|footer| footer.text("Powered by The Movie Database."));
                 embed.timestamp(&Utc::now())
             });
