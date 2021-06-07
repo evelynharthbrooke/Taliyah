@@ -25,6 +25,7 @@ pub struct UserData {
     pub name: String,                      // The user's display name.
     pub username: String,                  // The user's username / handle.
     pub created_at: DateTime<Utc>,         // The user's date of when they joined Twitter, in UTC.
+    pub protected: bool,                   // The user's protected account status, e.g. whether or not tweets are private.
     pub location: Option<String>,          // The user's provided location, if available.
     pub description: String,               // The user's description / bio.
     pub verified: bool,                    // The user's verified status.
@@ -59,7 +60,7 @@ pub async fn user(context: &Context, message: &Message, mut args: Args) -> Comma
     let config = read_config("config.toml");
     let bearer = config.api.social.twitter.bearer_token;
 
-    let user_fields = [("user.fields", "created_at,location,public_metrics,description,verified,profile_image_url")];
+    let user_fields = [("user.fields", "created_at,protected,location,public_metrics,description,verified,profile_image_url")];
     let tweet_fields = [("max_results", "5"), ("exclude", "retweets,replies")];
 
     let client = context.data.read().await.get::<ReqwestContainer>().cloned().unwrap();
@@ -72,6 +73,7 @@ pub async fn user(context: &Context, message: &Message, mut args: Args) -> Comma
     let user_name = &user.name;
     let user_handle = user.username;
     let user_joined = user.created_at.format("%B %-e, %Y").to_string();
+    let user_protected = if user.protected { "Yes" } else { "No" }.to_string();
     let user_location = user.location;
     let user_url = format!("https://twitter.com/{}", user_handle);
     let user_description = &user.description;
@@ -97,6 +99,7 @@ pub async fn user(context: &Context, message: &Message, mut args: Args) -> Comma
     let user_fields = vec![
         ("Username", user_handle, true),
         ("Join Date", user_joined, true),
+        ("Protected", user_protected, true),
         ("Location", if user_location != None { user_location.unwrap() } else { "None".to_string() }, true),
         ("Following", user_following, true),
         ("Followers", user_followers, true),
