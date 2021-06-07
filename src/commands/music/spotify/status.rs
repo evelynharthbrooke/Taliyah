@@ -36,8 +36,11 @@ pub async fn status(context: &Context, message: &Message, arguments: Args) -> Co
     let config = data.get::<ConfigContainer>().unwrap();
     let denied_ids = &config.bot.denylist.spotify.ids;
     if denied_ids.contains(&user.id.as_u64()) {
-        message.channel_id.say(context, "You cannot view this user's Spotify status as they are in the deny list.").await?;
-        return Ok(())
+        message
+            .channel_id
+            .say(context, "You cannot view this user's Spotify status as they are in the deny list.")
+            .await?;
+        return Ok(());
     }
 
     if !guild.presences.get(&user.id).is_none() {
