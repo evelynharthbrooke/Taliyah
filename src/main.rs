@@ -177,6 +177,7 @@ async fn main() -> Result<(), Box<dyn Error + Send + Sync>> {
         let pool = PgPoolOptions::new().max_connections(20).connect(&url).await?;
         let http_client = Client::builder().user_agent(REQWEST_USER_AGENT).redirect(Policy::none()).build()?;
 
+        data.insert::<ConfigContainer>(read_config("config.toml"));
         data.insert::<DatabasePool>(pool);
         data.insert::<ShardManagerContainer>(Arc::clone(&client.shard_manager));
         data.insert::<ReqwestContainer>(http_client);

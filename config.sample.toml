@@ -11,6 +11,14 @@
     appid = "" # replace with unquoted integer
     token = ""
 
+    [bot.denylist]
+        # Users unable to be parsed by the Spotify status / now playing command.
+        #
+        # Anyone who is in the deny list cannot have their current Spotify status checked
+        # by the bot.
+        [bot.denylist.spotify]
+        ids = [ ]
+
     [bot.logging]
     enabled = true
     level = "info"

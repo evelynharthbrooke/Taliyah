@@ -1,7 +1,8 @@
-use crate::utils::{
-    git_utils::{show_branch, show_head_rev},
-    read_config
+use crate::{
+    data::ConfigContainer,
+    utils::git_utils::{show_branch, show_head_rev}
 };
+
 use git2::Repository;
 use serenity::{
     client::Context,
@@ -12,13 +13,14 @@ use serenity::{
 #[command]
 #[aliases("info", "botinfo")]
 pub async fn about(context: &Context, message: &Message) -> CommandResult {
-    let config = read_config("config.toml");
+    let data = context.data.read().await;
+    let config = data.get::<ConfigContainer>().unwrap();
     let repo = Repository::open(env!("CARGO_MANIFEST_DIR"))?;
 
     let current_user = context.cache.current_user().await;
 
     let version = env!("CARGO_PKG_VERSION").to_string();
-    let codename = config.bot.general.codename;
+    let codename = &config.bot.general.codename;
     let branch = show_branch(&repo);
     let revision = show_head_rev(&repo);
 
@@ -33,7 +35,7 @@ pub async fn about(context: &Context, message: &Message) -> CommandResult {
 
     let about_fields = vec![
         ("Version", version, true),
-        ("Codename", codename, true),
+        ("Codename", codename.to_string(), true),
         ("Branch", branch, true),
         ("Revision", format!("`{}`", revision), true),
         ("Owner", bot_owner, true),

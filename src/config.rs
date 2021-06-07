@@ -11,6 +11,7 @@ pub struct BotConfig {
     pub general: GeneralConfig,
     pub database: DatabaseConfig,
     pub discord: DiscordConfig,
+    pub denylist: DenylistConfig,
     pub logging: LoggingConfig
 }
 
@@ -35,6 +36,16 @@ pub struct DatabaseConfig {
 pub struct DiscordConfig {
     pub appid: u64,
     pub token: String
+}
+
+#[derive(Debug, Clone, Deserialize, Serialize)]
+pub struct DenylistConfig {
+    pub spotify: DenylistSpotifyConfig
+}
+
+#[derive(Debug, Clone, Deserialize, Serialize)]
+pub struct DenylistSpotifyConfig {
+    pub ids: Vec<u64>
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
