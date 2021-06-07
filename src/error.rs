@@ -9,9 +9,9 @@ use tracing::error;
 #[derive(Debug)]
 pub enum EllieError {
     DatabaseError(sqlx::Error),
-    ParseError(ParseIntError),
+    ParseError(std::num::ParseIntError),
     SerenityError(serenity::Error),
-    CustomError(String)
+    CustomError(std::string::String)
 }
 
 impl Display for EllieError {
