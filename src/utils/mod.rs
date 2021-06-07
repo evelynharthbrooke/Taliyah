@@ -25,7 +25,7 @@ pub async fn get_profile_field(context: &Context, field: &str, user_id: UserId) 
         .fetch_one(&pool)
         .await
     {
-        Ok(row) => match row.try_get(0).map_err(EllieError::DatabaseError) {
+        Ok(row) => match row.try_get(0).map_err(EllieError::Database) {
             Ok(row) => Ok(row),
             Err(err) => {
                 error!("Field not set in database: {}", err);
