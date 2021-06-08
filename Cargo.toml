@@ -5,7 +5,7 @@ authors             = ["Kamran Mackey <kamranm1200@gmail.com>"]
 description         = "A Discord bot written in Rust with Serenity."
 homepage            = "https://github.com/KamranMackey/Ellie"
 repository          = "https://github.com/KamranMackey/Ellie.git"
-keywords            = ["discord", "bot", "serenity"]
+keywords            = ["discord", "discord-api", "bot", "serenity"]
 edition             = "2018" # TODO: Update to Rust 2021 Edition when released in Oct. 2021
 license             = "MIT"
 readme              = "README.md"
@@ -30,9 +30,9 @@ tracing-log         = "0.1.2"
 tracing-subscriber  = "0.2.18"
 
 [dependencies.reqwest]
-version = "0.11.3"
-default-features = false
-features = ["json", "multipart", "stream", "rustls-tls"]
+version             = "0.11.3"
+default-features    = false
+features            = ["json", "multipart", "stream", "rustls-tls"]
 
 [dependencies.serenity]
 git                 = "https://github.com/KamranMackey/serenity"
