@@ -29,6 +29,8 @@ pub async fn parse_user(name: &str, guild_id: GuildId, context: &Context) -> Opt
 }
 
 pub async fn parse_channel(name: &str, guild_id: GuildId, context: &Context) -> Option<ChannelId> {
+    let guild = guild_id.to_guild_cached(&context).await.unwrap();
+
     if let Some(x) = parse_channel_name(&name) {
         return Some(ChannelId(x));
     } else if let Ok(id) = name.parse::<u64>() {
@@ -36,11 +38,6 @@ pub async fn parse_channel(name: &str, guild_id: GuildId, context: &Context) -> 
             return Some(x.id());
         }
     }
-
-    let guild = match guild_id.to_guild_cached(&context).await {
-        Some(guild) => guild,
-        None => return None
-    };
 
     for (key, value) in guild.channels.iter() {
         let channel = &value.name;
