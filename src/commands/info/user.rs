@@ -25,7 +25,7 @@ pub async fn user(context: &Context, message: &Message, args: Args) -> CommandRe
         if args.is_empty() {
             message.member(&context).await.map_err(|_| "Could not find member.")?
         } else {
-            match parse_user(args.rest(), Some(&guild_id), Some(context)).await {
+            match parse_user(args.rest(), guild_id, context).await {
                 Some(i) => guild_id.member(&context, i).await?,
                 None => return Ok(())
             }

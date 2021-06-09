@@ -17,7 +17,7 @@ use commands::{
     extra::sloc::*,
     fun::{ascii::*, printerfacts::*, urban::*, xkcd::*},
     info::{about::*, channel::*, first_message::*, guild::*, profile::*, role::*, user::*},
-    moderation::slowmode::*,
+    moderation::{kick::*, slowmode::*},
     music::{lastfm::*, spotify::*},
     search::{krate::*, tmdb::*},
     social::twitter::*,
@@ -60,7 +60,7 @@ struct Info;
 
 #[group("Moderation")]
 #[description = "Commands that help with moderation of servers."]
-#[commands(slowmode)]
+#[commands(kick, slowmode)]
 struct Moderation;
 
 #[group("Music")]

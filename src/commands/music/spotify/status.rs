@@ -20,7 +20,7 @@ pub async fn status(context: &Context, message: &Message, arguments: Args) -> Co
         if arguments.is_empty() {
             message.member(&context).await.map_err(|_| "Could not find member.")?
         } else {
-            match parse_user(arguments.rest(), Some(&guild_id), Some(context)).await {
+            match parse_user(arguments.rest(), guild_id, context).await {
                 Some(user_id) => guild_id.member(&context, user_id).await?,
                 None => return Ok(())
             }
