@@ -6,7 +6,7 @@ use chrono::{DateTime, NaiveDateTime, Utc};
 use serenity::{
     client::Context,
     framework::standard::{macros::command, Args, CommandResult},
-    model::{gateway::Activity, interactions::ButtonStyle, prelude::Message}
+    model::{gateway::Activity, prelude::Message}
 };
 
 #[command]
@@ -92,33 +92,22 @@ pub async fn status(context: &Context, message: &Message, arguments: Args) -> Co
                 let artwork = assets.large_image.as_ref().unwrap().replace("spotify:", "");
                 let artwork_url = format!("https://i.scdn.co/image/{}", artwork);
 
-                let status_fields = vec![
-                    ("Track", track.to_string(), false),
-                    ("Artist(s)", artists, false),
-                    ("Album", album.to_string(), false),
-                    ("Duration", length.to_string(), false),
-                ];
-
                 message
                     .channel_id
                     .send_message(&context, |message| {
                         message.embed(|embed| {
                             embed.author(|author| {
                                 author.icon_url(logo);
-                                author.name(format!("Spotify status for {}", &user.name));
+                                author.name(format!("Now playing on Spotify for {}:", &user.name));
                                 author
                             });
+                            embed.title(track);
+                            embed.url(url);
+                            embed.description(format!("**{artists}** | {album}"));
+                            embed.footer(|f| f.text(format!("Length: {length}")));
                             embed.colour(0x001D_B954);
                             embed.thumbnail(artwork_url);
-                            embed.fields(status_fields);
                             embed
-                        });
-                        message.components(|comps| {
-                            comps.create_action_row(|row| {
-                                row.create_button(|b| b.label(format!("Play {track} on Spotify")).style(ButtonStyle::Link).url(url));
-                                row
-                            });
-                            comps
                         });
                         message
                     })
