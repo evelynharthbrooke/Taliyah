@@ -8,6 +8,7 @@ use tracing::error;
 
 #[command("slowmode")]
 #[usage = "<num of secs>"]
+#[required_permissions(MANAGE_CHANNELS)]
 /// Sets the slowmode rate for a channel.
 ///
 /// NOTE: Setting a slowmode rate for a specific channel is not yet supported,
