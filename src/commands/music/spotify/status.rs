@@ -36,15 +36,17 @@ pub async fn status(context: &Context, message: &Message, arguments: Args) -> Co
     let config = data.get::<ConfigContainer>().unwrap();
     let denied_ids = &config.bot.denylist.spotify.ids;
     if denied_ids.contains(user.id.as_u64()) {
-        message.channel_id.say(context, "This user's status cannot be viewed; they are in the deny list.").await?;
+        message.reply(context, "This user's status cannot be viewed; they are in the deny list.").await?;
         return Ok(());
     }
+
+    let name = &user.name;
 
     if !guild.presences.get(&user.id).is_none() {
         let presence = guild.presences.get(&user.id).unwrap();
 
         if presence.activities.first().is_none() {
-            message.channel_id.say(&context, format!("**{}** does not have an active activity.", &user.name)).await?
+            message.reply(&context, format!("**{name}** does not have an active activity.")).await?
         } else {
             let activities = presence.activities.iter().filter(|a| a.name == "Spotify").collect::<Vec<&Activity>>();
             if !activities.is_empty() {
@@ -53,7 +55,7 @@ pub async fn status(context: &Context, message: &Message, arguments: Args) -> Co
                 let track = activity.details.as_ref().unwrap();
                 let album = assets.large_text.as_ref().unwrap();
                 let mut artists = activity.state.as_ref().unwrap().to_string();
-                let logo = "https://upload.wikimedia.org/wikipedia/commons/7/71/Spotify.png";
+                let icon = "https://upload.wikimedia.org/wikipedia/commons/7/71/Spotify.png";
                 let id = activity.sync_id.as_ref().unwrap();
                 let url = format!("https://open.spotify.com/track/{}", id);
 
@@ -96,34 +98,24 @@ pub async fn status(context: &Context, message: &Message, arguments: Args) -> Co
                     .channel_id
                     .send_message(&context, |message| {
                         message.embed(|embed| {
-                            embed.author(|author| {
-                                author.icon_url(logo);
-                                author.name(format!("Now playing on Spotify for {}:", &user.name));
-                                author
-                            });
+                            embed.author(|a| a.icon_url(icon).name(format!("Now playing on Spotify for {name}:")));
                             embed.title(track);
+                            embed.colour(0x001D_B954);
                             embed.url(url);
                             embed.description(format!("**{artists}** | {album}"));
-                            embed.footer(|f| f.text(format!("Length: {length}")));
-                            embed.colour(0x001D_B954);
                             embed.thumbnail(artwork_url);
+                            embed.footer(|f| f.text(format!("Length: {length}")));
                             embed
                         });
                         message
                     })
                     .await?
             } else {
-                message
-                    .channel_id
-                    .say(&context, format!("**{}** is not currently playing anything on Spotify.", &user.name))
-                    .await?
+                message.reply(&context, format!("**{name}** is not currently playing anything on Spotify.")).await?
             }
         }
     } else {
-        message
-            .channel_id
-            .say(&context, format!("**{}** is currently offline / doesn't have a presence.", &user.name))
-            .await?
+        message.reply(&context, format!("**{name}** is currently offline / doesn't have a presence.")).await?
     };
 
     Ok(())
