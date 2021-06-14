@@ -92,14 +92,16 @@ pub async fn user(context: &Context, message: &Message, args: Args) -> CommandRe
                     ActivityType::Playing => {
                         if activity_name == "Visual Studio Code" {
                             let mut task = activity.details.as_ref().unwrap().clone();
-                            let project = activity.state.as_ref().unwrap().replace("Workspace: ", "").replace("Debugging: ", "");
+                            let mut project = activity.state.as_ref().unwrap().clone();
                             let app = activity.assets.as_ref().unwrap().small_text.as_ref().unwrap();
                             activity_name = app;
                             if task.contains("Editing ") {
                                 task = task.replace("Editing ", "");
+                                project = project.replace("Workspace: ", "");
                                 format!("editing the file **{}** in the project **{}** with", task, project)
                             } else {
                                 task = task.replace("Debugging ", "");
+                                project = project.replace("Debugging: ", "");
                                 format!("debugging the file **{}** in the project **{}** with", task, project)
                             }
                         } else {
