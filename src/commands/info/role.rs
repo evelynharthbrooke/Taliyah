@@ -51,13 +51,10 @@ pub async fn role(context: &Context, message: &Message, arguments: Args) -> Comm
         .channel_id
         .send_message(&context, |message| {
             message.embed(|embed| {
-                embed.author(|author| {
-                    author.name(name);
-                    author.icon_url(guild_icon)
-                });
+                embed.author(|a| a.name(name).icon_url(guild_icon));
                 embed.color(color);
                 embed.fields(role_fields);
-                embed.footer(|footer| footer.text(format!("Role ID: {}", id)))
+                embed.footer(|f| f.text(format!("Role ID: {}", id)))
             })
         })
         .await?;

@@ -3,7 +3,7 @@ use serde::Deserialize;
 use serenity::{
     client::Context,
     framework::standard::{macros::command, Args, CommandResult},
-    model::{channel::ReactionType::Unicode, interactions::ButtonStyle::Link, prelude::Message}
+    model::{interactions::ButtonStyle::Link, prelude::Message}
 };
 
 use crate::data::ReqwestContainer;
@@ -49,11 +49,8 @@ pub async fn xkcd(context: &Context, message: &Message, mut arguments: Args) -> 
                 embed
             });
             message.components(|comps| {
-                comps.create_action_row(|row| {
-                    row.create_button(|b| b.label("XKCD").style(Link).emoji(Unicode("🌐".to_string())).url(page));
-                    row.create_button(|b| b.label("Explain XKCD").style(Link).emoji(Unicode("🧠".to_string())).url(wiki));
-                    row
-                });
+                comps.create_action_row(|row| row.create_button(|b| b.label("View xkcd image page").style(Link).url(page)));
+                comps.create_action_row(|row| row.create_button(|b| b.label("View explanation").style(Link).url(wiki)));
                 comps
             });
             message

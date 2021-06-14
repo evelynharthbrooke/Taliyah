@@ -39,9 +39,9 @@ dependencies = [
 
 [[package]]
 name = "anyhow"
-version = "1.0.40"
+version = "1.0.41"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "28b2cd92db5cbd74e8e5028f7e27dd7aa3090e89e4f2a197cc7c8dfb69c7063b"
+checksum = "15af2628f6890fe2609a3b91bef4c83450512802e59489f9c1cb1fa5df064a61"
 
 [[package]]
 name = "arrayvec"
@@ -215,8 +215,8 @@ dependencies = [
 
 [[package]]
 name = "command_attr"
-version = "0.3.6"
-source = "git+https://github.com/KamranMackey/serenity?branch=kamrans-fork-await#8b094b52e97add9c14d64df8f9200c98dd60b921"
+version = "0.3.7"
+source = "git+https://github.com/serenity-rs/serenity?branch=current#3fba3726b2726c83c0e2a8a4e9862a214e7751da"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -862,9 +862,9 @@ dependencies = [
 
 [[package]]
 name = "libc"
-version = "0.2.96"
+version = "0.2.97"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5600b4e6efc5421841a2138a6b082e07fe12f9aaa12783d50e5d13325b26b4fc"
+checksum = "12b8adadd720df158f4d70dfe7ccc6adb0472d7c55ca83445f6a5ab3e36f8fb6"
 
 [[package]]
 name = "libgit2-sys"
@@ -1081,9 +1081,9 @@ dependencies = [
 
 [[package]]
 name = "once_cell"
-version = "1.7.2"
+version = "1.8.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "af8b08b04175473088b46763e51ee54da5f9a164bc162f615b91bc179dbf15a3"
+checksum = "692fcb63b64b1758029e0a96ee63e049ce8c5948587f2f7208df04625e5f6b56"
 
 [[package]]
 name = "opaque-debug"
@@ -1547,8 +1547,8 @@ dependencies = [
 
 [[package]]
 name = "serenity"
-version = "0.10.7"
-source = "git+https://github.com/KamranMackey/serenity?branch=kamrans-fork-await#8b094b52e97add9c14d64df8f9200c98dd60b921"
+version = "0.10.8"
+source = "git+https://github.com/serenity-rs/serenity?branch=current#3fba3726b2726c83c0e2a8a4e9862a214e7751da"
 dependencies = [
  "async-trait",
  "async-tungstenite",

@@ -69,11 +69,7 @@ pub async fn profile(context: &Context, message: &Message, arguments: Args) -> C
         .channel_id
         .send_message(&context, |message| {
             message.embed(|embed| {
-                embed.author(|author| {
-                    author.name(format!("Profile for user {}", user_name));
-                    author.icon_url(&member.user.face());
-                    author
-                });
+                embed.author(|a| a.name(format!("Profile for: {user_name}")).icon_url(&member.user.face()));
                 embed.color(color);
                 embed.fields(profile_fields);
                 embed

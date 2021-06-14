@@ -12,7 +12,7 @@ readme              = "README.md"
 include             = ["src/**/*", "config.sample.toml", "Cargo.toml", "README.md"]
 
 [dependencies]
-anyhow              = "1.0.40"
+anyhow              = "1.0.41"
 aspotify            = "0.7.0"
 byte-unit           = "4.0.12"
 chrono              = "0.4.19"
@@ -35,8 +35,8 @@ default-features    = false
 features            = ["json", "multipart", "stream", "rustls-tls"]
 
 [dependencies.serenity]
-git                 = "https://github.com/KamranMackey/serenity"
-branch              = "kamrans-fork-await"
+git                 = "https://github.com/serenity-rs/serenity"
+branch              = "current"
 default-features    = true
 features            = ["collector", "unstable_discord_api", "rustls_backend"]
 

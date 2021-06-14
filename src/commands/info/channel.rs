@@ -74,10 +74,7 @@ pub async fn channel(context: &Context, message: &Message, arguments: Args) -> C
         .channel_id
         .send_message(&context, |message| {
             message.embed(|embed| {
-                embed.author(|author| {
-                    author.name(channel_name);
-                    author.icon_url(guild_icon)
-                });
+                embed.author(|a| a.name(channel_name).icon_url(guild_icon));
                 embed.color(serenity::utils::Colour::BLURPLE);
                 embed.description(channel_topic);
                 embed.fields(vec![

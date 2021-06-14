@@ -3,8 +3,11 @@ use itertools::Itertools;
 use serenity::{
     client::Context,
     framework::standard::{macros::command, Args, CommandResult},
-    model::gateway::Activity,
-    model::{gateway::ActivityType, prelude::Message, user::OnlineStatus},
+    model::{
+        gateway::{Activity, ActivityType},
+        prelude::Message,
+        user::OnlineStatus
+    },
     utils::Colour
 };
 
@@ -101,6 +104,7 @@ pub async fn user(context: &Context, message: &Message, args: Args) -> CommandRe
                     ActivityType::Streaming => "streaming on".to_owned(),
                     _ => "".to_owned()
                 };
+
                 format!("{} **{}**", activity_kind, activity_name)
             })
             .join(" and ");
@@ -205,10 +209,7 @@ pub async fn user(context: &Context, message: &Message, args: Args) -> CommandRe
         .channel_id
         .send_message(&context, |message| {
             message.embed(|embed| {
-                embed.author(|author| {
-                    author.name(&user.name);
-                    author.icon_url(&user.face())
-                });
+                embed.author(|a| a.name(&user.name).icon_url(&user.face()));
                 embed.thumbnail(track_art);
                 embed.colour(color);
                 embed.description(format!(

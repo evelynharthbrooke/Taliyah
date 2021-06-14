@@ -61,10 +61,10 @@ pub async fn urban(context: &Context, message: &Message, arguments: Args) -> Com
         .channel_id
         .send_message(&context, |message| {
             message.embed(|embed| {
-                embed.author(|author| author.name(word).url(permalink));
+                embed.author(|a| a.name(word).url(permalink));
                 embed.color(0x00EF_FF00);
-                embed.description(format!("*{}*\n\n{}\n\n**Ratings**: {}", description, example, rating));
-                embed.footer(|footer| footer.text("Powered by the Urban Dictionary."))
+                embed.description(format!("*{description}*\n\n{example}\n\n**Ratings**: {rating}"));
+                embed.footer(|f| f.text("Powered by the Urban Dictionary."))
             })
         })
         .await?;
@@ -93,10 +93,10 @@ pub async fn randefine(context: &Context, message: &Message) -> CommandResult {
         .channel_id
         .send_message(&context, |message| {
             message.embed(|embed| {
-                embed.author(|author| author.name(word).url(permalink));
+                embed.author(|a| a.name(word).url(permalink));
                 embed.color(0x00EF_FF00);
-                embed.description(format!("*{}*\n\n{}\n\n**Ratings**: {}", description, example, rating));
-                embed.footer(|footer| footer.text("Powered by the Urban Dictionary."))
+                embed.description(format!("*{description}*\n\n{example}\n\n**Ratings**: {rating}"));
+                embed.footer(|f| f.text("Powered by the Urban Dictionary."))
             })
         })
         .await?;

@@ -112,10 +112,10 @@ pub async fn guild(context: &Context, message: &Message) -> CommandResult {
         .channel_id
         .send_message(&context, |message| {
             message.embed(|embed| {
-                embed.author(|author| author.name(&guild_name).icon_url(guild_icon));
+                embed.author(|a| a.name(&guild_name).icon_url(guild_icon));
                 embed.colour(highest_role_color);
                 embed.description(&guild_summary);
-                embed.footer(|footer| footer.text(format!("{} server ID: {}", guild_name, guild_id)))
+                embed.footer(|f| f.text(format!("{} server ID: {}", guild_name, guild_id)))
             })
         })
         .await?;

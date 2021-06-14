@@ -8,7 +8,7 @@ use crate::data::ReqwestContainer;
 
 #[command]
 #[usage = "<font> <string>"]
-#[example = "speed this is ascii"]
+#[example = "speed THIS. IS. ASCII."]
 /// Converts a string to various ASCII forms. Various ASCII font faces / font types
 /// are supported and are available to send to the command to change / modify the
 /// look of the fed ASCII text.
@@ -29,30 +29,23 @@ pub async fn ascii(context: &Context, message: &Message, arguments: Args) -> Com
         return Ok(());
     }
 
-    let text = arguments.rest();
-
     let client = context.data.read().await.get::<ReqwestContainer>().cloned().unwrap();
-    let font_url = "https://artii.herokuapp.com/fonts_list";
-    let font_in_text = text.split_whitespace().next().unwrap_or("");
-    let fonts_request = client.get(font_url).send().await?.text().await?;
 
-    // when checking for fonts, make sure a check is made, checking for both the font name
-    // in question & that there is a space. this will not work with zero width spaces due
-    // to the check that is already in place, and any spaces that are inserted without any
-    // additional characters are already trimmed or removed by Discord.
-    let request = if fonts_request.split_whitespace().any(|x| x == font_in_text) && text.contains('\u{0020}') {
-        // i don't know why this required a type annotation...but anyway
-        // this took me way longer than was necessary to figure out.
-        let font_name: &str = &text[0..font_in_text.chars().count()];
-        let string = &text[font_in_text.chars().count()..];
-        client.get("https://artii.herokuapp.com/make").query(&[("text", string), ("font", font_name)]).send().await?
+    let arg = arguments.rest();
+    let font_url = "https://artii.herokuapp.com/fonts_list";
+    let font_arg = arg.split_whitespace().next().unwrap_or("");
+    let font_request = client.get(font_url).send().await?.text().await?;
+    let request = if font_request.split_whitespace().any(|x| x == font_arg) && arg.contains('\u{0020}') {
+        let font = &arg[0..font_arg.chars().count()];
+        let text = &arg[font_arg.chars().count()..];
+        client.get("https://artii.herokuapp.com/make").query(&[("text", text), ("font", font)]).send().await?
     } else {
-        client.get("https://artii.herokuapp.com/make").query(&[("text", text)]).send().await?
+        client.get("https://artii.herokuapp.com/make").query(&[("text", arg)]).send().await?
     };
 
     let response = request.text().await?;
 
-    message.channel_id.say(context, format!("```Markup\n{}```", response)).await?;
+    message.channel_id.say(context, format!("```Markup\n{response}```")).await?;
 
     Ok(())
 }

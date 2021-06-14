@@ -39,16 +39,13 @@ pub async fn first_message(context: &Context, message: &Message, args: Args) -> 
         .channel_id
         .send_message(context, |message| {
             message.embed(|embed| {
-                embed.author(|author| {
-                    author.name(msg.author.tag());
-                    author.icon_url(msg.author.avatar_url().unwrap())
-                });
+                embed.author(|a| a.name(msg.author.tag()).icon_url(msg.author.avatar_url().unwrap()));
                 embed.color(msg_author_color);
                 embed.thumbnail(msg.author.avatar_url().unwrap());
                 embed.description(&msg.content);
                 embed.timestamp(&msg.timestamp);
                 embed.field("❯ Jump To Message", format!("[Click Here]({})", msg_link), true);
-                embed.footer(|footer| footer.text(format!("Message ID: {}", msg.id)));
+                embed.footer(|f| f.text(format!("Message ID: {}", msg.id)));
                 embed
             })
         })
