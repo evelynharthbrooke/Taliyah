@@ -9,7 +9,7 @@ use crate::data::ReqwestContainer;
 #[command]
 #[aliases("pf")]
 /// Gets a random printer fact from the printer facts API.
-pub async fn printerfacts(context: &Context, message: &Message) -> CommandResult {
+async fn printerfacts(context: &Context, message: &Message) -> CommandResult {
     let client = context.data.read().await.get::<ReqwestContainer>().cloned().unwrap();
     let endpoint = "https://printerfacts.cetacean.club/fact";
     let response = client.get(endpoint).send().await?;

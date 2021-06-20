@@ -14,7 +14,7 @@ use tracing::error;
 /// NOTE: Setting a slowmode rate for a specific channel is not yet supported,
 /// moderators and server owners / administrators have to send the command in
 /// the appropriate channel they want to apply slowmode to.
-pub async fn slowmode(context: &Context, message: &Message, mut arguments: Args) -> CommandResult {
+async fn slowmode(context: &Context, message: &Message, mut arguments: Args) -> CommandResult {
     let slowmode_content = if let Ok(slowmode_rate) = arguments.single::<u64>() {
         if let Err(why) = message.channel_id.edit(&context, |c| c.slow_mode_rate(slowmode_rate)).await {
             error!("Error setting channel's slowmode rate: {:?}", why);

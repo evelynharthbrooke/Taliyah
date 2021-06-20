@@ -10,7 +10,7 @@ use serenity::{
 #[required_permissions(BAN_MEMBERS)]
 #[min_args(1)]
 /// Bans the given member from the server.
-pub async fn ban(context: &Context, message: &Message, mut args: Args) -> CommandResult {
+async fn ban(context: &Context, message: &Message, mut args: Args) -> CommandResult {
     if message.is_private() {
         message.channel_id.say(context, "You can't kick anyone in private messages!").await?;
         return Ok(());

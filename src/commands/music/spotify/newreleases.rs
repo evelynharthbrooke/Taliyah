@@ -11,7 +11,7 @@ use crate::{data::SpotifyContainer, utils::locale_utils};
 
 #[command]
 #[description("Displays information about the new releases for a given market.")]
-pub async fn newreleases(context: &Context, message: &Message, args: Args) -> CommandResult {
+async fn newreleases(context: &Context, message: &Message, args: Args) -> CommandResult {
     let market = args.rest().to_string();
 
     if !market.is_empty() {

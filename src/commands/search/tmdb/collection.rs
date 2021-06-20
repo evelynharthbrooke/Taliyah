@@ -47,7 +47,7 @@ pub struct Movie {
 #[command]
 #[aliases("collection")]
 #[description("Gets detailed information about a collection from The Movie Database.")]
-pub async fn collection(context: &Context, message: &Message, arguments: Args) -> CommandResult {
+async fn collection(context: &Context, message: &Message, arguments: Args) -> CommandResult {
     if arguments.rest().is_empty() {
         message.channel_id.say(context, "Invalid collection name provided. Please try again.").await?;
         return Ok(());

@@ -28,7 +28,7 @@ use crate::utils::{format_int, get_profile_field, net_utils::*};
 #[description("Retrieves various Last.fm user stats.")]
 #[aliases("p", "prof", "pf")]
 #[usage("<user>")]
-pub async fn profile(context: &Context, message: &Message, mut arguments: Args) -> CommandResult {
+async fn profile(context: &Context, message: &Message, mut arguments: Args) -> CommandResult {
     message.channel_id.broadcast_typing(context).await?;
 
     let user = if !arguments.rest().is_empty() {

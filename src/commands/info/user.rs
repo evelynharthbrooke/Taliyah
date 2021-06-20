@@ -20,7 +20,7 @@ use crate::utils::parsing_utils::parse_user;
 #[usage = "<user> or <blank>"]
 #[aliases("user", "userinfo", "uinfo", "u")]
 #[only_in("guilds")]
-pub async fn user(context: &Context, message: &Message, args: Args) -> CommandResult {
+async fn user(context: &Context, message: &Message, args: Args) -> CommandResult {
     let cache = &context.cache;
     let guild_id = message.guild_id.ok_or("Failed to get GuildID from Message.")?;
     let cached_guild = cache.guild(guild_id).await.ok_or("Unable to retrieve guild")?;

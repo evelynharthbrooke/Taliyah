@@ -8,7 +8,7 @@ use tracing::error;
 
 #[command]
 #[description = "Generates an invite link for the bot."]
-pub async fn invite(context: &Context, message: &Message) -> CommandResult {
+async fn invite(context: &Context, message: &Message) -> CommandResult {
     let cache = &context.cache;
     let permissions = Permissions::empty();
     let current_user = &cache.current_user().await;

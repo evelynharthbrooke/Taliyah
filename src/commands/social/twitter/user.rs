@@ -54,7 +54,7 @@ pub struct UserTweet {
 #[min_args(1)]
 #[max_args(1)]
 /// Displays information about a given user on Twitter.
-pub async fn user(context: &Context, message: &Message, mut args: Args) -> CommandResult {
+async fn user(context: &Context, message: &Message, mut args: Args) -> CommandResult {
     let user: String = args.single().unwrap();
 
     let config = read_config("config.toml");

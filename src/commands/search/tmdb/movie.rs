@@ -30,7 +30,7 @@ pub struct SearchMovie {
 #[command]
 #[aliases("film")]
 #[description("Gets detailed information about a movie from The Movie Database.")]
-pub async fn movie(context: &Context, message: &Message, arguments: Args) -> CommandResult {
+async fn movie(context: &Context, message: &Message, arguments: Args) -> CommandResult {
     if arguments.rest().is_empty() {
         message.channel_id.say(context, "Invalid movie name provided. Please try again.").await?;
         return Ok(());

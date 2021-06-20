@@ -29,7 +29,7 @@ pub struct Definition {
 #[description = "Looks up a definition from the Urban Dictionary."]
 #[usage = "<name of word>"]
 #[aliases("urbandict", "ud", "urban", "define")]
-pub async fn urban(context: &Context, message: &Message, arguments: Args) -> CommandResult {
+async fn urban(context: &Context, message: &Message, arguments: Args) -> CommandResult {
     if arguments.rest().is_empty() {
         message.channel_id.say(context, "You did not provide a word to look up. Please provide one.").await?;
         return Ok(());
@@ -74,7 +74,7 @@ pub async fn urban(context: &Context, message: &Message, arguments: Args) -> Com
 
 #[command]
 #[description = "Gets a random definition from the Urban Dictionary."]
-pub async fn randefine(context: &Context, message: &Message) -> CommandResult {
+async fn randefine(context: &Context, message: &Message) -> CommandResult {
     let client = context.data.read().await.get::<ReqwestContainer>().cloned().unwrap();
     let request = client.get("http://api.urbandictionary.com/v0/random").send().await?;
     let response: Response = request.json().await?;

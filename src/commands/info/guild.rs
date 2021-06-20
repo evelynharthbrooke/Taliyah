@@ -15,7 +15,7 @@ use std::fmt::Write;
 #[description = "Shows various information about the current guild."]
 #[aliases("guild", "guildinfo", "ginfo", "server", "serverinfo", "serverstats", "sinfo")]
 #[only_in(guilds)]
-pub async fn guild(context: &Context, message: &Message) -> CommandResult {
+async fn guild(context: &Context, message: &Message) -> CommandResult {
     let cache = &context.cache;
     let guild_id = message.guild_id.unwrap();
     let guild_id_u64 = guild_id.as_u64();

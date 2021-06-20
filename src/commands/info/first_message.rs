@@ -11,7 +11,7 @@ use crate::utils::parsing_utils::parse_channel;
 #[required_permissions(READ_MESSAGE_HISTORY)]
 #[aliases("first-message", "first-msg")]
 #[only_in(guilds)]
-pub async fn first_message(context: &Context, message: &Message, args: Args) -> CommandResult {
+async fn first_message(context: &Context, message: &Message, args: Args) -> CommandResult {
     let guild_id = message.guild_id.unwrap();
 
     let channel_name = if args.is_empty() {

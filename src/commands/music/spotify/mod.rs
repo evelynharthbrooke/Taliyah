@@ -14,7 +14,10 @@ use self::newreleases::*;
 use self::status::*;
 use self::track::*;
 
-/// Retrieves information from the Spotify API about a varity of media types; e.g. albums, tracks, etc.
+/// Retrieves information from the Spotify API about a variety of media types, such as albums,
+/// tracks, and other kinds of media.
+///
+/// You can also view a user's current Spotify status, if they have one.
 #[command]
 #[aliases("sp", "spot")]
 #[sub_commands(album, newreleases, status, track)]

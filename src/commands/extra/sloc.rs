@@ -31,7 +31,7 @@ pub struct Language {
 #[usage = "<username> <repository>"]
 #[delimiters("/", " ")]
 #[aliases("tokei")]
-pub async fn sloc(context: &Context, message: &Message, mut arguments: Args) -> CommandResult {
+async fn sloc(context: &Context, message: &Message, mut arguments: Args) -> CommandResult {
     if arguments.is_empty() {
         message.channel_id.say(context, "No repository details provided. Please provide them & try again.").await?;
         return Ok(());

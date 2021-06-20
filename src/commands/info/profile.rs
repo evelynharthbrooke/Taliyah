@@ -25,7 +25,7 @@ const LASTFM_USER_BASE: &str = "https://www.last.fm/user";
 /// Shows the profile of a given user.
 ///
 /// To set your profile parameters, use the set command.
-pub async fn profile(context: &Context, message: &Message, arguments: Args) -> CommandResult {
+async fn profile(context: &Context, message: &Message, arguments: Args) -> CommandResult {
     let cache = &context.cache;
     let guild_id = message.guild_id.ok_or("Failed to get GuildID from Message.")?;
     let member = if message.mentions.is_empty() {
@@ -89,7 +89,7 @@ pub async fn profile(context: &Context, message: &Message, arguments: Args) -> C
 /// `gender`: Sets your gender. No forced gender options, so use what you want as long as its Male / Female, or non-binary.
 /// `pronouns`: Sets your pronouns. This doesn't have any forced pronoun options, however please stick to the normal ones.
 /// `lastfm`: Sets your Last.fm username. Used for the Last.fm command for listing Last.fm statistics.
-pub async fn set(context: &Context, message: &Message, mut arguments: Args) -> CommandResult {
+async fn set(context: &Context, message: &Message, mut arguments: Args) -> CommandResult {
     let pool = context.data.read().await.get::<DatabasePool>().cloned().unwrap();
     let property = arguments.single::<String>()?;
     let value = arguments.rest();

@@ -12,7 +12,7 @@ use serenity::{
 
 #[command]
 #[aliases("info", "botinfo")]
-pub async fn about(context: &Context, message: &Message) -> CommandResult {
+async fn about(context: &Context, message: &Message) -> CommandResult {
     let data = context.data.read().await;
     let config = data.get::<ConfigContainer>().unwrap();
     let repo = Repository::open(env!("CARGO_MANIFEST_DIR"))?;

@@ -18,7 +18,7 @@ struct XkcdComic {
 
 /// Retrieves the latest or a given comic from xkcd.
 #[command]
-pub async fn xkcd(context: &Context, message: &Message, mut arguments: Args) -> CommandResult {
+async fn xkcd(context: &Context, message: &Message, mut arguments: Args) -> CommandResult {
     let comic_num = arguments.single::<u32>().unwrap_or(0);
     let latest_comic = "https://xkcd.com/info.0.json";
     let xkcd_url = format!("https://xkcd.com/{}/info.0.json", comic_num);

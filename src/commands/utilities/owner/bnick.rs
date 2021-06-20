@@ -9,7 +9,7 @@ use serenity::{
 #[owners_only]
 #[required_permissions(CHANGE_NICKNAME)]
 /// Sets the bot's nickname in the current guild.
-pub async fn bnick(context: &Context, message: &Message, args: Args) -> CommandResult {
+async fn bnick(context: &Context, message: &Message, args: Args) -> CommandResult {
     let gid = message.guild_id.unwrap();
     let gid_u64 = gid.as_u64();
 

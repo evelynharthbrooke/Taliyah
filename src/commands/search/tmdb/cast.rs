@@ -67,7 +67,7 @@ pub struct CrewMember {
 #[aliases("cast", "credits")]
 #[min_args(2)]
 #[max_args(2)]
-pub async fn cast(context: &Context, message: &Message, mut arguments: Args) -> CommandResult {
+async fn cast(context: &Context, message: &Message, mut arguments: Args) -> CommandResult {
     if arguments.rest().is_empty() {
         message.channel_id.say(context, "No show or movie name provided. Provide one & try again.").await?;
         return Ok(());

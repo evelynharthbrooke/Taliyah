@@ -11,7 +11,7 @@ use crate::utils::{format_int, get_profile_field, net_utils::*};
 #[command]
 #[description("Retrieves a given Last.fm user's scrobble count.")]
 #[usage("<user>")]
-pub async fn scrobbles(context: &Context, message: &Message, mut arguments: Args) -> CommandResult {
+async fn scrobbles(context: &Context, message: &Message, mut arguments: Args) -> CommandResult {
     message.channel_id.broadcast_typing(context).await?;
 
     let user = if !arguments.rest().is_empty() {

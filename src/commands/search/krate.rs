@@ -94,7 +94,7 @@ struct Category {
 #[description = "Looks up a crate on crates.io and displays information about it."]
 #[usage = "<crate name>"]
 #[aliases("crates", "cratesio", "cio")]
-pub async fn krate(context: &Context, message: &Message, mut arguments: Args) -> CommandResult {
+async fn krate(context: &Context, message: &Message, mut arguments: Args) -> CommandResult {
     if arguments.rest().is_empty() {
         message.channel_id.say(context, "Invalid crate name provided. Please try again.").await?;
         return Ok(());

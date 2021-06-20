@@ -20,7 +20,7 @@ use crate::data::ReqwestContainer;
 /// laptop computer, tablet, or a smartphone in landscape mode. Portrait mode will
 /// not and does not work well due to various issues relating to the portrait nature
 /// of that orientation.
-pub async fn ascii(context: &Context, message: &Message, arguments: Args) -> CommandResult {
+async fn ascii(context: &Context, message: &Message, arguments: Args) -> CommandResult {
     if arguments.rest().is_empty() {
         message.channel_id.say(context, "No ASCII string provided. Please provide one.").await?;
         return Ok(());

@@ -12,7 +12,7 @@ use serenity::{
 #[command]
 #[description = "Shows yours or another user's Spotify status."]
 #[aliases("np", "nowplaying")]
-pub async fn status(context: &Context, message: &Message, arguments: Args) -> CommandResult {
+async fn status(context: &Context, message: &Message, arguments: Args) -> CommandResult {
     let cache = &context.cache;
     let guild_id = message.guild_id.ok_or("Failed to get GuildID from Message.")?;
     let cached_guild = cache.guild(guild_id).await.ok_or("Unable to retrieve guild")?;

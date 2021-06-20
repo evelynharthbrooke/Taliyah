@@ -14,7 +14,7 @@ use crate::data::SpotifyContainer;
 
 #[command]
 #[description("Displays information about a specified track on Spotify.")]
-pub async fn track(context: &Context, message: &Message, args: Args) -> CommandResult {
+async fn track(context: &Context, message: &Message, args: Args) -> CommandResult {
     if args.rest().is_empty() {
         message.channel_id.say(context, "No track name provided. Please provide one & try again.").await?;
         return Ok(());
