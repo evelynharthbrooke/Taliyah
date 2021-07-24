@@ -11,15 +11,13 @@ use serenity::{client::Context, model::prelude::Message};
 /// not being actual users, so bots having their own profile sort of
 /// holds no value.
 pub async fn message(context: Context, message: Message) {
+    let id = message.author.id.0 as i64;
+    let tag = message.author.tag();
     let pool = context.data.read().await.get::<DatabasePool>().cloned().unwrap();
-
-    let user_id = message.author.id.0 as i64;
-    let user_tag = message.author.tag();
-
     if !message.author.bot {
         sqlx::query("INSERT INTO profile_data (user_id, user_tag) VALUES ($1, $2) ON CONFLICT DO NOTHING")
-            .bind(user_id)
-            .bind(user_tag)
+            .bind(id)
+            .bind(tag)
             .execute(&pool)
             .await
             .unwrap();
