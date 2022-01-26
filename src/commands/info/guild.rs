@@ -27,7 +27,7 @@ async fn guild(context: &Context, message: &Message) -> CommandResult {
     let guild_members = cached_guild.members.len();
     let guild_presences = cached_guild.presences.len();
     let guild_channels: Vec<_> = cached_guild.channels.iter().filter_map(|(_, c)| c.clone().guild()).collect();
-    let guild_channels_all = guild_channels.iter().count();
+    let guild_channels_all = guild_channels.len();
     let guild_channels_text = guild_channels.iter().filter(|c| c.kind == ChannelType::Text).count();
     let guild_channels_voice = guild_channels.iter().filter(|c| c.kind == ChannelType::Voice).count();
     let guild_emojis = cached_guild.emojis.len();
@@ -93,7 +93,11 @@ async fn guild(context: &Context, message: &Message) -> CommandResult {
     writeln!(guild_summary, "**Creation Date**: {}", guild_creation_date)?;
     writeln!(guild_summary, "**Online Members**: {}", guild_presences)?;
     writeln!(guild_summary, "**Total Members**: {}", guild_members)?;
-    writeln!(guild_summary, "**Channels**: {} ({} text, {} voice)", guild_channels_all, guild_channels_text, guild_channels_voice)?;
+    writeln!(
+        guild_summary,
+        "**Channels**: {} ({} text, {} voice)",
+        guild_channels_all, guild_channels_text, guild_channels_voice
+    )?;
     writeln!(guild_summary, "**Emojis**: {} ({} static, {} animated)", guild_emojis, guild_emojis_normal, guild_emojis_animated)?;
     writeln!(guild_summary, "**Features**: {}", if !guild_features.is_empty() { &guild_features } else { "None" })?;
     writeln!(guild_summary, "**MFA Level**: {}", guild_mfa_level)?;

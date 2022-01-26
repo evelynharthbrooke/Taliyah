@@ -29,8 +29,8 @@ use reqwest::{redirect::Policy, Client};
 use serenity::{
     client::ClientBuilder,
     framework::{standard::macros::group, StandardFramework},
-    model::gateway::GatewayIntents,
-    http::Http
+    http::Http,
+    model::gateway::GatewayIntents
 };
 
 use sqlx::postgres::PgPoolOptions;

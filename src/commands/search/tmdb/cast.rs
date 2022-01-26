@@ -124,7 +124,7 @@ async fn cast(context: &Context, message: &Message, mut arguments: Args) -> Comm
         let show_response = client.get(&show_endpoint).query(&[("api_key", &api_key), show_sub_requests]).send().await?;
         let show_result: Show = show_response.json().await?;
         let show_poster_path = show_result.poster_path.unwrap();
-        let show_poster = format!("https://image.tmdb.org/t/p/original/{}", &show_poster_path.replace("/", ""));
+        let show_poster = format!("https://image.tmdb.org/t/p/original/{}", &show_poster_path.replace('/', ""));
 
         let credits_endpoint = format!("https://api.themoviedb.org/3/tv/{}/credits", show_id);
         let credits_response = client.get(&credits_endpoint).query(&[("api_key", &api_key)]).send().await?;
@@ -279,7 +279,7 @@ async fn cast(context: &Context, message: &Message, mut arguments: Args) -> Comm
         let movie_id = movie_result.id;
         let movie_name = &movie_result.title;
         let movie_poster_url = &movie_result.poster_path;
-        let movie_poster = format!("https://image.tmdb.org/t/p/original/{}", movie_poster_url.replace("/", ""));
+        let movie_poster = format!("https://image.tmdb.org/t/p/original/{}", movie_poster_url.replace('/', ""));
 
         let credits_endpoint = format!("https://api.themoviedb.org/3/movie/{}/credits", movie_id);
         let credits_response = client.get(&credits_endpoint).query(&[("api_key", &api_key)]).send().await?;

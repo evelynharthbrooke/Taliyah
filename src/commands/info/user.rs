@@ -43,7 +43,7 @@ async fn user(context: &Context, message: &Message, args: Args) -> CommandResult
     let mut activities: String = String::new();
     let mut active_status: String = String::new();
 
-    if !cached_guild.presences.get(&user.id).is_none() {
+    if cached_guild.presences.get(&user.id).is_some() {
         let presence = cached_guild.presences.get(&user.id).unwrap();
 
         activities = presence
@@ -64,15 +64,15 @@ async fn user(context: &Context, message: &Message, args: Args) -> CommandResult
                             let mut artist_string = artists.to_string();
 
                             if artists.contains(';') {
-                                let replacer = artist_string.replace(";", ",");
+                                let replacer = artist_string.replace(';', ",");
                                 let commas = replacer.matches(", ").count();
                                 let rfind = artist_string.rfind(';').unwrap();
                                 let (left, right) = replacer.split_at(rfind);
 
                                 let format_string = if commas >= 2 {
-                                    format!("{}{}", left, right.replace(",", ", &"))
+                                    format!("{}{}", left, right.replace(',', ", &"))
                                 } else {
-                                    format!("{} {}", left, right.replace(",", "&"))
+                                    format!("{} {}", left, right.replace(',', "&"))
                                 };
 
                                 artist_string.clear();
@@ -131,17 +131,17 @@ async fn user(context: &Context, message: &Message, args: Args) -> CommandResult
 
         let client_status = match &presence.client_status {
             Some(status) => {
-                if !status.desktop.is_none() && status.mobile.is_none() && status.web.is_none() {
+                if status.desktop.is_some() && status.mobile.is_none() && status.web.is_none() {
                     "Desktop"
-                } else if !status.mobile.is_none() && status.desktop.is_none() && status.web.is_none() {
+                } else if status.mobile.is_some() && status.desktop.is_none() && status.web.is_none() {
                     "Mobile"
-                } else if !status.web.is_none() && status.desktop.is_none() && status.mobile.is_none() {
+                } else if status.web.is_some() && status.desktop.is_none() && status.mobile.is_none() {
                     "Web"
-                } else if !status.desktop.is_none() && !status.mobile.is_none() && status.web.is_none() {
+                } else if status.desktop.is_some() && status.mobile.is_some() && status.web.is_none() {
                     "Desktop and Mobile"
-                } else if !status.desktop.is_none() && !status.mobile.is_none() && !status.web.is_none() {
+                } else if status.desktop.is_some() && status.mobile.is_some() && status.web.is_some() {
                     "Desktop, Mobile, and Web"
-                } else if !status.mobile.is_none() && !status.web.is_none() && status.desktop.is_none() {
+                } else if status.mobile.is_some() && status.web.is_some() && status.desktop.is_none() {
                     "Mobile and Web"
                 } else {
                     "Desktop and Web"
@@ -191,7 +191,7 @@ async fn user(context: &Context, message: &Message, args: Args) -> CommandResult
     let mut roles = String::new();
     let mut role_count = 0;
 
-    if !member.roles(&cache).is_none() {
+    if member.roles(&cache).is_some() {
         let cached_roles = member.roles(&cache).unwrap();
         let cached_roles_sorted = cached_roles.iter().sorted_by_key(|r| -r.position);
         roles = cached_roles_sorted.map(|r| format!("<@&{}>", &r.id.as_u64())).join(" / ");

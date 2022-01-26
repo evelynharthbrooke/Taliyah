@@ -42,9 +42,8 @@ async fn status(context: &Context, message: &Message, arguments: Args) -> Comman
 
     let name = &user.name;
 
-    if !guild.presences.get(&user.id).is_none() {
+    if guild.presences.get(&user.id).is_some() {
         let presence = guild.presences.get(&user.id).unwrap();
-
         if presence.activities.first().is_none() {
             message.reply(&context, format!("**{name}** does not have an active activity.")).await?
         } else {
@@ -76,15 +75,15 @@ async fn status(context: &Context, message: &Message, arguments: Args) -> Comman
                 };
 
                 if artists.contains(';') {
-                    let replacer = artists.replace(";", ",");
+                    let replacer = artists.replace(';', ",");
                     let commas = replacer.matches(", ").count();
                     let rfind = artists.rfind(';').unwrap();
                     let (left, right) = replacer.split_at(rfind);
 
                     let format_string = if commas >= 2 {
-                        format!("{}{}", left, right.replace(",", ", &"))
+                        format!("{}{}", left, right.replace(',', ", &"))
                     } else {
-                        format!("{} {}", left, right.replace(",", "&"))
+                        format!("{} {}", left, right.replace(',', "&"))
                     };
 
                     artists.clear();

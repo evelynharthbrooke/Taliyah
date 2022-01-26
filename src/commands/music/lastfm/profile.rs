@@ -148,7 +148,7 @@ async fn profile(context: &Context, message: &Message, mut arguments: Args) -> C
     };
 
     let play_state = if track.attrs.as_ref().is_none() { "last listened to" } else { "is currently listening to" };
-    let now_playing = format!("{} {} **{}** by **{}** on **{}**.", username, play_state, name, artist, album.to_string());
+    let now_playing = format!("{} {} **{}** by **{}** on **{}**.", username, play_state, name, artist, album);
 
     let lastfm_fields = vec![
         ("**Display Name**", display_name, true),

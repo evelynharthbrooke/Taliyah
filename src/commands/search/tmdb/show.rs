@@ -59,7 +59,7 @@ async fn show(context: &Context, message: &Message, arguments: Args) -> CommandR
     let show_response = client.get(&show_endpoint).query(&[("api_key", &api_key), show_sub_requests]).send().await.unwrap();
     let show_result: Show = show_response.json().await.unwrap();
     let show_poster_path = show_result.poster_path.unwrap();
-    let show_poster = format!("https://image.tmdb.org/t/p/original/{}", &show_poster_path.replace("/", ""));
+    let show_poster = format!("https://image.tmdb.org/t/p/original/{}", &show_poster_path.replace('/', ""));
 
     let show_title = show_result.name;
     let show_id = show_result.id;

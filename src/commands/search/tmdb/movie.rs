@@ -127,7 +127,7 @@ async fn movie(context: &Context, message: &Message, arguments: Args) -> Command
     let movie_genres = movie_result.genres.iter().map(|g| &g.name).join("\n");
     let movie_popularity = format!("{}%", movie_result.popularity);
     let movie_poster_uri = movie_result.poster_path.unwrap();
-    let movie_poster = format!("https://image.tmdb.org/t/p/original/{}", &movie_poster_uri.replace("/", ""));
+    let movie_poster = format!("https://image.tmdb.org/t/p/original/{}", &movie_poster_uri.replace('/', ""));
     let movie_user_score = format!("{}/100", movie_result.vote_average * 10.0);
     let movie_user_score_count = movie_result.vote_count;
     let movie_runtime = format_duration(Duration::from_secs(movie_result.runtime.unwrap() * 60)).to_string();
