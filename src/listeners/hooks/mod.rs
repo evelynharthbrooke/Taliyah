@@ -18,14 +18,14 @@ pub async fn after(context: &Context, message: &Message, command: &str, error: C
 }
 
 #[hook]
-pub async fn dispatch_error(context: &Context, message: &Message, error: DispatchError) {
+pub async fn dispatch_error(context: &Context, message: &Message, error: DispatchError, command: &str) {
     let error_response: String;
     match error {
         DispatchError::Ratelimited(secs) => {
             error_response = format!("This command has been rate limited. Try again in {} second(s).", secs.as_secs());
             let _ = message.channel_id.say(context, error_response).await;
         }
-        DispatchError::CommandDisabled(command) => {
+        DispatchError::CommandDisabled => {
             error_response = format!("The {} command has been disabled and cannot be used.", command);
             let _ = message.channel_id.say(context, error_response).await;
         }

@@ -11,7 +11,7 @@ use serenity::{
 async fn role(context: &Context, message: &Message, arguments: Args) -> CommandResult {
     let cache = &context.cache;
     let guild_id = message.guild_id.ok_or("Failed to get GuildID from Message.")?;
-    let cached_guild = cache.guild(guild_id).await.ok_or("Unable to retrieve guild")?;
+    let cached_guild = cache.guild(guild_id).ok_or("Unable to retrieve guild")?;
     let guild_icon = cached_guild.icon_url().unwrap();
 
     if arguments.is_empty() {

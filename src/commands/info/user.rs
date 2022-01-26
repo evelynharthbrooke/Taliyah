@@ -23,7 +23,7 @@ use crate::utils::parsing_utils::parse_user;
 async fn user(context: &Context, message: &Message, args: Args) -> CommandResult {
     let cache = &context.cache;
     let guild_id = message.guild_id.ok_or("Failed to get GuildID from Message.")?;
-    let cached_guild = cache.guild(guild_id).await.ok_or("Unable to retrieve guild")?;
+    let cached_guild = cache.guild(guild_id).ok_or("Unable to retrieve guild")?;
     let member = if message.mentions.is_empty() {
         if args.is_empty() {
             message.member(&context).await.map_err(|_| "Could not find member.")?
@@ -180,19 +180,19 @@ async fn user(context: &Context, message: &Message, args: Args) -> CommandResult
     let color: Colour;
     let hex: String;
 
-    if member.colour(cache).await.is_none() {
+    if member.colour(cache).is_none() {
         color = Colour::new(0x00FF_FFFF);
         hex = "No display color available.".to_owned()
     } else {
-        color = member.colour(cache).await.unwrap();
+        color = member.colour(cache).unwrap();
         hex = format!("#{}", color.hex().to_lowercase());
     }
 
     let mut roles = String::new();
     let mut role_count = 0;
 
-    if !member.roles(&cache).await.is_none() {
-        let cached_roles = member.roles(&cache).await.unwrap();
+    if !member.roles(&cache).is_none() {
+        let cached_roles = member.roles(&cache).unwrap();
         let cached_roles_sorted = cached_roles.iter().sorted_by_key(|r| -r.position);
         roles = cached_roles_sorted.map(|r| format!("<@&{}>", &r.id.as_u64())).join(" / ");
         role_count = cached_roles.len();
@@ -201,11 +201,11 @@ async fn user(context: &Context, message: &Message, args: Args) -> CommandResult
         }
     }
 
-    let main_role = if member.highest_role_info(&cache).await.is_none() {
+    let main_role = if member.highest_role_info(&cache).is_none() {
         info!("Cannot get role information.");
         "No main role available.".to_owned()
     } else {
-        let hoist_role_id = member.highest_role_info(&cache).await.ok_or("cannot get role id")?.0;
+        let hoist_role_id = member.highest_role_info(&cache).ok_or("cannot get role id")?.0;
         let hoist_role = cached_guild.roles.get(&hoist_role_id).ok_or("Cannot get role")?.id.as_u64();
         format!("<@&{}>", hoist_role)
     };

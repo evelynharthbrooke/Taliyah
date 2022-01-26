@@ -17,7 +17,7 @@ async fn about(context: &Context, message: &Message) -> CommandResult {
     let config = data.get::<ConfigContainer>().unwrap();
     let repo = Repository::open(env!("CARGO_MANIFEST_DIR"))?;
 
-    let current_user = context.cache.current_user().await;
+    let current_user = context.cache.current_user();
 
     let version = env!("CARGO_PKG_VERSION").to_string();
     let codename = &config.bot.general.codename;
@@ -28,10 +28,10 @@ async fn about(context: &Context, message: &Message) -> CommandResult {
     let bot_name = &current_user.name;
     let bot_avatar = &current_user.avatar_url().unwrap();
 
-    let num_guilds = context.cache.guilds().await.len();
-    let num_shards = context.cache.shard_count().await;
-    let num_channels = context.cache.guild_channel_count().await;
-    let num_users = context.cache.user_count().await;
+    let num_guilds = context.cache.guilds().len();
+    let num_shards = context.cache.shard_count();
+    let num_channels = context.cache.guild_channel_count();
+    let num_users = context.cache.user_count();
 
     let about_fields = vec![
         ("Version", version, true),

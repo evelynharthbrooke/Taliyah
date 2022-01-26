@@ -13,7 +13,7 @@ use serenity::{
 async fn channel(context: &Context, message: &Message, arguments: Args) -> CommandResult {
     let cache = &context.cache;
     let guild_id = message.guild_id.ok_or("Failed to get GuildID from Message.")?;
-    let cached_guild = cache.guild(guild_id).await.ok_or("Unable to retrieve guild")?;
+    let cached_guild = cache.guild(guild_id).ok_or("Unable to retrieve guild")?;
     let guild_icon = cached_guild.icon_url().unwrap();
 
     let channel_name = if arguments.is_empty() {
@@ -30,12 +30,12 @@ async fn channel(context: &Context, message: &Message, arguments: Args) -> Comma
         }
     };
 
-    let cached_channel = channel_id.to_channel_cached(&context).await.unwrap();
+    let cached_channel = channel_id.to_channel_cached(&context).unwrap();
     let guild_channel = cached_channel.guild().unwrap();
 
     let channel_name = &guild_channel.name;
 
-    let channel_category = match guild_channel.category_id {
+    let channel_category = match guild_channel.parent_id {
         Some(category) => category.name(&context).await.unwrap(),
         None => "No category available".to_string()
     };

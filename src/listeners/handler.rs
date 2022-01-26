@@ -67,7 +67,7 @@ impl EventHandler for Handler {
             info!("Failed to join thread (ID: {}) successfully: {}", thread.id, e)
         } else {
             let name = &thread.name;
-            let guild = thread.guild(ctx.cache).await.unwrap().name;
+            let guild = thread.guild(ctx.cache).unwrap().name;
             let id = thread.id.as_u64();
             info!("Joined new thread: {} (Server: {}, ID: {})", name, guild, id)
         }

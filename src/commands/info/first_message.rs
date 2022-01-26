@@ -31,9 +31,9 @@ async fn first_message(context: &Context, message: &Message, args: Args) -> Comm
     let messages = channel_id.messages(&context, |retriever| retriever.after(1).limit(1)).await.unwrap();
     let msg = messages.first().unwrap();
     let msg_link = msg.link().replace("@me", &guild_id.to_string()).to_string();
-    let msg_guild = message.guild(context).await.unwrap();
+    let msg_guild = message.guild(context).unwrap();
     let msg_member = msg_guild.member(context, msg.author.id).await.unwrap();
-    let msg_author_color = msg_member.colour(context).await.unwrap();
+    let msg_author_color = msg_member.colour(context).unwrap();
 
     message
         .channel_id

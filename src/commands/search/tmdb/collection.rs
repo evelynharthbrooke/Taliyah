@@ -118,7 +118,7 @@ async fn collection(context: &Context, message: &Message, arguments: Args) -> Co
                 embed.description(collection_overview);
                 embed.fields(collection_fields);
                 embed.footer(|footer| footer.text("Powered by The Movie Database."));
-                embed.timestamp(&Utc::now())
+                embed.timestamp(Utc::now())
             });
             message.components(|comps| comps.add_action_row(collection_rows))
         })

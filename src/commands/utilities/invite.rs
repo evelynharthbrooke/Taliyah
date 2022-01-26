@@ -11,7 +11,7 @@ use tracing::error;
 async fn invite(context: &Context, message: &Message) -> CommandResult {
     let cache = &context.cache;
     let permissions = Permissions::empty();
-    let current_user = &cache.current_user().await;
+    let current_user = &cache.current_user();
     let url = match current_user.invite_url(context, permissions).await {
         Ok(invite) => invite,
         Err(why) => {

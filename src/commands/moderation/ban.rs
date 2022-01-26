@@ -19,7 +19,7 @@ async fn ban(context: &Context, message: &Message, mut args: Args) -> CommandRes
     let mention = args.single_quoted::<String>()?;
     let guild = message.guild_id.unwrap();
     let user = parse_user(&mention, guild, context).await.unwrap();
-    let member = message.guild(context).await.unwrap().member(context, user).await.unwrap();
+    let member = message.guild(context).unwrap().member(context, user).await.unwrap();
 
     let name = &member.user.name;
     let disc = &member.user.discriminator;

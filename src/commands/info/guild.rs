@@ -3,10 +3,7 @@ use itertools::Itertools;
 use serenity::{
     client::Context,
     framework::standard::{macros::command, CommandResult},
-    model::{
-        channel::ChannelType::{Category, Text, Voice},
-        prelude::Message
-    }
+    model::{channel::ChannelType, prelude::Message}
 };
 
 use std::fmt::Write;
@@ -19,7 +16,7 @@ async fn guild(context: &Context, message: &Message) -> CommandResult {
     let cache = &context.cache;
     let guild_id = message.guild_id.unwrap();
     let guild_id_u64 = guild_id.as_u64();
-    let cached_guild = cache.guild(guild_id).await.unwrap();
+    let cached_guild = cache.guild(guild_id).unwrap();
 
     let guild_icon = cached_guild.icon_url().unwrap();
     let guild_name = &cached_guild.name;
@@ -29,9 +26,10 @@ async fn guild(context: &Context, message: &Message) -> CommandResult {
     let guild_creation_date = guild_id.created_at().format("%B %e, %Y @ %l:%M %P");
     let guild_members = cached_guild.members.len();
     let guild_presences = cached_guild.presences.len();
-    let guild_channels = cached_guild.channels.iter().filter(|(_, c)| c.kind != Category).count();
-    let guild_channels_text = cached_guild.channels.iter().filter(|(_, c)| c.kind == Text).count();
-    let guild_channels_voice = cached_guild.channels.iter().filter(|(_, c)| c.kind == Voice).count();
+    let guild_channels: Vec<_> = cached_guild.channels.iter().filter_map(|(_, c)| c.clone().guild()).collect();
+    let guild_channels_all = guild_channels.iter().count();
+    let guild_channels_text = guild_channels.iter().filter(|c| c.kind == ChannelType::Text).count();
+    let guild_channels_voice = guild_channels.iter().filter(|c| c.kind == ChannelType::Voice).count();
     let guild_emojis = cached_guild.emojis.len();
     let guild_emojis_animated = cached_guild.emojis.iter().filter(|(_, e)| e.animated).count();
     let guild_emojis_normal = cached_guild.emojis.iter().filter(|(_, e)| !e.animated).count();
@@ -41,8 +39,8 @@ async fn guild(context: &Context, message: &Message) -> CommandResult {
         0 => "None - Unrestricted.",
         1 => "Low - Must have a verified email.",
         2 => "Medium - Registered on Discord for 5+ minutes.",
-        3 => "(╯°□°）╯︵ ┻━┻ - In the server for 10+ minutes.",
-        4 => "┻━┻ ﾐヽ(ಠ益ಠ)ノ彡┻━┻) - Must have a verified phone number.",
+        3 => "(╯°□°)╯︵ ┻━┻ - In the server for 10+ minutes.",
+        4 => "┻━┻ ﾐヽ(ಠ益ಠ)/彡┻━┻) - Must have a verified phone number.",
         _ => "Unrecognized verification level."
     };
 
@@ -73,7 +71,6 @@ async fn guild(context: &Context, message: &Message) -> CommandResult {
     let guild_role_count = cached_guild.roles.iter().filter(|&(_, r)| &r.id != guild_id_u64).count();
 
     let mut highest = None;
-
     for role_id in cached_guild.roles.keys() {
         if let Some(role) = cached_guild.roles.get(role_id) {
             if let Some((id, pos)) = highest {
@@ -91,13 +88,12 @@ async fn guild(context: &Context, message: &Message) -> CommandResult {
     let highest_role_color = highest_role.colour;
 
     let mut guild_summary = String::new();
-
     writeln!(guild_summary, "**Owner**: {}", guild_owner)?;
     writeln!(guild_summary, "**System Channel**: <#{}>", guild_system_channel_id)?;
     writeln!(guild_summary, "**Creation Date**: {}", guild_creation_date)?;
     writeln!(guild_summary, "**Online Members**: {}", guild_presences)?;
     writeln!(guild_summary, "**Total Members**: {}", guild_members)?;
-    writeln!(guild_summary, "**Channels**: {} ({} text, {} voice)", guild_channels, guild_channels_text, guild_channels_voice)?;
+    writeln!(guild_summary, "**Channels**: {} ({} text, {} voice)", guild_channels_all, guild_channels_text, guild_channels_voice)?;
     writeln!(guild_summary, "**Emojis**: {} ({} static, {} animated)", guild_emojis, guild_emojis_normal, guild_emojis_animated)?;
     writeln!(guild_summary, "**Features**: {}", if !guild_features.is_empty() { &guild_features } else { "None" })?;
     writeln!(guild_summary, "**MFA Level**: {}", guild_mfa_level)?;

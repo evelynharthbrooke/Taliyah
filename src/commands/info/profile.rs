@@ -41,10 +41,10 @@ async fn profile(context: &Context, message: &Message, arguments: Args) -> Comma
         guild_id.member(&context, message.mentions.first().ok_or("Failed to get user mentioned.")?).await?
     };
 
-    let color = if member.colour(cache).await.is_none() {
+    let color = if member.colour(cache).is_none() {
         Colour::new(0x00FF_FFFF)
     } else {
-        member.colour(cache).await.unwrap()
+        member.colour(cache).unwrap()
     };
 
     let user_name = member.user.tag();

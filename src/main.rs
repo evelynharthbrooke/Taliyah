@@ -2,7 +2,6 @@
 //!
 //! Ellie is a bot for the Discord chat platform focused on giving users
 //! a powerful set of features, while remaining quick to respond.
-#![feature(format_args_capture)]
 
 mod commands;
 mod config;
@@ -19,7 +18,7 @@ use commands::{
     info::{about::*, channel::*, first_message::*, guild::*, profile::*, role::*, user::*},
     moderation::{ban::*, kick::*, slowmode::*},
     music::{lastfm::*, spotify::*},
-    search::{krate::*, tmdb::*},
+    search::tmdb::*,
     social::twitter::*,
     utilities::{help::*, invite::*, owner::bnick::*, ping::*, source::*}
 };
@@ -28,8 +27,9 @@ use listeners::{handler::Handler, hooks::*};
 
 use reqwest::{redirect::Policy, Client};
 use serenity::{
-    client::{bridge::gateway::GatewayIntents, ClientBuilder},
+    client::ClientBuilder,
     framework::{standard::macros::group, StandardFramework},
+    model::gateway::GatewayIntents,
     http::Http
 };
 
@@ -37,7 +37,7 @@ use sqlx::postgres::PgPoolOptions;
 
 use std::{collections::HashSet, error::Error, sync::Arc};
 
-use tracing::{error, info, instrument, Level};
+use tracing::{info, instrument, Level};
 use tracing_log::LogTracer;
 use tracing_subscriber::{EnvFilter, FmtSubscriber};
 
@@ -76,7 +76,7 @@ struct Owner;
 
 #[group("Search")]
 #[description = "Various commands that search various web services."]
-#[commands(krate, tmdb)]
+#[commands(tmdb)]
 struct Search;
 
 #[group("Social")]
@@ -125,22 +125,16 @@ async fn main() -> Result<(), Box<dyn Error + Send + Sync>> {
     let prefix = configuration.bot.general.prefix.as_str();
 
     let http = Http::new_with_token(&token);
-    let (owners, bot_id) = match http.get_current_application_info().await {
-        Ok(info) => {
-            let mut owners = HashSet::new();
-            owners.insert(info.owner.id);
-            (owners, info.id)
-        }
-        Err(why) => {
-            error!("Unable to retrieve application info: {:?}", why);
-            return Ok(());
-        }
-    };
+    let id = http.get_current_user().await.unwrap().id;
+    let owner = http.get_current_application_info().await.unwrap().owner.id;
+
+    let mut owners = HashSet::new();
+    owners.insert(owner);
 
     let framework = StandardFramework::new()
         .configure(|configuration| {
             configuration
-                .on_mention(Some(bot_id))
+                .on_mention(Some(id))
                 .prefix(prefix)
                 .ignore_webhooks(false)
                 .ignore_bots(true)

@@ -15,7 +15,7 @@ use serenity::{
 async fn status(context: &Context, message: &Message, arguments: Args) -> CommandResult {
     let cache = &context.cache;
     let guild_id = message.guild_id.ok_or("Failed to get GuildID from Message.")?;
-    let cached_guild = cache.guild(guild_id).await.ok_or("Unable to retrieve guild")?;
+    let cached_guild = cache.guild(guild_id).ok_or("Unable to retrieve guild")?;
     let member = if message.mentions.is_empty() {
         if arguments.is_empty() {
             message.member(&context).await.map_err(|_| "Could not find member.")?
