@@ -13,6 +13,7 @@ use std::time::Duration;
 use crate::data::SpotifyContainer;
 
 #[command]
+#[aliases("song")]
 #[description("Displays information about a specified track on Spotify.")]
 async fn track(context: &Context, message: &Message, args: Args) -> CommandResult {
     if args.rest().is_empty() {
