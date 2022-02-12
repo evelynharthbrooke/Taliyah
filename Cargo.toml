@@ -3,10 +3,10 @@ name                = "ellie"
 version             = "0.7.0-alpha"
 authors             = ["Evelyn Marie <evelynelizabethmarie@gmail.com>"]
 description         = "A Discord bot written in Rust with Serenity."
-homepage            = "https://github.com/KamranMackey/Ellie"
-repository          = "https://github.com/KamranMackey/Ellie.git"
+homepage            = "https://github.com/evelynmarie/Ellie"
+repository          = "https://github.com/evelynmarie/Ellie.git"
 keywords            = ["discord", "discord-api", "bot", "serenity"]
-edition             = "2018" # TODO: Update to Rust 2021 Edition when released in Oct. 2021
+edition             = "2021"
 license             = "MIT"
 readme              = "README.md"
 include             = ["src/**/*", "config.sample.toml", "Cargo.toml", "README.md"]
@@ -21,13 +21,13 @@ humantime           = "2.1.0"
 itertools           = "0.10.3"
 lastfm-rs           = "0.5.0"
 serde               = { version = "1.0.136", features = ["derive"] }
-serde_json          = "1.0.78"
+serde_json          = "1.0.79"
 tokio               = { version = "1.16.1", features = ["full"] }
 toml                = "0.5.8"
-tracing             = "0.1.29"
+tracing             = "0.1.30"
 tracing-futures     = "0.2.5"
 tracing-log         = "0.1.2"
-tracing-subscriber  = { version = "0.3.7", features = ["env-filter"] }
+tracing-subscriber  = { version = "0.3.8", features = ["env-filter"] }
 
 [dependencies.reqwest]
 version             = "0.11.9"
