@@ -93,8 +93,7 @@ struct Utilities;
 #[instrument]
 async fn main() -> Result<(), Box<dyn Error + Send + Sync>> {
     let configuration = read_config("config.toml");
-    let logging_enabled = configuration.bot.logging.enabled;
-    if logging_enabled {
+    if configuration.bot.logging.enabled {
         LogTracer::init()?;
 
         let level = match configuration.bot.logging.level.as_str() {
