@@ -93,14 +93,11 @@ struct Utilities;
 #[instrument]
 async fn main() -> Result<(), Box<dyn Error + Send + Sync>> {
     let configuration = read_config("config.toml");
-    let logging = configuration.bot.logging.enabled;
-
-    if logging {
+    let logging_enabled = configuration.bot.logging.enabled;
+    if logging_enabled {
         LogTracer::init()?;
 
-        let base_level = configuration.bot.logging.level.as_str();
-
-        let level = match base_level {
+        let level = match configuration.bot.logging.level.as_str() {
             "error" => Level::ERROR,
             "warn" => Level::WARN,
             "info" => Level::INFO,
@@ -165,12 +162,11 @@ async fn main() -> Result<(), Box<dyn Error + Send + Sync>> {
         .await?;
 
     {
-        let mut data = client.data.write().await;
-
         let url = configuration.bot.database.url;
         let pool = PgPoolOptions::new().max_connections(20).connect(&url).await?;
         let http_client = Client::builder().user_agent(REQWEST_USER_AGENT).redirect(Policy::none()).build()?;
 
+        let mut data = client.data.write().await;
         data.insert::<ConfigContainer>(read_config("config.toml"));
         data.insert::<DatabasePool>(pool);
         data.insert::<ShardManagerContainer>(Arc::clone(&client.shard_manager));

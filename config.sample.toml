@@ -47,12 +47,16 @@
 
     [api.social]
 
-        [api.social.twitter]
+        [api.social.twitter.core]
         api_key = ""
         api_key_secret = ""
+        bearer_token = ""
         access_token = ""
         access_token_secret = ""
-        bearer_token = ""
+
+        [api.social.twitter.client]
+        client_id = ""
+        client_secret = ""
 
     [api.services]
     github = ""

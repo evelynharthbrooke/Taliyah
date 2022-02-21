@@ -13,11 +13,6 @@ jobs:
       - name: Checkout sources
         uses: actions/checkout@v2
 
-      # Required for serenity voice
-      - name: Install dependencies
-        if: startsWith(matrix.os, 'macOS')
-        run: brew install automake autoconf libtool libsodium pkg-config opus
-
       - name: Install Nightly toolchain
         uses: actions-rs/toolchain@v1
         with:

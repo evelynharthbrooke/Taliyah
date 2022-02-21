@@ -105,9 +105,21 @@ pub struct LavalinkConfig {
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
 pub struct TwitterConfig {
+    pub core: TwitterCore,
+    pub client: TwitterClient
+}
+
+#[derive(Debug, Clone, Deserialize, Serialize)]
+pub struct TwitterCore {
     pub api_key: String,
     pub api_key_secret: String,
+    pub bearer_token: String,
     pub access_token: String,
-    pub access_token_secret: String,
-    pub bearer_token: String
+    pub access_token_secret: String
+}
+
+#[derive(Debug, Clone, Deserialize, Serialize)]
+pub struct TwitterClient {
+    pub client_id: String,
+    pub client_secret: String
 }

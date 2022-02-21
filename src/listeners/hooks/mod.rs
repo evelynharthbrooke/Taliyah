@@ -26,7 +26,7 @@ pub async fn dispatch_error(context: &Context, message: &Message, error: Dispatc
             let _ = message.channel_id.say(context, error_response).await;
         }
         DispatchError::CommandDisabled => {
-            error_response = format!("The {} command has been disabled and cannot be used.", command);
+            error_response = format!("The `{}` command has been disabled and cannot be used.", command);
             let _ = message.channel_id.say(context, error_response).await;
         }
         DispatchError::OnlyForDM => {
@@ -50,7 +50,7 @@ pub async fn dispatch_error(context: &Context, message: &Message, error: Dispatc
             let _ = message.channel_id.say(context, error_response).await;
         }
         DispatchError::NotEnoughArguments { min, given } => {
-            error_response = format!("This command needs {} arguments, but got {}.", min, given);
+            error_response = format!("The `{}` command needs {} arguments, but got {}.", command, min, given);
             let _ = message.channel_id.say(context, error_response).await;
         }
         DispatchError::TooManyArguments { max, given } => {

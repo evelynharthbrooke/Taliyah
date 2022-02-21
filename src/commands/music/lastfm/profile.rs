@@ -138,19 +138,18 @@ async fn profile(context: &Context, message: &Message, mut arguments: Args) -> C
         recent_tracks
             .iter()
             .map(|track| {
-                let track_status = if track.attrs.is_none() { "" } else { "\x5c▶️" };
-                let track_name = &track.name.replace("**", "\x5c**");
-                let track_url = &track.url.replace("**", "\x5c**");
-                let track_artist = &track.artist.name;
-                format!("{} **[{}]({})** — {}", track_status, track_name, track_url, track_artist)
+                let status = if track.attrs.is_none() { "" } else { "\x5c▶️" };
+                let name = &track.name.replace("**", "\x5c**");
+                let url = &track.url.replace("**", "\x5c**");
+                let artist = &track.artist.name;
+                format!("{} **[{}]({})** — {}", status, name, url, artist)
             })
             .join("\n")
     };
 
     let play_state = if track.attrs.as_ref().is_none() { "last listened to" } else { "is currently listening to" };
     let now_playing = format!("{} {} **{}** by **{}** on **{}**.", username, play_state, name, artist, album);
-
-    let lastfm_fields = vec![
+    let fields = vec![
         ("**Display Name**", display_name, true),
         ("**Country**", country, true),
         ("**Join Date**", registered.to_string(), true),
@@ -169,7 +168,7 @@ async fn profile(context: &Context, message: &Message, mut arguments: Args) -> C
                 embed.thumbnail(artwork);
                 embed.color(0x00d5_1007);
                 embed.description(now_playing);
-                embed.fields(lastfm_fields);
+                embed.fields(fields);
                 embed.footer(|f| f.text("Powered by Last.fm."));
                 embed
             })
