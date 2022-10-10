@@ -44,9 +44,11 @@ async fn xkcd(context: &Context, message: &Message, mut arguments: Args) -> Comm
         .image(response.img.as_str())
         .footer(CreateEmbedFooter::new(format!("xkcd comic no. {}", &num)));
 
-    let components = CreateComponents::new()
-        .add_action_row(CreateActionRow::new().add_button(CreateButton::new_link(page).label("View xkcd image page")))
-        .add_action_row(CreateActionRow::new().add_button(CreateButton::new_link(wiki).label("View explanation")));
+    let components = CreateComponents::new().add_action_row(
+        CreateActionRow::new()
+            .add_button(CreateButton::new_link(page).label("View xkcd image page"))
+            .add_button(CreateButton::new_link(wiki).label("View explanation"))
+    );
 
     message.channel_id.send_message(context, CreateMessage::new().embed(embed).components(components)).await?;
 
