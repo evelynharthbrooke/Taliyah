@@ -192,8 +192,8 @@ async fn user(context: &Context, message: &Message, args: Args) -> CommandResult
     let mut roles = String::new();
     let mut role_count = 0;
 
-    if member.roles(&cache).is_some() {
-        let cached_roles = member.roles(&cache).unwrap();
+    if member.roles(cache).is_some() {
+        let cached_roles = member.roles(cache).unwrap();
         let cached_roles_sorted = cached_roles.iter().sorted_by_key(|r| r.position).rev();
         roles = cached_roles_sorted.map(|r| format!("<@&{}>", r.id.get())).join(" / ");
         role_count = cached_roles.len();
@@ -202,11 +202,11 @@ async fn user(context: &Context, message: &Message, args: Args) -> CommandResult
         }
     }
 
-    let main_role = if member.highest_role_info(&cache).is_none() {
+    let main_role = if member.highest_role_info(cache).is_none() {
         info!("Cannot get role information.");
         "No main role available.".to_owned()
     } else {
-        let hoist_role_id = member.highest_role_info(&cache).ok_or("cannot get role id")?.0;
+        let hoist_role_id = member.highest_role_info(cache).ok_or("cannot get role id")?.0;
         let hoist_role = cached_guild.roles.get(&hoist_role_id).ok_or("Cannot get role")?.id.get();
         format!("<@&{}>", hoist_role)
     };

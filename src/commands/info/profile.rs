@@ -100,8 +100,8 @@ async fn set(context: &Context, message: &Message, mut arguments: Args) -> Comma
             };
 
             sqlx::query("UPDATE profile_data SET user_location = $1 WHERE user_id = $2;")
-                .bind(&value)
-                .bind(&user_id)
+                .bind(value)
+                .bind(user_id)
                 .execute(&pool)
                 .await
                 .unwrap();
@@ -129,8 +129,8 @@ async fn set(context: &Context, message: &Message, mut arguments: Args) -> Comma
             }
 
             sqlx::query("UPDATE profile_data SET user_lastfm_id = $1 WHERE user_id = $2")
-                .bind(&value)
-                .bind(&user_id)
+                .bind(value)
+                .bind(user_id)
                 .execute(&pool)
                 .await
                 .unwrap();
@@ -144,8 +144,8 @@ async fn set(context: &Context, message: &Message, mut arguments: Args) -> Comma
             };
 
             sqlx::query("UPDATE profile_data SET user_name = $1 WHERE user_id = $2")
-                .bind(&value)
-                .bind(&user_id)
+                .bind(value)
+                .bind(user_id)
                 .execute(&pool)
                 .await
                 .unwrap();
@@ -159,8 +159,8 @@ async fn set(context: &Context, message: &Message, mut arguments: Args) -> Comma
             };
 
             sqlx::query("UPDATE profile_data SET user_gender = $1 WHERE user_id = $2")
-                .bind(&value)
-                .bind(&user_id)
+                .bind(value)
+                .bind(user_id)
                 .execute(&pool)
                 .await
                 .unwrap();
@@ -174,8 +174,8 @@ async fn set(context: &Context, message: &Message, mut arguments: Args) -> Comma
             }
 
             sqlx::query("UPDATE profile_data SET user_pronouns = $1 WHERE user_id = $2")
-                .bind(&value)
-                .bind(&user_id)
+                .bind(value)
+                .bind(user_id)
                 .execute(&pool)
                 .await
                 .unwrap();

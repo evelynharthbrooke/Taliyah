@@ -41,7 +41,7 @@ async fn first_message(context: &Context, message: &Message, args: Args) -> Comm
         .color(msg_author_color)
         .thumbnail(msg.author.avatar_url().unwrap())
         .description(&msg.content)
-        .timestamp(&msg.timestamp)
+        .timestamp(msg.timestamp)
         .field("❯ Jump To Message", format!("[Click Here]({})", msg_link), true)
         .footer(CreateEmbedFooter::new(format!("Message ID: {}", msg.id)));
 

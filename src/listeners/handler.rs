@@ -53,7 +53,7 @@ impl EventHandler for Handler {
         let guild_prefix = config.bot.general.prefix;
 
         sqlx::query("INSERT INTO guild_info (guild_id, guild_name, guild_prefix) VALUES ($1, $2, $3) ON CONFLICT DO NOTHING")
-            .bind(&guild_id)
+            .bind(guild_id)
             .bind(&guild_name)
             .bind(&guild_prefix)
             .execute(&pool)

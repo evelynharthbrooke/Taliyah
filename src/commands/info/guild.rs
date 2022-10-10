@@ -30,7 +30,7 @@ async fn guild(context: &Context, message: &Message) -> CommandResult {
     let guild_creation_date = guild_id.created_at().format("%B %e, %Y @ %l:%M %P");
     let guild_members = cached_guild.members.len();
     let guild_presences = cached_guild.presences.len();
-    let guild_channels: Vec<_> = cached_guild.channels.iter().filter_map(|(_, c)| Some(c)).collect();
+    let guild_channels: Vec<_> = cached_guild.channels.values().map(|c| Some(c).unwrap()).collect();
     let guild_channels_all = guild_channels.len();
     let guild_channels_text = guild_channels.iter().filter(|c| c.kind == ChannelType::Text).count();
     let guild_channels_voice = guild_channels.iter().filter(|c| c.kind == ChannelType::Voice).count();

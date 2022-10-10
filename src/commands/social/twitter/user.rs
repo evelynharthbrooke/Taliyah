@@ -101,7 +101,7 @@ async fn user(context: &Context, message: &Message, mut args: Args) -> CommandRe
         ("Username", handle, true),
         ("Join Date", joined, true),
         ("Protected", protected, true),
-        ("Location", if location != None { location.unwrap() } else { "None".to_string() }, true),
+        ("Location", if location.is_some() { location.unwrap() } else { "None".to_string() }, true),
         ("Following", following, true),
         ("Followers", followers, true),
         ("Tweets", tweet_count, true),

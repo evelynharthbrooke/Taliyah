@@ -25,7 +25,7 @@ async fn slowmode(context: &Context, message: &Message, mut arguments: Args) -> 
         } else {
             format!("Successfully set the slowmode rate to `{}` seconds.", slowmode_rate)
         }
-    } else if let Some(Guild(channel)) = message.channel_id.to_channel_cached(&context) {
+    } else if let Some(Guild(channel)) = message.channel_id.to_channel_cached(context) {
         match channel.rate_limit_per_user {
             Some(rate) => {
                 if rate == 0 {

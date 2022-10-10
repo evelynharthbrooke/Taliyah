@@ -31,7 +31,7 @@ async fn channel(context: &Context, message: &Message, arguments: Args) -> Comma
         }
     };
 
-    let cached_channel = channel_id.to_channel_cached(&context).unwrap();
+    let cached_channel = channel_id.to_channel_cached(context).unwrap();
     let guild_channel = cached_channel.guild().unwrap();
 
     let channel_name = &guild_channel.name;
@@ -43,7 +43,7 @@ async fn channel(context: &Context, message: &Message, arguments: Args) -> Comma
 
     let channel_position = &guild_channel.position;
     let channel_id = &guild_channel.id;
-    let channel_bitrate = if guild_channel.bitrate != None {
+    let channel_bitrate = if guild_channel.bitrate.is_some() {
         guild_channel.bitrate.unwrap().to_string() + " kbps"
     } else {
         "N/A".to_string()
