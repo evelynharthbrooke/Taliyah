@@ -3,6 +3,7 @@ use reqwest::RequestBuilder;
 use serde::Deserialize;
 
 use serenity::{
+    builder::{CreateEmbed, CreateEmbedFooter, CreateMessage},
     client::Context,
     framework::standard::{macros::command, Args, CommandResult},
     model::prelude::Message
@@ -108,12 +109,7 @@ async fn cast(context: &Context, message: &Message, mut arguments: Args) -> Comm
         let search_results = search_result.results;
 
         if search_results.is_empty() {
-            message
-                .channel_id
-                .send_message(&context, |message| {
-                    message.content(format!("Nothing found for `{}` on TMDb. Please try a different term.", input))
-                })
-                .await?;
+            message.channel_id.say(&context, format!("Nothing found for `{}`. Please try a different term.", input)).await?;
             return Ok(());
         }
 
@@ -174,12 +170,10 @@ async fn cast(context: &Context, message: &Message, mut arguments: Args) -> Comm
                 // removing the last crew member and re-adding it without the
                 // inline property enabled.
                 if !show_crew.is_empty() && show_crew.len() > 2 {
+                    let last_crew_member = show_crew.last().unwrap();
                     for member in &show_crew[0..show_cast.len() - 1] {
                         show_crew_fields.push((&member.name, &member.job, true));
                     }
-
-                    let last_crew_member = show_crew.last().unwrap();
-
                     show_crew_fields.push((&last_crew_member.name, &last_crew_member.job, false));
                 } else if !show_crew.is_empty() {
                     for member in &show_crew[0..show_cast.len()] {
@@ -220,23 +214,14 @@ async fn cast(context: &Context, message: &Message, mut arguments: Args) -> Comm
             }
         }
 
-        message
-            .channel_id
-            .send_message(&context, |message| {
-                message.embed(|embed| {
-                    embed.title(format!("{} — Cast & Crew", show_name));
-                    embed.color(0x0001_d277);
-                    embed.thumbnail(show_poster);
-                    embed.fields(show_cast_fields);
+        let embed = CreateEmbed::new()
+            .title(format!("{} — Cast & Crew", show_name))
+            .color(0x0001_d277)
+            .thumbnail(show_poster)
+            .fields(if !show_crew_fields.is_empty() { show_crew_fields } else { show_cast_fields })
+            .footer(CreateEmbedFooter::new("Powered by The Movie Database."));
 
-                    if !show_crew_fields.is_empty() {
-                        embed.fields(show_crew_fields);
-                    }
-
-                    embed.footer(|footer| footer.text("Powered by the The Movie Database API."))
-                })
-            })
-            .await?;
+        message.channel_id.send_message(&context, CreateMessage::new().embed(embed)).await?;
 
         Ok(())
     } else if media_type.contains("movie") || media_type.contains("film") {
@@ -266,12 +251,7 @@ async fn cast(context: &Context, message: &Message, mut arguments: Args) -> Comm
         let search_results = search_result.results;
 
         if search_results.is_empty() {
-            message
-                .channel_id
-                .send_message(&context, |message| {
-                    message.content(format!("Nothing found for `{}` on TMDb. Please try a different search term.", input))
-                })
-                .await?;
+            message.channel_id.say(&context, format!("Nothing found for `{}`. Please try a different term.", input)).await?;
             return Ok(());
         }
 
@@ -299,31 +279,22 @@ async fn cast(context: &Context, message: &Message, mut arguments: Args) -> Comm
             movie_crew_fields.push((&member.name, &member.job, true));
         }
 
-        message
-            .channel_id
-            .send_message(&context, |message| {
-                message.embed(|embed| {
-                    embed.title(format!("{} — Cast & Crew", movie_name));
-                    embed.color(0x0001_d277);
-                    embed.thumbnail(movie_poster);
-                    embed.description(format!(
-                        "\
-                        Not all cast and crew members could be displayed for *{}*. For a full \
-                        list of the cast / crew members in this movie, please visit the The Movie \
-                        Database website by [clicking here]({}).\
-                        ",
-                        movie_name, movie_cast_url
-                    ));
-                    embed.fields(movie_cast_fields);
+        let embed = CreateEmbed::new()
+            .title(format!("{} — Cast & Crew", movie_name))
+            .color(0x0001_d277)
+            .thumbnail(movie_poster)
+            .description(format!(
+                "\
+            Not all cast and crew members could be displayed for *{}*. For a full \
+            list of the cast / crew members in this movie, please visit the The Movie \
+            Database website by [clicking here]({}).\
+            ",
+                movie_name, movie_cast_url
+            ))
+            .fields(if !movie_crew_fields.is_empty() { movie_crew_fields } else { movie_cast_fields })
+            .footer(CreateEmbedFooter::new("Powered by The Movie Database."));
 
-                    if !movie_crew_fields.is_empty() {
-                        embed.fields(movie_crew_fields);
-                    }
-
-                    embed.footer(|footer| footer.text("Powered by the The Movie Database API."))
-                })
-            })
-            .await?;
+        message.channel_id.send_message(&context, CreateMessage::new().embed(embed)).await?;
 
         Ok(())
     } else {

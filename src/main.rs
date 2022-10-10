@@ -128,19 +128,8 @@ async fn main() -> Result<(), Box<dyn Error + Send + Sync>> {
     owners.insert(owner);
 
     let framework = StandardFramework::new()
-        .configure(|configuration| {
-            configuration
-                .on_mention(Some(id))
-                .prefix(prefix)
-                .ignore_webhooks(false)
-                .ignore_bots(true)
-                .no_dm_prefix(true)
-                .with_whitespace(true)
-                .owners(owners)
-                .case_insensitivity(true)
-        })
-        .after(after)
         .prefix_only(prefix_only)
+        .after(after)
         .on_dispatch_error(dispatch_error)
         .group(&EXTRA_GROUP)
         .group(&FUN_GROUP)
@@ -152,11 +141,12 @@ async fn main() -> Result<(), Box<dyn Error + Send + Sync>> {
         .group(&SOCIAL_GROUP)
         .group(&UTILITIES_GROUP)
         .help(&HELP);
+    framework.configure(|c| c.on_mention(Some(id)).prefix(prefix).ignore_webhooks(false).no_dm_prefix(true).owners(owners));
 
     let mut client = ClientBuilder::new(&token, GatewayIntents::all())
         .event_handler(Handler)
-        .application_id(appid)
         .framework(framework)
+        .application_id(appid.into())
         .await?;
     {
         let url = configuration.bot.database.url;

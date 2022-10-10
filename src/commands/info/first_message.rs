@@ -1,4 +1,5 @@
 use serenity::{
+    builder::{CreateEmbed, CreateEmbedAuthor, CreateEmbedFooter, CreateMessage, GetMessages},
     client::Context,
     framework::standard::{macros::command, Args, CommandResult},
     model::prelude::Message
@@ -28,28 +29,23 @@ async fn first_message(context: &Context, message: &Message, args: Args) -> Comm
         }
     };
 
-    let messages = channel_id.messages(&context, |retriever| retriever.after(1).limit(1)).await.unwrap();
+    let messages = channel_id.messages(&context, GetMessages::new().after(1).limit(1)).await.unwrap();
     let msg = messages.first().unwrap();
     let msg_link = msg.link().replace("@me", &guild_id.to_string()).to_string();
-    let msg_guild = message.guild(context).unwrap();
+    let msg_guild = message.guild(&context.cache).unwrap().clone();
     let msg_member = msg_guild.member(context, msg.author.id).await.unwrap();
     let msg_author_color = msg_member.colour(context).unwrap();
 
-    message
-        .channel_id
-        .send_message(context, |message| {
-            message.embed(|embed| {
-                embed.author(|a| a.name(msg.author.tag()).icon_url(msg.author.avatar_url().unwrap()));
-                embed.color(msg_author_color);
-                embed.thumbnail(msg.author.avatar_url().unwrap());
-                embed.description(&msg.content);
-                embed.timestamp(&msg.timestamp);
-                embed.field("❯ Jump To Message", format!("[Click Here]({})", msg_link), true);
-                embed.footer(|f| f.text(format!("Message ID: {}", msg.id)));
-                embed
-            })
-        })
-        .await?;
+    let embed = CreateEmbed::new()
+        .author(CreateEmbedAuthor::new(msg.author.tag()).icon_url(msg.author.avatar_url().unwrap()))
+        .color(msg_author_color)
+        .thumbnail(msg.author.avatar_url().unwrap())
+        .description(&msg.content)
+        .timestamp(&msg.timestamp)
+        .field("❯ Jump To Message", format!("[Click Here]({})", msg_link), true)
+        .footer(CreateEmbedFooter::new(format!("Message ID: {}", msg.id)));
+
+    message.channel_id.send_message(context, CreateMessage::new().embed(embed)).await?;
 
     Ok(())
 }

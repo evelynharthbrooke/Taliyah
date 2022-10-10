@@ -3,7 +3,7 @@ use chrono::{offset::Utc, Duration};
 use serenity::{
     client::{bridge::gateway::ShardId, Context},
     framework::standard::{macros::command, CommandResult},
-    model::prelude::Message
+    model::prelude::Message, builder::{CreateEmbed, EditMessage}
 };
 
 use crate::ShardManagerContainer;
@@ -14,7 +14,7 @@ async fn ping(context: &Context, message: &Message) -> CommandResult {
     let start = Utc::now();
     let start_ts = start.timestamp();
     let start_ts_ss = start.timestamp_subsec_millis() as i64;
-    let mut ping: Message = message.channel_id.send_message(context, |m| m.content(":ping_pong: Pinging!")).await?;
+    let mut ping: Message = message.channel_id.say(context, ":ping_pong: Pinging!").await?;
     let end = Utc::now();
     let end_ts = end.timestamp();
     let end_ts_ss = end.timestamp_subsec_millis() as i64;
@@ -53,15 +53,8 @@ async fn ping(context: &Context, message: &Message) -> CommandResult {
         api_response, shard_response
     );
 
-    ping.edit(context, |message| {
-        message.content("");
-        message.embed(|embed| {
-            embed.color(0x008b_0000);
-            embed.title("Discord Latency Information");
-            embed.description(response)
-        })
-    })
-    .await?;
+    let embed = CreateEmbed::new().color(0x008b_0000).title("Discord Latency Information").description(response);
+    ping.edit(context, EditMessage::new().embed(embed)).await?;
 
     Ok(())
 }

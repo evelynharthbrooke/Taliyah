@@ -7,7 +7,7 @@ use serde::Deserialize;
 use serenity::{
     client::Context,
     framework::standard::{macros::command, Args, CommandResult},
-    model::prelude::Message
+    model::prelude::Message, builder::EditMessage
 };
 
 #[derive(Debug, Deserialize)]
@@ -89,7 +89,7 @@ async fn sloc(context: &Context, message: &Message, mut arguments: Args) -> Comm
 
     language_string.push_str(total.as_str());
 
-    msg.edit(&context, |message| message.content(language_string)).await?;
+    msg.edit(&context, EditMessage::new().content(language_string)).await?;
 
     Ok(())
 }

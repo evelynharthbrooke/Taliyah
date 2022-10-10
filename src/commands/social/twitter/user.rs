@@ -1,6 +1,7 @@
 use serde::{Deserialize, Serialize};
 
 use serenity::{
+    builder::{CreateEmbed, CreateEmbedFooter, CreateMessage},
     client::Context,
     framework::standard::{macros::command, Args, CommandResult},
     model::prelude::Message
@@ -107,21 +108,18 @@ async fn user(context: &Context, message: &Message, mut args: Args) -> CommandRe
         ("Latest Tweet", latest_tweet, false),
     ];
 
-    message
-        .channel_id
-        .send_message(context, |message| {
-            message.embed(|embed| {
-                embed.title(header);
-                embed.url(url);
-                embed.thumbnail(avatar);
-                embed.color(0x00acee);
-                embed.description(description);
-                embed.fields(fields);
-                embed.footer(|footer| footer.text(format!("User ID: {} | Powered by Twitter.", id)));
-                embed
-            })
-        })
-        .await?;
+    let embed = CreateEmbed::new()
+        .title(header)
+        .url(url)
+        .thumbnail(avatar)
+        .color(0x00acee)
+        .description(description)
+        .fields(fields)
+        .footer(CreateEmbedFooter::new(format!("User ID: {} | Powered by Twitter.", id)));
+
+    let builder = CreateMessage::new().embed(embed);
+
+    message.channel_id.send_message(context, builder).await?;
 
     Ok(())
 }

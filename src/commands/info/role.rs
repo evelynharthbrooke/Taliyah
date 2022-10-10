@@ -1,4 +1,5 @@
 use serenity::{
+    builder::{CreateEmbed, CreateEmbedAuthor, CreateEmbedFooter, CreateMessage},
     client::Context,
     framework::standard::{macros::command, Args, CommandResult},
     model::prelude::Message
@@ -11,7 +12,7 @@ use serenity::{
 async fn role(context: &Context, message: &Message, arguments: Args) -> CommandResult {
     let cache = &context.cache;
     let guild_id = message.guild_id.ok_or("Failed to get GuildID from Message.")?;
-    let cached_guild = cache.guild(guild_id).ok_or("Unable to retrieve guild")?;
+    let cached_guild = cache.guild(guild_id).ok_or("Unable to retrieve guild")?.clone();
     let guild_icon = cached_guild.icon_url().unwrap();
 
     if arguments.is_empty() {
@@ -47,17 +48,13 @@ async fn role(context: &Context, message: &Message, arguments: Args) -> CommandR
         ("Permissions", permissions.to_string(), false),
     ];
 
-    message
-        .channel_id
-        .send_message(&context, |message| {
-            message.embed(|embed| {
-                embed.author(|a| a.name(name).icon_url(guild_icon));
-                embed.color(color);
-                embed.fields(role_fields);
-                embed.footer(|f| f.text(format!("Role ID: {}", id)))
-            })
-        })
-        .await?;
+    let embed = CreateEmbed::new()
+        .author(CreateEmbedAuthor::new(name).icon_url(guild_icon))
+        .color(color)
+        .fields(role_fields)
+        .footer(CreateEmbedFooter::new(format!("Role ID: {}", id)));
+
+    message.channel_id.send_message(&context, CreateMessage::new().embed(embed)).await?;
 
     Ok(())
 }

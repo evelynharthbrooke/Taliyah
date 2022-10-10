@@ -4,10 +4,11 @@ use lastfm_rs::{
 };
 
 use serenity::{
+    builder::{CreateEmbed, CreateEmbedAuthor, CreateMessage},
     client::Context,
     framework::standard::{macros::command, Args, CommandResult},
-    model::prelude::Message,
-    utils::Colour
+    model::colour::Colour,
+    model::prelude::Message
 };
 
 use crate::{
@@ -65,17 +66,12 @@ async fn profile(context: &Context, message: &Message, arguments: Args) -> Comma
         ("Last.fm", lastfm_url, false),
     ];
 
-    message
-        .channel_id
-        .send_message(&context, |message| {
-            message.embed(|embed| {
-                embed.author(|a| a.name(format!("Profile for: {user_name}")).icon_url(&member.user.face()));
-                embed.color(color);
-                embed.fields(profile_fields);
-                embed
-            })
-        })
-        .await?;
+    let embed = CreateEmbed::new()
+        .author(CreateEmbedAuthor::new(format!("Profile for: {user_name}")).icon_url(&member.user.face()))
+        .color(color)
+        .fields(profile_fields);
+
+    message.channel_id.send_message(&context, CreateMessage::new().embed(embed)).await?;
 
     Ok(())
 }
@@ -94,7 +90,7 @@ async fn set(context: &Context, message: &Message, mut arguments: Args) -> Comma
     let property = arguments.single::<String>()?;
     let value = arguments.rest();
     let config = read_config("config.toml");
-    let user_id = message.author.id.0 as i64;
+    let user_id = message.author.id.get() as i64;
 
     match property.as_str() {
         "location" => {

@@ -1,4 +1,5 @@
 use serenity::{
+    builder::{CreateEmbed, CreateMessage},
     client::Context,
     framework::standard::{macros::command, CommandResult},
     model::{prelude::Message, Permissions}
@@ -11,8 +12,8 @@ use tracing::error;
 async fn invite(context: &Context, message: &Message) -> CommandResult {
     let cache = &context.cache;
     let permissions = Permissions::empty();
-    let current_user = &cache.current_user();
-    let url = match current_user.invite_url(context, permissions).await {
+    let current_user = cache.current_user().clone();
+    let url = match current_user.invite_url(&context.http, permissions).await {
         Ok(invite) => invite,
         Err(why) => {
             error!("Encountered an error while trying to generate an invite: {}", why);
@@ -25,16 +26,12 @@ async fn invite(context: &Context, message: &Message) -> CommandResult {
     let name = &user.name;
     let avatar = user.avatar_url().unwrap();
 
-    message
-        .channel_id
-        .send_message(context, |message| {
-            message.embed(|embed| {
-                embed.title(format!("{} Invite URL", name));
-                embed.thumbnail(avatar);
-                embed.description(format!("Click [here]({}) to add {} to your Discord server.", url, name))
-            })
-        })
-        .await?;
+    let embed = CreateEmbed::new()
+        .title(format!("{} Invite URL", name))
+        .thumbnail(avatar)
+        .description(format!("Click [here]({}) to add {} to your Discord server.", url, name));
+
+    message.channel_id.send_message(&context.http, CreateMessage::new().embed(embed)).await?;
 
     Ok(())
 }

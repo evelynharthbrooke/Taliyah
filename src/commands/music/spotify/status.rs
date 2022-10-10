@@ -4,6 +4,7 @@ use crate::utils::parsing_utils::parse_user;
 use chrono::{DateTime, NaiveDateTime, Utc};
 
 use serenity::{
+    builder::{CreateEmbed, CreateEmbedAuthor, CreateEmbedFooter, CreateMessage},
     client::Context,
     framework::standard::{macros::command, Args, CommandResult},
     model::{gateway::Activity, prelude::Message}
@@ -15,7 +16,7 @@ use serenity::{
 async fn status(context: &Context, message: &Message, arguments: Args) -> CommandResult {
     let cache = &context.cache;
     let guild_id = message.guild_id.ok_or("Failed to get GuildID from Message.")?;
-    let cached_guild = cache.guild(guild_id).ok_or("Unable to retrieve guild")?;
+    let cached_guild = cache.guild(guild_id).ok_or("Unable to retrieve guild")?.clone();
     let member = if message.mentions.is_empty() {
         if arguments.is_empty() {
             message.member(&context).await.map_err(|_| "Could not find member.")?
@@ -35,7 +36,7 @@ async fn status(context: &Context, message: &Message, arguments: Args) -> Comman
     let data = context.data.read().await;
     let config = data.get::<ConfigContainer>().unwrap();
     let denied_ids = &config.bot.denylist.spotify.ids;
-    if denied_ids.contains(user.id.as_u64()) {
+    if denied_ids.contains(&user.id.get()) {
         message.reply(context, "This user's status cannot be viewed; they are in the deny list.").await?;
         return Ok(());
     }
@@ -79,7 +80,6 @@ async fn status(context: &Context, message: &Message, arguments: Args) -> Comman
                     let commas = replacer.matches(", ").count();
                     let rfind = artists.rfind(';').unwrap();
                     let (left, right) = replacer.split_at(rfind);
-
                     let format_string = if commas >= 2 {
                         format!("{}{}", left, right.replace(',', ", &"))
                     } else {
@@ -93,22 +93,16 @@ async fn status(context: &Context, message: &Message, arguments: Args) -> Comman
                 let artwork = assets.large_image.as_ref().unwrap().replace("spotify:", "");
                 let artwork_url = format!("https://i.scdn.co/image/{}", artwork);
 
-                message
-                    .channel_id
-                    .send_message(&context, |message| {
-                        message.embed(|embed| {
-                            embed.author(|a| a.icon_url(icon).name(format!("Now playing on Spotify for {name}:")));
-                            embed.title(track);
-                            embed.colour(0x001D_B954);
-                            embed.url(url);
-                            embed.description(format!("**{artists}** | {album}"));
-                            embed.thumbnail(artwork_url);
-                            embed.footer(|f| f.text(format!("Length: {length}")));
-                            embed
-                        });
-                        message
-                    })
-                    .await?
+                let embed = CreateEmbed::new()
+                    .author(CreateEmbedAuthor::new(format!("Now playing on Spotify for {name}:")).icon_url(icon))
+                    .title(track)
+                    .colour(0x001D_B954)
+                    .url(url)
+                    .description(format!("**{artists}** | {album}"))
+                    .thumbnail(artwork_url)
+                    .footer(CreateEmbedFooter::new(format!("Length: {length}")));
+
+                message.channel_id.send_message(&context, CreateMessage::new().embed(embed)).await?
             } else {
                 message.reply(&context, format!("**{name}** is not currently playing anything on Spotify.")).await?
             }

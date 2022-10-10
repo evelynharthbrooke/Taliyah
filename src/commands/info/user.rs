@@ -1,14 +1,15 @@
 use itertools::Itertools;
 
 use serenity::{
+    builder::{CreateEmbed, CreateEmbedAuthor, CreateMessage},
     client::Context,
     framework::standard::{macros::command, Args, CommandResult},
     model::{
+        colour::Colour,
         gateway::{Activity, ActivityType},
         prelude::Message,
         user::OnlineStatus
-    },
-    utils::Colour
+    }
 };
 
 use tracing::info;
@@ -21,9 +22,9 @@ use crate::utils::parsing_utils::parse_user;
 #[aliases("user", "userinfo", "uinfo", "u")]
 #[only_in("guilds")]
 async fn user(context: &Context, message: &Message, args: Args) -> CommandResult {
-    let cache = &context.cache;
+    let cache = &context.cache.clone();
     let guild_id = message.guild_id.ok_or("Failed to get GuildID from Message.")?;
-    let cached_guild = cache.guild(guild_id).ok_or("Unable to retrieve guild")?;
+    let cached_guild = cache.guild(guild_id).ok_or("Unable to retrieve guild")?.clone();
     let member = if message.mentions.is_empty() {
         if args.is_empty() {
             message.member(&context).await.map_err(|_| "Could not find member.")?
@@ -193,8 +194,8 @@ async fn user(context: &Context, message: &Message, args: Args) -> CommandResult
 
     if member.roles(&cache).is_some() {
         let cached_roles = member.roles(&cache).unwrap();
-        let cached_roles_sorted = cached_roles.iter().sorted_by_key(|r| -r.position);
-        roles = cached_roles_sorted.map(|r| format!("<@&{}>", &r.id.as_u64())).join(" / ");
+        let cached_roles_sorted = cached_roles.iter().sorted_by_key(|r| r.position).rev();
+        roles = cached_roles_sorted.map(|r| format!("<@&{}>", r.id.get())).join(" / ");
         role_count = cached_roles.len();
         if roles.is_empty() {
             roles = "No roles available.".to_owned();
@@ -206,39 +207,35 @@ async fn user(context: &Context, message: &Message, args: Args) -> CommandResult
         "No main role available.".to_owned()
     } else {
         let hoist_role_id = member.highest_role_info(&cache).ok_or("cannot get role id")?.0;
-        let hoist_role = cached_guild.roles.get(&hoist_role_id).ok_or("Cannot get role")?.id.as_u64();
+        let hoist_role = cached_guild.roles.get(&hoist_role_id).ok_or("Cannot get role")?.id.get();
         format!("<@&{}>", hoist_role)
     };
 
     let nickname = member.nick.map_or("No nickname has been set.".to_owned(), |nick| nick);
     let joined = member.joined_at.unwrap().format("%A, %B %e, %Y @ %l:%M %P");
 
-    message
-        .channel_id
-        .send_message(&context, |message| {
-            message.embed(|embed| {
-                embed.author(|a| a.name(&user.name).icon_url(&user.face()));
-                embed.thumbnail(track_art);
-                embed.colour(color);
-                embed.description(format!(
-                    "{}{}\
-                    **__User Information__**:\n\
-                    **Type**: {}\n\
-                    **Profile**: <@{}>\n\
-                    **Tag**: {}\n\
-                    **ID**: {}\n\
-                    **Creation Date**: {}\n\n\
-                    **__Guild-related Information__**:\n\
-                    **Join Date**: {}\n\
-                    **Nickname**: {}\n\
-                    **Display Color**: {}\n\
-                    **Main Role**: {}\n\
-                    **Roles ({})**: {}",
-                    active_status, activities, account_type, id, tag, id, created, joined, nickname, hex, main_role, role_count, roles
-                ))
-            })
-        })
-        .await?;
+    let embed = CreateEmbed::new()
+        .author(CreateEmbedAuthor::new(&user.name).icon_url(&user.face()))
+        .thumbnail(track_art)
+        .colour(color)
+        .description(format!(
+            "{}{}\
+        **__User Information__**:\n\
+        **Type**: {}\n\
+        **Profile**: <@{}>\n\
+        **Tag**: {}\n\
+        **ID**: {}\n\
+        **Creation Date**: {}\n\n\
+        **__Guild-related Information__**:\n\
+        **Join Date**: {}\n\
+        **Nickname**: {}\n\
+        **Display Color**: {}\n\
+        **Main Role**: {}\n\
+        **Roles ({})**: {}",
+            active_status, activities, account_type, id, tag, id, created, joined, nickname, hex, main_role, role_count, roles
+        ));
+
+    message.channel_id.send_message(&context, CreateMessage::new().embed(embed)).await?;
 
     Ok(())
 }

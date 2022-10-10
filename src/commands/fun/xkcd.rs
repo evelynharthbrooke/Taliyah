@@ -1,9 +1,10 @@
 use reqwest::StatusCode;
 use serde::Deserialize;
 use serenity::{
+    builder::{CreateActionRow, CreateButton, CreateComponents, CreateEmbed, CreateEmbedFooter, CreateMessage},
     client::Context,
     framework::standard::{macros::command, Args, CommandResult},
-    model::{application::component::ButtonStyle::Link, prelude::Message}
+    model::prelude::Message
 };
 
 use crate::data::ReqwestContainer;
@@ -24,7 +25,6 @@ async fn xkcd(context: &Context, message: &Message, mut arguments: Args) -> Comm
     let xkcd_url = format!("https://xkcd.com/{}/info.0.json", comic_num);
     let client = context.data.read().await.get::<ReqwestContainer>().cloned().unwrap();
     let request = client.get(if comic_num == 0 { latest_comic } else { &xkcd_url }).send().await?;
-
     if request.status() == StatusCode::NOT_FOUND {
         message.reply(context, "You did not provide a valid xkcd comic ID!").await?;
         return Ok(());
@@ -37,25 +37,18 @@ async fn xkcd(context: &Context, message: &Message, mut arguments: Args) -> Comm
     let page = format!("https://xkcd.com/{}", num);
     let wiki = format!("https://explainxkcd.com/wiki/index.php/{}", num);
 
-    message
-        .channel_id
-        .send_message(context, |message| {
-            message.embed(|embed| {
-                embed.title(title);
-                embed.color(0xfafafa);
-                embed.description(alt);
-                embed.image(response.img.as_str());
-                embed.footer(|f| f.text(format!("xkcd comic no. {}", &num)));
-                embed
-            });
-            message.components(|c| {
-                c.create_action_row(|row| row.create_button(|b| b.label("View xkcd image page").style(Link).url(page)));
-                c.create_action_row(|row| row.create_button(|b| b.label("View explanation").style(Link).url(wiki)));
-                c
-            });
-            message
-        })
-        .await?;
+    let embed = CreateEmbed::new()
+        .title(title)
+        .color(0xfafafa)
+        .description(alt)
+        .image(response.img.as_str())
+        .footer(CreateEmbedFooter::new(format!("xkcd comic no. {}", &num)));
+
+    let components = CreateComponents::new()
+        .add_action_row(CreateActionRow::new().add_button(CreateButton::new_link(page).label("View xkcd image page")))
+        .add_action_row(CreateActionRow::new().add_button(CreateButton::new_link(wiki).label("View explanation")));
+
+    message.channel_id.send_message(context, CreateMessage::new().embed(embed).components(components)).await?;
 
     Ok(())
 }

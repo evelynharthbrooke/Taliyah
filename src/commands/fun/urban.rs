@@ -1,6 +1,7 @@
 use serde::Deserialize;
 
 use serenity::{
+    builder::{CreateEmbed, CreateEmbedAuthor, CreateEmbedFooter, CreateMessage},
     client::Context,
     framework::standard::{macros::command, Args, CommandResult},
     model::prelude::Message
@@ -57,17 +58,13 @@ async fn urban(context: &Context, message: &Message, arguments: Args) -> Command
 
     let rating = format!("{} 👍 | {} 👎", thumbs_up, thumbs_down);
 
-    message
-        .channel_id
-        .send_message(&context, |message| {
-            message.embed(|embed| {
-                embed.author(|a| a.name(word).url(permalink));
-                embed.color(0x00EF_FF00);
-                embed.description(format!("*{description}*\n\n{example}\n\n**Ratings**: {rating}"));
-                embed.footer(|f| f.text("Powered by the Urban Dictionary."))
-            })
-        })
-        .await?;
+    let embed = CreateEmbed::new()
+        .author(CreateEmbedAuthor::new(word).url(permalink))
+        .color(0x00EF_FF00)
+        .description(format!("*{description}*\n\n{example}\n\n**Ratings**: {rating}"))
+        .footer(CreateEmbedFooter::new("Powered by the Urban Dictionary."));
+
+    message.channel_id.send_message(&context, CreateMessage::new().embed(embed)).await?;
 
     Ok(())
 }
@@ -89,17 +86,13 @@ async fn randefine(context: &Context, message: &Message) -> CommandResult {
 
     let rating = format!("{} 👍 | {} 👎", thumbs_up, thumbs_down);
 
-    message
-        .channel_id
-        .send_message(&context, |message| {
-            message.embed(|embed| {
-                embed.author(|a| a.name(word).url(permalink));
-                embed.color(0x00EF_FF00);
-                embed.description(format!("*{description}*\n\n{example}\n\n**Ratings**: {rating}"));
-                embed.footer(|f| f.text("Powered by the Urban Dictionary."))
-            })
-        })
-        .await?;
+    let embed = CreateEmbed::new()
+        .author(CreateEmbedAuthor::new(word).url(permalink))
+        .color(0x00EF_FF00)
+        .description(format!("*{description}*\n\n{example}\n\n**Ratings**: {rating}"))
+        .footer(CreateEmbedFooter::new("Powered by the Urban Dictionary."));
+
+    message.channel_id.send_message(&context, CreateMessage::new().embed(embed)).await?;
 
     Ok(())
 }

@@ -39,7 +39,7 @@ async fn scrobbles(context: &Context, message: &Message, mut arguments: Args) ->
     let scrobbles = format_int(user_info.scrobbles.parse::<usize>().unwrap());
     let scrobbles_msg = format!("**{}** has **{}** scrobbles on Last.fm.", name, scrobbles);
 
-    message.channel_id.send_message(context, |m| m.content(scrobbles_msg)).await?;
+    message.channel_id.say(context, scrobbles_msg).await?;
 
     Ok(())
 }

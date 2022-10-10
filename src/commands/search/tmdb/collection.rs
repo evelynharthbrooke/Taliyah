@@ -2,10 +2,10 @@ use chrono::prelude::{NaiveDate, Utc};
 use serde::Deserialize;
 
 use serenity::{
-    builder::CreateActionRow,
+    builder::{CreateEmbed, CreateEmbedFooter, CreateMessage, CreateActionRow, CreateButton, CreateComponents},
     client::Context,
     framework::standard::{macros::command, Args, CommandResult},
-    model::{application::component::ButtonStyle, prelude::Message}
+    model::prelude::Message
 };
 
 use crate::{data::ReqwestContainer, utils::read_config};
@@ -95,6 +95,7 @@ async fn collection(context: &Context, message: &Message, arguments: Args) -> Co
         let part_url = format!("https://www.themoviedb.org/movie/{}", part_id);
         let part_release_date = part.release_date.format("%B %-e, %Y");
         let part_summary = &part.overview;
+        let row = collection_rows.clone().add_button(CreateButton::new_link(part_url).label(part_title));
         let movie_endpoint = format!("https://api.themoviedb.org/3/movie/{}", part_id);
         let movie_response = client.get(&movie_endpoint).query(&[("api_key", &api_key)]).send().await?;
         let movie_result: Movie = movie_response.json().await?;
@@ -104,25 +105,21 @@ async fn collection(context: &Context, message: &Message, arguments: Args) -> Co
         };
 
         collection_fields.push((format!("{} — {} {}", part_title, movie_status, part_release_date), part_summary, false));
-        collection_rows.create_button(|b| b.label(part_title).url(part_url).style(ButtonStyle::Link));
+        collection_rows = row
     }
 
-    message
-        .channel_id
-        .send_message(&context, |message| {
-            message.embed(|embed| {
-                embed.title(collection_name);
-                embed.url(collection_url);
-                embed.thumbnail(collection_poster);
-                embed.color(0x0001_d277);
-                embed.description(collection_overview);
-                embed.fields(collection_fields);
-                embed.footer(|footer| footer.text("Powered by The Movie Database."));
-                embed.timestamp(Utc::now())
-            });
-            message.components(|comps| comps.add_action_row(collection_rows))
-        })
-        .await?;
+    let components = CreateComponents::new().add_action_row(collection_rows);
+    let embed = CreateEmbed::new()
+        .title(collection_name)
+        .url(collection_url)
+        .thumbnail(collection_poster)
+        .color(0x0001_d277)
+        .description(collection_overview)
+        .fields(collection_fields)
+        .footer(CreateEmbedFooter::new("Powered by The Movie Database."))
+        .timestamp(Utc::now());
+
+    message.channel_id.send_message(&context, CreateMessage::new().components(components).embed(embed)).await?;
 
     Ok(())
 }

@@ -2,9 +2,10 @@ use crate::{data::DatabasePool, utils::read_config};
 use serenity::{
     async_trait,
     client::{Context, EventHandler},
+    gateway::ActivityData,
     model::{
         channel::{GuildChannel, Message},
-        prelude::{Activity, OnlineStatus}
+        prelude::OnlineStatus
     },
     model::{gateway::Ready, guild::Guild}
 };
@@ -40,15 +41,15 @@ impl EventHandler for Handler {
 
         let presence_string = format!("on {} guilds | e.help", guild_count);
 
-        context.set_presence(Some(Activity::playing(&presence_string)), OnlineStatus::Online).await
+        context.set_presence(Some(ActivityData::playing(&presence_string)), OnlineStatus::Online);
     }
 
-    async fn guild_create(&self, context: Context, guild: Guild, _is_new: bool) {
+    async fn guild_create(&self, context: Context, guild: Guild, _is_new: std::option::Option<bool>) {
         let config = read_config("config.toml");
         let pool = context.data.read().await.get::<DatabasePool>().cloned().unwrap();
 
         let guild_name = guild.name;
-        let guild_id = guild.id.0 as i64;
+        let guild_id = guild.id.get() as i64;
         let guild_prefix = config.bot.general.prefix;
 
         sqlx::query("INSERT INTO guild_info (guild_id, guild_name, guild_prefix) VALUES ($1, $2, $3) ON CONFLICT DO NOTHING")
@@ -67,8 +68,8 @@ impl EventHandler for Handler {
             info!("Failed to join thread (ID: {}) successfully: {}", thread.id, e)
         } else {
             let name = &thread.name;
-            let guild = thread.guild(ctx.cache).unwrap().name;
-            let id = thread.id.as_u64();
+            let guild = &thread.guild(&ctx.cache).unwrap().name;
+            let id = thread.id.get();
             info!("Joined new thread: {} (Server: {}, ID: {})", name, guild, id)
         }
     }
@@ -83,7 +84,7 @@ impl EventHandler for Handler {
     /// not being actual users, so bots having their own profile sort of
     /// holds no value.
     async fn message(&self, context: Context, message: Message) {
-        let id = message.author.id.0 as i64;
+        let id = message.author.id.get() as i64;
         let tag = message.author.tag();
         let pool = context.data.read().await.get::<DatabasePool>().cloned().unwrap();
         if !message.author.bot {

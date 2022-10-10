@@ -4,6 +4,7 @@ use lastfm_rs::error::{
 };
 
 use serenity::{
+    builder::{CreateEmbed, CreateEmbedAuthor, CreateEmbedFooter, CreateMessage},
     client::Context,
     framework::standard::{macros::command, Args, CommandResult},
     model::prelude::Message
@@ -103,20 +104,16 @@ async fn nowplaying(context: &Context, message: &Message, mut arguments: Args) -
     let artwork = get_album_artwork(context, artist, name, &album).await;
     let header = format!("{} is currently playing:", username);
 
-    message
-        .channel_id
-        .send_message(context, |m| {
-            m.embed(|embed| {
-                embed.author(|author| author.name(header).url(url).icon_url(avatar));
-                embed.title(name);
-                embed.url(track_url);
-                embed.description(format!("**{}** | {}", artist, album));
-                embed.thumbnail(artwork);
-                embed.color(0x00d5_1007);
-                embed
-            })
-        })
-        .await?;
+    let embed = CreateEmbed::new()
+        .author(CreateEmbedAuthor::new(header).url(url).icon_url(avatar))
+        .title(name)
+        .url(track_url)
+        .description(format!("**{}** | {}", artist, album))
+        .thumbnail(artwork)
+        .color(0x00d5_1007)
+        .footer(CreateEmbedFooter::new("Powered by Last.fm."));
+
+    message.channel_id.send_message(context, CreateMessage::new().embed(embed)).await?;
 
     Ok(())
 }

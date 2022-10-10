@@ -5,6 +5,7 @@ use crate::{
 
 use git2::Repository;
 use serenity::{
+    builder::{CreateEmbed, CreateEmbedFooter, CreateMessage},
     client::Context,
     framework::standard::{macros::command, CommandResult},
     model::prelude::Message
@@ -17,12 +18,12 @@ async fn about(context: &Context, message: &Message) -> CommandResult {
     let config = data.get::<ConfigContainer>().unwrap();
     let repo = Repository::open(env!("CARGO_MANIFEST_DIR"))?;
 
-    let current_user = context.cache.current_user();
-
     let version = env!("CARGO_PKG_VERSION").to_string();
     let codename = &config.bot.general.codename;
     let branch = show_branch(&repo);
     let revision = show_head_rev(&repo);
+
+    let current_user = context.cache.current_user().clone();
 
     let bot_owner = context.http.get_current_application_info().await?.owner.tag();
     let bot_name = &current_user.name;
@@ -45,20 +46,15 @@ async fn about(context: &Context, message: &Message) -> CommandResult {
         ("Users", num_users.to_string(), true),
     ];
 
-    message
-        .channel_id
-        .send_message(&context, |message| {
-            message.embed(|embed| {
-                embed.title(format!("**{}**", bot_name));
-                embed.url("https://github.com/KamranMackey/Ellie");
-                embed.thumbnail(bot_avatar);
-                embed.color(0x00BFFF);
-                embed.fields(about_fields);
-                embed.footer(|footer| footer.text("Written with Rust & serenity."));
-                embed
-            })
-        })
-        .await?;
+    let embed = CreateEmbed::new()
+        .title(format!("**{}**", bot_name))
+        .url("https://github.com/evelynmarie/Ellie")
+        .thumbnail(bot_avatar)
+        .color(0x00BFFF)
+        .fields(about_fields)
+        .footer(CreateEmbedFooter::new("Written with Rust & serenity."));
+
+    message.channel_id.send_message(&context, CreateMessage::new().embed(embed)).await?;
 
     Ok(())
 }

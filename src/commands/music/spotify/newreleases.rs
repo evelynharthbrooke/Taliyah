@@ -2,6 +2,7 @@ use aspotify::CountryCode;
 use itertools::Itertools;
 
 use serenity::{
+    builder::{CreateEmbed, CreateEmbedFooter, CreateMessage},
     client::Context,
     framework::standard::{macros::command, Args, CommandResult},
     model::prelude::Message
@@ -13,7 +14,6 @@ use crate::{data::SpotifyContainer, utils::locale_utils};
 #[description("Displays information about the new releases for a given market.")]
 async fn newreleases(context: &Context, message: &Message, args: Args) -> CommandResult {
     let market = args.rest().to_string();
-
     if !market.is_empty() {
         if market.len() < 2 || market.len() > 2 {
             message.channel_id.say(context, "The market name you provided is more or less than 2 characters long.").await?;
@@ -41,19 +41,13 @@ async fn newreleases(context: &Context, message: &Message, args: Args) -> Comman
         })
         .join("\n");
 
-    message
-        .channel_id
-        .send_message(context, |m| {
-            m.embed(|e| {
-                e.title(format!("New Releases on Spotify for: {country_name}"));
-                e.colour(0x001D_B954);
-                e.description(nr_items);
-                e.footer(|f| f.text("Powered by the Spotify Web API."));
-                e
-            });
-            m
-        })
-        .await?;
+    let embed = CreateEmbed::new()
+        .title(format!("New Releases on Spotify for: {country_name}"))
+        .colour(0x001D_B954)
+        .description(nr_items)
+        .footer(CreateEmbedFooter::new("Powered by the Spotify Web API."));
+
+    message.channel_id.send_message(context, CreateMessage::new().embed(embed)).await?;
 
     return Ok(());
 }

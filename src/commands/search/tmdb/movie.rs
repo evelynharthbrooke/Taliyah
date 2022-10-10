@@ -4,6 +4,7 @@ use reqwest::RequestBuilder;
 use serde::Deserialize;
 
 use serenity::{
+    builder::{CreateEmbed, CreateEmbedFooter, CreateMessage},
     client::Context,
     framework::standard::{macros::command, Args, CommandResult},
     model::prelude::Message
@@ -133,35 +134,30 @@ async fn movie(context: &Context, message: &Message, arguments: Args) -> Command
     let movie_runtime = format_duration(Duration::from_secs(movie_result.runtime.unwrap() * 60)).to_string();
     let movie_external_links = format!("{} | {}", movie_homepage, movie_imdb);
 
-    message
-        .channel_id
-        .send_message(&context, |message| {
-            message.embed(|embed| {
-                embed.title(movie_title);
-                embed.url(movie_url);
-                embed.color(0x01b4e4);
-                embed.thumbnail(movie_poster);
-                embed.description(format!("{}{}", movie_tagline, movie_overview));
-                embed.fields(vec![
-                    ("Status", movie_status, true),
-                    ("Film ID", movie_id, true),
-                    ("Language", movie_language, true),
-                    ("Runtime", movie_runtime, true),
-                    ("Release Date", movie_release_date, true),
-                    ("Collection", movie_collection, true),
-                    ("Popularity", movie_popularity, true),
-                    ("User Score", format!("{} ({} votes)", movie_user_score, movie_user_score_count), true),
-                    ("Budget", format!("${}", movie_budget), true),
-                    ("Box Office", format!("${}", movie_revenue), true),
-                    ("Genres", movie_genres, true),
-                    ("Studios", movie_studios, true),
-                    ("External Links", movie_external_links, false),
-                ]);
-                embed.footer(|footer| footer.text("Powered by the The Movie Database API."))
-            })
-        })
-        .await
-        .unwrap();
+    let embed = CreateEmbed::new()
+        .title(movie_title)
+        .url(movie_url)
+        .color(0x01b4e4)
+        .thumbnail(movie_poster)
+        .description(format!("{}{}", movie_tagline, movie_overview))
+        .fields(vec![
+            ("Status", movie_status, true),
+            ("Film ID", movie_id, true),
+            ("Language", movie_language, true),
+            ("Runtime", movie_runtime, true),
+            ("Release Date", movie_release_date, true),
+            ("Collection", movie_collection, true),
+            ("Popularity", movie_popularity, true),
+            ("User Score", format!("{} ({} votes)", movie_user_score, movie_user_score_count), true),
+            ("Budget", format!("${}", movie_budget), true),
+            ("Box Office", format!("${}", movie_revenue), true),
+            ("Genres", movie_genres, true),
+            ("Studios", movie_studios, true),
+            ("External Links", movie_external_links, false),
+        ])
+        .footer(CreateEmbedFooter::new("Powered by the The Movie Database API."));
+
+    message.channel_id.send_message(&context, CreateMessage::new().embed(embed)).await.unwrap();
 
     Ok(())
 }

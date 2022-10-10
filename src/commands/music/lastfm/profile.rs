@@ -15,6 +15,7 @@ use lastfm_rs::{
 };
 
 use serenity::{
+    builder::{CreateEmbed, CreateEmbedAuthor, CreateEmbedFooter, CreateMessage},
     client::Context,
     framework::standard::{macros::command, Args, CommandResult},
     model::prelude::Message
@@ -160,20 +161,15 @@ async fn profile(context: &Context, message: &Message, mut arguments: Args) -> C
         ("**Recently Played:**", tracks, false),
     ];
 
-    message
-        .channel_id
-        .send_message(context, |message| {
-            message.embed(|embed| {
-                embed.author(|author| author.name(username).url(url).icon_url(avatar));
-                embed.thumbnail(artwork);
-                embed.color(0x00d5_1007);
-                embed.description(now_playing);
-                embed.fields(fields);
-                embed.footer(|f| f.text("Powered by Last.fm."));
-                embed
-            })
-        })
-        .await?;
+    let embed = CreateEmbed::new()
+        .author(CreateEmbedAuthor::new(username).url(url).icon_url(avatar))
+        .thumbnail(artwork)
+        .color(0x00d5_1007)
+        .description(now_playing)
+        .fields(fields)
+        .footer(CreateEmbedFooter::new("Powered by Last.fm."));
+
+    message.channel_id.send_message(&context, CreateMessage::new().embed(embed)).await?;
 
     Ok(())
 }

@@ -3,6 +3,7 @@ use humantime::format_duration;
 use itertools::Itertools;
 
 use serenity::{
+    builder::{CreateEmbed, CreateEmbedFooter, CreateMessage},
     client::Context,
     framework::standard::{macros::command, Args, CommandResult},
     model::prelude::Message
@@ -96,35 +97,31 @@ async fn track(context: &Context, message: &Message, args: Args) -> CommandResul
         Mode::Minor => "Major".to_owned()
     };
 
-    message
-        .channel_id
-        .send_message(&context, |message| {
-            message.embed(|embed| {
-                embed.title(track_name);
-                embed.thumbnail(track_image);
-                embed.url(track_url);
-                embed.color(0x001D_B954);
-                embed.fields(vec![
-                    ("Artists", track_artists, true),
-                    ("Album", format!("[{}]({})", track_album_name, track_album_url), true),
-                    ("Disc", track_disc.to_string(), true),
-                    ("Position", track_position.to_string(), true),
-                    ("Release Date", track_date, true),
-                    ("Popularity", format!("{}%", track_popularity), true),
-                    ("Explicit", track_explicit.to_string(), true),
-                    ("Song Preview", track_preview_url, true),
-                    ("Markets", track_markets.to_string(), true),
-                    ("Duration", track_length.to_string(), true),
-                    ("Loudness", format!("{} dB", track_loudness), true),
-                    ("Keys", track_key, true),
-                    ("Mode", track_mode, true),
-                    ("Tempo", track_tempo.to_string(), true),
-                    ("Time Signature", track_time_signature.to_string(), true),
-                ]);
-                embed.footer(|footer| footer.text(track_copyright))
-            })
-        })
-        .await?;
+    let embed = CreateEmbed::new()
+        .title(track_name)
+        .thumbnail(track_image)
+        .url(track_url)
+        .color(0x001D_B954)
+        .fields(vec![
+            ("Artists", track_artists, true),
+            ("Album", format!("[{}]({})", track_album_name, track_album_url), true),
+            ("Disc", track_disc.to_string(), true),
+            ("Position", track_position.to_string(), true),
+            ("Release Date", track_date, true),
+            ("Popularity", format!("{}%", track_popularity), true),
+            ("Explicit", track_explicit.to_string(), true),
+            ("Song Preview", track_preview_url, true),
+            ("Markets", track_markets.to_string(), true),
+            ("Duration", track_length.to_string(), true),
+            ("Loudness", format!("{} dB", track_loudness), true),
+            ("Keys", track_key, true),
+            ("Mode", track_mode, true),
+            ("Tempo", track_tempo.to_string(), true),
+            ("Time Signature", track_time_signature.to_string(), true),
+        ])
+        .footer(CreateEmbedFooter::new(track_copyright));
+
+    message.channel_id.send_message(&context, CreateMessage::new().add_embed(embed)).await?;
 
     Ok(())
 }

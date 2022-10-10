@@ -1,9 +1,10 @@
 use crate::utils::parsing_utils::parse_channel;
 
 use serenity::{
+    builder::{CreateEmbed, CreateEmbedAuthor, CreateEmbedFooter, CreateMessage},
     client::Context,
     framework::standard::{macros::command, Args, CommandResult},
-    model::prelude::Message
+    model::prelude::{Colour, Message}
 };
 
 #[command]
@@ -13,7 +14,7 @@ use serenity::{
 async fn channel(context: &Context, message: &Message, arguments: Args) -> CommandResult {
     let cache = &context.cache;
     let guild_id = message.guild_id.ok_or("Failed to get GuildID from Message.")?;
-    let cached_guild = cache.guild(guild_id).ok_or("Unable to retrieve guild")?;
+    let cached_guild = cache.guild(guild_id).ok_or("Unable to retrieve guild")?.clone();
     let guild_icon = cached_guild.icon_url().unwrap();
 
     let channel_name = if arguments.is_empty() {
@@ -70,24 +71,20 @@ async fn channel(context: &Context, message: &Message, arguments: Args) -> Comma
         _ => "Unrecognized channel type"
     };
 
-    message
-        .channel_id
-        .send_message(&context, |message| {
-            message.embed(|embed| {
-                embed.author(|a| a.name(channel_name).icon_url(guild_icon));
-                embed.color(serenity::utils::Colour::BLURPLE);
-                embed.description(channel_topic);
-                embed.fields(vec![
-                    ("Category", channel_category, false),
-                    ("Position", channel_position.to_string(), true),
-                    ("Bitrate", channel_bitrate, true),
-                    ("Kind", channel_kind.to_string(), true),
-                    ("NSFW", channel_nsfw.to_string(), true),
-                ]);
-                embed.footer(|footer| footer.text(format!("Channel ID: {}", channel_id)))
-            })
-        })
-        .await?;
+    let embed = CreateEmbed::new()
+        .author(CreateEmbedAuthor::new(channel_name).icon_url(guild_icon))
+        .color(Colour::BLURPLE)
+        .description(channel_topic)
+        .fields(vec![
+            ("Category", channel_category, false),
+            ("Position", channel_position.to_string(), true),
+            ("Bitrate", channel_bitrate, true),
+            ("Kind", channel_kind.to_string(), true),
+            ("NSFW", channel_nsfw.to_string(), true),
+        ])
+        .footer(CreateEmbedFooter::new(format!("Channel ID: {}", channel_id)));
+
+    message.channel_id.send_message(&context, CreateMessage::new().embed(embed)).await?;
 
     Ok(())
 }

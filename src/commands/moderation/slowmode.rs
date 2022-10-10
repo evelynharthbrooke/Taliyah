@@ -1,7 +1,7 @@
 use serenity::{
     client::Context,
     framework::standard::{macros::command, Args, CommandResult},
-    model::channel::{Channel::Guild, Message}
+    model::channel::{Channel::Guild, Message}, builder::EditChannel
 };
 
 use tracing::error;
@@ -16,7 +16,7 @@ use tracing::error;
 /// the appropriate channel they want to apply slowmode to.
 async fn slowmode(context: &Context, message: &Message, mut arguments: Args) -> CommandResult {
     let slowmode_content = if let Ok(slowmode_rate) = arguments.single::<u64>() {
-        if let Err(why) = message.channel_id.edit(&context, |c| c.rate_limit_per_user(slowmode_rate)).await {
+        if let Err(why) = message.channel_id.edit(&context, EditChannel::new().rate_limit_per_user(slowmode_rate)).await {
             error!("Error setting channel's slowmode rate: {:?}", why);
             format!("Failed to set slowmode to `{}` seconds.", slowmode_rate)
         } else if slowmode_rate == 0 {

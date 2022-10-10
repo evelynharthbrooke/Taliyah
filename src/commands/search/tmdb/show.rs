@@ -3,6 +3,7 @@ use itertools::Itertools;
 use serde::Deserialize;
 
 use serenity::{
+    builder::{CreateEmbed, CreateEmbedFooter, CreateMessage},
     client::Context,
     framework::standard::{macros::command, Args, CommandResult},
     model::prelude::Message
@@ -128,20 +129,16 @@ async fn show(context: &Context, message: &Message, arguments: Args) -> CommandR
         ("External Links", show_external_links, false),
     ];
 
-    message
-        .channel_id
-        .send_message(&context, |message| {
-            message.embed(|embed| {
-                embed.title(show_title);
-                embed.url(show_url);
-                embed.thumbnail(show_poster);
-                embed.color(0x01b4e4);
-                embed.description(show_tagline);
-                embed.fields(show_fields);
-                embed.footer(|footer| footer.text("Powered by the The Movie Database API."))
-            })
-        })
-        .await?;
+    let embed = CreateEmbed::new()
+        .title(show_title)
+        .url(show_url)
+        .thumbnail(show_poster)
+        .color(0x01b4e4)
+        .description(show_tagline)
+        .fields(show_fields)
+        .footer(CreateEmbedFooter::new("Powered by the The Movie Database API."));
+
+    message.channel_id.send_message(&context, CreateMessage::new().embed(embed)).await?;
 
     Ok(())
 }

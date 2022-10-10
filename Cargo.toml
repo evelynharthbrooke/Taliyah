@@ -36,7 +36,7 @@ features            = ["json", "multipart", "stream", "rustls-tls"]
 
 [dependencies.serenity]
 git                 = "https://github.com/serenity-rs/serenity"
-rev                 = "91c2c3e47f162c319986906e4cd81386bd1b2d96"
+branch              = "next"
 default-features    = true
 features            = ["collector", "unstable_discord_api", "rustls_backend"]
 

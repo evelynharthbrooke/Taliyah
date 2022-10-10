@@ -10,7 +10,7 @@ pub async fn after(context: &Context, message: &Message, command: &str, error: C
     if let Err(why) = &error {
         error!("Error while running command {}", &command);
         error!("{:?}", &error);
-        if message.channel_id.say(context, &why).await.is_err() {
+        if message.channel_id.say(context, why.to_string()).await.is_err() {
             let channel = &message.channel_id.name(&context).await.unwrap();
             error!("Unable to send messages to channel {}", &channel);
         };

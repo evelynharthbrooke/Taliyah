@@ -3,6 +3,7 @@ use humantime::format_duration;
 use itertools::Itertools;
 
 use serenity::{
+    builder::{CreateEmbed, CreateEmbedFooter, CreateMessage},
     client::Context,
     framework::standard::{macros::command, Args, CommandResult},
     model::prelude::Message
@@ -89,20 +90,16 @@ async fn album(context: &Context, message: &Message, args: Args) -> CommandResul
         ("Tracks", album_track_count.to_string(), true),
     ];
 
-    message
-        .channel_id
-        .send_message(context, |message| {
-            message.embed(|embed| {
-                embed.title(album_name);
-                embed.url(album_url);
-                embed.thumbnail(album_image);
-                embed.color(0x001D_B954);
-                embed.fields(album_fields);
-                embed.description(album_tracks);
-                embed.footer(|footer| footer.text(album_copyright))
-            })
-        })
-        .await?;
+    let embed = CreateEmbed::new()
+        .title(album_name)
+        .url(album_url)
+        .thumbnail(album_image)
+        .color(0x001D_B954)
+        .fields(album_fields)
+        .description(album_tracks)
+        .footer(CreateEmbedFooter::new(album_copyright));
+
+    message.channel_id.send_message(&context, CreateMessage::new().embed(embed)).await?;
 
     Ok(())
 }
