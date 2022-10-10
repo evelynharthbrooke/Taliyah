@@ -120,7 +120,7 @@ async fn main() -> Result<(), Box<dyn Error + Send + Sync>> {
     let token = configuration.bot.discord.token;
     let prefix = configuration.bot.general.prefix.as_str();
 
-    let http = Http::new_with_token(&token);
+    let http = Http::new(&token);
     let id = http.get_current_user().await.unwrap().id;
     let owner = http.get_current_application_info().await.unwrap().owner.id;
 
@@ -153,13 +153,11 @@ async fn main() -> Result<(), Box<dyn Error + Send + Sync>> {
         .group(&UTILITIES_GROUP)
         .help(&HELP);
 
-    let mut client = ClientBuilder::new(&token)
+    let mut client = ClientBuilder::new(&token, GatewayIntents::all())
         .event_handler(Handler)
         .application_id(appid)
-        .intents(GatewayIntents::all())
         .framework(framework)
         .await?;
-
     {
         let url = configuration.bot.database.url;
         let pool = PgPoolOptions::new().max_connections(20).connect(&url).await?;

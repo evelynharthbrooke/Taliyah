@@ -5,7 +5,7 @@ use serenity::{
     builder::CreateActionRow,
     client::Context,
     framework::standard::{macros::command, Args, CommandResult},
-    model::{interactions::message_component::ButtonStyle, prelude::Message}
+    model::{application::component::ButtonStyle, prelude::Message}
 };
 
 use crate::{data::ReqwestContainer, utils::read_config};

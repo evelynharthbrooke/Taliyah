@@ -3,7 +3,7 @@ use serde::Deserialize;
 use serenity::{
     client::Context,
     framework::standard::{macros::command, Args, CommandResult},
-    model::{interactions::message_component::ButtonStyle::Link, prelude::Message}
+    model::{application::component::ButtonStyle::Link, prelude::Message}
 };
 
 use crate::data::ReqwestContainer;
