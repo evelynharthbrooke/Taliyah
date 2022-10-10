@@ -5,9 +5,10 @@ use reqwest::{Client, Url};
 use serde::Deserialize;
 
 use serenity::{
+    builder::EditMessage,
     client::Context,
     framework::standard::{macros::command, Args, CommandResult},
-    model::prelude::Message, builder::EditMessage
+    model::prelude::Message
 };
 
 #[derive(Debug, Deserialize)]

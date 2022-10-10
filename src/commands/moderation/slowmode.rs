@@ -1,7 +1,8 @@
 use serenity::{
+    builder::EditChannel,
     client::Context,
     framework::standard::{macros::command, Args, CommandResult},
-    model::channel::{Channel::Guild, Message}, builder::EditChannel
+    model::channel::{Channel::Guild, Message}
 };
 
 use tracing::error;

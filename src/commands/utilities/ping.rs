@@ -1,9 +1,10 @@
 use chrono::{offset::Utc, Duration};
 
 use serenity::{
+    builder::{CreateEmbed, EditMessage},
     client::{bridge::gateway::ShardId, Context},
     framework::standard::{macros::command, CommandResult},
-    model::prelude::Message, builder::{CreateEmbed, EditMessage}
+    model::prelude::Message
 };
 
 use crate::ShardManagerContainer;
