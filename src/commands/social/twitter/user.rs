@@ -47,7 +47,7 @@ pub struct UserTweets {
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
 pub struct UserTweet {
-    pub text: String // the text 
+    pub text: String // the text
 }
 
 #[command]
