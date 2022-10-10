@@ -41,7 +41,7 @@ async fn xkcd(context: &Context, message: &Message, mut arguments: Args) -> Comm
         .title(title)
         .color(0xfafafa)
         .description(alt)
-        .image(response.img.as_str())
+        .image(response.img)
         .footer(CreateEmbedFooter::new(format!("xkcd comic no. {}", &num)));
 
     let components = CreateComponents::new().add_action_row(
