@@ -1,8 +1,8 @@
-use chrono::prelude::{NaiveDate, Utc};
+use chrono::prelude::NaiveDate;
 use serde::Deserialize;
 
 use serenity::{
-    builder::{CreateEmbed, CreateEmbedFooter, CreateMessage},
+    builder::{CreateActionRow, CreateButton, CreateComponents, CreateEmbed, CreateEmbedFooter, CreateMessage},
     client::Context,
     framework::standard::{macros::command, Args, CommandResult},
     model::prelude::Message
@@ -78,7 +78,10 @@ async fn collection(context: &Context, message: &Message, arguments: Args) -> Co
     let collection_id = collection_result.id;
     let collection_url = format!("https://www.themoviedb.org/collection/{collection_id}");
     let collection_overview = collection_result.overview;
-    let collection_parts = collection_result.parts;
+    let mut collection_parts = collection_result.parts;
+    collection_parts.sort_unstable_by_key(|p| p.release_date);
+
+    let mut components = CreateComponents::new();
     let mut collection_fields = Vec::with_capacity(collection_parts.len());
 
     for part in &collection_parts {
@@ -88,6 +91,16 @@ async fn collection(context: &Context, message: &Message, arguments: Args) -> Co
         collection_fields.push((format!("{part_title} ({part_release_date})"), part_summary, false));
     }
 
+    for chunk in collection_parts.chunks(5) {
+        let mut row = CreateActionRow::new();
+        for part in chunk {
+            let id = &part.id;
+            let title = &part.title;
+            row = row.clone().add_button(CreateButton::new_link(format!("https://themoviedb.org/movie/{id}")).label(title));
+        }
+        components = components.clone().add_action_row(row.clone());
+    }
+
     let embed = CreateEmbed::new()
         .title(collection_name)
         .url(collection_url)
@@ -95,10 +108,9 @@ async fn collection(context: &Context, message: &Message, arguments: Args) -> Co
         .color(0x0001_d277)
         .description(collection_overview)
         .fields(collection_fields)
-        .footer(CreateEmbedFooter::new("Powered by The Movie Database."))
-        .timestamp(Utc::now());
+        .footer(CreateEmbedFooter::new("Powered by TMDb."));
 
-    message.channel_id.send_message(&context, CreateMessage::new().embed(embed)).await?;
+    message.channel_id.send_message(&context, CreateMessage::new().embed(embed).components(components)).await?;
 
     Ok(())
 }
