@@ -90,10 +90,10 @@ async fn collection(context: &Context, message: &Message, arguments: Args) -> Co
             let title = &part.title;
             let release_date = part.release_date.format("%B %-e, %Y");
             let summary = &part.overview;
-            row = row.clone().add_button(CreateButton::new_link(format!("https://themoviedb.org/movie/{id}")).label(title));
+            row = row.add_button(CreateButton::new_link(format!("https://themoviedb.org/movie/{id}")).label(title));
             fields.push((format!("{title} ({release_date})"), summary, false));
         }
-        components = components.clone().add_action_row(row.clone());
+        components = components.add_action_row(row);
     }
 
     let embed = CreateEmbed::new()

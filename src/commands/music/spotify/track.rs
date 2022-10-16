@@ -27,8 +27,8 @@ async fn track(context: &Context, message: &Message, args: Args) -> CommandResul
 
     let track_search = spotify.search().search(args.rest(), [ItemType::Track].iter().copied(), false, 1, 0, None);
     let track_result = &track_search.await.unwrap().data;
-    let tracks = track_result.tracks.clone();
-    let items = tracks.unwrap().items;
+    let tracks = &track_result.tracks;
+    let items = &tracks.as_ref().unwrap().items;
 
     if items.is_empty() {
         message.channel_id.say(context, format!("No track was found for `{}`. Try something else.", args.rest())).await?;
@@ -36,23 +36,23 @@ async fn track(context: &Context, message: &Message, args: Args) -> CommandResul
     }
 
     let track = items.first().unwrap();
-    let track_id = &track.id.clone().unwrap();
-    let track_album = track.album.clone();
-    let track_album_id = &track_album.id.unwrap();
+    let track_id = track.id.as_ref().unwrap();
+    let track_album = &track.album;
+    let track_album_id = track_album.id.as_ref().unwrap();
     let track_name = &track.name;
 
     let track_album = spotify.albums().get_album(track_album_id, None).await.unwrap().data;
 
-    let track_album_name = &track_album.name;
+    let track_album_name = track_album.name;
     let track_album_url = track_album.external_urls.get("spotify").unwrap();
     let track_markets = track_album.available_markets.unwrap().len();
     let track_label = track_album.label;
     let track_length = format_duration(Duration::from_millis((track.duration.as_millis() as u64) / 1000 * 1000));
     let track_url = track.external_urls.get("spotify").unwrap();
-    let track_explicit = track.explicit;
-    let track_popularity = &track.popularity;
-    let track_position = &track.track_number;
-    let track_disc = &track.disc_number;
+    let track_explicit = if track.explicit { "Yes" } else { "No" };
+    let track_popularity = track.popularity;
+    let track_position = track.track_number;
+    let track_disc = track.disc_number;
     let track_image = &track_album.images.first().unwrap().url;
     let track_artists = track.artists.iter().map(|a| format!("[{}]({})", &a.name, &a.external_urls["spotify"])).join(", ");
     let track_date = track_album.release_date.to_string();

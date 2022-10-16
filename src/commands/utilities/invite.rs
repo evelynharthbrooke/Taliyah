@@ -10,10 +10,8 @@ use tracing::error;
 #[command]
 #[description = "Generates an invite link for the bot."]
 async fn invite(context: &Context, message: &Message) -> CommandResult {
-    let cache = &context.cache;
-    let permissions = Permissions::empty();
-    let current_user = cache.current_user().clone();
-    let url = match current_user.invite_url(&context.http, permissions).await {
+    let current_user = &context.cache.current_user().clone();
+    let url = match current_user.invite_url(&context.http, Permissions::empty()).await {
         Ok(invite) => invite,
         Err(why) => {
             error!("Encountered an error while trying to generate an invite: {}", why);
@@ -22,7 +20,7 @@ async fn invite(context: &Context, message: &Message) -> CommandResult {
         }
     };
 
-    let user = &current_user;
+    let user = current_user;
     let name = &user.name;
     let avatar = user.avatar_url().unwrap();
 
