@@ -75,7 +75,6 @@ async fn collection(context: &Context, message: &Message, arguments: Args) -> Co
 
     let collection_name = collection_result.name;
     let collection_poster = format!("https://image.tmdb.org/t/p/original{}", collection_result.poster_path);
-    let collection_id = collection_result.id;
     let collection_url = format!("https://www.themoviedb.org/collection/{collection_id}");
     let collection_overview = collection_result.overview;
 
