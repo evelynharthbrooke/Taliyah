@@ -57,7 +57,7 @@ async fn status(context: &Context, message: &Message, arguments: Args) -> Comman
                 let mut artists = activity.state.as_ref().unwrap().to_string();
                 let icon = "https://upload.wikimedia.org/wikipedia/commons/7/71/Spotify.png";
                 let id = activity.sync_id.as_ref().unwrap();
-                let url = format!("https://open.spotify.com/track/{}", id);
+                let url = format!("https://open.spotify.com/track/{id}");
 
                 let timestamp_start = activity.timestamps.as_ref().unwrap().start.unwrap() as i64 / 1000;
                 let timestamp_end = activity.timestamps.as_ref().unwrap().end.unwrap() as i64 / 1000;
@@ -91,7 +91,7 @@ async fn status(context: &Context, message: &Message, arguments: Args) -> Comman
                 }
 
                 let artwork = assets.large_image.as_ref().unwrap().replace("spotify:", "");
-                let artwork_url = format!("https://i.scdn.co/image/{}", artwork);
+                let artwork_url = format!("https://i.scdn.co/image/{artwork}");
 
                 let embed = CreateEmbed::new()
                     .author(CreateEmbedAuthor::new(format!("Now playing on Spotify for {name}:")).icon_url(icon))

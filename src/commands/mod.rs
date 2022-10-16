@@ -3,7 +3,6 @@ pub mod fun;
 pub mod info;
 pub mod moderation;
 pub mod music;
-pub mod research;
 pub mod search;
 pub mod social;
 pub mod utilities;

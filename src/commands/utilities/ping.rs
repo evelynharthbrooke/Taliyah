@@ -49,9 +49,8 @@ async fn ping(context: &Context, message: &Message) -> CommandResult {
 
     let response = format!(
         "Pong! Succesfully retrieved the message and shard latencies. :ping_pong:\n\n\
-        **API Response Time**: `{}ms`\n\
-        **Shard Response Time**: {}",
-        api_response, shard_response
+        **API Response Time**: `{api_response}ms`\n\
+        **Shard Response Time**: {shard_response}"
     );
 
     let embed = CreateEmbed::new().color(0x008b_0000).title("Discord Latency Information").description(response);

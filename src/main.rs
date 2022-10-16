@@ -12,6 +12,7 @@ mod listeners;
 mod models;
 mod utils;
 
+use aspotify::{Client as SpotifyClient, ClientCredentials};
 use commands::{
     extra::sloc::*,
     fun::{ascii::*, printerfacts::*, urban::*, xkcd::*},
@@ -116,13 +117,12 @@ async fn main() -> Result<(), Box<dyn Error + Send + Sync>> {
         info!("Tracing initialized with logging level set to {}.", level);
     }
 
-    let appid = configuration.bot.discord.appid;
     let token = configuration.bot.discord.token;
     let prefix = configuration.bot.general.prefix.as_str();
 
     let http = Http::new(&token);
-    let id = http.get_current_user().await.unwrap().id;
-    let owner = http.get_current_application_info().await.unwrap().owner.id;
+    let id = http.get_current_user().await?.id;
+    let owner = http.get_current_application_info().await?.owner.id;
 
     let mut owners = HashSet::new();
     owners.insert(owner);
@@ -141,30 +141,27 @@ async fn main() -> Result<(), Box<dyn Error + Send + Sync>> {
         .group(&SOCIAL_GROUP)
         .group(&UTILITIES_GROUP)
         .help(&HELP);
+
     framework.configure(|c| c.on_mention(Some(id)).prefix(prefix).ignore_webhooks(false).no_dm_prefix(true).owners(owners));
 
-    let mut client = ClientBuilder::new(&token, GatewayIntents::all())
-        .event_handler(Handler)
-        .framework(framework)
-        .application_id(appid.into())
-        .await?;
+    let mut client = ClientBuilder::new(&token, GatewayIntents::all()).event_handler(Handler).framework(framework).await?;
+
     {
+        let mut data = client.data.write().await;
         let url = configuration.bot.database.url;
         let pool = PgPoolOptions::new().max_connections(20).connect(&url).await?;
-        let http_client = Client::builder().user_agent(REQWEST_USER_AGENT).redirect(Policy::none()).build()?;
+        let http = Client::builder().user_agent(REQWEST_USER_AGENT).redirect(Policy::none()).build()?;
 
-        let mut data = client.data.write().await;
         data.insert::<ConfigContainer>(read_config("config.toml"));
         data.insert::<DatabasePool>(pool);
         data.insert::<ShardManagerContainer>(Arc::clone(&client.shard_manager));
-        data.insert::<ReqwestContainer>(http_client);
+        data.insert::<ReqwestContainer>(http);
 
         {
             let id = configuration.api.music.spotify.client_id;
             let secret = configuration.api.music.spotify.client_secret;
-            let credentials = aspotify::ClientCredentials { id, secret };
-            let spotify_client = aspotify::Client::new(credentials);
-            data.insert::<SpotifyContainer>(spotify_client);
+            let client = SpotifyClient::new(ClientCredentials { id, secret });
+            data.insert::<SpotifyContainer>(client);
         }
     }
 

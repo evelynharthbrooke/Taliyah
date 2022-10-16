@@ -67,7 +67,6 @@ pub struct CrewMember {
 #[command]
 #[aliases("cast", "credits")]
 #[min_args(2)]
-#[max_args(2)]
 async fn cast(context: &Context, message: &Message, mut arguments: Args) -> CommandResult {
     if arguments.rest().is_empty() {
         message.channel_id.say(context, "No show or movie name provided. Provide one & try again.").await?;
@@ -115,14 +114,14 @@ async fn cast(context: &Context, message: &Message, mut arguments: Args) -> Comm
 
         let show_id = search_results.first().unwrap().id;
 
-        let show_endpoint = format!("https://api.themoviedb.org/3/tv/{}", show_id);
+        let show_endpoint = format!("https://api.themoviedb.org/3/tv/{show_id}");
         let show_sub_requests = ("append_to_response", &"external_ids".to_string());
         let show_response = client.get(&show_endpoint).query(&[("api_key", &api_key), show_sub_requests]).send().await?;
         let show_result: Show = show_response.json().await?;
         let show_poster_path = show_result.poster_path.unwrap();
         let show_poster = format!("https://image.tmdb.org/t/p/original/{}", &show_poster_path.replace('/', ""));
 
-        let credits_endpoint = format!("https://api.themoviedb.org/3/tv/{}/credits", show_id);
+        let credits_endpoint = format!("https://api.themoviedb.org/3/tv/{show_id}/credits");
         let credits_response = client.get(&credits_endpoint).query(&[("api_key", &api_key)]).send().await?;
         let credits_result: Credits = credits_response.json().await?;
 
@@ -215,11 +214,12 @@ async fn cast(context: &Context, message: &Message, mut arguments: Args) -> Comm
         }
 
         let embed = CreateEmbed::new()
-            .title(format!("{} — Cast & Crew", show_name))
+            .title(format!("{show_name} — Cast & Crew"))
             .color(0x0001_d277)
             .thumbnail(show_poster)
-            .fields(if !show_crew_fields.is_empty() { show_crew_fields } else { show_cast_fields })
-            .footer(CreateEmbedFooter::new("Powered by The Movie Database."));
+            .fields(show_crew_fields)
+            .fields(show_cast_fields)
+            .footer(CreateEmbedFooter::new("Powered by TMDb."));
 
         message.channel_id.send_message(&context, CreateMessage::new().embed(embed)).await?;
 
@@ -228,14 +228,6 @@ async fn cast(context: &Context, message: &Message, mut arguments: Args) -> Comm
         let search_endpoint = "https://api.themoviedb.org/3/search/movie";
         let search_response: RequestBuilder;
 
-        // This is a pretty hacky way of being able to search by year, but
-        // surprisingly enough it actually works from what I've tested, and
-        // while it might be a tad slow, it should compute fast enough to not
-        // make users wonder why its taking so long for the response to send.
-        //
-        // This code follows the y: notation syntax as available on the website
-        // for The Movie Database, with the additional ability to use year: in
-        // place of y:, depending on the user's preference.
         if input.contains("y:") || input.contains("year:") {
             input = input.replace(" y:", "").replace(" year:", "");
             let mut year_rev: Vec<char> = input.chars().rev().take(4).collect();
@@ -271,8 +263,10 @@ async fn cast(context: &Context, message: &Message, mut arguments: Args) -> Comm
         let mut movie_cast_fields = Vec::with_capacity(20);
         let mut movie_crew_fields = Vec::with_capacity(5);
 
-        for member in movie_cast {
-            movie_cast_fields.push((&member.name, &member.character, true));
+        if !movie_cast.is_empty() {
+            for member in movie_cast {
+                movie_cast_fields.push((&member.name, &member.character, true));
+            }
         }
 
         for member in movie_crew {
@@ -285,13 +279,13 @@ async fn cast(context: &Context, message: &Message, mut arguments: Args) -> Comm
             .thumbnail(movie_poster)
             .description(format!(
                 "\
-            Not all cast and crew members could be displayed for *{}*. For a full \
-            list of the cast / crew members in this movie, please visit the The Movie \
-            Database website by [clicking here]({}).\
-            ",
-                movie_name, movie_cast_url
+                Not all cast and crew members could be displayed for *{movie_name}*. For a full \
+                list of the cast / crew members in this movie, please visit the The Movie \
+                Database website by [clicking here]({movie_cast_url}).\
+                "
             ))
-            .fields(if !movie_crew_fields.is_empty() { movie_crew_fields } else { movie_cast_fields })
+            .fields(movie_crew_fields)
+            .fields(movie_cast_fields)
             .footer(CreateEmbedFooter::new("Powered by The Movie Database."));
 
         message.channel_id.send_message(&context, CreateMessage::new().embed(embed)).await?;

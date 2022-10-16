@@ -43,7 +43,7 @@ async fn urban(context: &Context, message: &Message, arguments: Args) -> Command
     let response: Response = request.json().await?;
 
     if response.definitions.is_empty() {
-        message.channel_id.say(context, format!("No definitions found for `{}`. Try a different word.", term)).await?;
+        message.channel_id.say(context, format!("No definitions found for `{term}`. Try a different word.")).await?;
         return Ok(());
     }
 
@@ -56,7 +56,7 @@ async fn urban(context: &Context, message: &Message, arguments: Args) -> Command
     let thumbs_up = &definition.thumbs_up;
     let thumbs_down = &definition.thumbs_down;
 
-    let rating = format!("{} 👍 | {} 👎", thumbs_up, thumbs_down);
+    let rating = format!("{thumbs_up} 👍 | {thumbs_down} 👎");
 
     let embed = CreateEmbed::new()
         .author(CreateEmbedAuthor::new(word).url(permalink))
@@ -84,7 +84,7 @@ async fn randefine(context: &Context, message: &Message) -> CommandResult {
     let thumbs_up = &definition.thumbs_up;
     let thumbs_down = &definition.thumbs_down;
 
-    let rating = format!("{} 👍 | {} 👎", thumbs_up, thumbs_down);
+    let rating = format!("{thumbs_up} 👍 | {thumbs_down} 👎");
 
     let embed = CreateEmbed::new()
         .author(CreateEmbedAuthor::new(word).url(permalink))

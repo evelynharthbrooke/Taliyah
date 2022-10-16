@@ -52,7 +52,7 @@ async fn role(context: &Context, message: &Message, arguments: Args) -> CommandR
         .author(CreateEmbedAuthor::new(name).icon_url(guild_icon))
         .color(color)
         .fields(role_fields)
-        .footer(CreateEmbedFooter::new(format!("Role ID: {}", id)));
+        .footer(CreateEmbedFooter::new(format!("Role ID: {id}")));
 
     message.channel_id.send_message(&context, CreateMessage::new().embed(embed)).await?;
 

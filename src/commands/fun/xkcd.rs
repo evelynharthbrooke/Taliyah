@@ -1,3 +1,4 @@
+use crate::data::ReqwestContainer;
 use reqwest::StatusCode;
 use serde::Deserialize;
 use serenity::{
@@ -6,8 +7,6 @@ use serenity::{
     framework::standard::{macros::command, Args, CommandResult},
     model::prelude::Message
 };
-
-use crate::data::ReqwestContainer;
 
 #[derive(Debug, Clone, Deserialize)]
 struct XkcdComic {
@@ -22,27 +21,25 @@ struct XkcdComic {
 async fn xkcd(context: &Context, message: &Message, mut arguments: Args) -> CommandResult {
     let comic_num = arguments.single::<u32>().unwrap_or(0);
     let latest_comic = "https://xkcd.com/info.0.json";
-    let xkcd_url = format!("https://xkcd.com/{}/info.0.json", comic_num);
+    let selected_comic = format!("https://xkcd.com/{comic_num}/info.0.json");
     let client = context.data.read().await.get::<ReqwestContainer>().cloned().unwrap();
-    let request = client.get(if comic_num == 0 { latest_comic } else { &xkcd_url }).send().await?;
+    let request = client.get(if comic_num == 0 { latest_comic } else { &selected_comic }).send().await?;
     if request.status() == StatusCode::NOT_FOUND {
-        message.reply(context, "You did not provide a valid xkcd comic ID!").await?;
+        message.reply(context, "You did not provide a valid comic id.").await?;
         return Ok(());
     }
 
     let response: XkcdComic = request.json().await?;
-    let title = &response.title;
-    let alt = &response.alt;
     let num = response.num;
-    let page = format!("https://xkcd.com/{}", num);
-    let wiki = format!("https://explainxkcd.com/wiki/index.php/{}", num);
+    let page = format!("https://xkcd.com/{num}");
+    let wiki = format!("https://explainxkcd.com/wiki/index.php/{num}");
 
     let embed = CreateEmbed::new()
-        .title(title)
+        .title(&response.title)
         .color(0xfafafa)
-        .description(alt)
-        .image(response.img)
-        .footer(CreateEmbedFooter::new(format!("xkcd comic no. {}", &num)));
+        .description(&response.alt)
+        .image(&response.img)
+        .footer(CreateEmbedFooter::new(format!("xkcd comic no. {num}")));
 
     let components = CreateComponents::new().add_action_row(
         CreateActionRow::new()

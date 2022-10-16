@@ -22,9 +22,9 @@ impl EventHandler for Handler {
 
         let api_version = ready.version;
         let bot_gateway = http.get_bot_gateway().await.unwrap();
+        let bot_owner = http.get_current_application_info().await.unwrap().owner;
         let t_sessions = bot_gateway.session_start_limit.total;
         let r_sessions = bot_gateway.session_start_limit.remaining;
-        let bot_owner = http.get_current_application_info().await.unwrap().owner;
         let db_name: String = sqlx::query("SELECT current_database()").fetch_one(&pool).await.unwrap().get(0);
         let db_version: String = sqlx::query("SELECT version()").fetch_one(&pool).await.unwrap().get(0);
 
@@ -35,12 +35,11 @@ impl EventHandler for Handler {
 
         let guild_count = ready.guilds.len();
 
-        info!("Connected to the Discord API (version {}) with {}/{} sessions remaining.", api_version, r_sessions, t_sessions);
-        info!("Connected to database {} running {}.", db_name, db_version);
-        info!("Connected to and serving a total of {} guild(s).", guild_count);
+        info!("Connected to the Discord API (version {api_version}) with {r_sessions}/{t_sessions} sessions remaining.");
+        info!("Connected to database {db_name} running {db_version}.");
+        info!("Connected to and serving a total of {guild_count} guild(s).");
 
-        let presence_string = format!("on {} guilds | e.help", guild_count);
-
+        let presence_string = format!("on {guild_count} guilds | e.help");
         context.set_presence(Some(ActivityData::playing(&presence_string)), OnlineStatus::Online);
     }
 
@@ -60,17 +59,18 @@ impl EventHandler for Handler {
             .await
             .unwrap();
 
-        info!("Guild {} recognized and loaded.", guild_name);
+        info!("Guild {guild_name} recognized and loaded.");
     }
 
     async fn thread_create(&self, ctx: Context, thread: GuildChannel) {
-        if let Err(e) = thread.id.join_thread(ctx.http).await {
-            info!("Failed to join thread (ID: {}) successfully: {}", thread.id, e)
+        if let Err(err) = thread.id.join_thread(ctx.http).await {
+            let thread_id = thread.id;
+            info!("Failed to succesfully join thread (ID: {thread_id}): {err}")
         } else {
             let name = &thread.name;
             let guild = &thread.guild(&ctx.cache).unwrap().name;
             let id = thread.id.get();
-            info!("Joined new thread: {} (Server: {}, ID: {})", name, guild, id)
+            info!("Joined new thread: {name} (Server: {guild}, ID: {id})")
         }
     }
 

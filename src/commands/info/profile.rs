@@ -106,7 +106,7 @@ async fn set(context: &Context, message: &Message, mut arguments: Args) -> Comma
                 .await
                 .unwrap();
 
-            message.channel_id.say(&context, format!("Your location has been set to `{}`.", &value)).await?;
+            message.channel_id.say(&context, format!("Your location has been set to `{value}`.")).await?;
         }
         "lastfm" => {
             if value.is_empty() {
@@ -135,7 +135,7 @@ async fn set(context: &Context, message: &Message, mut arguments: Args) -> Comma
                 .await
                 .unwrap();
 
-            message.channel_id.say(&context, format!("Your Last.fm username has been set to `{}`.", &value)).await?;
+            message.channel_id.say(&context, format!("Your Last.fm username has been set to `{value}`.")).await?;
         }
         "name" => {
             if value.is_empty() {
@@ -150,7 +150,7 @@ async fn set(context: &Context, message: &Message, mut arguments: Args) -> Comma
                 .await
                 .unwrap();
 
-            message.channel_id.say(&context, format!("Your name has been set to {}.", &value)).await?;
+            message.channel_id.say(&context, format!("Your name has been set to {value}.")).await?;
         }
         "gender" => {
             if value.is_empty() {
@@ -165,7 +165,7 @@ async fn set(context: &Context, message: &Message, mut arguments: Args) -> Comma
                 .await
                 .unwrap();
 
-            message.channel_id.say(&context, format!("Your gender has been set to {}.", &value)).await?;
+            message.channel_id.say(&context, format!("Your gender has been set to {value}.")).await?;
         }
         "pronouns" => {
             if value.is_empty() {
@@ -180,7 +180,7 @@ async fn set(context: &Context, message: &Message, mut arguments: Args) -> Comma
                 .await
                 .unwrap();
 
-            message.channel_id.say(&context, format!("Your pronouns have been set to {}.", &value)).await?;
+            message.channel_id.say(&context, format!("Your pronouns have been set to {value}.")).await?;
         }
         _ => {
             message.channel_id.say(&context, "That is not a valid profile property.").await?;

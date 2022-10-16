@@ -40,9 +40,9 @@ async fn user(context: &Context, message: &Message, args: Args) -> CommandResult
 
     let user = &member.user;
 
-    let mut track_art: String = "".to_string();
-    let mut activities: String = String::new();
-    let mut active_status: String = String::new();
+    let mut track_art = "".to_string();
+    let mut activities = String::new();
+    let mut active_status = String::new();
 
     if cached_guild.presences.get(&user.id).is_some() {
         let presence = cached_guild.presences.get(&user.id).unwrap();
@@ -61,15 +61,13 @@ async fn user(context: &Context, message: &Message, args: Args) -> CommandResult
                             let artists = activity.state.as_ref().unwrap();
                             let album = assets.large_text.as_ref().unwrap();
                             let uri = activity.sync_id.as_ref().unwrap();
-                            let url = format!("https://open.spotify.com/track/{}", uri);
+                            let url = format!("https://open.spotify.com/track/{uri}");
                             let mut artist_string = artists.to_string();
-
                             if artists.contains(';') {
                                 let replacer = artist_string.replace(';', ",");
                                 let commas = replacer.matches(", ").count();
                                 let rfind = artist_string.rfind(';').unwrap();
                                 let (left, right) = replacer.split_at(rfind);
-
                                 let format_string = if commas >= 2 {
                                     format!("{}{}", left, right.replace(',', ", &"))
                                 } else {
@@ -81,11 +79,11 @@ async fn user(context: &Context, message: &Message, args: Args) -> CommandResult
                             }
 
                             let artwork = assets.large_image.as_ref().unwrap().replace("spotify:", "");
-                            let artwork_url = format!("https://i.scdn.co/image/{}", artwork);
+                            let artwork_url = format!("https://i.scdn.co/image/{artwork}");
 
                             track_art = artwork_url;
 
-                            format!("listening to **[{}]({})** on **{}** by **{}** on", song, url, album, artist_string)
+                            format!("listening to **[{song}]({url})** on **{album}** by **{artist_string}** on")
                         } else {
                             "listening to".to_owned()
                         }
@@ -99,11 +97,11 @@ async fn user(context: &Context, message: &Message, args: Args) -> CommandResult
                             if task.contains("Editing ") {
                                 task = task.replace("Editing ", "");
                                 project = project.replace("Workspace: ", "");
-                                format!("editing the file **{}** in the project **{}** with", task, project)
+                                format!("editing the file **{task}** in the project **{project}** with")
                             } else {
                                 task = task.replace("Debugging ", "");
                                 project = project.replace("Debugging: ", "");
-                                format!("debugging the file **{}** in the project **{}** with", task, project)
+                                format!("debugging the file **{task}** in the project **{project}** with")
                             }
                         } else {
                             "playing".to_owned()
@@ -114,12 +112,11 @@ async fn user(context: &Context, message: &Message, args: Args) -> CommandResult
                     _ => "".to_owned()
                 };
 
-                format!("{} **{}**", activity_kind, activity_name)
+                format!("{activity_kind} **{activity_name}**")
             })
             .join(" and ");
 
         let currently_status: String = format!("{} is currently ", user.name);
-
         active_status.push_str(currently_status.as_str());
 
         let status = match presence.status {
@@ -169,7 +166,7 @@ async fn user(context: &Context, message: &Message, args: Args) -> CommandResult
         if activities.is_empty() {
             active_status.push_str(".\n\n")
         } else {
-            activities = format!(", {}.\n\n", activities);
+            activities = format!(", {activities}.\n\n");
         }
     };
 
@@ -191,7 +188,6 @@ async fn user(context: &Context, message: &Message, args: Args) -> CommandResult
 
     let mut roles = String::new();
     let mut role_count = 0;
-
     if member.roles(cache).is_some() {
         let cached_roles = member.roles(cache).unwrap();
         let cached_roles_sorted = cached_roles.iter().sorted_by_key(|r| r.position).rev();
@@ -219,20 +215,19 @@ async fn user(context: &Context, message: &Message, args: Args) -> CommandResult
         .thumbnail(track_art)
         .colour(color)
         .description(format!(
-            "{}{}\
-        **__User Information__**:\n\
-        **Type**: {}\n\
-        **Profile**: <@{}>\n\
-        **Tag**: {}\n\
-        **ID**: {}\n\
-        **Creation Date**: {}\n\n\
-        **__Guild-related Information__**:\n\
-        **Join Date**: {}\n\
-        **Nickname**: {}\n\
-        **Display Color**: {}\n\
-        **Main Role**: {}\n\
-        **Roles ({})**: {}",
-            active_status, activities, account_type, id, tag, id, created, joined, nickname, hex, main_role, role_count, roles
+            "{active_status}{activities}\
+            **__User Information__**:\n\
+            **Type**: {account_type}\n\
+            **Profile**: <@{id}>\n\
+            **Tag**: {tag}\n\
+            **ID**: {id}\n\
+            **Creation Date**: {created}\n\n\
+            **__Guild-related Information__**:\n\
+            **Join Date**: {joined}\n\
+            **Nickname**: {nickname}\n\
+            **Display Color**: {hex}\n\
+            **Main Role**: {main_role}\n\
+            **Roles ({role_count})**: {roles}"
         ));
 
     message.channel_id.send_message(&context, CreateMessage::new().embed(embed)).await?;
