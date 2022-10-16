@@ -19,8 +19,6 @@ use crate::utils::{get_profile_field, net_utils::*};
 #[aliases("np")]
 #[usage("<user>, or leave blank")]
 async fn nowplaying(context: &Context, message: &Message, mut arguments: Args) -> CommandResult {
-    message.channel_id.broadcast_typing(context).await?;
-
     let user = if !arguments.rest().is_empty() {
         if !message.mentions.is_empty() {
             get_profile_field(context, "user_lastfm_id", message.mentions.first().unwrap().id).await.unwrap()
@@ -102,13 +100,13 @@ async fn nowplaying(context: &Context, message: &Message, mut arguments: Args) -
     let artist = &track.artist.name;
     let album = if track.album.name.is_empty() { "".to_owned() } else { track.album.name.to_owned() };
     let artwork = get_album_artwork(context, artist, name, &album).await;
-    let header = format!("{} is currently playing:", username);
+    let header = format!("{username} is currently playing:");
 
     let embed = CreateEmbed::new()
         .author(CreateEmbedAuthor::new(header).url(url).icon_url(avatar))
         .title(name)
         .url(track_url)
-        .description(format!("**{}** | {}", artist, album))
+        .description(format!("**{artist}** | {album}"))
         .thumbnail(artwork)
         .color(0x00d5_1007)
         .footer(CreateEmbedFooter::new("Powered by Last.fm."));

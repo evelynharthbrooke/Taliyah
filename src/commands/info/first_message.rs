@@ -42,7 +42,7 @@ async fn first_message(context: &Context, message: &Message, args: Args) -> Comm
         .thumbnail(msg.author.avatar_url().unwrap())
         .description(&msg.content)
         .timestamp(msg.timestamp)
-        .field("❯ Jump To Message", format!("[Click Here]({})", msg_link), true)
+        .field("❯ Jump To Message", format!("[Click Here]({msg_link})"), true)
         .footer(CreateEmbedFooter::new(format!("Message ID: {}", msg.id)));
 
     message.channel_id.send_message(context, CreateMessage::new().embed(embed)).await?;

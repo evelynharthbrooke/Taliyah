@@ -108,7 +108,7 @@ async fn cast(context: &Context, message: &Message, mut arguments: Args) -> Comm
         let search_results = search_result.results;
 
         if search_results.is_empty() {
-            message.channel_id.say(&context, format!("Nothing found for `{}`. Please try a different term.", input)).await?;
+            message.channel_id.say(&context, format!("Nothing found for `{input}`. Please try a different term.")).await?;
             return Ok(());
         }
 
@@ -243,7 +243,7 @@ async fn cast(context: &Context, message: &Message, mut arguments: Args) -> Comm
         let search_results = search_result.results;
 
         if search_results.is_empty() {
-            message.channel_id.say(&context, format!("Nothing found for `{}`. Please try a different term.", input)).await?;
+            message.channel_id.say(&context, format!("Nothing found for `{input}`. Please try a different term.")).await?;
             return Ok(());
         }
 
@@ -253,13 +253,13 @@ async fn cast(context: &Context, message: &Message, mut arguments: Args) -> Comm
         let movie_poster_url = &movie_result.poster_path;
         let movie_poster = format!("https://image.tmdb.org/t/p/original/{}", movie_poster_url.replace('/', ""));
 
-        let credits_endpoint = format!("https://api.themoviedb.org/3/movie/{}/credits", movie_id);
+        let credits_endpoint = format!("https://api.themoviedb.org/3/movie/{movie_id}/credits");
         let credits_response = client.get(&credits_endpoint).query(&[("api_key", &api_key)]).send().await?;
         let credits_result: Credits = credits_response.json().await?;
 
         let movie_cast = &credits_result.cast[..20];
         let movie_crew = &credits_result.crew[..5];
-        let movie_cast_url = format!("https://www.themoviedb.org/movie/{}/cast", movie_id);
+        let movie_cast_url = format!("https://www.themoviedb.org/movie/{movie_id}/cast");
         let mut movie_cast_fields = Vec::with_capacity(20);
         let mut movie_crew_fields = Vec::with_capacity(5);
 
@@ -274,7 +274,7 @@ async fn cast(context: &Context, message: &Message, mut arguments: Args) -> Comm
         }
 
         let embed = CreateEmbed::new()
-            .title(format!("{} — Cast & Crew", movie_name))
+            .title(format!("{movie_name} — Cast & Crew"))
             .color(0x0001_d277)
             .thumbnail(movie_poster)
             .description(format!(

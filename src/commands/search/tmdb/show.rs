@@ -49,13 +49,13 @@ async fn show(context: &Context, message: &Message, arguments: Args) -> CommandR
     let search_results = search_result.results;
 
     if search_results.is_empty() {
-        message.channel_id.say(context, format!("Nothing found for `{}`. Please try a different name.", show)).await?;
+        message.channel_id.say(context, format!("Nothing found for `{show}`. Please try a different name.")).await?;
         return Ok(());
     }
 
     let show_id = search_results.first().unwrap().id;
 
-    let show_endpoint = format!("https://api.themoviedb.org/3/tv/{}", show_id);
+    let show_endpoint = format!("https://api.themoviedb.org/3/tv/{show_id}");
     let show_sub_requests = ("append_to_response", &"external_ids".to_string());
     let show_response = client.get(&show_endpoint).query(&[("api_key", &api_key), show_sub_requests]).send().await.unwrap();
     let show_result: Show = show_response.json().await.unwrap();
@@ -76,7 +76,7 @@ async fn show(context: &Context, message: &Message, arguments: Args) -> CommandR
     let show_seasons = show_result.number_of_seasons.to_string();
     let show_episodes = show_result.number_of_episodes.to_string();
     let show_imdb_id = show_result.external_ids.imdb_id.unwrap();
-    let show_imdb_url = format!("https://www.imdb.com/title/{}", show_imdb_id);
+    let show_imdb_url = format!("https://www.imdb.com/title/{show_imdb_id}");
     let show_genres = show_result.genres.iter().map(|genre| &genre.name).join("\n");
     let show_tagline = if !show_result.tagline.is_empty() {
         format!("*{}*", show_result.tagline)

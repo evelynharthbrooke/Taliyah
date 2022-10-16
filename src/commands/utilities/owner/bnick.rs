@@ -20,7 +20,7 @@ async fn bnick(context: &Context, message: &Message, args: Args) -> CommandResul
 
     let nick = args.rest();
     context.http.edit_nickname(gid, Some(nick), None).await?;
-    message.channel_id.say(context, format!("Set my nickname to \"{}\".", nick)).await?;
+    message.channel_id.say(context, format!("Set my nickname to \"{nick}\".")).await?;
 
     Ok(())
 }

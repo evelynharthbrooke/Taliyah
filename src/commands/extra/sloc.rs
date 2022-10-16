@@ -41,16 +41,16 @@ async fn sloc(context: &Context, message: &Message, mut arguments: Args) -> Comm
     let owner = arguments.single::<String>()?;
     let name = arguments.single::<String>()?;
 
-    let mut msg = message.channel_id.say(context, format!("Getting statistics for `{}/{}`, please wait...", owner, name)).await?;
+    let mut msg = message.channel_id.say(context, format!("Getting statistics for `{owner}/{name}`, please wait...")).await?;
 
     let user_agent: &str = concat!(env!("CARGO_PKG_NAME"), "/", env!("CARGO_PKG_VERSION"));
     let client = Client::builder().user_agent(user_agent).build()?;
-    let url = Url::parse(format!("https://tokei.now.sh/{}/{}", owner, name).as_str())?;
+    let url = Url::parse(format!("https://tokei.now.sh/{owner}/{name}").as_str())?;
     let request: Response = client.get(url).send().await?.json().await?;
 
     let mut language_string: String = String::new();
 
-    let title = format!("**Code statistics for repository `{}/{}`**:", owner, name);
+    let title = format!("**Code statistics for repository `{owner}/{name}`**:");
 
     language_string.push_str(title.as_str());
     language_string.push_str("\n\n");

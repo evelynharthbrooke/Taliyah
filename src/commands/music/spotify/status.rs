@@ -81,9 +81,9 @@ async fn status(context: &Context, message: &Message, arguments: Args) -> Comman
                     let rfind = artists.rfind(';').unwrap();
                     let (left, right) = replacer.split_at(rfind);
                     let format_string = if commas >= 2 {
-                        format!("{}{}", left, right.replace(',', ", &"))
+                        format!("{left}{}", right.replace(',', ", &"))
                     } else {
-                        format!("{} {}", left, right.replace(',', "&"))
+                        format!("{left} {}", right.replace(',', "&"))
                     };
 
                     artists.clear();

@@ -69,9 +69,9 @@ async fn user(context: &Context, message: &Message, args: Args) -> CommandResult
                                 let rfind = artist_string.rfind(';').unwrap();
                                 let (left, right) = replacer.split_at(rfind);
                                 let format_string = if commas >= 2 {
-                                    format!("{}{}", left, right.replace(',', ", &"))
+                                    format!("{left}{}", right.replace(',', ", &"))
                                 } else {
-                                    format!("{} {}", left, right.replace(',', "&"))
+                                    format!("{left} {}", right.replace(',', "&"))
                                 };
 
                                 artist_string.clear();
@@ -204,7 +204,7 @@ async fn user(context: &Context, message: &Message, args: Args) -> CommandResult
     } else {
         let hoist_role_id = member.highest_role_info(cache).ok_or("cannot get role id")?.0;
         let hoist_role = cached_guild.roles.get(&hoist_role_id).ok_or("Cannot get role")?.id.get();
-        format!("<@&{}>", hoist_role)
+        format!("<@&{hoist_role}>")
     };
 
     let nickname = member.nick.map_or("No nickname has been set.".to_owned(), |nick| nick);

@@ -76,7 +76,7 @@ async fn album(context: &Context, message: &Message, args: Args) -> CommandResul
             let url = &track.external_urls["spotify"];
             let length = format_duration(Duration::from_millis((track.duration.as_millis() as u64) / 1000 * 1000));
             let explicit = if track.explicit { "(explicit)" } else { "" };
-            format!("**{}.** [{}]({}) — {} {}", position, name, url, length, explicit)
+            format!("**{position}.** [{name}]({url}) — {length} {explicit}")
         })
         .join("\n");
 
@@ -85,7 +85,7 @@ async fn album(context: &Context, message: &Message, args: Args) -> CommandResul
         ("Length", album_length.to_string(), true),
         ("Artists", album_artists.to_string(), true),
         ("Release Date", album_date, true),
-        ("Popularity", format!("{}%", album_popularity), true),
+        ("Popularity", format!("{album_popularity}%"), true),
         ("Markets", album_markets.to_string(), true),
         ("Tracks", album_track_count.to_string(), true),
     ];

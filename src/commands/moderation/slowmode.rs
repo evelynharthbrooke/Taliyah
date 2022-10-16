@@ -19,11 +19,11 @@ async fn slowmode(context: &Context, message: &Message, mut arguments: Args) -> 
     let slowmode_content = if let Ok(slowmode_rate) = arguments.single::<u64>() {
         if let Err(why) = message.channel_id.edit(&context, EditChannel::new().rate_limit_per_user(slowmode_rate)).await {
             error!("Error setting channel's slowmode rate: {:?}", why);
-            format!("Failed to set slowmode to `{}` seconds.", slowmode_rate)
+            format!("Failed to set slowmode to `{slowmode_rate}` seconds.")
         } else if slowmode_rate == 0 {
             "Successfully cleared the channel's slowmode rate.".to_string()
         } else {
-            format!("Successfully set the slowmode rate to `{}` seconds.", slowmode_rate)
+            format!("Successfully set the slowmode rate to `{slowmode_rate}` seconds.")
         }
     } else if let Some(Guild(channel)) = message.channel_id.to_channel_cached(context) {
         match channel.rate_limit_per_user {
@@ -31,7 +31,7 @@ async fn slowmode(context: &Context, message: &Message, mut arguments: Args) -> 
                 if rate == 0 {
                     "Slowmode is not currently set in this channel.".to_string()
                 } else {
-                    format!("Current slowmode rate is set to `{}` seconds.", rate)
+                    format!("Current slowmode rate is set to `{rate}` seconds.")
                 }
             }
             None => "Slowmode is not available for this channel type.".to_string()

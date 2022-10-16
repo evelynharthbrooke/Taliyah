@@ -26,7 +26,7 @@ pub async fn dispatch_error(context: &Context, message: &Message, error: Dispatc
             let _ = message.channel_id.say(context, error_response).await;
         }
         DispatchError::CommandDisabled => {
-            error_response = format!("The `{}` command has been disabled and cannot be used.", command);
+            error_response = format!("The `{command}` command has been disabled and cannot be used.");
             let _ = message.channel_id.say(context, error_response).await;
         }
         DispatchError::OnlyForDM => {
@@ -46,15 +46,15 @@ pub async fn dispatch_error(context: &Context, message: &Message, error: Dispatc
             let _ = message.channel_id.say(context, error_response).await;
         }
         DispatchError::LackingPermissions(perms) => {
-            error_response = format!("You lack the permissions required to use this command. Permissions needed: {}", perms);
+            error_response = format!("You lack the permissions required to use this command. Permissions needed: {perms}");
             let _ = message.channel_id.say(context, error_response).await;
         }
         DispatchError::NotEnoughArguments { min, given } => {
-            error_response = format!("The `{}` command needs {} arguments, but got {}.", command, min, given);
+            error_response = format!("The `{command}` command needs {min} arguments, but got {given}.");
             let _ = message.channel_id.say(context, error_response).await;
         }
         DispatchError::TooManyArguments { max, given } => {
-            error_response = format!("Max arguments allowed is {}, but got {}.", max, given);
+            error_response = format!("Max arguments allowed is {max}, but got {given}.");
             let _ = message.channel_id.say(context, error_response).await;
         }
         _ => tracing::warn!("Unhandled Dispatch error: {:?}", error)

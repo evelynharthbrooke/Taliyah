@@ -20,7 +20,7 @@ pub fn read_config(file: &str) -> ConfigurationData {
 
 pub async fn get_profile_field(context: &Context, field: &str, user_id: UserId) -> Result<String, EllieError> {
     let pool = context.data.read().await.get::<DatabasePool>().cloned().unwrap();
-    match sqlx::query(format!("SELECT {} FROM profile_data WHERE user_id = $1", field).as_str())
+    match sqlx::query(format!("SELECT {field} FROM profile_data WHERE user_id = $1").as_str())
         .bind(user_id.get() as i64)
         .fetch_one(&pool)
         .await

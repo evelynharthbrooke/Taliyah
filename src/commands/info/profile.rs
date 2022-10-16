@@ -56,7 +56,7 @@ async fn profile(context: &Context, message: &Message, arguments: Args) -> Comma
     let gender = get_profile_field(context, "user_gender", user_id).await?;
     let pronouns = get_profile_field(context, "user_pronouns", user_id).await?;
     let lastfm = get_profile_field(context, "user_lastfm_id", user_id).await?;
-    let lastfm_url = format!("[{}]({}/{})", lastfm, LASTFM_USER_BASE, lastfm);
+    let lastfm_url = format!("[{lastfm}]({LASTFM_USER_BASE}/{lastfm})");
 
     let profile_fields = vec![
         ("Name", name, true),

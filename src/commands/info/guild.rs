@@ -92,27 +92,27 @@ async fn guild(context: &Context, message: &Message) -> CommandResult {
     let highest_role_color = highest_role.colour;
 
     let mut summary = String::new();
-    writeln!(summary, "**Owner**: {}", guild_owner)?;
-    writeln!(summary, "**System Channel**: <#{}>", guild_system_channel_id)?;
-    writeln!(summary, "**Creation Date**: {}", guild_creation_date)?;
-    writeln!(summary, "**Online Members**: {}", guild_presences)?;
-    writeln!(summary, "**Total Members**: {}", guild_members)?;
-    writeln!(summary, "**Channels**: {} ({} text, {} voice)", guild_channels_all, guild_channels_text, guild_channels_voice)?;
-    writeln!(summary, "**Emojis**: {} ({} static, {} animated)", guild_emojis, guild_emojis_normal, guild_emojis_animated)?;
+    writeln!(summary, "**Owner**: {guild_owner}")?;
+    writeln!(summary, "**System Channel**: <#{guild_system_channel_id}>")?;
+    writeln!(summary, "**Creation Date**: {guild_creation_date}")?;
+    writeln!(summary, "**Online Members**: {guild_presences}")?;
+    writeln!(summary, "**Total Members**: {guild_members}")?;
+    writeln!(summary, "**Channels**: {guild_channels_all} ({guild_channels_text} text, {guild_channels_voice} voice)")?;
+    writeln!(summary, "**Emojis**: {guild_emojis} ({guild_emojis_normal} static, {guild_emojis_animated} animated)")?;
     writeln!(summary, "**Features**: {}", if !guild_features.is_empty() { &guild_features } else { "None" })?;
-    writeln!(summary, "**MFA Level**: {}", guild_mfa_level)?;
-    writeln!(summary, "**Verification Level**: {}", guild_verification_level)?;
-    writeln!(summary, "**Explicit Content Filter**: {}", guild_explicit_filter)?;
-    writeln!(summary, "**Nitro Boosts**: {}", guild_boosts)?;
-    writeln!(summary, "**Nitro Boost Level**: {}", guild_boost_tier)?;
-    writeln!(summary, "**Highest Role**: {}", highest_role_name)?;
-    writeln!(summary, "**Roles ({})**: {}", guild_role_count, guild_roles_map)?;
+    writeln!(summary, "**MFA Level**: {guild_mfa_level}")?;
+    writeln!(summary, "**Verification Level**: {guild_verification_level}")?;
+    writeln!(summary, "**Explicit Content Filter**: {guild_explicit_filter}")?;
+    writeln!(summary, "**Nitro Boosts**: {guild_boosts}")?;
+    writeln!(summary, "**Nitro Boost Level**: {guild_boost_tier}")?;
+    writeln!(summary, "**Highest Role**: {highest_role_name}")?;
+    writeln!(summary, "**Roles ({guild_role_count})**: {guild_roles_map}")?;
 
     let embed = CreateEmbed::new()
         .author(CreateEmbedAuthor::new(guild_name).icon_url(guild_icon))
         .colour(highest_role_color)
         .description(&summary)
-        .footer(CreateEmbedFooter::new(format!("{} server ID: {}", guild_name, guild_id)));
+        .footer(CreateEmbedFooter::new(format!("{guild_name} server ID: {guild_id}")));
 
     message.channel_id.send_message(&context, CreateMessage::new().embed(embed)).await?;
 

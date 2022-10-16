@@ -53,7 +53,7 @@ async fn channel(context: &Context, message: &Message, arguments: Args) -> Comma
     let channel_topic = match &guild_channel.topic {
         Some(topic) => {
             if !topic.is_empty() {
-                format!("{}\n\n", topic)
+                format!("{topic}\n\n")
             } else {
                 "".to_string()
             }
@@ -82,7 +82,7 @@ async fn channel(context: &Context, message: &Message, arguments: Args) -> Comma
             ("Kind", channel_kind.to_string(), true),
             ("NSFW", channel_nsfw.to_string(), true),
         ])
-        .footer(CreateEmbedFooter::new(format!("Channel ID: {}", channel_id)));
+        .footer(CreateEmbedFooter::new(format!("Channel ID: {channel_id}")));
 
     message.channel_id.send_message(&context, CreateMessage::new().embed(embed)).await?;
 

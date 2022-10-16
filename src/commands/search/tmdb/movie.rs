@@ -69,12 +69,12 @@ async fn movie(context: &Context, message: &Message, arguments: Args) -> Command
     let search_results = search_result.results;
 
     if search_results.is_empty() {
-        message.channel_id.say(context, format!("Nothing found for `{}`. Please try again.", movie)).await?;
+        message.channel_id.say(context, format!("Nothing found for `{movie}`. Please try again.")).await?;
         return Ok(());
     }
 
     let movie_id = search_results.first().unwrap().id;
-    let movie_endpoint = format!("https://api.themoviedb.org/3/movie/{}", movie_id);
+    let movie_endpoint = format!("https://api.themoviedb.org/3/movie/{movie_id}");
     let movie_response = client.get(&movie_endpoint).query(&[("api_key", &api_key)]).send().await.unwrap();
     let movie_result: Movie = movie_response.json().await.unwrap();
 
@@ -83,7 +83,7 @@ async fn movie(context: &Context, message: &Message, arguments: Args) -> Command
             if tagline.is_empty() {
                 "".to_string()
             } else {
-                format!("*{}*", tagline)
+                format!("*{tagline}*")
             }
         }
         None => "".to_string()
@@ -92,7 +92,7 @@ async fn movie(context: &Context, message: &Message, arguments: Args) -> Command
     let movie_overview = match movie_result.overview {
         Some(overview) => {
             if !movie_tagline.is_empty() {
-                format!("\n\n{}", overview)
+                format!("\n\n{overview}")
             } else {
                 overview
             }
@@ -112,7 +112,7 @@ async fn movie(context: &Context, message: &Message, arguments: Args) -> Command
     };
 
     let movie_homepage = match movie_result.homepage {
-        Some(homepage) => format!("[Website]({})", homepage),
+        Some(homepage) => format!("[Website]({homepage})"),
         None => "No Website".to_string()
     };
 
@@ -124,7 +124,7 @@ async fn movie(context: &Context, message: &Message, arguments: Args) -> Command
     let movie_budget = format_int(movie_result.budget as usize);
     let movie_revenue = format_int(movie_result.revenue as usize);
     let movie_imdb = format!("[IMDb](https://www.imdb.com/title/{})", movie_result.imdb_id.unwrap());
-    let movie_url = format!("https://www.themoviedb.org/movie/{}", movie_id);
+    let movie_url = format!("https://www.themoviedb.org/movie/{movie_id}");
     let movie_genres = movie_result.genres.iter().map(|g| &g.name).join("\n");
     let movie_popularity = format!("{}%", movie_result.popularity);
     let movie_poster_uri = movie_result.poster_path.unwrap();
@@ -132,14 +132,14 @@ async fn movie(context: &Context, message: &Message, arguments: Args) -> Command
     let movie_user_score = format!("{}/100", movie_result.vote_average * 10.0);
     let movie_user_score_count = movie_result.vote_count;
     let movie_runtime = format_duration(Duration::from_secs(movie_result.runtime.unwrap() * 60)).to_string();
-    let movie_external_links = format!("{} | {}", movie_homepage, movie_imdb);
+    let movie_external_links = format!("{movie_homepage} | {movie_imdb}");
 
     let embed = CreateEmbed::new()
         .title(movie_title)
         .url(movie_url)
         .color(0x01b4e4)
         .thumbnail(movie_poster)
-        .description(format!("{}{}", movie_tagline, movie_overview))
+        .description(format!("{movie_tagline}{movie_overview}"))
         .fields(vec![
             ("Status", movie_status, true),
             ("Film ID", movie_id, true),
@@ -148,9 +148,9 @@ async fn movie(context: &Context, message: &Message, arguments: Args) -> Command
             ("Release Date", movie_release_date, true),
             ("Collection", movie_collection, true),
             ("Popularity", movie_popularity, true),
-            ("User Score", format!("{} ({} votes)", movie_user_score, movie_user_score_count), true),
-            ("Budget", format!("${}", movie_budget), true),
-            ("Box Office", format!("${}", movie_revenue), true),
+            ("User Score", format!("{movie_user_score} ({movie_user_score_count} votes)"), true),
+            ("Budget", format!("${movie_budget}"), true),
+            ("Box Office", format!("${movie_revenue}"), true),
             ("Genres", movie_genres, true),
             ("Studios", movie_studios, true),
             ("External Links", movie_external_links, false),

@@ -27,9 +27,9 @@ async fn invite(context: &Context, message: &Message) -> CommandResult {
     let avatar = user.avatar_url().unwrap();
 
     let embed = CreateEmbed::new()
-        .title(format!("{} Invite URL", name))
+        .title(format!("{name} Invite URL"))
         .thumbnail(avatar)
-        .description(format!("Click [here]({}) to add {} to your Discord server.", url, name));
+        .description(format!("Click [here]({url}) to add {name} to your Discord server."));
 
     message.channel_id.send_message(&context.http, CreateMessage::new().embed(embed)).await?;
 

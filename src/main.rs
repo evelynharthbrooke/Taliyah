@@ -166,7 +166,7 @@ async fn main() -> Result<(), Box<dyn Error + Send + Sync>> {
     }
 
     if let Err(why) = client.start_autosharded().await {
-        eprintln!("An error occurred while running the client: {:?}", why);
+        eprintln!("An error occurred while running the client: {why:?}");
     }
 
     Ok(())

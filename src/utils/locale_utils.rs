@@ -75,7 +75,7 @@ pub fn get_country_name_from_iso(country: &str) -> &str {
         "CC" => "Cocos (Keeling) Islands",
         "CO" => "Columbia",
         "KM" => "Comoros",
-        "CG" => "Congo (Brazzaville",
+        "CG" => "Congo (Brazzaville)",
         "CD" => "Congo, (Kinshasa)",
         "CK" => "Cook Islands",
         "CR" => "Costa Rica",

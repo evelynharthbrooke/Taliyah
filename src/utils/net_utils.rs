@@ -3,14 +3,11 @@
 //! These utilities help with various network-related tasks
 //! and functions.
 
+use super::read_config;
+use crate::data::{ReqwestContainer, SpotifyContainer};
 use aspotify::{CountryCode::CAN, ItemType, Market::Country};
 use lastfm_rs::Client;
-
 use serenity::client::Context;
-
-use crate::data::{ReqwestContainer, SpotifyContainer};
-
-use super::read_config;
 
 pub async fn get_lastfm_client(context: &Context) -> Client {
     let config = read_config("config.toml");
@@ -23,7 +20,7 @@ pub async fn get_album_artwork(context: &Context, artist: &str, track: &str, alb
     let data = context.data.read().await;
     let spotify = data.get::<SpotifyContainer>().unwrap();
 
-    let search_string = format!("artist:\"{}\" track:\"{}\" album:\"{}\"", artist, track, album);
+    let search_string = format!("artist:\"{artist}\" track:\"{track}\" album:\"{album}\"");
     let track_search = spotify.search().search(&search_string, [ItemType::Track].iter().copied(), false, 1, 0, Some(Country(CAN))).await;
     let track_result = &track_search.unwrap().data.tracks.unwrap();
 

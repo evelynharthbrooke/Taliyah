@@ -42,7 +42,7 @@ async fn newreleases(context: &Context, message: &Message, args: Args) -> Comman
         .join("\n");
 
     let embed = CreateEmbed::new()
-        .title(format!("New Releases on Spotify for: {country_name}"))
+        .title(format!("New Releases on Spotify for {country_name}"))
         .colour(0x001D_B954)
         .description(nr_items)
         .footer(CreateEmbedFooter::new("Powered by the Spotify Web API."));

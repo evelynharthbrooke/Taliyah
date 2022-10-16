@@ -30,8 +30,6 @@ use crate::utils::{format_int, get_profile_field, net_utils::*};
 #[aliases("p", "prof", "pf")]
 #[usage("<user>")]
 async fn profile(context: &Context, message: &Message, mut arguments: Args) -> CommandResult {
-    message.channel_id.broadcast_typing(context).await?;
-
     let user = if !arguments.rest().is_empty() {
         if !message.mentions.is_empty() {
             get_profile_field(context, "user_lastfm_id", message.mentions.first().unwrap().id).await.unwrap()
@@ -103,7 +101,7 @@ async fn profile(context: &Context, message: &Message, mut arguments: Args) -> C
         .map(|artist| {
             let name = &artist.name;
             let plays = format_int(artist.scrobbles.parse::<usize>().unwrap());
-            format!("**{}** — {} scrobbles", name, plays)
+            format!("**{name}** — {plays} scrobbles")
         })
         .join("\n");
 
@@ -143,13 +141,13 @@ async fn profile(context: &Context, message: &Message, mut arguments: Args) -> C
                 let name = &track.name.replace("**", "\x5c**");
                 let url = &track.url.replace("**", "\x5c**");
                 let artist = &track.artist.name;
-                format!("{} **[{}]({})** — {}", status, name, url, artist)
+                format!("{status} **[{name}]({url})** — {artist}")
             })
             .join("\n")
     };
 
     let play_state = if track.attrs.as_ref().is_none() { "last listened to" } else { "is currently listening to" };
-    let now_playing = format!("{} {} **{}** by **{}** on **{}**.", username, play_state, name, artist, album);
+    let now_playing = format!("{username} {play_state} **{name}** by **{artist}** on **{album}**.");
     let fields = vec![
         ("**Display Name**", display_name, true),
         ("**Country**", country, true),

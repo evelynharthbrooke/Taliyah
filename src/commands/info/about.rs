@@ -38,7 +38,7 @@ async fn about(context: &Context, message: &Message) -> CommandResult {
         ("Version", version, true),
         ("Codename", codename.to_string(), true),
         ("Branch", branch, true),
-        ("Revision", format!("`{}`", revision), true),
+        ("Revision", format!("`{revision}`"), true),
         ("Owner", bot_owner, true),
         ("Shards", num_shards.to_string(), true),
         ("Guilds", num_guilds.to_string(), true),
@@ -47,7 +47,7 @@ async fn about(context: &Context, message: &Message) -> CommandResult {
     ];
 
     let embed = CreateEmbed::new()
-        .title(format!("**{}**", bot_name))
+        .title(format!("**{bot_name}**"))
         .url("https://github.com/evelynmarie/Ellie")
         .thumbnail(bot_avatar)
         .color(0x00BFFF)

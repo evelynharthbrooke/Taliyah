@@ -61,7 +61,7 @@ async fn track(context: &Context, message: &Message, args: Args) -> CommandResul
         true => track_label,
         false => {
             let copyright = &track_album.copyrights.first().unwrap().text;
-            format!("{} ({})", copyright, track_label)
+            format!("{copyright} ({track_label})")
         }
     };
 
@@ -104,16 +104,16 @@ async fn track(context: &Context, message: &Message, args: Args) -> CommandResul
         .color(0x001D_B954)
         .fields(vec![
             ("Artists", track_artists, true),
-            ("Album", format!("[{}]({})", track_album_name, track_album_url), true),
+            ("Album", format!("[{track_album_name}]({track_album_url})"), true),
             ("Disc", track_disc.to_string(), true),
             ("Position", track_position.to_string(), true),
             ("Release Date", track_date, true),
-            ("Popularity", format!("{}%", track_popularity), true),
+            ("Popularity", format!("{track_popularity}%"), true),
             ("Explicit", track_explicit.to_string(), true),
             ("Song Preview", track_preview_url, true),
             ("Markets", track_markets.to_string(), true),
             ("Duration", track_length.to_string(), true),
-            ("Loudness", format!("{} dB", track_loudness), true),
+            ("Loudness", format!("{track_loudness} dB"), true),
             ("Keys", track_key, true),
             ("Mode", track_mode, true),
             ("Tempo", track_tempo.to_string(), true),
