@@ -78,20 +78,20 @@ async fn collection(context: &Context, message: &Message, arguments: Args) -> Co
     let collection_id = collection_result.id;
     let collection_url = format!("https://www.themoviedb.org/collection/{collection_id}");
     let collection_overview = collection_result.overview;
-    let mut collection_parts = collection_result.parts;
-    collection_parts.sort_unstable_by_key(|p| p.release_date);
 
+    let mut parts = collection_result.parts;
     let mut components = CreateComponents::new();
-    let mut collection_fields = Vec::with_capacity(collection_parts.len());
+    let mut fields = Vec::with_capacity(parts.len());
+    parts.sort_unstable_by_key(|p| p.release_date);
 
-    for part in &collection_parts {
+    for part in &parts {
         let part_title = &part.title;
         let part_release_date = part.release_date.format("%B %-e, %Y");
         let part_summary = &part.overview;
-        collection_fields.push((format!("{part_title} ({part_release_date})"), part_summary, false));
+        fields.push((format!("{part_title} ({part_release_date})"), part_summary, false));
     }
 
-    for chunk in collection_parts.chunks(5) {
+    for chunk in parts.chunks(5) {
         let mut row = CreateActionRow::new();
         for part in chunk {
             let id = &part.id;
@@ -107,7 +107,7 @@ async fn collection(context: &Context, message: &Message, arguments: Args) -> Co
         .thumbnail(collection_poster)
         .color(0x0001_d277)
         .description(collection_overview)
-        .fields(collection_fields)
+        .fields(fields)
         .footer(CreateEmbedFooter::new("Powered by TMDb."));
 
     message.channel_id.send_message(&context, CreateMessage::new().embed(embed).components(components)).await?;
