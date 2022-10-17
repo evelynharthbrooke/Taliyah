@@ -22,6 +22,6 @@ async fn help(
     command_groups: &[&'static CommandGroup],
     bot_owners: HashSet<UserId>
 ) -> CommandResult {
-    let _ = help_commands::plain(context, message, arguments, options, command_groups, bot_owners).await;
+    drop(help_commands::plain(context, message, arguments, options, command_groups, bot_owners).await);
     Ok(())
 }
