@@ -15,13 +15,13 @@ mod utils;
 use aspotify::{Client as SpotifyClient, ClientCredentials};
 use commands::{
     extra::sloc::*,
-    fun::{ascii::*, printerfacts::*, urban::*, xkcd::*},
-    info::{about::*, channel::*, first_message::*, guild::*, profile::*, role::*, user::*},
+    fun::{urban::*, xkcd::*},
+    info::{about::*, guild::*, profile::*, user::*},
     moderation::{ban::*, kick::*, slowmode::*},
     music::{lastfm::*, spotify::*},
     search::tmdb::*,
     social::twitter::*,
-    utilities::{help::*, invite::*, owner::bnick::*, ping::*, source::*}
+    utilities::{help::*, invite::*, ping::*, source::*}
 };
 
 use listeners::{handler::Handler, hooks::*};
@@ -51,12 +51,12 @@ struct Extra;
 
 #[group("Fun")]
 #[description = "Commands that could be considered fun / silly."]
-#[commands(ascii, printerfacts, urban, randefine, xkcd)]
+#[commands(urban, randefine, xkcd)]
 struct Fun;
 
 #[group("Info")]
 #[description = "Informational commands that provide useful information."]
-#[commands(about, channel, first_message, guild, profile, role, user)]
+#[commands(about, guild, profile, user)]
 struct Info;
 
 #[group("Moderation")]
@@ -68,12 +68,6 @@ struct Moderation;
 #[description = "Music-focused commands."]
 #[commands(lastfm, spotify)]
 struct Music;
-
-#[group("Owner")]
-#[description = "Commands restricted to the bot owner."]
-#[commands(bnick)]
-#[owners_only]
-struct Owner;
 
 #[group("Search")]
 #[description = "Various commands that search various web services."]
@@ -136,7 +130,6 @@ async fn main() -> Result<(), Box<dyn Error + Send + Sync>> {
         .group(&INFO_GROUP)
         .group(&MODERATION_GROUP)
         .group(&MUSIC_GROUP)
-        .group(&OWNER_GROUP)
         .group(&SEARCH_GROUP)
         .group(&SOCIAL_GROUP)
         .group(&UTILITIES_GROUP)

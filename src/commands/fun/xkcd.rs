@@ -8,7 +8,7 @@ use serenity::{
     model::prelude::Message
 };
 
-#[derive(Debug, Clone, Deserialize)]
+#[derive(Debug, Deserialize)]
 struct XkcdComic {
     num: u16,      // the numeric ID of the xkcd comic.
     alt: String,   // the caption of the xkcd comic.
@@ -19,7 +19,7 @@ struct XkcdComic {
 /// Retrieves the latest or a given comic from xkcd.
 #[command]
 async fn xkcd(context: &Context, message: &Message, mut arguments: Args) -> CommandResult {
-    let comic_num = arguments.single::<u32>().unwrap_or(0);
+    let comic_num = arguments.single::<u16>().unwrap_or(0);
     let latest_comic = "https://xkcd.com/info.0.json";
     let selected_comic = format!("https://xkcd.com/{comic_num}/info.0.json");
     let client = context.data.read().await.get::<ReqwestContainer>().cloned().unwrap();
