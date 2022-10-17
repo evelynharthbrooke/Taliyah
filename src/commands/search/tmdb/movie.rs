@@ -81,12 +81,12 @@ async fn movie(context: &Context, message: &Message, arguments: Args) -> Command
     let movie_tagline = match movie_result.tagline {
         Some(tagline) => {
             if tagline.is_empty() {
-                "".to_string()
+                String::new()
             } else {
                 format!("*{tagline}*")
             }
         }
-        None => "".to_string()
+        None => String::new()
     };
 
     let movie_overview = match movie_result.overview {
@@ -97,7 +97,7 @@ async fn movie(context: &Context, message: &Message, arguments: Args) -> Command
                 overview
             }
         }
-        None => "".to_string()
+        None => String::new()
     };
 
     let movie_studios = if movie_result.production_companies.is_empty() {
@@ -112,7 +112,13 @@ async fn movie(context: &Context, message: &Message, arguments: Args) -> Command
     };
 
     let movie_homepage = match movie_result.homepage {
-        Some(homepage) => format!("[Website]({homepage})"),
+        Some(homepage) => {
+            if homepage.is_empty() {
+                "No Website".to_string()
+            } else {
+                format!("[Website]({homepage})")
+            }
+        }
         None => "No Website".to_string()
     };
 
@@ -121,8 +127,8 @@ async fn movie(context: &Context, message: &Message, arguments: Args) -> Command
     let movie_status = movie_result.status;
     let movie_language = locale_utils::get_language_name_from_iso(&movie_result.original_language).to_string();
     let movie_release_date = movie_result.release_date.unwrap().format("%B %e, %Y").to_string();
-    let movie_budget = format_int(movie_result.budget as usize);
-    let movie_revenue = format_int(movie_result.revenue as usize);
+    let movie_budget = format_int(movie_result.budget);
+    let movie_revenue = format_int(movie_result.revenue);
     let movie_imdb = format!("[IMDb](https://www.imdb.com/title/{})", movie_result.imdb_id.unwrap());
     let movie_url = format!("https://www.themoviedb.org/movie/{movie_id}");
     let movie_genres = movie_result.genres.iter().map(|g| &g.name).join("\n");

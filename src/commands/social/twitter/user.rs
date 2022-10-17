@@ -73,9 +73,9 @@ async fn user(context: &Context, message: &Message, mut args: Args) -> CommandRe
     let description = &user.description;
     let verified = user.verified;
     let avatar = &user.profile_image_url.replace("normal", "400x400").to_string();
-    let followers = format_int(user.public_metrics.followers_count as usize);
-    let following = format_int(user.public_metrics.following_count as usize);
-    let tweet_count = format_int(user.public_metrics.tweet_count as usize);
+    let followers = format_int(user.public_metrics.followers_count);
+    let following = format_int(user.public_metrics.following_count);
+    let tweet_count = format_int(user.public_metrics.tweet_count);
 
     endpoint = format!("https://api.twitter.com/2/users/{id}/tweets");
     request = client.get(&endpoint).bearer_auth(&bearer).query(&tweet_fields).send().await?;

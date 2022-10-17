@@ -34,7 +34,7 @@ async fn scrobbles(context: &Context, message: &Message, mut arguments: Args) ->
     let mut client = get_lastfm_client(context).await;
     let user_info = client.user_info(&user).await.send().await.unwrap().user;
     let name = &message.author.name;
-    let scrobbles = format_int(user_info.scrobbles.parse::<usize>().unwrap());
+    let scrobbles = format_int(user_info.scrobbles.parse::<u64>().unwrap());
 
     message.channel_id.say(context, format!("**{name}** has **{scrobbles}** scrobbles on Last.fm.")).await?;
 

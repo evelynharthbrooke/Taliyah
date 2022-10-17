@@ -26,14 +26,13 @@ async fn kick(context: &Context, message: &Message, mut args: Args) -> CommandRe
     let disc = &member.user.discriminator;
     let id = &member.user.id;
     let reason = args.remains();
-
     if let Some(reason) = reason {
         member.kick_with_reason(context, reason).await?;
         message.reply(context, format!("Kicked member `{name}#{disc}` with id `{id}` for reason `{reason}`!")).await?;
         return Ok(());
-    } else {
-        member.kick(context).await?;
-        message.reply(context, format!("Kicked member `{name}#{disc}` with id `{id}`.")).await?;
-        return Ok(());
     }
+
+    member.kick(context).await?;
+    message.reply(context, format!("Kicked member `{name}#{disc}` with id `{id}`.")).await?;
+    return Ok(());
 }

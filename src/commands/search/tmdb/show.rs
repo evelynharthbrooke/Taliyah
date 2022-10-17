@@ -81,7 +81,7 @@ async fn show(context: &Context, message: &Message, arguments: Args) -> CommandR
     let show_tagline = if !show_result.tagline.is_empty() {
         format!("*{}*", show_result.tagline)
     } else {
-        "".to_string()
+        String::new()
     };
 
     let show_language = locale_utils::get_language_name_from_iso(&show_result.original_language).to_string();

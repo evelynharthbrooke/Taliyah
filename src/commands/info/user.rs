@@ -40,7 +40,7 @@ async fn user(context: &Context, message: &Message, args: Args) -> CommandResult
 
     let user = &member.user;
 
-    let mut track_art = "".to_string();
+    let mut track_art = String::new();
     let mut activities = String::new();
     let mut active_status = String::new();
 
@@ -81,7 +81,7 @@ async fn user(context: &Context, message: &Message, args: Args) -> CommandResult
                             let artwork = assets.large_image.as_ref().unwrap().replace("spotify:", "");
                             let artwork_url = format!("https://i.scdn.co/image/{artwork}");
 
-                            track_art = artwork_url;
+                            track_art.push_str(&artwork_url);
 
                             format!("listening to **[{song}]({url})** on **{album}** by **{artist_string}** on")
                         } else {
@@ -109,7 +109,7 @@ async fn user(context: &Context, message: &Message, args: Args) -> CommandResult
                     }
                     ActivityType::Competing => "competing in".to_owned(),
                     ActivityType::Streaming => "streaming on".to_owned(),
-                    _ => "".to_owned()
+                    _ => String::new()
                 };
 
                 format!("{activity_kind} **{activity_name}**")

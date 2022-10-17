@@ -26,14 +26,13 @@ async fn ban(context: &Context, message: &Message, mut args: Args) -> CommandRes
     let disc = &member.user.discriminator;
     let id = &member.user.id;
     let reason = args.remains();
-
     if let Some(reason) = reason {
         member.ban_with_reason(context, 1, reason).await?;
         message.reply(context, format!("Banned member `{name}#{disc}` with id `{id}` for reason `{reason}`!")).await?;
         return Ok(());
-    } else {
-        member.ban(context, 1).await?;
-        message.reply(context, format!("Banned member `{name}#{disc}` with id `{id}`.")).await?;
-        return Ok(());
     }
+
+    member.ban(context, 1).await?;
+    message.reply(context, format!("Banned member `{name}#{disc}` with id `{id}`.")).await?;
+    return Ok(());
 }

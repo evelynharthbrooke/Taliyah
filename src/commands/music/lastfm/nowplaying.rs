@@ -98,7 +98,7 @@ async fn nowplaying(context: &Context, message: &Message, mut arguments: Args) -
 
     let name = &track.name;
     let artist = &track.artist.name;
-    let album = if track.album.name.is_empty() { "".to_owned() } else { track.album.name.to_owned() };
+    let album = if track.album.name.is_empty() { String::new() } else { track.album.name.to_owned() };
     let artwork = get_album_artwork(context, artist, name, &album).await;
     let header = format!("{username} is currently playing:");
 

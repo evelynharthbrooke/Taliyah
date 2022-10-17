@@ -93,14 +93,14 @@ async fn profile(context: &Context, message: &Message, mut arguments: Args) -> C
     let avatar = user_info.images[3].image_url.as_str();
     let country = user_info.country;
     let url = user_info.url;
-    let total_artists = format_int(top_artists.attrs.total.parse::<usize>().unwrap());
+    let total_artists = format_int(top_artists.attrs.total.parse::<u64>().unwrap());
 
     let artists = top_artists
         .artists
         .iter()
         .map(|artist| {
             let name = &artist.name;
-            let plays = format_int(artist.scrobbles.parse::<usize>().unwrap());
+            let plays = format_int(artist.scrobbles.parse::<u64>().unwrap());
             format!("**{name}** — {plays} scrobbles")
         })
         .join("\n");
@@ -122,13 +122,13 @@ async fn profile(context: &Context, message: &Message, mut arguments: Args) -> C
     };
 
     let registered = user_info.registered.date.format("%B %e, %Y");
-    let scrobbles = format_int(user_info.scrobbles.parse::<usize>().unwrap());
+    let scrobbles = format_int(user_info.scrobbles.parse::<u64>().unwrap());
 
     let track = recent_tracks.first().unwrap();
 
     let name = &track.name;
     let artist = &track.artist.name;
-    let album = if track.album.name.is_empty() { "".to_owned() } else { track.album.name.to_owned() };
+    let album = if track.album.name.is_empty() { String::new() } else { track.album.name.to_owned() };
     let artwork = get_album_artwork(context, artist, name, &album).await;
 
     let tracks = if recent_tracks.is_empty() {
