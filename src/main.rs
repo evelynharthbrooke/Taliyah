@@ -21,7 +21,7 @@ use commands::{
     music::{lastfm::*, spotify::*},
     search::tmdb::*,
     social::twitter::*,
-    utilities::{help::*, invite::*, ping::*, source::*}
+    utilities::*
 };
 
 use listeners::{handler::Handler, hooks::*};
@@ -96,7 +96,6 @@ async fn main() -> Result<(), Box<dyn Error + Send + Sync>> {
             "warn" => Level::WARN,
             "info" => Level::INFO,
             "debug" => Level::DEBUG,
-            "trace" => Level::TRACE,
             _ => Level::TRACE
         };
 
