@@ -2,7 +2,7 @@ use chrono::prelude::NaiveDate;
 use serde::Deserialize;
 
 use serenity::{
-    builder::{CreateActionRow, CreateButton, CreateComponents, CreateEmbed, CreateEmbedFooter, CreateMessage},
+    builder::{CreateActionRow, CreateButton, CreateEmbed, CreateEmbedFooter, CreateMessage},
     client::Context,
     framework::standard::{macros::command, Args, CommandResult},
     model::prelude::Message
@@ -79,22 +79,18 @@ async fn collection(context: &Context, message: &Message, arguments: Args) -> Co
     let collection_overview = collection_result.overview;
 
     let mut parts = collection_result.parts;
-    let mut components = CreateComponents::new();
     let mut fields = Vec::with_capacity(parts.len());
-    parts.sort_unstable_by_key(|p| p.release_date);
+    parts.sort_by_cached_key(|p| p.release_date);
 
-    for chunk in parts.chunks(5) {
-        let mut row = CreateActionRow::new();
-        for part in chunk {
-            let id = &part.id;
-            let title = &part.title;
-            let release_date = part.release_date.format("%B %-e, %Y");
-            let summary = &part.overview;
-            row = row.add_button(CreateButton::new_link(format!("https://themoviedb.org/movie/{id}")).label(title));
-            fields.push((format!("{title} ({release_date})"), summary, false));
-        }
-        components = components.add_action_row(row);
-    }
+    #[rustfmt::skip]
+    let rows = parts.chunks(5).map(|chunk| CreateActionRow::Buttons(chunk.iter().map(|part| {
+        let id = &part.id;
+        let title = &part.title;
+        let release_date = part.release_date.format("%B %-e, %Y");
+        let summary = &part.overview;
+        fields.push((format!("{title} ({release_date})"), summary, false));
+        CreateButton::new_link(title, format!("https://themoviedb.org/movie/{id}"))
+    }).collect())).collect::<Vec<CreateActionRow>>();
 
     let embed = CreateEmbed::new()
         .title(collection_name)
@@ -105,7 +101,7 @@ async fn collection(context: &Context, message: &Message, arguments: Args) -> Co
         .fields(fields)
         .footer(CreateEmbedFooter::new("Powered by TMDb."));
 
-    message.channel_id.send_message(&context, CreateMessage::new().embed(embed).components(components)).await?;
+    message.channel_id.send_message(&context, CreateMessage::new().embed(embed).components(rows)).await?;
 
     Ok(())
 }

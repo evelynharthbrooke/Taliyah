@@ -2,7 +2,7 @@ use crate::data::ReqwestContainer;
 use reqwest::StatusCode;
 use serde::Deserialize;
 use serenity::{
-    builder::{CreateActionRow, CreateButton, CreateComponents, CreateEmbed, CreateEmbedFooter, CreateMessage},
+    builder::{CreateActionRow, CreateButton, CreateEmbed, CreateEmbedFooter, CreateMessage},
     client::Context,
     framework::standard::{macros::command, Args, CommandResult},
     model::prelude::Message
@@ -41,13 +41,8 @@ async fn xkcd(context: &Context, message: &Message, mut arguments: Args) -> Comm
         .image(&response.img)
         .footer(CreateEmbedFooter::new(format!("xkcd comic no. {num}")));
 
-    let components = CreateComponents::new().add_action_row(
-        CreateActionRow::new()
-            .add_button(CreateButton::new_link(page).label("View xkcd image page"))
-            .add_button(CreateButton::new_link(wiki).label("View explanation"))
-    );
-
-    message.channel_id.send_message(context, CreateMessage::new().embed(embed).components(components)).await?;
+    let links = CreateActionRow::Buttons(vec![CreateButton::new_link("View xkcd image page", page), CreateButton::new_link("View explanation", wiki)]);
+    message.channel_id.send_message(context, CreateMessage::new().embed(embed).components(vec![links])).await?;
 
     Ok(())
 }

@@ -3,7 +3,7 @@ use itertools::Itertools;
 use serde::Deserialize;
 
 use serenity::{
-    builder::{CreateActionRow, CreateButton, CreateComponents, CreateEmbed, CreateEmbedFooter, CreateMessage},
+    builder::{CreateActionRow, CreateButton, CreateEmbed, CreateEmbedFooter, CreateMessage},
     client::Context,
     framework::standard::{macros::command, Args, CommandResult},
     model::prelude::Message
@@ -126,9 +126,6 @@ async fn show(context: &Context, message: &Message, arguments: Args) -> CommandR
         ("Production Status", show_production_status.to_string(), true),
     ];
 
-    let links_action_row = CreateActionRow::new().add_button(CreateButton::new_link(show_imdb_url).label("View IMDb Page"));
-    let components = CreateComponents::new().add_action_row(links_action_row);
-
     let embed = CreateEmbed::new()
         .title(show_title)
         .url(show_url)
@@ -138,7 +135,8 @@ async fn show(context: &Context, message: &Message, arguments: Args) -> CommandR
         .fields(show_fields)
         .footer(CreateEmbedFooter::new("Powered by TMDB."));
 
-    message.channel_id.send_message(&context, CreateMessage::new().embed(embed).components(components)).await?;
+    let links = CreateActionRow::Buttons(vec![(CreateButton::new_link("View IMDb Page", show_imdb_url))]);
+    message.channel_id.send_message(&context, CreateMessage::new().embed(embed).components(vec![links])).await?;
 
     Ok(())
 }

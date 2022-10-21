@@ -12,7 +12,7 @@ readme              = "README.md"
 include             = ["src/**/*", "config.sample.toml", "Cargo.toml", "README.md"]
 
 [dependencies]
-anyhow              = "1.0.65"
+anyhow              = "1.0.66"
 aspotify            = "0.7.1"
 byte-unit           = "4.0.14"
 chrono              = "0.4.22"
@@ -20,9 +20,9 @@ git2                = "0.15.0"
 humantime           = "2.1.0"
 itertools           = "0.10.5"
 lastfm-rs           = "0.5.0"
-reqwest             = { version = "0.11.2", default-features = false, features = ["json", "multipart", "stream", "rustls-tls"]}
-serde               = { version = "1.0.145", features = ["derive"] }
-serde_json          = "1.0.86"
+reqwest             = { version = "0.11.12", default-features = false, features = ["json", "multipart", "stream", "rustls-tls"]}
+serde               = { version = "1.0.147", features = ["derive"] }
+serde_json          = "1.0.87"
 tokio               = { version = "1.21.2", features = ["full"] }
 toml                = "0.5.9"
 tracing             = "0.1.37"
