@@ -128,9 +128,9 @@ async fn user(context: &Context, message: &Message, args: Args) -> CommandResult
         };
 
         if presence.status == OnlineStatus::DoNotDisturb {
-            active_status.push_str(format!("**{status}**").as_str());
-        } else {
             active_status.push_str("in **Do Not Disturb** mode");
+        } else {
+            active_status.push_str(format!("**{status}**").as_str());
         }
 
         let client_status = match &presence.client_status {
