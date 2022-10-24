@@ -83,7 +83,6 @@ async fn randefine(context: &Context, message: &Message) -> CommandResult {
     let permalink = &definition.permalink;
     let thumbs_up = &definition.thumbs_up;
     let thumbs_down = &definition.thumbs_down;
-
     let rating = format!("{thumbs_up} 👍 | {thumbs_down} 👎");
 
     let embed = CreateEmbed::new()

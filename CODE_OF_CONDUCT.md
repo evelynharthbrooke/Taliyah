@@ -4,8 +4,8 @@
 
 We as members, contributors, and leaders pledge to make participation in our community a harassment-free experience for
 everyone, regardless of age, body size, visible or invisible disability, ethnicity, sex characteristics, gender identity
-and expression, level of experience, education, socio-economic status, nationality, personal appearance, race, religion,
-or sexual identity and orientation.
+and expression, level of experience, education, socio-economic status, nationality, personal appearance, race, caste,
+color, religion, or sexual identity and orientation.
 
 We pledge to act and interact in ways that contribute to an open, welcoming, diverse, inclusive, and healthy community.
 
@@ -88,15 +88,15 @@ harassment of an individual, or aggression toward or disparagement of classes of
 
 ## Attribution
 
-This Code of Conduct is adapted from the [Contributor Covenant][homepage], version 2.0, available [here][version].
+This Code of Conduct is adapted from the [Contributor Covenant][homepage], version 2.1, available [here][version].
 
 Community Impact Guidelines were inspired by [Mozilla's code of conduct enforcement ladder][diversity].
 
 For answers to common questions about this code of conduct, see the FAQ [here][faq]. Translations are available [here][translations].
 
 [homepage]: http://contributor-covenant.org
-[version]: https://www.contributor-covenant.org/version/2/0/code_of_conduct/
+[version]: https://www.contributor-covenant.org/version/2/1/code_of_conduct/
 [faq]: https://www.contributor-covenant.org/faq
 [translations]:https://www.contributor-covenant.org/translations
 [diversity]: https://github.com/mozilla/diversity
-[email]: mailto:kamranm102@gmail.com?subject=Contributor%20Complaint
+[email]: mailto:evelynelizabethmarie@gmail.com?subject=Contributor%20Complaint

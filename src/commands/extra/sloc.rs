@@ -18,11 +18,11 @@ struct Response {
 #[derive(Debug, Deserialize)]
 pub struct Language {
     name: String,
-    files: usize,
-    lines: usize,
-    code: usize,
-    comments: usize,
-    blanks: usize
+    files: u64,
+    lines: u64,
+    code: u64,
+    comments: u64,
+    blanks: u64
 }
 
 #[command("sloc")]
