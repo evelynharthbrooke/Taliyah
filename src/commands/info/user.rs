@@ -127,6 +127,12 @@ async fn user(context: &Context, message: &Message, args: Args) -> CommandResult
             _ => "Offline"
         };
 
+        if presence.status == OnlineStatus::DoNotDisturb {
+            active_status.push_str(format!("**{status}**").as_str());
+        } else {
+            active_status.push_str("in **Do Not Disturb** mode");
+        }
+
         let client_status = match &presence.client_status {
             Some(status) => {
                 if status.desktop.is_some() && status.mobile.is_none() && status.web.is_none() {
@@ -147,12 +153,6 @@ async fn user(context: &Context, message: &Message, args: Args) -> CommandResult
             }
             None => ""
         };
-
-        if status != "Do Not Disturb" {
-            active_status.push_str(format!("**{status}**").as_str());
-        } else {
-            active_status.push_str("in **Do Not Disturb** mode");
-        }
 
         if !client_status.is_empty() {
             active_status.push_str(format!(" on **{client_status}**").as_str());

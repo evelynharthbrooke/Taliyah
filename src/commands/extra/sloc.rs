@@ -1,6 +1,5 @@
-use crate::constants::REQWEST_USER_AGENT;
+use crate::data::ReqwestContainer;
 use itertools::Itertools;
-use reqwest::{Client, Url};
 use serde::Deserialize;
 use serenity::{
     builder::EditMessage,
@@ -41,9 +40,8 @@ async fn sloc(context: &Context, message: &Message, mut arguments: Args) -> Comm
 
     let mut msg = message.channel_id.say(context, format!("Getting statistics for `{owner}/{name}`, please wait...")).await?;
 
-    let client = Client::builder().user_agent(REQWEST_USER_AGENT).build()?;
-    let url = Url::parse(format!("https://tokei.vercel.app/{owner}/{name}").as_str())?;
-    let request: Response = client.get(url).send().await?.json().await?;
+    let client = context.data.read().await.get::<ReqwestContainer>().cloned().unwrap();
+    let request: Response = client.get(format!("https://tokei.vercel.app/{owner}/{name}")).send().await?.json().await?;
 
     let title = format!("**Code statistics for repository `{owner}/{name}`**:");
 
