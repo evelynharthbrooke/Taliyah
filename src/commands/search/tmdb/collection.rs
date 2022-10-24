@@ -90,7 +90,7 @@ async fn collection(context: &Context, message: &Message, arguments: Args) -> Co
         let summary = &part.overview;
         fields.push((format!("{title} ({release_date})"), summary, false));
         CreateButton::new_link(title, format!("https://themoviedb.org/movie/{id}"))
-    }).collect())).collect::<Vec<CreateActionRow>>();
+    }).collect())).collect();
 
     let embed = CreateEmbed::new()
         .title(collection_name)

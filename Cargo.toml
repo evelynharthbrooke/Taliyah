@@ -12,9 +12,7 @@ readme              = "README.md"
 include             = ["src/**/*", "config.sample.toml", "Cargo.toml", "README.md"]
 
 [dependencies]
-anyhow              = "1.0.66"
 aspotify            = "0.7.1"
-byte-unit           = "4.0.14"
 chrono              = "0.4.22"
 git2                = "0.15.0"
 humantime           = "2.1.0"
@@ -34,7 +32,7 @@ tracing-subscriber  = { version = "0.3.16", features = ["env-filter"] }
 git                 = "https://github.com/serenity-rs/serenity"
 branch              = "next"
 default-features    = true
-features            = ["collector", "unstable_discord_api", "rustls_backend"]
+features            = ["collector", "unstable_discord_api"]
 
 [dependencies.sqlx]
 git                 = "https://github.com/launchbadge/sqlx"

@@ -67,7 +67,6 @@ async fn movie(context: &Context, message: &Message, arguments: Args) -> Command
 
     let search_result: SearchResponse = search_response.send().await.unwrap().json().await.unwrap();
     let search_results = search_result.results;
-
     if search_results.is_empty() {
         message.channel_id.say(context, format!("Nothing found for `{movie}`. Please try again.")).await?;
         return Ok(());

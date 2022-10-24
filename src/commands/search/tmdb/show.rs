@@ -47,14 +47,12 @@ async fn show(context: &Context, message: &Message, arguments: Args) -> CommandR
     let search_response = client.get(search_endpoint).query(&[("api_key", &api_key), search_query]);
     let search_result: SearchResponse = search_response.send().await.unwrap().json().await.unwrap();
     let search_results = search_result.results;
-
     if search_results.is_empty() {
         message.channel_id.say(context, format!("Nothing found for `{show}`. Please try a different name.")).await?;
         return Ok(());
     }
 
     let show_id = search_results.first().unwrap().id;
-
     let show_endpoint = format!("https://api.themoviedb.org/3/tv/{show_id}");
     let show_sub_requests = ("append_to_response", &"external_ids".to_string());
     let show_response = client.get(&show_endpoint).query(&[("api_key", &api_key), show_sub_requests]).send().await.unwrap();
@@ -63,7 +61,6 @@ async fn show(context: &Context, message: &Message, arguments: Args) -> CommandR
     let show_poster = format!("https://image.tmdb.org/t/p/original/{}", &show_poster_path.replace('/', ""));
 
     let show_title = show_result.name;
-    let show_id = show_result.id;
     let show_url = format!("https://themoviedb.org/tv/{}", &show_id);
     let show_status = show_result.status;
     let show_type = show_result.show_type;

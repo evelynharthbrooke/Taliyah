@@ -21,9 +21,9 @@ impl RGB {
     ///
     /// [ParseIntError]: std::num::ParseIntError
     pub fn from_hex_code(code: &str) -> Result<Self, ParseIntError> {
-        let r: u8 = u8::from_str_radix(&code[1..3], 16)?;
-        let g: u8 = u8::from_str_radix(&code[3..5], 16)?;
-        let b: u8 = u8::from_str_radix(&code[5..7], 16)?;
+        let r = u8::from_str_radix(&code[1..3], 16)?;
+        let g = u8::from_str_radix(&code[3..5], 16)?;
+        let b = u8::from_str_radix(&code[5..7], 16)?;
         Ok(RGB { r, g, b })
     }
 
@@ -40,10 +40,8 @@ impl RGB {
     /// assert_eq!(rgb_hex, "291e669".to_string());
     /// ```
     pub fn to_hex_code(&self) -> String {
-        let r = self.r;
-        let g = self.g;
-        let b = self.b;
-        let rgb = format!("{}{}{}", r, g, b);
+        let (r, g, b) = (self.r, self.g, self.b);
+        let rgb = format!("{r}{g}{b}");
         let rgb_str = rgb.parse::<i32>().unwrap();
         let formatted_hex = format!("{:06X}", rgb_str);
         formatted_hex.to_lowercase()
