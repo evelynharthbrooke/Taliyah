@@ -149,18 +149,13 @@ async fn user(context: &Context, message: &Message, args: Args) -> CommandResult
         };
 
         if status != "Do Not Disturb" {
-            active_status.push_str("**");
-            active_status.push_str(status);
-            active_status.push_str("**");
+            active_status.push_str(format!("**{status}**").as_str());
         } else {
             active_status.push_str("in **Do Not Disturb** mode");
         }
 
         if !client_status.is_empty() {
-            active_status.push_str(" on ");
-            active_status.push_str("**");
-            active_status.push_str(client_status);
-            active_status.push_str("**")
+            active_status.push_str(format!(" on **{client_status}**").as_str());
         }
 
         if activities.is_empty() {

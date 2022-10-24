@@ -1,9 +1,7 @@
+use crate::constants::REQWEST_USER_AGENT;
 use itertools::Itertools;
-
 use reqwest::{Client, Url};
-
 use serde::Deserialize;
-
 use serenity::{
     builder::EditMessage,
     client::Context,
@@ -43,51 +41,35 @@ async fn sloc(context: &Context, message: &Message, mut arguments: Args) -> Comm
 
     let mut msg = message.channel_id.say(context, format!("Getting statistics for `{owner}/{name}`, please wait...")).await?;
 
-    let user_agent: &str = concat!(env!("CARGO_PKG_NAME"), "/", env!("CARGO_PKG_VERSION"));
-    let client = Client::builder().user_agent(user_agent).build()?;
-    let url = Url::parse(format!("https://tokei.now.sh/{owner}/{name}").as_str())?;
+    let client = Client::builder().user_agent(REQWEST_USER_AGENT).build()?;
+    let url = Url::parse(format!("https://tokei.vercel.app/{owner}/{name}").as_str())?;
     let request: Response = client.get(url).send().await?.json().await?;
-
-    let mut language_string: String = String::new();
 
     let title = format!("**Code statistics for repository `{owner}/{name}`**:");
 
-    language_string.push_str(title.as_str());
-    language_string.push_str("\n\n");
+    let mut language_string: String = String::new();
+    language_string.push_str(format!("{title}\n\n").as_str());
 
-    let languages = request
-        .languages
-        .iter()
-        .map(|language: &Language| {
-            let name = language.name.as_str();
-            let files = language.files;
-            let lines = language.lines;
-            let code = language.code;
-            let comments = language.comments;
-            let blank_lines = language.blanks;
+    #[rustfmt::skip]
+    let languages = request.languages.iter().map(|lang| {
+        let name = lang.name.as_str();
+        let files = lang.files;
+        let lines = lang.lines;
+        let code = lang.code;
+        let comments = lang.comments;
+        let blanks = lang.blanks;
+        format!("**{name}**: {files} files, {lines} total lines, {code} code lines, {comments} comments, {blanks} blank lines")
+    }).join("\n");
 
-            format!(
-                "**{}**: {} files, {} total lines, {} code lines, {} comments, {} blank lines",
-                name, files, lines, code, comments, blank_lines
-            )
-        })
-        .join("\n");
+    language_string.push_str(format!("{languages}\n\n").as_str());
 
-    language_string.push_str(languages.as_str());
-    language_string.push_str("\n\n");
-
-    let total_name = request.total.name;
-    let total_lines = request.total.lines;
-    let total_files = request.total.files;
-    let total_code_lines = request.total.code;
-    let total_comments = request.total.comments;
-    let total_blank_lines = request.total.blanks;
-
-    let total = format!(
-        "**{}**: {} files, {} lines, {} code lines, {} comments, {} blank lines",
-        total_name, total_files, total_lines, total_code_lines, total_comments, total_blank_lines
-    );
-
+    let name = request.total.name;
+    let files = request.total.files;
+    let lines = request.total.lines;
+    let code_lines = request.total.code;
+    let comments = request.total.comments;
+    let blanks = request.total.blanks;
+    let total = format!("**{name}**: {files} files, {lines} lines, {code_lines} code lines, {comments} comments, {blanks} blank lines");
     language_string.push_str(total.as_str());
 
     msg.edit(&context, EditMessage::new().content(language_string)).await?;
