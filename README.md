@@ -40,7 +40,7 @@ All in all, you will need the following prerequisites for Ellie to build and run
 
 > **Note**: The `voice` module and associated commands have been temporarily removed from Ellie whilist a better solution
 > to the aforementioned commands are found. Due to this, the following are no longer required: Opus, FFmpeg, `youtube-dl`,
-> Lavalink, and Python.
+> Lavalink, Eclipse Temurin, and Python.
 >
 > PostgreSQL is *still* required, as several commands rely on this.
 
