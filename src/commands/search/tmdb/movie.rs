@@ -15,7 +15,7 @@ use std::time::Duration;
 use crate::{
     data::ReqwestContainer,
     models::tmdb::movie::*,
-    utils::{format_int, locale_utils, read_config}
+    utils::{format_int, locale, read_config}
 };
 
 #[derive(Debug, Deserialize)]
@@ -124,7 +124,7 @@ async fn movie(context: &Context, message: &Message, arguments: Args) -> Command
     let movie_id = movie_result.id.to_string();
     let movie_title = movie_result.title.as_str();
     let movie_status = movie_result.status;
-    let movie_language = locale_utils::get_language_name_from_iso(&movie_result.original_language).to_string();
+    let movie_language = locale::get_language_name_from_iso(&movie_result.original_language).to_string();
     let movie_release_date = movie_result.release_date.unwrap().format("%B %e, %Y").to_string();
     let movie_budget = format_int(movie_result.budget);
     let movie_revenue = format_int(movie_result.revenue);

@@ -6,7 +6,7 @@ use serenity::{
     model::prelude::Message
 };
 
-use crate::utils::{format_int, get_profile_field, net_utils::*};
+use crate::utils::{format_int, get_profile_field, net::*};
 
 #[command]
 #[description("Retrieves a given Last.fm user's scrobble count.")]

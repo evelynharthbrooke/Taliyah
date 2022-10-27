@@ -13,7 +13,7 @@ use serenity::{
 
 use crate::{
     read_config,
-    utils::{get_profile_field, parsing_utils::parse_user},
+    utils::{get_profile_field, parsing::parse_user},
     DatabasePool
 };
 

@@ -8,7 +8,7 @@ use serenity::{
     model::prelude::Message
 };
 
-use crate::{data::SpotifyContainer, utils::locale_utils};
+use crate::{data::SpotifyContainer, utils::locale};
 
 #[command]
 #[description("Displays information about the new releases for a given market.")]
@@ -27,7 +27,7 @@ async fn newreleases(context: &Context, message: &Message, args: Args) -> Comman
     let data = context.data.read().await;
     let spotify = data.get::<SpotifyContainer>().unwrap();
     let country_iso = CountryCode::for_alpha2_caseless(&market).unwrap();
-    let country_name = locale_utils::get_country_name_from_iso(&market);
+    let country_name = locale::get_country_name_from_iso(&market);
     let new_releases = spotify.browse().get_new_releases(20, 0, Some(country_iso)).await?;
     let nr_items = new_releases
         .data

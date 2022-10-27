@@ -1,6 +1,6 @@
 use crate::{
     data::ConfigContainer,
-    utils::git_utils::{show_branch, show_head_rev}
+    utils::git::{get_current_branch, get_head_revision}
 };
 
 use git2::Repository;
@@ -20,17 +20,17 @@ async fn about(context: &Context, message: &Message) -> CommandResult {
 
     let version = env!("CARGO_PKG_VERSION").to_string();
     let codename = &config.bot.general.codename;
-    let branch = show_branch(&repo);
-    let revision = show_head_rev(&repo);
+    let branch = get_current_branch(&repo);
+    let revision = get_head_revision(&repo);
 
     let current_user = context.cache.current_user().clone();
 
-    let bot_owner = context.http.get_current_application_info().await?.owner.tag();
     let bot_name = &current_user.name;
     let bot_avatar = &current_user.avatar_url().unwrap();
+    let bot_owner = context.http.get_current_application_info().await?.owner.tag();
 
-    let num_guilds = context.cache.guilds().len();
     let num_shards = context.cache.shard_count();
+    let num_guilds = context.cache.guilds().len();
     let num_channels = context.cache.guild_channel_count();
     let num_users = context.cache.user_count();
 

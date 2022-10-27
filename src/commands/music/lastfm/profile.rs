@@ -23,7 +23,7 @@ use serenity::{
 
 use tracing::error;
 
-use crate::utils::{format_int, get_profile_field, net_utils::*};
+use crate::utils::{format_int, get_profile_field, net::*};
 
 #[command]
 #[description("Retrieves various Last.fm user stats.")]

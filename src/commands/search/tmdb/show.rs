@@ -14,7 +14,7 @@ use std::time::Duration;
 use crate::{
     data::ReqwestContainer,
     models::tmdb::show::*,
-    utils::{calculate_average_sum, locale_utils, read_config}
+    utils::{calculate_average_sum, locale, read_config}
 };
 
 #[derive(Debug, Deserialize)]
@@ -81,9 +81,9 @@ async fn show(context: &Context, message: &Message, arguments: Args) -> CommandR
         String::new()
     };
 
-    let show_language = locale_utils::get_language_name_from_iso(&show_result.original_language).to_string();
-    let show_languages = show_result.languages.iter().map(|l| locale_utils::get_language_name_from_iso(l)).join("\n");
-    let show_origin_country = show_result.origin_country.iter().map(|c| locale_utils::get_country_name_from_iso(c)).join("\n");
+    let show_language = locale::get_language_name_from_iso(&show_result.original_language).to_string();
+    let show_languages = show_result.languages.iter().map(|l| locale::get_language_name_from_iso(l)).join("\n");
+    let show_origin_country = show_result.origin_country.iter().map(|c| locale::get_country_name_from_iso(c)).join("\n");
 
     let show_creators = if show_result.created_by.is_empty() {
         "Unknown".to_string()

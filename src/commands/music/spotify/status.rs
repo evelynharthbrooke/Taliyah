@@ -1,5 +1,5 @@
 use crate::data::ConfigContainer;
-use crate::utils::parsing_utils::parse_user;
+use crate::utils::parsing::parse_user;
 
 use chrono::{DateTime, NaiveDateTime, Utc};
 

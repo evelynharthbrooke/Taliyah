@@ -12,7 +12,7 @@ use serenity::{
 
 use tracing::error;
 
-use crate::utils::{get_profile_field, net_utils::*};
+use crate::utils::{get_profile_field, net::*};
 
 #[command]
 #[description("Retrieves the Last.fm now playing state of a given user.")]

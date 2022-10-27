@@ -1,4 +1,4 @@
-use crate::utils::parsing_utils::parse_user;
+use crate::utils::parsing::parse_user;
 use serenity::{
     client::Context,
     framework::standard::{macros::command, Args, CommandResult},

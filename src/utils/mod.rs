@@ -1,8 +1,8 @@
 // pub mod color_utils;
-pub mod git_utils;
-pub mod locale_utils;
-pub mod net_utils;
-pub mod parsing_utils;
+pub mod git;
+pub mod locale;
+pub mod net;
+pub mod parsing;
 
 use serenity::{client::Context, model::id::UserId};
 use sqlx::Row;
