@@ -1,5 +1,5 @@
+use crate::utils::parsing::parse_user;
 use itertools::Itertools;
-
 use serenity::{
     builder::{CreateEmbed, CreateEmbedAuthor, CreateMessage},
     client::Context,
@@ -11,10 +11,7 @@ use serenity::{
         user::OnlineStatus
     }
 };
-
 use tracing::info;
-
-use crate::utils::parsing::parse_user;
 
 #[command]
 #[description = "Shows various information about a user."]
