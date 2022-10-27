@@ -203,7 +203,7 @@ async fn user(context: &Context, message: &Message, args: Args) -> CommandResult
     let joined = member.joined_at.unwrap().format("%A, %B %e, %Y @ %l:%M %P");
 
     let embed = CreateEmbed::new()
-        .author(CreateEmbedAuthor::new(&user.name).icon_url(&user.face()))
+        .author(CreateEmbedAuthor::new(&user.name).icon_url(user.face()))
         .thumbnail(track_art)
         .colour(color)
         .description(format!(

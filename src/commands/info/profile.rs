@@ -67,7 +67,7 @@ async fn profile(context: &Context, message: &Message, arguments: Args) -> Comma
     ];
 
     let embed = CreateEmbed::new()
-        .author(CreateEmbedAuthor::new(format!("Profile for: {user_name}")).icon_url(&member.user.face()))
+        .author(CreateEmbedAuthor::new(format!("Profile for: {user_name}")).icon_url(member.user.face()))
         .color(color)
         .fields(profile_fields);
 
