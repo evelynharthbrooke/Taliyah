@@ -38,7 +38,7 @@ in 2020.
 
 All in all, you will need the following prerequisites for Ellie to build and run:
 
-> **Note**: The `voice` module and associated commands have been temporairily removed from Ellie whilist a better solution
+> **Note**: The `voice` module and associated commands have been temporarily removed from Ellie whilist a better solution
 > to the aforementioned commands are found. Due to this, the following are no longer required: Opus, FFmpeg, `youtube-dl`,
 > Lavalink / Andesite, and Python.
 >
