@@ -30,22 +30,29 @@ well.
 Across *all* operating systems, however, you will need to install the PostgreSQL database server, version 13 or later, as
 that is required for the database. For the voice functionalities provided by Ellie, you will need Opus, FFmpeg, `youtube-dl`,
 as well as a Lavalink-compatible voice server, e.g. Lavalink or Andesite, meaning you will also need Python and Java. Version
-15 of the AdoptOpenJDK distribution is recommended, with the OpenJ9 runtime being a good option. For Python, version 3.2
-or better work fine, however Python 3.9.1 or later is recommended as newer versions of Python perform faster. Version 2.6
-or 2.7 are NOT, and I mean ARE NOT, supported. They are supported by the `youtube-dl` tool, but I will provide absolutely
-ZERO support for these, as they are EOL and completely unsupported, even by the Python Software Foundation.
+15 of the Eclipse Temurin distribution is recommended, with the OpenJ9 runtime being a good option. For Python, version 3.2
+or better work fine, however Python 3.9.1 or later is recommended as newer versions of Python perform faster. Versions 2.6
+and 2.7 are NOT, and I mean ARE NOT, supported. They are supported by `youtube-dl`, but I will provide absolutely ZERO support
+for these, as they are EOL and completely unsupported, even by the Python Software Foundation, as Python 2.7 reached EOL
+in 2020.
 
 All in all, you will need the following prerequisites for Ellie to build and run:
 
-* Visual Studio 2019 / Visual Studio 2019 Build Tools (*Windows (non-WSL) only*)
-* PostgreSQL, version 13 or later
+> **Note**: The `voice` module and associated commands have been temporairily removed from Ellie whilist a better solution
+> to the aforementioned commands are found. Due to this, the following are no longer required: Opus, FFmpeg, `youtube-dl`,
+> Lavalink / Andesite, and Python.
+>
+> PostgreSQL is *still* required, as several commands rely on this.
+
+* Visual Studio 2019 / Visual Studio 2022 Build Tools (*Windows (non-WSL) only*)
+* PostgreSQL, version 14 or later
 * Opus 1.3.1 or later
 * FFmpeg 3.4.8 or later
 * youtube-dl
 * Lavalink / Andesite
-* AdoptOpenJDK 15 or later (OpenJ9 runtime)
+* Eclipse Temurin 16 or later (OpenJ9 runtime)
 * Python, version 3.2 or later
-* Rust, preferably version 1.48 or later
+* Rust, version 1.64 or later
 
 #### Windows
 
@@ -97,14 +104,14 @@ Now, we can actually download Ellie and set her up. This step 100% requires Git,
 be downloading her.
 
 ```bash
-git clone https://github.com/KamranMackey/Ellie.git
+git clone https://github.com/evelynmarie/Ellie.git
 ```
 
 If you'd like to use GitLab for the cloning process instead of GitHub, you can do that too. Just use
 the following command instead to clone from Ellie's GitLab mirror.
 
 ```bash
-git clone https://gitlab.com/KamranMackey/Ellie.git
+git clone https://gitlab.com/evelynmarie/Ellie.git
 ```
 
 Alright, now let's `cd` into the download directory where we downloaded Ellie to. This works across any and all operating
