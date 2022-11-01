@@ -1,4 +1,4 @@
-// pub mod color_utils;
+// pub mod color;
 pub mod git;
 pub mod locale;
 pub mod net;
@@ -28,20 +28,20 @@ pub async fn get_profile_field(context: &Context, field: &str, user_id: UserId) 
         Ok(row) => match row.try_get(0).map_err(EllieError::Database) {
             Ok(row) => Ok(row),
             Err(err) => {
-                error!("Field not set in database: {}", err);
+                error!("Field not set in database: {err}");
                 Ok("Field not set.".to_string())
             }
         },
         Err(err) => {
-            error!("Error querying database: {}", err);
+            error!("Error querying database: {err}");
             Ok("Database unsuccessfully queried.".to_string())
         }
     }
 }
 
-// converts integers to human-readable integers separated by
-// commas, e.g. "1000000" displays as "1,000,000" when fed through
-// this function.
+/// Converts integers to human-readable integers separated by
+/// commas, e.g. "1000000" displays as "1,000,000" when fed through
+/// this function.
 pub fn format_int(int: u64) -> String {
     let mut string = String::new();
     for (idx, val) in int.to_string().chars().rev().enumerate() {
