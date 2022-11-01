@@ -1,7 +1,7 @@
 use chrono::prelude::NaiveDate;
-use serde::{Deserialize, Serialize};
+use serde::Deserialize;
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Deserialize)]
 pub struct Movie {
     pub adult: bool,                                  // Whether or not the movie has an adult rating.
     pub belongs_to_collection: Option<Collection>,    // The movie's collection, if applicable.
@@ -29,7 +29,7 @@ pub struct Movie {
     pub vote_count: f64                               // The movie's total amount of votes on The Movie Database.
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Deserialize)]
 pub struct Collection {
     pub id: u64,               // The ID of the collection.
     pub name: String,          // The name of the collection.
@@ -37,20 +37,20 @@ pub struct Collection {
     pub backdrop_path: String  // the backdrop of the collection.
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Deserialize)]
 pub struct Genre {
     pub id: u64,      // The genre's ID.
     pub name: String  // The genre's name.
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Deserialize)]
 pub struct ProductionCompany {
     pub name: String,           // The friendly name of the production company.
     pub id: u64,                // The ID of the production company on The Movie Database.
     pub origin_country: String  // The country of origin of the production company.
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Deserialize)]
 pub struct ProductionCountry {
     pub iso_3166_1: String, // The ISO standard shortcode of the production country.
     pub name: String        // The friendly name of the production country.

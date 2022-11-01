@@ -52,87 +52,87 @@ async fn show(context: &Context, message: &Message, arguments: Args) -> CommandR
         return Ok(());
     }
 
-    let show_id = search_results.first().unwrap().id;
-    let show_endpoint = format!("https://api.themoviedb.org/3/tv/{show_id}");
-    let show_sub_requests = ("append_to_response", &"external_ids".to_string());
-    let show_response = client.get(&show_endpoint).query(&[("api_key", &api_key), show_sub_requests]).send().await.unwrap();
-    let show_result: Show = show_response.json().await.unwrap();
-    let show_poster_path = show_result.poster_path.unwrap();
-    let show_poster = format!("https://image.tmdb.org/t/p/original/{}", &show_poster_path.replace('/', ""));
+    let id = search_results.first().unwrap().id;
+    let endpoint = format!("https://api.themoviedb.org/3/tv/{id}");
+    let sub_requests = ("append_to_response", &"external_ids".to_string());
+    let response = client.get(&endpoint).query(&[("api_key", &api_key), sub_requests]).send().await.unwrap();
+    let result: Show = response.json().await.unwrap();
+    let poster_path = result.poster_path.unwrap();
+    let poster = format!("https://image.tmdb.org/t/p/original/{}", &poster_path.replace('/', ""));
 
-    let show_title = show_result.name;
-    let show_url = format!("https://themoviedb.org/tv/{}", &show_id);
-    let show_status = show_result.status;
-    let show_type = show_result.show_type;
-    let show_average_runtime = calculate_average_sum(&show_result.episode_run_time);
-    let show_runtime = format_duration(Duration::from_secs(show_average_runtime as u64 * 60)).to_string();
-    let show_overview = show_result.overview;
-    let show_popularity = show_result.popularity.to_string();
-    let show_production_status = if show_result.in_production { "In Production" } else { "Finished Production" };
-    let show_networks = show_result.networks.iter().map(|n| &n.name).join("\n");
-    let show_seasons = show_result.number_of_seasons.to_string();
-    let show_episodes = show_result.number_of_episodes.to_string();
-    let show_imdb_id = show_result.external_ids.imdb_id.unwrap();
-    let show_imdb_url = format!("https://www.imdb.com/title/{show_imdb_id}");
-    let show_genres = show_result.genres.iter().map(|genre| &genre.name).join("\n");
-    let show_tagline = if !show_result.tagline.is_empty() {
-        format!("*{}*", show_result.tagline)
+    let title = result.name;
+    let url = format!("https://themoviedb.org/tv/{}", &id);
+    let status = result.status;
+    let format = result.format;
+    let average_runtime = calculate_average_sum(&result.episode_run_time);
+    let runtime = format_duration(Duration::from_secs(average_runtime as u64 * 60)).to_string();
+    let overview = result.overview;
+    let popularity = result.popularity.to_string();
+    let production_status = if result.in_production { "In Production" } else { "Finished Production" };
+    let networks = result.networks.iter().map(|n| &n.name).join("\n");
+    let seasons = result.number_of_seasons.to_string();
+    let episodes = result.number_of_episodes.to_string();
+    let imdb_id = result.external_ids.imdb_id.unwrap();
+    let imdb_url = format!("https://www.imdb.com/title/{imdb_id}");
+    let genres = result.genres.iter().map(|genre| &genre.name).join("\n");
+    let tagline = if !result.tagline.is_empty() {
+        format!("*{}*", result.tagline)
     } else {
         String::new()
     };
 
-    let show_language = locale::get_language_name_from_iso(&show_result.original_language).to_string();
-    let show_languages = show_result.languages.iter().map(|l| locale::get_language_name_from_iso(l)).join("\n");
-    let show_origin_country = show_result.origin_country.iter().map(|c| locale::get_country_name_from_iso(c)).join("\n");
+    let language = locale::get_language_name_from_iso(&result.original_language).to_string();
+    let languages = result.languages.iter().map(|l| locale::get_language_name_from_iso(l)).join("\n");
+    let origin_country = result.origin_country.iter().map(|c| locale::get_country_name_from_iso(c)).join("\n");
 
-    let show_creators = if show_result.created_by.is_empty() {
+    let creators = if result.created_by.is_empty() {
         "Unknown".to_string()
     } else {
-        show_result.created_by.iter().map(|c| &c.name).join("\n")
+        result.created_by.iter().map(|c| &c.name).join("\n")
     };
 
-    let show_user_score = show_result.vote_average * 10.0;
-    let show_user_score_count = show_result.vote_count;
-    let show_first_air_date = show_result.first_air_date.format("%B %-e, %Y").to_string();
-    let show_last_air_date = show_result.last_air_date.format("%B %-e, %Y").to_string();
+    let user_score = result.vote_average * 10.0;
+    let user_score_count = result.vote_count;
+    let first_air_date = result.first_air_date.format("%B %-e, %Y").to_string();
+    let last_air_date = result.last_air_date.format("%B %-e, %Y").to_string();
 
-    let show_studios = if show_result.studios.is_empty() {
+    let studios = if result.studios.is_empty() {
         "Unknown".to_string()
     } else {
-        show_result.studios.iter().map(|s| &s.name).join("\n")
+        result.studios.iter().map(|s| &s.name).join("\n")
     };
 
-    let show_fields = vec![
-        ("Overview", show_overview, false),
-        ("Status", show_status, true),
-        ("Type", show_type, true),
-        ("Created By", show_creators, true),
-        ("Runtime", show_runtime, true),
-        ("First Air Date", show_first_air_date, true),
-        ("Last Air Date", show_last_air_date, true),
-        ("Main Language", show_language, true),
-        ("Origin Countries", show_origin_country, true),
-        ("Languages", show_languages, true),
-        ("Popularity", format!("{show_popularity}%"), true),
-        ("User Score", format!("{show_user_score}/100 ({show_user_score_count} votes)"), true),
-        ("Seasons", show_seasons, true),
-        ("Episodes", show_episodes, true),
-        ("Networks / Services", show_networks, true),
-        ("Genres", show_genres, true),
-        ("Studios", show_studios, false),
-        ("Production Status", show_production_status.to_string(), true),
+    let fields = vec![
+        ("Overview", overview, false),
+        ("Status", status, true),
+        ("Format", format, true),
+        ("Created By", creators, true),
+        ("Runtime", runtime, true),
+        ("First Air Date", first_air_date, true),
+        ("Last Air Date", last_air_date, true),
+        ("Main Language", language, true),
+        ("Origin Countries", origin_country, true),
+        ("Languages", languages, true),
+        ("Popularity", format!("{popularity}%"), true),
+        ("User Score", format!("{user_score}/100 ({user_score_count} votes)"), true),
+        ("Seasons", seasons, true),
+        ("Episodes", episodes, true),
+        ("Networks / Services", networks, true),
+        ("Genres", genres, true),
+        ("Studios", studios, false),
+        ("Production Status", production_status.to_string(), true),
     ];
 
     let embed = CreateEmbed::new()
-        .title(show_title)
-        .url(show_url)
-        .thumbnail(show_poster)
+        .title(title)
+        .url(url)
+        .thumbnail(poster)
         .color(0x01b4e4)
-        .description(show_tagline)
-        .fields(show_fields)
-        .footer(CreateEmbedFooter::new("Powered by TMDB."));
+        .description(tagline)
+        .fields(fields)
+        .footer(CreateEmbedFooter::new("Powered by TMDb."));
 
-    let links = CreateActionRow::Buttons(vec![(CreateButton::new_link("View IMDb Page", show_imdb_url))]);
+    let links = CreateActionRow::Buttons(vec![(CreateButton::new_link("View IMDb Page", imdb_url))]);
     message.channel_id.send_message(&context, CreateMessage::new().embed(embed).components(vec![links])).await?;
 
     Ok(())

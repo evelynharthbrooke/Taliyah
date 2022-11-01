@@ -72,12 +72,12 @@ async fn movie(context: &Context, message: &Message, arguments: Args) -> Command
         return Ok(());
     }
 
-    let movie_id = search_results.first().unwrap().id;
-    let movie_endpoint = format!("https://api.themoviedb.org/3/movie/{movie_id}");
-    let movie_response = client.get(&movie_endpoint).query(&[("api_key", &api_key)]).send().await.unwrap();
-    let movie_result: Movie = movie_response.json().await.unwrap();
+    let id = search_results.first().unwrap().id;
+    let endpoint = format!("https://api.themoviedb.org/3/movie/{id}");
+    let response = client.get(&endpoint).query(&[("api_key", &api_key)]).send().await.unwrap();
+    let result: Movie = response.json().await.unwrap();
 
-    let movie_tagline = match movie_result.tagline {
+    let tagline = match result.tagline {
         Some(tagline) => {
             if tagline.is_empty() {
                 String::new()
@@ -88,9 +88,9 @@ async fn movie(context: &Context, message: &Message, arguments: Args) -> Command
         None => String::new()
     };
 
-    let movie_overview = match movie_result.overview {
+    let overview = match result.overview {
         Some(overview) => {
-            if !movie_tagline.is_empty() {
+            if !tagline.is_empty() {
                 format!("\n\n{overview}")
             } else {
                 overview
@@ -99,18 +99,18 @@ async fn movie(context: &Context, message: &Message, arguments: Args) -> Command
         None => String::new()
     };
 
-    let movie_studios = if movie_result.production_companies.is_empty() {
+    let studios = if result.production_companies.is_empty() {
         "No Known Studios".to_string()
     } else {
-        movie_result.production_companies.iter().map(|c| &c.name).join("\n")
+        result.production_companies.iter().map(|c| &c.name).join("\n")
     };
 
-    let movie_collection = match movie_result.belongs_to_collection {
+    let collection = match result.belongs_to_collection {
         Some(collection) => collection.name,
         None => "N/A".to_string()
     };
 
-    let movie_homepage = match movie_result.homepage {
+    let homepage = match result.homepage {
         Some(homepage) => {
             if homepage.is_empty() {
                 "No Website".to_string()
@@ -121,44 +121,44 @@ async fn movie(context: &Context, message: &Message, arguments: Args) -> Command
         None => "No Website".to_string()
     };
 
-    let movie_id = movie_result.id.to_string();
-    let movie_title = movie_result.title.as_str();
-    let movie_status = movie_result.status;
-    let movie_language = locale::get_language_name_from_iso(&movie_result.original_language).to_string();
-    let movie_release_date = movie_result.release_date.unwrap().format("%B %e, %Y").to_string();
-    let movie_budget = format_int(movie_result.budget);
-    let movie_revenue = format_int(movie_result.revenue);
-    let movie_imdb = format!("[IMDb](https://www.imdb.com/title/{})", movie_result.imdb_id.unwrap());
-    let movie_url = format!("https://www.themoviedb.org/movie/{movie_id}");
-    let movie_genres = movie_result.genres.iter().map(|g| &g.name).join("\n");
-    let movie_popularity = format!("{}%", movie_result.popularity);
-    let movie_poster_uri = movie_result.poster_path.unwrap();
-    let movie_poster = format!("https://image.tmdb.org/t/p/original/{}", &movie_poster_uri.replace('/', ""));
-    let movie_user_score = format!("{}/100", movie_result.vote_average * 10.0);
-    let movie_user_score_count = movie_result.vote_count;
-    let movie_runtime = format_duration(Duration::from_secs(movie_result.runtime.unwrap() * 60)).to_string();
-    let movie_external_links = format!("{movie_homepage} | {movie_imdb}");
+    let id = result.id.to_string();
+    let title = result.title.as_str();
+    let status = result.status;
+    let language = locale::get_language_name_from_iso(&result.original_language).to_string();
+    let release_date = result.release_date.unwrap().format("%B %e, %Y").to_string();
+    let budget = format_int(result.budget);
+    let revenue = format_int(result.revenue);
+    let imdb = format!("[IMDb](https://www.imdb.com/title/{})", result.imdb_id.unwrap());
+    let url = format!("https://www.themoviedb.org/movie/{id}");
+    let genres = result.genres.iter().map(|g| &g.name).join("\n");
+    let popularity = format!("{}%", result.popularity);
+    let poster_uri = result.poster_path.unwrap();
+    let poster = format!("https://image.tmdb.org/t/p/original/{}", &poster_uri.replace('/', ""));
+    let user_score = format!("{}/100", result.vote_average * 10.0);
+    let user_score_count = result.vote_count;
+    let runtime = format_duration(Duration::from_secs(result.runtime.unwrap() * 60)).to_string();
+    let external_links = format!("{homepage} | {imdb}");
 
     let embed = CreateEmbed::new()
-        .title(movie_title)
-        .url(movie_url)
+        .title(title)
+        .url(url)
         .color(0x01b4e4)
-        .thumbnail(movie_poster)
-        .description(format!("{movie_tagline}{movie_overview}"))
+        .thumbnail(poster)
+        .description(format!("{tagline}{overview}"))
         .fields(vec![
-            ("Status", movie_status, true),
-            ("Film ID", movie_id, true),
-            ("Language", movie_language, true),
-            ("Runtime", movie_runtime, true),
-            ("Release Date", movie_release_date, true),
-            ("Collection", movie_collection, true),
-            ("Popularity", movie_popularity, true),
-            ("User Score", format!("{movie_user_score} ({movie_user_score_count} votes)"), true),
-            ("Budget", format!("${movie_budget}"), true),
-            ("Box Office", format!("${movie_revenue}"), true),
-            ("Genres", movie_genres, true),
-            ("Studios", movie_studios, true),
-            ("External Links", movie_external_links, false),
+            ("Status", status, true),
+            ("Film ID", id, true),
+            ("Language", language, true),
+            ("Runtime", runtime, true),
+            ("Release Date", release_date, true),
+            ("Collection", collection, true),
+            ("Popularity", popularity, true),
+            ("User Score", format!("{user_score} ({user_score_count} votes)"), true),
+            ("Budget", format!("${budget}"), true),
+            ("Box Office", format!("${revenue}"), true),
+            ("Genres", genres, true),
+            ("Studios", studios, true),
+            ("External Links", external_links, false),
         ])
         .footer(CreateEmbedFooter::new("Powered by the The Movie Database API."));
 

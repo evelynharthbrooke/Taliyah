@@ -68,17 +68,17 @@ async fn collection(context: &Context, message: &Message, arguments: Args) -> Co
         return Ok(());
     }
 
-    let collection_id = search_results.first().unwrap().id;
-    let collection_endpoint = format!("https://api.themoviedb.org/3/collection/{collection_id}");
-    let collection_response = client.get(&collection_endpoint).query(&[("api_key", &api_key)]).send().await?;
-    let collection_result: Collection = collection_response.json().await?;
+    let id = search_results.first().unwrap().id;
+    let endpoint = format!("https://api.themoviedb.org/3/collection/{id}");
+    let response = client.get(&endpoint).query(&[("api_key", &api_key)]).send().await?;
+    let result: Collection = response.json().await?;
 
-    let collection_name = collection_result.name;
-    let collection_poster = format!("https://image.tmdb.org/t/p/original{}", collection_result.poster_path);
-    let collection_url = format!("https://www.themoviedb.org/collection/{collection_id}");
-    let collection_overview = collection_result.overview;
+    let name = result.name;
+    let poster = format!("https://image.tmdb.org/t/p/original{}", result.poster_path);
+    let url = format!("https://www.themoviedb.org/collection/{id}");
+    let overview = result.overview;
 
-    let mut parts = collection_result.parts;
+    let mut parts = result.parts;
     let mut fields = Vec::with_capacity(parts.len());
     parts.sort_by_cached_key(|p| p.release_date);
 
@@ -93,11 +93,11 @@ async fn collection(context: &Context, message: &Message, arguments: Args) -> Co
     }).collect())).collect();
 
     let embed = CreateEmbed::new()
-        .title(collection_name)
-        .url(collection_url)
-        .thumbnail(collection_poster)
+        .title(name)
+        .url(url)
+        .thumbnail(poster)
         .color(0x0001_d277)
-        .description(collection_overview)
+        .description(overview)
         .fields(fields)
         .footer(CreateEmbedFooter::new("Powered by TMDb."));
 

@@ -8,13 +8,13 @@ use serenity::{
     model::prelude::Message
 };
 
-#[derive(Debug, Deserialize)]
+#[derive(Deserialize)]
 struct Response {
     languages: Vec<Language>,
     total: Language
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Deserialize)]
 pub struct Language {
     name: String,
     files: u64,

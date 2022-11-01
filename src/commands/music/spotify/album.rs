@@ -45,7 +45,6 @@ async fn album(context: &Context, message: &Message, args: Args) -> CommandResul
     let album_markets = album.available_markets.unwrap().len();
     let album_track_count = album.tracks.total;
     let album_url = &album.external_urls["spotify"];
-
     let album_type = match album.album_type {
         AlbumType::Album => "Album".to_owned(),
         AlbumType::Single => {
@@ -67,7 +66,6 @@ async fn album(context: &Context, message: &Message, args: Args) -> CommandResul
     let album_track_items = &album.tracks.items;
     let album_track_lengths: u64 = album_track_items.iter().map(|track| track.duration.as_millis() as u64).sum();
     let album_length = format_duration(Duration::from_millis(album_track_lengths / 1000 * 1000));
-
     let album_tracks = album_track_items
         .iter()
         .map(|track| {

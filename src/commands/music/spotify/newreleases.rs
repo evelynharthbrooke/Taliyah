@@ -29,17 +29,13 @@ async fn newreleases(context: &Context, message: &Message, args: Args) -> Comman
     let country_iso = CountryCode::for_alpha2_caseless(&market).unwrap();
     let country_name = locale::get_country_name_from_iso(&market);
     let new_releases = spotify.browse().get_new_releases(20, 0, Some(country_iso)).await?;
-    let nr_items = new_releases
-        .data
-        .items
-        .iter()
-        .map(|album| {
-            let album_name = &album.name;
-            let album_artists = &album.artists.iter().map(|a| &a.name).join(", ");
-            let album_date = album.release_date.unwrap().format("%B %-d, %Y").to_string();
-            format!("**{album_name}** — {album_artists} — {album_date}")
-        })
-        .join("\n");
+    #[rustfmt::skip]
+    let nr_items = new_releases.data.items.iter().map(|album| {
+        let album_name = &album.name;
+        let album_artists = &album.artists.iter().map(|a| &a.name).join(", ");
+        let album_date = album.release_date.unwrap().format("%B %-d, %Y").to_string();
+        format!("**{album_name}** — {album_artists} — {album_date}")
+    }).join("\n");
 
     let embed = CreateEmbed::new()
         .title(format!("New Releases on Spotify for {country_name}"))

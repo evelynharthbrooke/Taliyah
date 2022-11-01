@@ -2,7 +2,7 @@ use crate::data::ReqwestContainer;
 use crate::read_config;
 use crate::utils::format_int;
 use chrono::{DateTime, Utc};
-use serde::{Deserialize, Serialize};
+use serde::Deserialize;
 use serenity::{
     builder::{CreateEmbed, CreateEmbedFooter, CreateMessage},
     client::Context,
@@ -10,12 +10,12 @@ use serenity::{
     model::prelude::Message
 };
 
-#[derive(Debug, Clone, Deserialize, Serialize)]
+#[derive(Deserialize)]
 struct User {
     pub data: UserData
 }
 
-#[derive(Debug, Clone, Deserialize, Serialize)]
+#[derive(Deserialize)]
 struct UserData {
     pub id: String,                        // The user's Twitter identifier.
     pub name: String,                      // The user's display name.
@@ -29,19 +29,19 @@ struct UserData {
     pub public_metrics: UserPublicMetrics  // The user's publicly available metrics, such as followers / following.
 }
 
-#[derive(Debug, Clone, Deserialize, Serialize)]
+#[derive(Deserialize)]
 struct UserPublicMetrics {
     pub followers_count: u64, // The amount of people that follow the given user.
     pub following_count: u64, // The amount of people that the given user is following.
     pub tweet_count: u64      // The total amount of times the given user has Tweeted.
 }
 
-#[derive(Debug, Clone, Deserialize, Serialize)]
+#[derive(Deserialize)]
 struct UserTweets {
     pub data: Option<Vec<UserTweet>>
 }
 
-#[derive(Debug, Clone, Deserialize, Serialize)]
+#[derive(Deserialize)]
 struct UserTweet {
     pub text: String // the text
 }
@@ -71,11 +71,10 @@ async fn user(context: &Context, message: &Message, mut args: Args) -> CommandRe
     let location = user.location;
     let url = format!("https://twitter.com/{handle}");
     let description = &user.description;
-    let verified = user.verified;
     let avatar = &user.profile_image_url.replace("normal", "400x400").to_string();
-    let followers = format_int(user.public_metrics.followers_count);
     let following = format_int(user.public_metrics.following_count);
-    let tweet_count = format_int(user.public_metrics.tweet_count);
+    let followers = format_int(user.public_metrics.followers_count);
+    let tweets = format_int(user.public_metrics.tweet_count);
 
     endpoint = format!("https://api.twitter.com/2/users/{id}/tweets");
     request = client.get(&endpoint).bearer_auth(&bearer).query(&tweet_fields).send().await?;
@@ -88,7 +87,7 @@ async fn user(context: &Context, message: &Message, mut args: Args) -> CommandRe
 
     let builder = CreateMessage::new().embed(
         CreateEmbed::new()
-            .title(format!("{name} {}", if verified { "\\✔️" } else { "" }))
+            .title(format!("{name}{verified}", verified = if user.verified { " \\✔️" } else { "" }))
             .url(url)
             .thumbnail(avatar)
             .color(0x00acee)
@@ -100,7 +99,7 @@ async fn user(context: &Context, message: &Message, mut args: Args) -> CommandRe
                 ("Location", if location.is_some() { location.unwrap() } else { "None".to_string() }, true),
                 ("Following", following, true),
                 ("Followers", followers, true),
-                ("Tweets", tweet_count, true),
+                ("Tweets", tweets, true),
                 ("Latest Tweet", latest_tweet, false),
             ])
             .footer(CreateEmbedFooter::new(format!("User ID: {id} | Powered by Twitter.")))

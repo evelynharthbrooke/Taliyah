@@ -39,8 +39,8 @@ impl EventHandler for Handler {
         info!("Connected to database {db_name} running {db_version}.");
         info!("Connected to and serving a total of {guild_count} guild(s).");
 
-        let presence_string = format!("on {guild_count} guilds | e.help");
-        context.set_presence(Some(ActivityData::playing(presence_string)), OnlineStatus::Online);
+        let presence = format!("on {guild_count} guilds | e.help");
+        context.set_presence(Some(ActivityData::playing(presence)), OnlineStatus::Online);
     }
 
     async fn guild_create(&self, context: Context, guild: Guild, _is_new: std::option::Option<bool>) {

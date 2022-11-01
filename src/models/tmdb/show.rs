@@ -1,7 +1,7 @@
 use chrono::prelude::NaiveDate;
 use serde::Deserialize;
 
-#[derive(Debug, Deserialize)]
+#[derive(Deserialize)]
 #[rustfmt::skip]
 pub struct Show {
     pub backdrop_path: Option<String>,             // The show's backdrop path.
@@ -30,16 +30,16 @@ pub struct Show {
     pub studios: Vec<NetworkOrStudio>,             // The studios that produce and manage the show.
     pub seasons: Vec<Season>,                      // A vector array containing information on the show's individual seasons.
     pub spoken_languages: Vec<Language>,           // A vector array containing information about the show's spoken languages.
-    pub status: String,                            // The status of the show, e.g. Returning Series, Cancelled, or Ended.
+    pub status: String,                            // The status of the show; can be Returning Series, Cancelled, or Ended.
     pub tagline: String,                           // The show's tagline.
     #[serde(rename = "type")]
-    pub show_type: String,                         // The type of the show, e.g. Scripted, News, or Unscripted.
+    pub format: String,                            // The format of the show; can be Scripted, News, or Unscripted.
     pub vote_average: f64,                         // The show's average user score on The Movie Database.
     pub vote_count: i64,                           // The show's total amount of user votes on The Movie Database.
     pub external_ids: ExternalId                   // The external IDs associated with the show, e.g. the external IMDb ID.
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Deserialize)]
 pub struct CreatedBy {
     pub id: i64,                      // The ID associated with the given creator.
     pub credit_id: String,            // The credit ID associated with the given creator.
@@ -48,13 +48,13 @@ pub struct CreatedBy {
     pub profile_path: Option<String>  // The (optional) profile path of the given creator.
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Deserialize)]
 pub struct Genre {
     pub id: i64,      // The ID of the given genre.
     pub name: String  // The name of the given genre.
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Deserialize)]
 pub struct EpisodeToAir {
     pub air_date: Option<NaiveDate>, // The episode's air date.
     pub episode_number: i64,         // The number of the episode.
@@ -68,7 +68,7 @@ pub struct EpisodeToAir {
     pub vote_count: i64              // The total amount of votes for the episode.
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Deserialize)]
 pub struct NetworkOrStudio {
     pub name: String,                   // The name of the studio.
     pub id: i64,                        // The ID associated with the studio.
@@ -76,7 +76,7 @@ pub struct NetworkOrStudio {
     pub origin_country: Option<String>  // The country where the studio originated.
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Deserialize)]
 pub struct Season {
     pub air_date: Option<NaiveDate>, // The premiere date of the season.
     pub episode_count: i64,          // The total amount of episodes in the season.
@@ -87,14 +87,14 @@ pub struct Season {
     pub season_number: i64           // The season's numerical number.
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Deserialize)]
 pub struct Language {
     pub english_name: String, // The name of the given language, in English.
     pub iso_639_1: String,    // The ISO 639-1 identifier associated with the language.
     pub name: String          // The native name associated with the language.
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Deserialize)]
 pub struct ExternalId {
     pub imdb_id: Option<String>,      // The show's IMDb identifier.
     pub freebase_mid: Option<String>, // The show's Freebase MID.

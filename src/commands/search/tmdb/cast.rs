@@ -11,36 +11,36 @@ use serenity::{
 
 use crate::{data::ReqwestContainer, models::tmdb::show::*, utils::read_config};
 
-#[derive(Debug, Deserialize)]
+#[derive(Deserialize)]
 pub struct SeriesSearchResponse {
     pub results: Vec<SeriesResult>
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Deserialize)]
 pub struct SeriesResult {
     pub id: i64
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Deserialize)]
 pub struct MovieSearchResponse {
     pub results: Vec<MovieResult>
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Deserialize)]
 pub struct MovieResult {
     pub title: String,
     pub poster_path: String,
     pub id: i64
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Deserialize)]
 pub struct Credits {
     pub cast: Vec<CastMember>,
     pub crew: Vec<CrewMember>,
     pub id: i64
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Deserialize)]
 pub struct CastMember {
     pub character: String,
     pub credit_id: String,
@@ -51,7 +51,7 @@ pub struct CastMember {
     pub order: i64
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Deserialize)]
 pub struct CrewMember {
     pub credit_id: String,
     pub department: String,

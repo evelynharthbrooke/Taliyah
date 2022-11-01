@@ -9,13 +9,13 @@ use serenity::{
 
 use crate::data::ReqwestContainer;
 
-#[derive(Debug, Deserialize)]
+#[derive(Deserialize)]
 pub struct Response {
     #[serde(rename = "list")]
     definitions: Vec<Definition>
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Deserialize)]
 pub struct Definition {
     #[serde(rename = "definition")]
     description: String,
