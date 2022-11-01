@@ -75,11 +75,7 @@ async fn show(context: &Context, message: &Message, arguments: Args) -> CommandR
     let imdb_id = result.external_ids.imdb_id.unwrap();
     let imdb_url = format!("https://www.imdb.com/title/{imdb_id}");
     let genres = result.genres.iter().map(|genre| &genre.name).join("\n");
-    let tagline = if !result.tagline.is_empty() {
-        format!("*{}*", result.tagline)
-    } else {
-        String::new()
-    };
+    let tagline = if !result.tagline.is_empty() { format!("*{}*", result.tagline) } else { String::new() };
 
     let language = locale::get_language_name_from_iso(&result.original_language).to_string();
     let languages = result.languages.iter().map(|l| locale::get_language_name_from_iso(l)).join("\n");
