@@ -185,8 +185,8 @@ with regards to this software.
 [invite-link]: https://discordapp.com/oauth2/authorize?client_id=483499705108529163&scope=bot
 [invite-badge]: https://img.shields.io/badge/invite-to%20your%20Discord%20server-7289da.svg?style=flat-square&logo=discord
 
-[dependency-link]: https://deps.rs/repo/github/kamranmackey/taliyah
-[dependency-badge]: https://deps.rs/repo/github/kamranmackey/taliyah/status.svg
+[dependency-link]: https://deps.rs/repo/github/evelynmarie/taliyah
+[dependency-badge]: https://deps.rs/repo/github/evelynmarie/taliyah/status.svg
 
 [license-link]: https://github.com/evelynmarie/Taliyah/blob/rust_rewrite/LICENSE.txt
 [license-badge]: https://img.shields.io/github/license/evelynmarie/Taliyah.svg?color=ff1f46&style=flat-square
