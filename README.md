@@ -188,8 +188,8 @@ with regards to this software.
 [dependency-link]: https://deps.rs/repo/github/kamranmackey/taliyah
 [dependency-badge]: https://deps.rs/repo/github/kamranmackey/taliyah/status.svg
 
-[license-link]: https://github.com/KamranMackey/Taliyah/blob/rust_rewrite/LICENSE.txt
-[license-badge]: https://img.shields.io/github/license/KamranMackey/Taliyah.svg?color=ff1f46&style=flat-square
+[license-link]: https://github.com/evelynmarie/Taliyah/blob/rust_rewrite/LICENSE.txt
+[license-badge]: https://img.shields.io/github/license/evelynmarie/Taliyah.svg?color=ff1f46&style=flat-square
 
-[github-actions-link]: https://github.com/KamranMackey/Taliyah/actions?query=workflow%3A%22Check+Project%22
-[github-actions-badge]: https://github.com/KamranMackey/Taliyah/workflows/Check%20Project/badge.svg
+[github-actions-link]: https://github.com/evelynmarie/Taliyah/actions?query=workflow%3A%22Check+Project%22
+[github-actions-badge]: https://github.com/evelynmarie/Taliyah/workflows/Check%20Project/badge.svg
