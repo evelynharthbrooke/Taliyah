@@ -108,6 +108,6 @@ async fn ping(context: &Context, message: &Message) -> CommandResult {
 #[command]
 #[description = "Sends a link containing the bot's source code."]
 async fn source(context: &Context, message: &Message) -> CommandResult {
-    message.reply(context, "GitHub repository: <https://github.com/evelynmarie/Ellie>").await?;
+    message.reply(context, "GitHub repository: <https://github.com/evelynmarie/Taliyah>").await?;
     Ok(())
 }

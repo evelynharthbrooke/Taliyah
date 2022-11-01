@@ -1,13 +1,13 @@
-# Ellie
+# Taliyah
 
 A feature-packed bot for Discord servers, written in Rust with Serenity and various other libraries.
 
-[![Invite Ellie][invite-badge]][invite-link]
+[![Invite Taliyah][invite-badge]][invite-link]
 [![License][license-badge]][license-link]
 [![Dependency Status][dependency-badge]][dependency-link]
 [![GitHub Actions Build Status][github-actions-badge]][github-actions-link]
 
-Welcome to the official GitHub / GitLab repository for Ellie, a bot for the Discord chat platform written in Rust with the
+Welcome to the official GitHub / GitLab repository for Taliyah, a bot for the Discord chat platform written in Rust with the
 serenity library, as well as various other libraries. It should be noted that this project is still in a heavy Work-In-Progress
 state, however there are still a pretty robust set of commands implemented so far, including a near-complete suite of voice
 commands, which I am very happy with. This project will be continulously improved and updated with more commands and features,
@@ -17,7 +17,7 @@ so please keep an eye on this repository for any new features and updates, as we
 
 ### Prerequisites
 
-Alright, before we can get Ellie up and running, we'll need to install a couple pieces of software in order for Ellie
+Alright, before we can get Taliyah up and running, we'll need to install a couple pieces of software in order for Taliyah
 to actually build and run. This will depend on your operating system, be it either Windows, macOS or Linux. On Windows,
 this means you'll need Visual Studio 2019 installed, be it either the full IDE (Community, Professional, or Enterprise work
 fine) or just the Visual Studio 2019 Build Tools, and Rust itself. On macOS, you will need the Xcode Developer Tools, as
@@ -28,7 +28,7 @@ to the same `clang` compiler as macOS by installing it through your respective p
 well.
 
 Across *all* operating systems, however, you will need to install the PostgreSQL database server, version 13 or later, as
-that is required for the database. For the voice functionalities provided by Ellie, you will need Opus, FFmpeg, `youtube-dl`,
+that is required for the database. For the voice functionalities provided by Taliyah, you will need Opus, FFmpeg, `youtube-dl`,
 as well as a Lavalink-compatible voice server, e.g. Lavalink or Andesite, meaning you will also need Python and Java. Version
 15 of the Eclipse Temurin distribution is recommended, with the OpenJ9 runtime being a good option. For Python, version 3.2
 or better work fine, however Python 3.9.1 or later is recommended as newer versions of Python perform faster. Versions 2.6
@@ -36,9 +36,9 @@ and 2.7 are NOT, and I mean ARE NOT, supported. They are supported by `youtube-d
 for these, as they are EOL and completely unsupported, even by the Python Software Foundation, as Python 2.7 reached EOL
 in 2020.
 
-All in all, you will need the following prerequisites for Ellie to build and run:
+All in all, you will need the following prerequisites for Taliyah to build and run:
 
-> **Note**: The `voice` module and associated commands have been temporarily removed from Ellie whilist a better solution
+> **Note**: The `voice` module and associated commands have been temporarily removed from Taliyah whilist a better solution
 > to the aforementioned commands are found. Due to this, the following are no longer required: Opus, FFmpeg, `youtube-dl`,
 > Lavalink, Eclipse Temurin, and Python.
 >
@@ -100,28 +100,28 @@ a different drive.
 
 ### Installing the Bot
 
-Now, we can actually download Ellie and set her up. This step 100% requires Git, as that is how we will
+Now, we can actually download Taliyah and set her up. This step 100% requires Git, as that is how we will
 be downloading her.
 
 ```bash
-git clone https://github.com/evelynmarie/Ellie.git
+git clone https://github.com/evelynmarie/Taliyah.git
 ```
 
 If you'd like to use GitLab for the cloning process instead of GitHub, you can do that too. Just use
-the following command instead to clone from Ellie's GitLab mirror.
+the following command instead to clone from Taliyah's GitLab mirror.
 
 ```bash
-git clone https://gitlab.com/evelynmarie/Ellie.git
+git clone https://gitlab.com/evelynmarie/Taliyah.git
 ```
 
-Alright, now let's `cd` into the download directory where we downloaded Ellie to. This works across any and all operating
+Alright, now let's `cd` into the download directory where we downloaded Taliyah to. This works across any and all operating
 systems, including Windows.
 
 ```bash
-cd Ellie
+cd Taliyah
 ```
 
-Now we can install Ellie's dependencies. On Windows, you will need to install the `windows-build-tools`
+Now we can install Taliyah's dependencies. On Windows, you will need to install the `windows-build-tools`
 package using npm, as Windows does not natively include build tools like Linux does. For macOS, just
 install Xcode and the commandline tools.
 
@@ -144,7 +144,7 @@ speed as well as the speed of your system's SSD and/or hard drive.
 
 > This section is currently out of date. This section will be updated soon.
 
-Now we can set up Ellie. You will need to go to the developers site for Discord, and create a new application.
+Now we can set up Taliyah. You will need to go to the developers site for Discord, and create a new application.
 You can do this by going [here](https://discordapp.com/developers/applications/), logging in, and selecting
 "Create an application" on the main page, and filling in the neccessary information. Once you have
 successfully created an application, click on your application's card. Now, we'll have to create a
@@ -160,7 +160,7 @@ and usernames and passwords you'd like. I should note though that there is curre
 implemented in any commands right now, so if you forget to add API keys or usernames/passwords, you will
 encounter an error when trying to run the respective commands, so that's why I strongly suggest doing so.
 
-Now, we are pretty much done. Now, onto the final step, which is actually running Ellie.
+Now, we are pretty much done. Now, onto the final step, which is actually running Taliyah.
 
 ### Running the Bot
 
@@ -171,12 +171,12 @@ the bot and then start her up.
 cargo run # (--release if you want to run the optimized variant)
 ```
 
-Congratulations! You have (hopefully) successfully installed and set up Ellie, and you can now add the bot to
+Congratulations! You have (hopefully) successfully installed and set up Taliyah, and you can now add the bot to
 any guild you'd like. (if you have the permission to of course)
 
 ### Licensing
 
-Ellie is licensed under the terms of the MIT License, a fairly unrestrictive license that gives you the power to do
+Taliyah is licensed under the terms of the MIT License, a fairly unrestrictive license that gives you the power to do
 mostly anything you want with this project, and is one of two licenses used by the Rust project itself alongside version
 2.0 of the Apache License, meaning that this software should be 100% compatible. The full contents of the MIT license are
 written in the `LICENSE` file, in the root project directory. Please read it in full to understand your full rights
@@ -185,11 +185,11 @@ with regards to this software.
 [invite-link]: https://discordapp.com/oauth2/authorize?client_id=483499705108529163&scope=bot
 [invite-badge]: https://img.shields.io/badge/invite-to%20your%20Discord%20server-7289da.svg?style=flat-square&logo=discord
 
-[dependency-link]: https://deps.rs/repo/github/kamranmackey/ellie
-[dependency-badge]: https://deps.rs/repo/github/kamranmackey/ellie/status.svg
+[dependency-link]: https://deps.rs/repo/github/kamranmackey/taliyah
+[dependency-badge]: https://deps.rs/repo/github/kamranmackey/taliyah/status.svg
 
-[license-link]: https://github.com/KamranMackey/Ellie/blob/rust_rewrite/LICENSE.txt
-[license-badge]: https://img.shields.io/github/license/KamranMackey/Ellie.svg?color=ff1f46&style=flat-square
+[license-link]: https://github.com/KamranMackey/Taliyah/blob/rust_rewrite/LICENSE.txt
+[license-badge]: https://img.shields.io/github/license/KamranMackey/Taliyah.svg?color=ff1f46&style=flat-square
 
-[github-actions-link]: https://github.com/KamranMackey/Ellie/actions?query=workflow%3A%22Check+Project%22
-[github-actions-badge]: https://github.com/KamranMackey/Ellie/workflows/Check%20Project/badge.svg
+[github-actions-link]: https://github.com/KamranMackey/Taliyah/actions?query=workflow%3A%22Check+Project%22
+[github-actions-badge]: https://github.com/KamranMackey/Taliyah/workflows/Check%20Project/badge.svg

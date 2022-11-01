@@ -76,7 +76,7 @@ impl EventHandler for Handler {
 
     /// Message handler
     ///
-    /// Upon message receive events, Ellie will automatically add the
+    /// Upon message receive events, Taliyah will automatically add the
     /// author's user id to the profiles table in the database. This
     /// event might get expanded later on to handle other things, too.
     ///

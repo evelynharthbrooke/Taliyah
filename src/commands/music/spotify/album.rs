@@ -36,7 +36,6 @@ async fn album(context: &Context, message: &Message, args: Args) -> CommandResul
 
     let album_id = items.first().unwrap().id.as_ref().unwrap();
     let album = spotify.albums().get_album(album_id, None).await.unwrap().data;
-
     let album_name = &album.name;
     let album_date = album.release_date.to_string();
     let album_artists = &album.artists.iter().map(|a| format!("[{}]({})", &a.name, &a.external_urls["spotify"])).join(", ");
@@ -66,17 +65,15 @@ async fn album(context: &Context, message: &Message, args: Args) -> CommandResul
     let album_track_items = &album.tracks.items;
     let album_track_lengths: u64 = album_track_items.iter().map(|track| track.duration.as_millis() as u64).sum();
     let album_length = format_duration(Duration::from_millis(album_track_lengths / 1000 * 1000));
-    let album_tracks = album_track_items
-        .iter()
-        .map(|track| {
-            let name = &track.name;
-            let position = &track.track_number;
-            let url = &track.external_urls["spotify"];
-            let length = format_duration(Duration::from_millis((track.duration.as_millis() as u64) / 1000 * 1000));
-            let explicit = if track.explicit { "(explicit)" } else { "" };
-            format!("**{position}.** [{name}]({url}) — {length} {explicit}")
-        })
-        .join("\n");
+    #[rustfmt::skip]
+    let album_tracks = album_track_items.iter().map(|track| {
+        let name = &track.name;
+        let position = &track.track_number;
+        let url = &track.external_urls["spotify"];
+        let length = format_duration(Duration::from_millis((track.duration.as_millis() as u64) / 1000 * 1000));
+        let explicit = if track.explicit { "(explicit)" } else { "" };
+        format!("**{position}.** [{name}]({url}) — {length} {explicit}")
+    }).join("\n");
 
     let album_fields = vec![
         ("Type", album_type, true),

@@ -32,7 +32,7 @@ impl RGB {
     ///
     /// # Example
     /// ```
-    /// use ellie::utilities::RGB;
+    /// use taliyah::utilities::RGB;
     ///
     /// let rgb = RGB { 43, 116, 137 };
     /// let rgb_hex = RGB::to_hex_code(rgb);

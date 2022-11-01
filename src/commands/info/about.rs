@@ -48,7 +48,7 @@ async fn about(context: &Context, message: &Message) -> CommandResult {
 
     let embed = CreateEmbed::new()
         .title(format!("**{bot_name}**"))
-        .url("https://github.com/evelynmarie/Ellie")
+        .url("https://github.com/evelynmarie/Taliyah")
         .thumbnail(bot_avatar)
         .color(0x00BFFF)
         .fields(about_fields)

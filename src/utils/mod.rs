@@ -9,7 +9,7 @@ use sqlx::Row;
 use std::{fs::File, io::prelude::Read};
 use tracing::error;
 
-use crate::{config::ConfigurationData, data::DatabasePool, error::EllieError};
+use crate::{config::ConfigurationData, data::DatabasePool, error::TaliyahError};
 
 pub fn read_config(file: &str) -> ConfigurationData {
     let mut file = File::open(file).unwrap();
@@ -18,14 +18,14 @@ pub fn read_config(file: &str) -> ConfigurationData {
     toml::from_str::<ConfigurationData>(&contents).unwrap()
 }
 
-pub async fn get_profile_field(context: &Context, field: &str, user_id: UserId) -> Result<String, EllieError> {
+pub async fn get_profile_field(context: &Context, field: &str, user_id: UserId) -> Result<String, TaliyahError> {
     let pool = context.data.read().await.get::<DatabasePool>().cloned().unwrap();
     match sqlx::query(format!("SELECT {field} FROM profile_data WHERE user_id = $1").as_str())
         .bind(user_id.get() as i64)
         .fetch_one(&pool)
         .await
     {
-        Ok(row) => match row.try_get(0).map_err(EllieError::Database) {
+        Ok(row) => match row.try_get(0).map_err(TaliyahError::Database) {
             Ok(row) => Ok(row),
             Err(err) => {
                 error!("Field not set in database: {err}");

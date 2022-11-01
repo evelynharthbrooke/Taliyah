@@ -1,6 +1,6 @@
-//! Ellie for Discord
+//! Taliyah for Discord
 //!
-//! Ellie is a bot for the Discord chat platform focused on giving users
+//! Taliyah is a bot for the Discord chat platform focused on giving users
 //! a powerful set of features, while remaining quick to respond.
 
 mod commands;

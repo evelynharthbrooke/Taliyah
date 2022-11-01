@@ -1,10 +1,10 @@
 [package]
-name                = "ellie"
+name                = "taliyah"
 version             = "0.7.0-alpha"
 authors             = ["Evelyn Marie <evelynelizabethmarie@gmail.com>"]
 description         = "A Discord bot written in Rust with Serenity."
-homepage            = "https://github.com/evelynmarie/Ellie"
-repository          = "https://github.com/evelynmarie/Ellie.git"
+homepage            = "https://github.com/evelynmarie/Taliyah"
+repository          = "https://github.com/evelynmarie/Taliyah.git"
 keywords            = ["discord", "discord-api", "bot", "serenity"]
 edition             = "2021"
 license             = "MIT"

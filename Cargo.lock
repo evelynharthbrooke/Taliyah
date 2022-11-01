@@ -341,29 +341,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "90e5c1c8368803113bf0c9584fc495a58b86dc8a29edbf8fe877d21d9507e797"
 
 [[package]]
-name = "ellie"
-version = "0.7.0-alpha"
-dependencies = [
- "aspotify",
- "chrono",
- "git2",
- "humantime",
- "itertools",
- "lastfm-rs",
- "reqwest",
- "serde",
- "serde_json",
- "serenity",
- "sqlx",
- "tokio",
- "toml",
- "tracing",
- "tracing-futures",
- "tracing-log",
- "tracing-subscriber",
-]
-
-[[package]]
 name = "encoding_rs"
 version = "0.8.31"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1795,6 +1772,29 @@ dependencies = [
  "proc-macro2",
  "quote",
  "unicode-ident",
+]
+
+[[package]]
+name = "taliyah"
+version = "0.7.0-alpha"
+dependencies = [
+ "aspotify",
+ "chrono",
+ "git2",
+ "humantime",
+ "itertools",
+ "lastfm-rs",
+ "reqwest",
+ "serde",
+ "serde_json",
+ "serenity",
+ "sqlx",
+ "tokio",
+ "toml",
+ "tracing",
+ "tracing-futures",
+ "tracing-log",
+ "tracing-subscriber",
 ]
 
 [[package]]

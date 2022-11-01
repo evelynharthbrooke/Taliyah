@@ -29,7 +29,6 @@ async fn track(context: &Context, message: &Message, args: Args) -> CommandResul
     let track_result = &track_search.await.unwrap().data;
     let tracks = &track_result.tracks;
     let items = &tracks.as_ref().unwrap().items;
-
     if items.is_empty() {
         message.channel_id.say(context, format!("No track was found for `{}`. Try something else.", args.rest())).await?;
         return Ok(());
@@ -42,7 +41,6 @@ async fn track(context: &Context, message: &Message, args: Args) -> CommandResul
     let track_name = &track.name;
 
     let track_album = spotify.albums().get_album(track_album_id, None).await.unwrap().data;
-
     let track_album_name = track_album.name;
     let track_album_url = track_album.external_urls.get("spotify").unwrap();
     let track_markets = track_album.available_markets.unwrap().len();
@@ -56,7 +54,6 @@ async fn track(context: &Context, message: &Message, args: Args) -> CommandResul
     let track_image = &track_album.images.first().unwrap().url;
     let track_artists = track.artists.iter().map(|a| format!("[{}]({})", &a.name, &a.external_urls["spotify"])).join(", ");
     let track_date = track_album.release_date.to_string();
-
     let track_copyright = match &track_album.copyrights.is_empty() {
         true => track_label,
         false => {
@@ -72,7 +69,6 @@ async fn track(context: &Context, message: &Message, args: Args) -> CommandResul
     };
 
     let track_features = spotify.tracks().get_features_track(track_id).await.unwrap().data;
-
     let track_key = match track_features.key {
         0 => "C".to_owned(),
         1 => "C♯, D♭".to_owned(),
