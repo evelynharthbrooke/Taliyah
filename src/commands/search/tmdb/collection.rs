@@ -12,12 +12,12 @@ use crate::{data::ReqwestContainer, utils::read_config};
 
 #[derive(Deserialize, Debug)]
 pub struct SearchResponse {
-    pub results: Vec<SearchCollection> // The collection search results.
+    pub results: Vec<SearchCollection>
 }
 
 #[derive(Deserialize, Debug)]
 pub struct SearchCollection {
-    pub id: u64 // The ID of the collection. All we need.
+    pub id: u64
 }
 
 #[derive(Deserialize, Debug)]
@@ -49,7 +49,7 @@ pub struct Movie {
 #[description("Gets detailed information about a collection from The Movie Database.")]
 async fn collection(context: &Context, message: &Message, arguments: Args) -> CommandResult {
     if arguments.rest().is_empty() {
-        message.channel_id.say(context, "Invalid collection name provided. Please try again.").await?;
+        message.channel_id.say(context, "No collection name provided. Please provide one.").await?;
         return Ok(());
     }
 
@@ -64,7 +64,7 @@ async fn collection(context: &Context, message: &Message, arguments: Args) -> Co
     let search_result: SearchResponse = search_response.send().await?.json().await?;
     let search_results = search_result.results;
     if search_results.is_empty() {
-        message.channel_id.say(context, format!("Nothing found for `{collection}`. Please try something else.")).await?;
+        message.channel_id.say(context, format!("Nothing found for `{collection}`. Please try another name.")).await?;
         return Ok(());
     }
 

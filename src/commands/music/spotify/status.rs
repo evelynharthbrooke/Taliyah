@@ -59,11 +59,10 @@ async fn status(context: &Context, message: &Message, arguments: Args) -> Comman
                 let id = activity.sync_id.as_ref().unwrap();
                 let url = format!("https://open.spotify.com/track/{id}");
 
-                let timestamp_start = activity.timestamps.as_ref().unwrap().start.unwrap() as i64 / 1000;
-                let timestamp_end = activity.timestamps.as_ref().unwrap().end.unwrap() as i64 / 1000;
-                let start = DateTime::<Utc>::from_utc(NaiveDateTime::from_timestamp(timestamp_start, 0), Utc).timestamp();
-                let end = DateTime::<Utc>::from_utc(NaiveDateTime::from_timestamp(timestamp_end, 0), Utc).timestamp();
-
+                let ts_start = activity.timestamps.as_ref().unwrap().start.unwrap() as i64 / 1000;
+                let ts_end = activity.timestamps.as_ref().unwrap().end.unwrap() as i64 / 1000;
+                let start = DateTime::<Utc>::from_utc(NaiveDateTime::from_timestamp(ts_start, 0), Utc).timestamp();
+                let end = DateTime::<Utc>::from_utc(NaiveDateTime::from_timestamp(ts_end, 0), Utc).timestamp();
                 let length = if end - start < 60 {
                     NaiveDateTime::from_timestamp(end - start, 0).format("%-S seconds")
                 } else if end - start > 3600 {
@@ -92,7 +91,6 @@ async fn status(context: &Context, message: &Message, arguments: Args) -> Comman
 
                 let artwork = assets.large_image.as_ref().unwrap().replace("spotify:", "");
                 let artwork_url = format!("https://i.scdn.co/image/{artwork}");
-
                 let embed = CreateEmbed::new()
                     .author(CreateEmbedAuthor::new(format!("Now playing on Spotify for {name}:")).icon_url(icon))
                     .title(track)

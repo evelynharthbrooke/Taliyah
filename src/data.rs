@@ -1,11 +1,10 @@
+use crate::config::ConfigurationData;
 use aspotify::Client as SpotifyClient;
 use reqwest::Client as ReqwestClient;
 use serenity::{client::bridge::gateway::ShardManager, prelude::TypeMapKey};
 use sqlx::PgPool;
 use std::sync::Arc;
 use tokio::sync::Mutex;
-
-use crate::config::ConfigurationData;
 
 pub struct ShardManagerContainer;
 pub struct ConfigContainer;
