@@ -39,7 +39,6 @@ async fn track(context: &Context, message: &Message, args: Args) -> CommandResul
     let track_album = &track.album;
     let track_album_id = track_album.id.as_ref().unwrap();
     let track_name = &track.name;
-
     let track_album = spotify.albums().get_album(track_album_id, None).await.unwrap().data;
     let track_album_name = track_album.name;
     let track_album_url = track_album.external_urls.get("spotify").unwrap();
@@ -48,9 +47,6 @@ async fn track(context: &Context, message: &Message, args: Args) -> CommandResul
     let track_length = format_duration(Duration::from_millis((track.duration.as_millis() as u64) / 1000 * 1000));
     let track_url = track.external_urls.get("spotify").unwrap();
     let track_explicit = if track.explicit { "Yes" } else { "No" };
-    let track_popularity = track.popularity;
-    let track_position = track.track_number;
-    let track_disc = track.disc_number;
     let track_image = &track_album.images.first().unwrap().url;
     let track_artists = track.artists.iter().map(|a| format!("[{}]({})", &a.name, &a.external_urls["spotify"])).join(", ");
     let track_date = track_album.release_date.to_string();
@@ -60,12 +56,6 @@ async fn track(context: &Context, message: &Message, args: Args) -> CommandResul
             let copyright = &track_album.copyrights.first().unwrap().text;
             format!("{copyright} ({track_label})")
         }
-    };
-
-    let track_preview_url = if track.preview_url.is_none() {
-        "No preview available.".to_owned()
-    } else {
-        format!("[Click Here]({})", track.preview_url.as_ref().unwrap())
     };
 
     let track_features = spotify.tracks().get_features_track(track_id).await.unwrap().data;
@@ -87,7 +77,6 @@ async fn track(context: &Context, message: &Message, args: Args) -> CommandResul
 
     let track_loudness = track_features.loudness;
     let track_tempo = track_features.tempo;
-    let track_time_signature = track_features.time_signature;
     let track_mode = match track_features.mode {
         Mode::Major => "Minor".to_owned(),
         Mode::Minor => "Major".to_owned()
@@ -101,19 +90,14 @@ async fn track(context: &Context, message: &Message, args: Args) -> CommandResul
         .fields(vec![
             ("Artists", track_artists, true),
             ("Album", format!("[{track_album_name}]({track_album_url})"), true),
-            ("Disc", track_disc.to_string(), true),
-            ("Position", track_position.to_string(), true),
             ("Release Date", track_date, true),
-            ("Popularity", format!("{track_popularity}%"), true),
             ("Explicit", track_explicit.to_string(), true),
-            ("Song Preview", track_preview_url, true),
             ("Markets", track_markets.to_string(), true),
             ("Duration", track_length.to_string(), true),
             ("Loudness", format!("{track_loudness} dB"), true),
             ("Keys", track_key, true),
             ("Mode", track_mode, true),
             ("Tempo", track_tempo.to_string(), true),
-            ("Time Signature", track_time_signature.to_string(), true),
         ])
         .footer(CreateEmbedFooter::new(track_copyright));
 

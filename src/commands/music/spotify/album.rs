@@ -39,7 +39,6 @@ async fn album(context: &Context, message: &Message, args: Args) -> CommandResul
     let album_name = &album.name;
     let album_date = album.release_date.to_string();
     let album_artists = &album.artists.iter().map(|a| format!("[{}]({})", &a.name, &a.external_urls["spotify"])).join(", ");
-    let album_popularity = &album.popularity;
     let album_image = &album.images.first().unwrap().url;
     let album_markets = album.available_markets.unwrap().len();
     let album_track_count = album.tracks.total;
@@ -80,7 +79,6 @@ async fn album(context: &Context, message: &Message, args: Args) -> CommandResul
         ("Length", album_length.to_string(), true),
         ("Artists", album_artists.to_string(), true),
         ("Release Date", album_date, true),
-        ("Popularity", format!("{album_popularity}%"), true),
         ("Markets", album_markets.to_string(), true),
         ("Tracks", album_track_count.to_string(), true),
     ];
