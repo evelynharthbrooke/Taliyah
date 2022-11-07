@@ -105,20 +105,16 @@ async fn status(context: &Context, message: &Message, arguments: Args) -> Comman
                     .footer(CreateEmbedFooter::new(format!("Length: {length}")));
 
                 message.channel_id.send_message(&context, CreateMessage::new().embed(embed)).await?
+            } else if user == message.author {
+                message.reply(&context, "You are not currently listening to anything on Spotify.").await?
             } else {
-                if user == message.author {
-                    message.reply(&context, "You are not currently listening to anything on Spotify.").await?
-                } else {
-                    message.reply(&context, format!("**{name}** is not currently playing anything on Spotify.")).await?
-                }
+                message.reply(&context, format!("**{name}** is not currently playing anything on Spotify.")).await?
             }
         }
+    } else if user == message.author {
+        message.reply(&context, "You are currently shown as offline or you don't have a visible presence.").await?
     } else {
-        if user == message.author {
-            message.reply(&context, "You are currently shown as offline or you don't have a visible presence.").await?
-        } else {
-            message.reply(&context, format!("**{name}** is currently offline / doesn't have a presence.")).await?
-        }
+        message.reply(&context, format!("**{name}** is currently offline / doesn't have a presence.")).await?
     };
 
     Ok(())
