@@ -1,3 +1,4 @@
+use crate::utils::{get_profile_field, net::*};
 use lastfm_rs::error::{
     Error,
     LastFMErrorResponse::{InvalidParameters, OperationFailed}
@@ -11,8 +12,6 @@ use serenity::{
 };
 
 use tracing::error;
-
-use crate::utils::{get_profile_field, net::*};
 
 #[command]
 #[description("Retrieves the Last.fm now playing state of a given user.")]

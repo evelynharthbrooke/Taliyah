@@ -89,12 +89,10 @@ async fn profile(context: &Context, message: &Message, mut arguments: Args) -> C
     let user_info = client.user_info(&user).await.send().await.unwrap().user;
 
     let display_name = if user_info.display_name.is_empty() { "None".to_string() } else { user_info.display_name };
-
     let avatar = user_info.images[3].image_url.as_str();
     let country = user_info.country;
     let url = user_info.url;
     let total_artists = format_int(top_artists.attrs.total.parse::<u64>().unwrap());
-
     let artists = top_artists
         .artists
         .iter()
@@ -125,12 +123,10 @@ async fn profile(context: &Context, message: &Message, mut arguments: Args) -> C
     let scrobbles = format_int(user_info.scrobbles.parse::<u64>().unwrap());
 
     let track = recent_tracks.first().unwrap();
-
     let name = &track.name;
     let artist = &track.artist.name;
     let album = if track.album.name.is_empty() { String::new() } else { track.album.name.to_owned() };
     let artwork = get_album_artwork(context, artist, name, &album).await;
-
     let tracks = if recent_tracks.is_empty() {
         "Unknown".to_owned()
     } else {

@@ -41,7 +41,7 @@ async fn xkcd(context: &Context, message: &Message, mut arguments: Args) -> Comm
         .image(&response.img)
         .footer(CreateEmbedFooter::new(format!("xkcd comic no. {num}")));
 
-    let links = CreateActionRow::Buttons(vec![CreateButton::new_link("View xkcd image page", page), CreateButton::new_link("View explanation", wiki)]);
+    let links = CreateActionRow::Buttons(vec![CreateButton::new_link(page).label("View image on xkcd"), CreateButton::new_link(wiki).label("View wiki")]);
     message.channel_id.send_message(context, CreateMessage::new().embed(embed).components(vec![links])).await?;
 
     Ok(())

@@ -73,7 +73,7 @@ async fn show(context: &Context, message: &Message, arguments: Args) -> CommandR
     let seasons = result.number_of_seasons.to_string();
     let episodes = result.number_of_episodes.to_string();
     let imdb_id = result.external_ids.imdb_id.unwrap();
-    let imdb_url = format!("https://www.imdb.com/title/{imdb_id}");
+    let imdb = format!("https://www.imdb.com/title/{imdb_id}");
     let genres = result.genres.iter().map(|genre| &genre.name).join("\n");
     let tagline = if !result.tagline.is_empty() { format!("*{}*", result.tagline) } else { String::new() };
 
@@ -128,7 +128,7 @@ async fn show(context: &Context, message: &Message, arguments: Args) -> CommandR
         .fields(fields)
         .footer(CreateEmbedFooter::new("Powered by TMDb."));
 
-    let links = CreateActionRow::Buttons(vec![(CreateButton::new_link("View IMDb Page", imdb_url))]);
+    let links = CreateActionRow::Buttons(vec![(CreateButton::new_link(imdb)).label("View IMDb Page")]);
     message.channel_id.send_message(&context, CreateMessage::new().embed(embed).components(vec![links])).await?;
 
     Ok(())

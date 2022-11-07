@@ -46,7 +46,11 @@ async fn status(context: &Context, message: &Message, arguments: Args) -> Comman
     if guild.presences.get(&user.id).is_some() {
         let presence = guild.presences.get(&user.id).unwrap();
         if presence.activities.first().is_none() {
-            message.reply(&context, format!("**{name}** does not have an active activity.")).await?
+            if user == message.author {
+                message.reply(&context, "You do not currently have an active activity.").await?
+            } else {
+                message.reply(&context, format!("**{name}** does not have an active activity.")).await?
+            }
         } else {
             let activities = presence.activities.iter().filter(|a| a.name == "Spotify").collect::<Vec<&Activity>>();
             if !activities.is_empty() {
@@ -102,11 +106,19 @@ async fn status(context: &Context, message: &Message, arguments: Args) -> Comman
 
                 message.channel_id.send_message(&context, CreateMessage::new().embed(embed)).await?
             } else {
-                message.reply(&context, format!("**{name}** is not currently playing anything on Spotify.")).await?
+                if user == message.author {
+                    message.reply(&context, "You are not currently listening to anything on Spotify.").await?
+                } else {
+                    message.reply(&context, format!("**{name}** is not currently playing anything on Spotify.")).await?
+                }
             }
         }
     } else {
-        message.reply(&context, format!("**{name}** is currently offline / doesn't have a presence.")).await?
+        if user == message.author {
+            message.reply(&context, "You are currently shown as offline or you don't have a visible presence.").await?
+        } else {
+            message.reply(&context, format!("**{name}** is currently offline / doesn't have a presence.")).await?
+        }
     };
 
     Ok(())

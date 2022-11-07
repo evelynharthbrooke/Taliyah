@@ -89,7 +89,7 @@ async fn collection(context: &Context, message: &Message, arguments: Args) -> Co
         let release_date = part.release_date.format("%B %-e, %Y");
         let summary = &part.overview;
         fields.push((format!("{title} ({release_date})"), summary, false));
-        CreateButton::new_link(title, format!("https://themoviedb.org/movie/{id}"))
+        CreateButton::new_link(format!("https://themoviedb.org/movie/{id}")).label(title)
     }).collect())).collect();
 
     let embed = CreateEmbed::new()
